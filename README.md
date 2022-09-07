@@ -5,6 +5,9 @@ Uses ChilloutVR's "Controller Toggle Gestures" binding in SteamVR to lock Gestur
 
 Does nothing on Knuckles controllers as the bind is used for finger tracking.
 
+![VirtualDesktop Android-20220907-172923](https://user-images.githubusercontent.com/37721153/188999382-7663a863-49be-4b9b-8839-8b6e8c32783b.jpg)
+
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
