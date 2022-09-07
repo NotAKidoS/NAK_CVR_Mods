@@ -1,0 +1,23 @@
+{
+  "_id": 93,
+  "name": "GestureLock",
+  "modversion": "1.1.0",
+  "gameversion": "2022r168",
+  "loaderversion": "0.5.4",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Locks GestureLeft & GestureRight on SteamVR binding.",
+  "searchtags": [
+    "gesture",
+    "lock",
+    "GestureLeft",
+    "GestureRight"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/GestureLock/releases/download/r1/GestureLock.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/GestureLock/",
+  "changelog": "Use SteamVR Index Gesture Lock binding instead of touch input.",
+  "embedcolor": "804221"
+}

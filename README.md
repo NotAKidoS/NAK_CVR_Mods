@@ -1,7 +1,9 @@
 # GestureLock
  Simple GestureLock for CVR.
 
-Double-touch the selected binding for the selected hand to toggle.
+Uses ChilloutVR's "Controller Toggle Gestures" binding in SteamVR to lock GestureLeft & GestureRight input. 
+
+Does nothing on Knuckles controllers as the bind is used for finger tracking.
 
 ---
 

@@ -1,5 +1,5 @@
-﻿using MelonLoader;
-using GestureLock.Properties;
+﻿using GestureLock.Properties;
+using MelonLoader;
 using System.Reflection;
 
 
@@ -15,7 +15,7 @@ using System.Reflection;
     nameof(GestureLock),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: ""
+    downloadLink: "https://github.com/NotAKidOnSteam/GestureLock"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -25,6 +25,6 @@ using System.Reflection;
 namespace GestureLock.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.1.0";
     public const string Author = "NotAKidoS";
 }
