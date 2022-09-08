@@ -1,0 +1,23 @@
+{
+  "_id": 91,
+  "name": "PickupPushPull",
+  "modversion": "1.1.0",
+  "gameversion": "2022r168",
+  "loaderversion": "0.5.4",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Allows you to push & pull pickups with Gamepad or VR using the right joystick.",
+  "searchtags": [
+    "pull",
+    "push",
+    "pickup",
+    "prop"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPP/releases/download/r3/PickupPushPull.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/PickupPP/",
+  "changelog": "Switched to using Harmony Patches.",
+  "embedcolor": "804221"
+}
