@@ -4,6 +4,8 @@ just updates the menu position when the game detects a change in avatar scale
 
 im sure itll be patched officially before cvrmg verifies it lol
 
+https://user-images.githubusercontent.com/37721153/189479474-41e93dff-a695-42f2-9d20-6a895a723039.mp4
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
