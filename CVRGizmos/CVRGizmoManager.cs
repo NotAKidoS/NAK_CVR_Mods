@@ -20,6 +20,10 @@ namespace CVRGizmos
             typeof(CVRGizmos_DistanceLod),
             typeof(CVRGizmos_HapticZone),
             typeof(CVRGizmos_HapticAreaChest),
+            typeof(CVRGizmos_ToggleStateTrigger),
+            typeof(CVRGizmos_Avatar),
+            typeof(CVRGizmos_AvatarPickupMarker),
+            typeof(CVRGizmos_DistanceConstrain),
         };
 
         void Start()

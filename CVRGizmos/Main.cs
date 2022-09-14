@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core.Player;
 using MelonLoader;
+using UnityEngine;
 using System.Collections;
 
 namespace CVRGizmos;
@@ -35,11 +36,13 @@ public class CVRGizmos : MelonMod
 
     public void CVRGizmosEnabled()
     {
+        if (!CVRGizmoManager.Instance) return;
         CVRGizmoManager.Instance.EnableGizmos(m_entryCVRGizmosEnabled.Value);
     }
 
     public void CVRGizmosLocalOnly()
     {
+        if (!CVRGizmoManager.Instance) return;
         CVRGizmoManager.Instance.g_localOnly = m_entryCVRGizmosLocalOnly.Value;
         CVRGizmoManager.Instance.RefreshGizmos();
     }
