@@ -37,8 +37,12 @@ namespace CVRGizmos.GismoTypes
                     Gizmos.Color = Color.green;
                     Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, references[i].transform.rotation, references[i].transform.localScale);
                     Gizmos.Sphere(references[i].viewPosition, 0.01f);
+                    Gizmos.Line(references[i].viewPosition, references[i].viewPosition + Vector3.forward * 0.05f);
+                    Gizmos.Line(references[i].viewPosition, references[i].viewPosition + Vector3.right * 0.05f);
                     Gizmos.Color = Color.red;
                     Gizmos.Sphere(references[i].voicePosition, 0.01f);
+                    Gizmos.Line(references[i].voicePosition, references[i].voicePosition + Vector3.forward * 0.05f);
+                    Gizmos.Line(references[i].voicePosition, references[i].voicePosition + Vector3.right * 0.05f);
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using CVRGizmos.GismoTypes;
+using Gizmos = Popcron.Gizmos;
 using UnityEngine;
 
 namespace CVRGizmos
@@ -41,6 +42,7 @@ namespace CVRGizmos
             for (int i = 0; i < GizmoTypes.Count(); i++)
             {
                 managed[i].enabled = able;
+                Gizmos.Enabled = able;
             }
             RefreshGizmos();
         }
@@ -49,7 +51,7 @@ namespace CVRGizmos
         {
             for (int i = 0; i < GizmoTypes.Count(); i++)
             {
-                managed[i].Invoke("CacheGizmos", 1f);
+                managed[i].Invoke("CacheGizmos", 0f);
             }
         }
     }
