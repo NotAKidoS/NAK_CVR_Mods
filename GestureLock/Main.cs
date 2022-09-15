@@ -51,9 +51,9 @@ public class GestureLock : MelonMod
             }
             if (isLocked)
             {
-                ___gestureLeftRaw = oldGestureLeft;
+                //___gestureLeftRaw = oldGestureLeft;
                 ___gestureLeft = oldGestureLeft;
-                ___gestureRightRaw = oldGestureRight;
+                //___gestureRightRaw = oldGestureRight;
                 ___gestureRight = oldGestureRight;
             }
         }
