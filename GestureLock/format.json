@@ -1,7 +1,7 @@
 {
   "_id": 93,
   "name": "GestureLock",
-  "modversion": "1.1.0",
+  "modversion": "1.1.1",
   "gameversion": "2022r168",
   "loaderversion": "0.5.4",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/GestureLock/releases/download/r3/GestureLock.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/GestureLock/releases/download/r4/GestureLock.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/GestureLock/",
-  "changelog": "Use SteamVR Controller Gesture Lock binding instead of touch input.",
+  "changelog": "Gesture recognizer now works properly while gestures are locked.\nCan pull camera out with gestures while locked.",
   "embedcolor": "804221"
 }
