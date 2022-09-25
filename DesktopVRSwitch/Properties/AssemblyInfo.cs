@@ -1,5 +1,5 @@
-﻿using MelonLoader;
-using DesktopVRSwitch.Properties;
+﻿using DesktopVRSwitch.Properties;
+using MelonLoader;
 using System.Reflection;
 
 

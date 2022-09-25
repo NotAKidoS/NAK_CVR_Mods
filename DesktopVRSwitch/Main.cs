@@ -1,18 +1,12 @@
-﻿using HarmonyLib;
-using MelonLoader;
-using UnityEngine;
-using RootMotion.FinalIK;
+﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
-using ABI.CCK.Components;
-using ABI_RC.Core.InteractionSystem;
-using ABI_RC.Systems.MovementSystem;
 using ABI_RC.Core.UI;
-using System.Reflection;
-using cohtml;
-using ABI_RC.Core.IO;
+using ABI_RC.Systems.MovementSystem;
+using MelonLoader;
+using RootMotion.FinalIK;
 using System.Collections;
-using System;
+using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
 
@@ -20,89 +14,160 @@ namespace DesktopVRSwitch;
 
 public class DesktopVRSwitch : MelonMod
 {
-
-    private static MelonPreferences_Category m_categoryDesktopVRSwitch;
-    private static MelonPreferences_Entry<bool> m_entryEnabled;
-
     private static System.Object melon;
+    private static bool isAttemptingSwitch = false;
 
-    public override void OnApplicationStart()
+    public override void OnUpdate()
     {
-        m_categoryDesktopVRSwitch = MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
-        m_entryEnabled = m_categoryDesktopVRSwitch.CreateEntry<bool>("Start SteamVR", false, description: "Launch SteamVR");
-        m_entryEnabled.OnValueChangedUntyped += UpdateSettings;
-    }
-    private static void UpdateSettings()
-    {
-        melon = MelonCoroutines.Start(AttemptPlatformSwitch());
-    }
-
-    static IEnumerator AttemptPlatformSwitch()
-    {
-        if (MetaPort.Instance.isUsingVr)
+        // assuming CVRInputManager.switchMode button was originally for desktop/vr switching before being left to do literally nothing in rootlogic
+        if (Input.GetKeyDown(KeyCode.F6) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && !isAttemptingSwitch)
         {
-            //close the UI cause cohtml can get grumpy
-            ViewManager.Instance.UiStateToggle(false);
-            CVR_MenuManager.Instance.ToggleQuickMenu(false);
-            MelonLogger.Msg("Closed ChilloutVR UI.");
+            isAttemptingSwitch = true;
+            melon = MelonCoroutines.Start(AttemptPlatformSwitch());
+        }
+    }
 
-            MetaPort.Instance.isUsingVr = false;
-            MelonLogger.Msg("Set MetaPort isUsingVr to false.");
+    private static IEnumerator AttemptPlatformSwitch()
+    {
+        bool toVR = !MetaPort.Instance.isUsingVr;
 
-            SteamVR_Behaviour.instance.enabled = false;
-            SteamVR_Render.instance.enabled = false;
+        //load SteamVR/OpenVR if entering VR
+        MelonCoroutines.Start(LoadDevice("OpenVR", toVR));
 
-            yield return new WaitForEndOfFrame();
+        //we need to wait a frame or meet doom :shock: :shock: :stare:
+        //we are waiting a frame in LoadDevice after LoadDeviceByName()
+        yield return new WaitForEndOfFrame();
 
-            PlayerSetup.Instance._inVr = false;
-            PlayerSetup.Instance.Invoke("CalibrateAvatar", 0f);
-            MelonLogger.Msg("Invoked CalibrateAvatar() on PlayerSetup.Instance.");
-            PlayerSetup.Instance.desktopCameraRig.SetActive(true);
-            PlayerSetup.Instance.vrCameraRig.SetActive(false);
-            CohtmlHud.Instance.gameObject.transform.parent = PlayerSetup.Instance.desktopCamera.transform;
-            MelonLogger.Msg("Enabled Desktop camera rig.");
-            MelonLogger.Msg("Set PlayerSetup _inVr to false.");
+        CloseMenuElements();
 
-            yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
 
-            MovementSystem.Instance.isVr = false;
-            MelonLogger.Msg("Set MovementSystem isVr to false.");
-            //CVR_MovementSystem.Instance.isVr = true;
-            //MelonLogger.Msg("Set CVR_MovementSystem isVR to false.");
+        SetMetaPort(toVR);
 
-            yield return new WaitForSeconds(1);
+        yield return new WaitForEndOfFrame();
 
+        SetPlayerSetup(toVR);
 
-            CVRInputManager.Instance.reload = true;
-            CVRInputManager.Instance.inputEnabled = true;
-            CVRInputManager.Instance.blockedByUi = false;
-            CVRInputManager.Instance.independentHeadToggle = false;
-            MelonLogger.Msg("Set CVRInputManager reload to true. Input should reload next frame...");
+        yield return new WaitForEndOfFrame();
 
-            yield return new WaitForSeconds(1);
+        SetMovementSystem(toVR);
 
-            XRSettings.enabled = false;
+        yield return new WaitForEndOfFrame();
 
-            PlayerSetup.Instance.ReCalibrateAvatar();
-            MelonLogger.Msg("Called ReCalibrateAvatar() on PlayerSetup.Instance.");
+        SetSteamVRInstances(toVR);
+
+        yield return new WaitForEndOfFrame();
+
+        ReloadCVRInputManager();
+
+        //some menus have 0.5s wait(), so to be safe
+        yield return new WaitForSeconds(1f);
+
+        Recalibrate();
+
+        yield return null;
+        isAttemptingSwitch = false;
+    }
+    private static IEnumerator LoadDevice(string newDevice, bool isVR)
+    {
+        if (isVR)
+        {
+            if (String.Compare(XRSettings.loadedDeviceName, newDevice, true) != 0)
+            {
+                XRSettings.LoadDeviceByName(newDevice);
+                yield return null;
+                XRSettings.enabled = true;
+                SteamVR.settings.pauseGameWhenDashboardVisible = false;
+                if (SteamVR_Behaviour.instance.enabled == false)
+                {
+                    SteamVR_Behaviour.instance.enabled = true;
+                    SteamVR_Render.instance.enabled = true;
+                }
+            }
+            else
+            {
+                MelonLogger.Msg("OpenVR device already loaded!");
+                MelonCoroutines.Stop(melon);
+                yield return null;
+                XRSettings.enabled = true;
+                if (SteamVR_Behaviour.instance.enabled == false)
+                {
+                    SteamVR_Behaviour.instance.enabled = true;
+                    SteamVR_Render.instance.enabled = true;
+                }
+                isAttemptingSwitch = false;
+            }
         }
         else
         {
-            //close the UI cause cohtml can get grumpy
-            ViewManager.Instance.UiStateToggle(false);
-            CVR_MenuManager.Instance.ToggleQuickMenu(false);
-            MelonLogger.Msg("Closed ChilloutVR UI.");
-
-            MelonCoroutines.Start(LoadDevice("OpenVR"));
-            MelonLogger.Msg("OpenVR device loaded!");
-
-            yield return new WaitForSeconds(3);
-
-            MelonLogger.Msg("Set MetaPort isUsingVr to true.");
-            MetaPort.Instance.isUsingVr = true;
-
+            //holyfuck that was a lot of trial and error
+            SteamVR.enabled = false;
             yield return new WaitForEndOfFrame();
+            XRSettings.LoadDeviceByName("None");
+            yield return null;
+        }
+    }
 
+    // shouldn't be that important, right?
+    private static void CloseMenuElements()
+    {
+        if (ViewManager.Instance != null)
+        {
+            MelonLogger.Msg("Closed MainMenu Instance.");
+            ViewManager.Instance.UiStateToggle(false);
+        }
+        else
+        {
+            MelonLogger.Msg("MainMenu Instance not found!!!");
+        }
+        if (ViewManager.Instance != null)
+        {
+            MelonLogger.Msg("Closed QuickMenu Instance.");
+            CVR_MenuManager.Instance.ToggleQuickMenu(false);
+        }
+        else
+        {
+            MelonLogger.Msg("QuickMenu Instance not found!!!");
+        }
+    }
+
+    private static void SetMetaPort(bool isVR)
+    {
+        if (MetaPort.Instance == null)
+        {
+            MelonLogger.Msg("MetaPort Instance not found!!!");
+            return;
+        }
+        MelonLogger.Msg($"Set MetaPort isUsingVr to {isVR}.");
+        MetaPort.Instance.isUsingVr = isVR;
+    }
+
+    //uh huh
+    private static void SetSteamVRInstances(bool isVR)
+    {
+        if (SteamVR_Behaviour.instance == null)
+        {
+            MelonLogger.Msg("SteamVR Instances not found!!!");
+            return;
+        }
+        MelonLogger.Msg($"Set SteamVR monobehavior instances to {isVR}.");
+        SteamVR_Behaviour.instance.enabled = isVR;
+        SteamVR_Render.instance.enabled = isVR;
+        //set again just in case on desktop & disabling
+        XRSettings.enabled = isVR;
+    }
+
+    private static void SetPlayerSetup(bool isVR)
+    {
+        if (PlayerSetup.Instance == null)
+        {
+            MelonLogger.Msg("PlayerSetup Instance not found!!!");
+            return;
+        }
+
+        if (isVR)
+        {
+            MelonLogger.Msg("Creating temp VRIK component.");
             VRIK ik = (VRIK)PlayerSetup.Instance._avatar.GetComponent(typeof(VRIK));
             if (ik == null)
             {
@@ -110,66 +175,69 @@ public class DesktopVRSwitch : MelonMod
             }
             ik.solver.IKPositionWeight = 0f;
             ik.enabled = false;
-
-            PlayerSetup.Instance._inVr = true;
-            PlayerSetup.Instance.Invoke("CalibrateAvatar", 0f);
-            MelonLogger.Msg("Invoked CalibrateAvatar() on PlayerSetup.Instance.");
-            PlayerSetup.Instance.desktopCameraRig.SetActive(false);
-            PlayerSetup.Instance.vrCameraRig.SetActive(true);
-            CohtmlHud.Instance.gameObject.transform.parent = PlayerSetup.Instance.vrCamera.transform;
-            MelonLogger.Msg("Disabled Desktop camera rig.");
-            MelonLogger.Msg("Set PlayerSetup _inVr to true.");
-
-            yield return new WaitForEndOfFrame();
-
-            MovementSystem.Instance.isVr = true;
-            MelonLogger.Msg("Set MovementSystem isVr to false.");
-            //CVR_MovementSystem.Instance.isVr = true;
-            //MelonLogger.Msg("Set CVR_MovementSystem isVR to false.");
-
-            yield return new WaitForSeconds(1);
-
-            CVRInputManager.Instance.reload = true;
-            CVRInputManager.Instance.inputEnabled = true;
-            CVRInputManager.Instance.blockedByUi = false;
-            CVRInputManager.Instance.independentHeadToggle = false;
-            MelonLogger.Msg("Set CVRInputManager reload to true. Input should reload next frame...");
-
-            yield return new WaitForSeconds(1f);
-
-            CVRInputManager.Instance.reload = true;
-
-            PlayerSetup.Instance.ReCalibrateAvatar();
-            MelonLogger.Msg("Called ReCalibrateAvatar() on PlayerSetup.Instance.");
         }
 
-        yield return null;
+        MelonLogger.Msg($"Set PlayerSetup instance to {isVR}.");
+        PlayerSetup.Instance._inVr = isVR;
+
+        //we invoke calibrate to get VRIK and calibrator instance set up, faster than full recalibrate
+        MelonLogger.Msg("Called CalibrateAvatar() on PlayerSetup.Instance. Expect a few errors from PlayerSetup Update() and LateUpdate().");
+        PlayerSetup.Instance.CalibrateAvatar();
+
+        MelonLogger.Msg("Switched active camera rigs.");
+        PlayerSetup.Instance.desktopCameraRig.SetActive(!isVR);
+        PlayerSetup.Instance.vrCameraRig.SetActive(isVR);
+
+        if (CohtmlHud.Instance == null)
+        {
+            MelonLogger.Msg("CohtmlHud Instance not found!!!");
+            return;
+        }
+        MelonLogger.Msg("Parented CohtmlHud to active camera.");
+        CohtmlHud.Instance.gameObject.transform.parent = isVR ? PlayerSetup.Instance.vrCamera.transform : PlayerSetup.Instance.desktopCamera.transform;
+
+        //i think the VR offset depends on headset... cant find where in the games code it is though so could be wrong... ?
+        CohtmlHud.Instance.gameObject.transform.localPosition = isVR ? new Vector3(-0.2f, -0.391f, 1.244f) : new Vector3(0f, 0f, 1.3f);
     }
 
-    static IEnumerator LoadDevice(string newDevice)
+    //hopefully whatever rework was hinted at doesn't immediatly break this
+    private static void SetMovementSystem(bool isVR)
     {
-        if (String.Compare(XRSettings.loadedDeviceName, newDevice, true) != 0)
+        if (MovementSystem.Instance == null)
         {
-            XRSettings.LoadDeviceByName(newDevice);
-            yield return null;
-            XRSettings.enabled = true;
-            if (SteamVR_Behaviour.instance.enabled == false)
-            {
-                SteamVR_Behaviour.instance.enabled = true;
-                SteamVR_Render.instance.enabled = true;
-            }
+            MelonLogger.Msg("MovementSystem Instance not found!!!");
+            return;
         }
-        else
+        MelonLogger.Msg($"Set MovementSystem instance to {isVR}.");
+        MovementSystem.Instance.isVr = true;
+    }
+
+    private static void ReloadCVRInputManager()
+    {
+        if (CVRInputManager.Instance == null)
         {
-            MelonLogger.Msg("OpenVR device already loaded!");
-            MelonCoroutines.Stop(melon);
-            yield return null;
-            XRSettings.enabled = true;
-            if (SteamVR_Behaviour.instance.enabled == false)
-            {
-                SteamVR_Behaviour.instance.enabled = true;
-                SteamVR_Render.instance.enabled = true;
-            }
+            MelonLogger.Msg("CVRInputManager Instance not found!!!");
+            return;
         }
+        MelonLogger.Msg("Set CVRInputManager reload to True. Input should reload next frame...");
+        CVRInputManager.Instance.reload = true;
+        CVRInputManager.Instance.inputEnabled = true;
+        CVRInputManager.Instance.blockedByUi = false;
+        CVRInputManager.Instance.independentHeadToggle = false;
+        CVRInputManager.Instance.gestureLeft = 0f;
+        CVRInputManager.Instance.gestureLeftRaw = 0f;
+        CVRInputManager.Instance.gestureRight = 0f;
+        CVRInputManager.Instance.gestureRightRaw = 0f;
+    }
+
+    private static void Recalibrate()
+    {
+        if (PlayerSetup.Instance == null)
+        {
+            MelonLogger.Msg("PlayerSetup Instance not found!!!");
+            return;
+        }
+        MelonLogger.Msg("Called ReCalibrateAvatar() on PlayerSetup.Instance. Will take a second...");
+        PlayerSetup.Instance.ReCalibrateAvatar();
     }
 }
