@@ -70,25 +70,21 @@ public class DesktopVRSwitch : MelonMod
             //CVR_MovementSystem.Instance.isVr = true;
             //MelonLogger.Msg("Set CVR_MovementSystem isVR to false.");
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1);
+
 
             CVRInputManager.Instance.reload = true;
-            //CVRInputManager.Instance.inputEnabled = true;
-            //CVRInputManager.Instance.blockedByUi = false;
-            //CVRInputManager.Instance.independentHeadToggle = false;
-            //MelonLogger.Msg("Set CVRInputManager reload to true. Input should reload next frame...");
+            CVRInputManager.Instance.inputEnabled = true;
+            CVRInputManager.Instance.blockedByUi = false;
+            CVRInputManager.Instance.independentHeadToggle = false;
+            MelonLogger.Msg("Set CVRInputManager reload to true. Input should reload next frame...");
 
-            yield return new WaitForSeconds(1f);
-
-            CVRInputManager.Instance.reload = true;
-
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1);
 
             XRSettings.enabled = false;
 
-            PlayerSetup.Instance.Invoke("CalibrateAvatar", 0f);
-            MelonLogger.Msg("Invoked CalibrateAvatar() on PlayerSetup.Instance.");
-            //ViewManager.Instance.VrInputChanged(true);
+            PlayerSetup.Instance.ReCalibrateAvatar();
+            MelonLogger.Msg("Called ReCalibrateAvatar() on PlayerSetup.Instance.");
         }
         else
         {
@@ -131,22 +127,20 @@ public class DesktopVRSwitch : MelonMod
             //CVR_MovementSystem.Instance.isVr = true;
             //MelonLogger.Msg("Set CVR_MovementSystem isVR to false.");
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(1);
 
             CVRInputManager.Instance.reload = true;
-            //CVRInputManager.Instance.inputEnabled = true;
-            //CVRInputManager.Instance.blockedByUi = false;
-            //CVRInputManager.Instance.independentHeadToggle = false;
-            //MelonLogger.Msg("Set CVRInputManager reload to true. Input should reload next frame...");
+            CVRInputManager.Instance.inputEnabled = true;
+            CVRInputManager.Instance.blockedByUi = false;
+            CVRInputManager.Instance.independentHeadToggle = false;
+            MelonLogger.Msg("Set CVRInputManager reload to true. Input should reload next frame...");
 
             yield return new WaitForSeconds(1f);
 
             CVRInputManager.Instance.reload = true;
 
-            //PlayerSetup.Instance.Invoke("CalibrateAvatar", 0f);
-            //MelonLogger.Msg("Invoked CalibrateAvatar() on PlayerSetup.Instance.");
-
-            //ViewManager.Instance.VrInputChanged(true);
+            PlayerSetup.Instance.ReCalibrateAvatar();
+            MelonLogger.Msg("Called ReCalibrateAvatar() on PlayerSetup.Instance.");
         }
 
         yield return null;
