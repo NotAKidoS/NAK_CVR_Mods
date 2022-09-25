@@ -4,9 +4,7 @@ kinda shit test to see how resilient the game is when switching between Desktop 
 Desktop to VR works enough
 VR to Desktop does not close SteamVR and sometimes just refuses to work
 
-Sometimes all input just dies. Seems to be CVR issue, or maybe I have to manually reload all CoHTML myself..?
-
-Hud is not repositioned properly to fit the new camera.
+https://user-images.githubusercontent.com/37721153/192128515-5630f47b-63ed-45c5-b0eb-0aac46d23731.mp4
 
 ---
 
