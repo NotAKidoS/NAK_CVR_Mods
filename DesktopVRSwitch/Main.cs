@@ -16,14 +16,24 @@ public class DesktopVRSwitch : MelonMod
 {
     private static System.Object melon;
     private static bool isAttemptingSwitch = false;
+    private static float timedSwitch = 0f;
 
     public override void OnUpdate()
     {
         // assuming CVRInputManager.switchMode button was originally for desktop/vr switching before being left to do literally nothing in rootlogic
         if (Input.GetKeyDown(KeyCode.F6) && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && !isAttemptingSwitch)
         {
+            //start attempt
             isAttemptingSwitch = true;
             melon = MelonCoroutines.Start(AttemptPlatformSwitch());
+            timedSwitch = Time.time + 10f;
+        }
+
+        if (isAttemptingSwitch && Time.time > timedSwitch)
+        {
+            isAttemptingSwitch = false;
+            MelonCoroutines.Stop(melon);
+            MelonLogger.Msg("Timer exceeded. Something is wrong.");
         }
     }
 
@@ -38,7 +48,7 @@ public class DesktopVRSwitch : MelonMod
         //we are waiting a frame in LoadDevice after LoadDeviceByName()
         yield return new WaitForEndOfFrame();
 
-        CloseMenuElements();
+        CloseMenuElements(toVR);
 
         yield return new WaitForEndOfFrame();
 
@@ -109,12 +119,13 @@ public class DesktopVRSwitch : MelonMod
     }
 
     // shouldn't be that important, right?
-    private static void CloseMenuElements()
+    private static void CloseMenuElements(bool isVR)
     {
         if (ViewManager.Instance != null)
         {
             MelonLogger.Msg("Closed MainMenu Instance.");
             ViewManager.Instance.UiStateToggle(false);
+            ViewManager.Instance.VrInputChanged(isVR);
         }
         else
         {
@@ -198,6 +209,7 @@ public class DesktopVRSwitch : MelonMod
 
         //i think the VR offset depends on headset... cant find where in the games code it is though so could be wrong... ?
         CohtmlHud.Instance.gameObject.transform.localPosition = isVR ? new Vector3(-0.2f, -0.391f, 1.244f) : new Vector3(0f, 0f, 1.3f);
+        CohtmlHud.Instance.gameObject.transform.localRotation = Quaternion.Euler( new Vector3(0f, 180f, 0f) );
     }
 
     //hopefully whatever rework was hinted at doesn't immediatly break this
