@@ -1,23 +1,23 @@
 {
-  "_id": 95,
+  "_id": -1,
   "name": "DesktopVRSwitch",
-  "modversion": "1.1.0",
+  "modversion": "1.0.0",
   "gameversion": "2022r168",
   "loaderversion": "0.5.4",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is scaled.\nAdditional option to scale player collision.",
+  "description": "Allows you to switch between Desktop and VR with a keybind.\n**Press Control + F6 to switch.**\n\nWhile this mod is a nice convienence feature to have access to, not every chillout system or mod is built to support it. I cannot possibly cover every edge case or mitigate issues with every mod. **Use at your own discretion.**",
   "searchtags": [
-    "menu",
-    "scale",
-    "avatarscale",
-    "slider"
+    "desktop",
+    "vr",
+    "switch",
+    "hotswap"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/r2/DesktopVRSwitch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/r1/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/",
-  "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
-  "embedcolor": "804221"
+  "changelog": "Initial Release",
+  "embedcolor": "3498db"
 }

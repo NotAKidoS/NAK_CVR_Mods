@@ -1,17 +1,17 @@
-﻿using ABI_RC.Core.InteractionSystem;
+﻿using ABI_RC.Core;
+using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
-using ABI_RC.Core;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.MovementSystem;
 using MelonLoader;
 using RootMotion.FinalIK;
 using System.Collections;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using UnityEngine.XR;
 using Valve.VR;
+using Object = UnityEngine.Object;
 
 namespace DesktopVRSwitch;
 
@@ -28,7 +28,7 @@ public class DesktopVRSwitch : MelonMod
         {
             //start attempt
             isAttemptingSwitch = true;
-            MelonCoroutines.Start( AttemptPlatformSwitch() );
+            MelonCoroutines.Start(AttemptPlatformSwitch());
 
             //how long we wait until we assume an error occured
             timedSwitch = Time.time + 10f;
@@ -38,26 +38,28 @@ public class DesktopVRSwitch : MelonMod
         if (isAttemptingSwitch && Time.time > timedSwitch)
         {
             MelonLogger.Error("Timer exceeded. Something is wrong and coroutine failed partway.");
-            MelonCoroutines.Start( AttemptPlatformSwitch(true) );
+            MelonCoroutines.Start(AttemptPlatformSwitch(true));
         }
     }
 
     private static IEnumerator AttemptPlatformSwitch(bool forceMode = false)
     {
-        //forceMode will attempt to backtrack to last working mode
+        //forceMode will attempt to backtrack to last working mode (if you dont like the mess, fix it yourself thx)
         CurrentMode = forceMode ? CurrentMode : MetaPort.Instance.isUsingVr;
         bool VRMode = forceMode ? CurrentMode : !CurrentMode;
-        
+
         //load or unload SteamVR
         InitializeSteamVR(VRMode);
 
         CloseMenuElements(VRMode);
 
-        yield return new WaitForEndOfFrame();
+        yield
+        return new WaitForEndOfFrame();
 
         SetMetaPort(VRMode);
 
-        yield return new WaitForEndOfFrame();
+        yield
+        return new WaitForEndOfFrame();
 
         SetPlayerSetup(VRMode);
         SwitchActiveCameraRigs(VRMode);
@@ -67,21 +69,33 @@ public class DesktopVRSwitch : MelonMod
         RepositionCohtmlHud(VRMode);
         UpdateHudOperations(VRMode);
 
-        yield return new WaitForEndOfFrame();
+        yield
+        return new WaitForEndOfFrame();
 
         SetMovementSystem(VRMode);
 
-        yield return new WaitForEndOfFrame();
+        yield
+        return new WaitForEndOfFrame();
+
+        //needs to come after SetMovementSystem
+        //UpdateGestureReconizerCam();
 
         //right here is the fucker most likely to break
         ReloadCVRInputManager();
 
         //some menus have 0.5s wait(), so to be safe
-        yield return new WaitForSeconds(1f);
+        yield
+        return new WaitForSeconds(1f);
 
         Recalibrate();
 
-        yield return null;
+        //tell the game to change VRMode/DesktopMode for Steam/Discord presence
+        //RichPresence.PopulatePresence();
+
+        //nvm that resets the RichPresence clock- i want people to know how long ive wasted staring at mirror 
+
+        yield
+        return null;
         isAttemptingSwitch = false;
     }
 
@@ -121,7 +135,6 @@ public class DesktopVRSwitch : MelonMod
             SteamVR.SafeDispose();
         }
     }
-
 
     // shouldn't be that important, right?
     private static void CloseMenuElements(bool isVR)
@@ -244,7 +257,7 @@ public class DesktopVRSwitch : MelonMod
         {
             MelonLogger.Msg("Parented CohtmlHud to active camera.");
             CohtmlHud.Instance.gameObject.transform.parent = isVR ? PlayerSetup.Instance.vrCamera.transform : PlayerSetup.Instance.desktopCamera.transform;
-            
+
             //sets hud position, rotation, and scale based on MetaPort isUsingVr
             CVRTools.ConfigureHudAffinity();
         }
@@ -318,6 +331,7 @@ public class DesktopVRSwitch : MelonMod
     {
         try
         {
+            MelonLogger.Msg("Updating all CameraFacingObject scripts to face new camera. (this fixes nameplates)");
             CameraFacingObject[] camfaceobjs = Object.FindObjectsOfType<CameraFacingObject>();
 
             for (int i = 0; i < camfaceobjs.Count(); i++)
@@ -332,10 +346,34 @@ public class DesktopVRSwitch : MelonMod
         }
     }
 
+    //cant fix unless i log the original VR gripOrigins with a patch...
+    //private static void SetPickupObjectOrigins()
+    //{
+    //    try
+    //    {
+    //        CVRPickupObject[] pickups = Object.FindObjectsOfType<CVRPickupObject>();
+
+    //        if (pickups.gripOrigin != null)
+    //        {
+    //            Transform x = this.gripOrigin.Find("[Desktop]");
+    //            if (x != null)
+    //            {
+    //                this.gripOrigin = x;
+    //            }
+    //        }
+    //    }
+    //    catch (Exception)
+    //    {
+    //        MelonLogger.Error("Error updating CameraFacingObject objects! Nameplates will be wonk...");
+    //        throw;
+    //    }
+    //}
+
     private static void UpdateHudOperations(bool isVR)
     {
         try
         {
+            MelonLogger.Msg("Set HudOperations worldLoadingItem and worldLoadStatus to their respective Desktop/Vr parent.");
             HudOperations.Instance.worldLoadingItem = isVR ? HudOperations.Instance.worldLoadingItemVr : HudOperations.Instance.worldLoadingItemDesktop;
             HudOperations.Instance.worldLoadStatus = isVR ? HudOperations.Instance.worldLoadStatusVr : HudOperations.Instance.worldLoadStatusDesktop;
         }
@@ -345,4 +383,20 @@ public class DesktopVRSwitch : MelonMod
             throw;
         }
     }
+
+    //i suck at traverse
+    //private static void UpdateGestureReconizerCam()
+    //{
+    //    try
+    //    {
+    //        MelonLogger.Msg("Set GestureReconizerCam camera to Camera.main.");
+    //        Camera _camera = Traverse.Create(CVRGestureRecognizer.Instance).Field("_camera").GetValue<Camera>();
+    //        _camera = Camera.main;
+    //    }
+    //    catch (Exception)
+    //    {
+    //        MelonLogger.Error("Error updating CVRGestureRecognizer camera!");
+    //        throw;
+    //    }
+    //}
 }
