@@ -33,6 +33,9 @@
         <Reference Include="SteamVR">
           <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\SteamVR.dll</HintPath>
         </Reference>
+        <Reference Include="Unity.TextMeshPro">
+          <HintPath>..\..\..\DakyModsCVR\ManagedLibs\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
         <Reference Include="UnityEngine.AnimationModule">
           <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>

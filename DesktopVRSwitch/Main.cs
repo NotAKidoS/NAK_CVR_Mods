@@ -2,6 +2,8 @@
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
+using ABI_RC.Core;
+using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.MovementSystem;
 using MelonLoader;
 using RootMotion.FinalIK;
@@ -17,6 +19,7 @@ public class DesktopVRSwitch : MelonMod
 {
     private static bool isAttemptingSwitch = false;
     private static float timedSwitch = 0f;
+    private static bool CurrentMode;
 
     public override void OnUpdate()
     {
@@ -25,7 +28,8 @@ public class DesktopVRSwitch : MelonMod
         {
             //start attempt
             isAttemptingSwitch = true;
-            MelonCoroutines.Start(AttemptPlatformSwitch());
+            MelonCoroutines.Start( AttemptPlatformSwitch() );
+
             //how long we wait until we assume an error occured
             timedSwitch = Time.time + 10f;
         }
@@ -33,21 +37,63 @@ public class DesktopVRSwitch : MelonMod
         //catch if coroutine just decided to not finish... which happens?
         if (isAttemptingSwitch && Time.time > timedSwitch)
         {
-            isAttemptingSwitch = false;
             MelonLogger.Error("Timer exceeded. Something is wrong and coroutine failed partway.");
+            MelonCoroutines.Start( AttemptPlatformSwitch(true) );
         }
     }
 
-    private static IEnumerator AttemptPlatformSwitch()
+    private static IEnumerator AttemptPlatformSwitch(bool forceMode = false)
     {
-        bool toVR = !MetaPort.Instance.isUsingVr;
-
+        //forceMode will attempt to backtrack to last working mode
+        CurrentMode = forceMode ? CurrentMode : MetaPort.Instance.isUsingVr;
+        bool VRMode = forceMode ? CurrentMode : !CurrentMode;
+        
         //load or unload SteamVR
-        if (toVR)
+        InitializeSteamVR(VRMode);
+
+        CloseMenuElements(VRMode);
+
+        yield return new WaitForEndOfFrame();
+
+        SetMetaPort(VRMode);
+
+        yield return new WaitForEndOfFrame();
+
+        SetPlayerSetup(VRMode);
+        SwitchActiveCameraRigs(VRMode);
+        UpdateCameraFacingObject();
+        CreateTempVRIK(VRMode);
+        QuickCalibrate(VRMode);
+        RepositionCohtmlHud(VRMode);
+        UpdateHudOperations(VRMode);
+
+        yield return new WaitForEndOfFrame();
+
+        SetMovementSystem(VRMode);
+
+        yield return new WaitForEndOfFrame();
+
+        //right here is the fucker most likely to break
+        ReloadCVRInputManager();
+
+        //some menus have 0.5s wait(), so to be safe
+        yield return new WaitForSeconds(1f);
+
+        Recalibrate();
+
+        yield return null;
+        isAttemptingSwitch = false;
+    }
+
+    //shitton of try catch below
+
+    private static void InitializeSteamVR(bool isVR)
+    {
+        if (isVR)
         {
             //force SteamVR to fully initialize, this does all and more than what i did with LoadDevice()
             SteamVR.Initialize(true);
-            
+
             //Just to make sure. Game does this natively when entering VR.
             SteamVR_Settings.instance.pauseGameWhenDashboardVisible = false;
 
@@ -74,43 +120,7 @@ public class DesktopVRSwitch : MelonMod
             //what even does this do that is actually important?
             SteamVR.SafeDispose();
         }
-
-        CloseMenuElements(toVR);
-
-        yield return new WaitForEndOfFrame();
-
-        SetMetaPort(toVR);
-
-        yield return new WaitForEndOfFrame();
-
-        SetPlayerSetup(toVR);
-        SwitchActiveCameraRigs(toVR);
-        CreateTempVRIK(toVR);
-        QuickCalibrate(toVR);
-        RepositionCohtmlHud(toVR);
-
-        yield return new WaitForEndOfFrame();
-
-        SetMovementSystem(toVR);
-
-        yield return new WaitForEndOfFrame();
-
-        //right here is the fucker most likely to break
-        ReloadCVRInputManager();
-
-        //some menus have 0.5s wait(), so to be safe
-        yield return new WaitForSeconds(1f);
-
-        Recalibrate();
-
-        yield return null;
-        isAttemptingSwitch = false;
     }
-
-
-
-    //shitton of try catch below
-
 
 
     // shouldn't be that important, right?
@@ -234,9 +244,9 @@ public class DesktopVRSwitch : MelonMod
         {
             MelonLogger.Msg("Parented CohtmlHud to active camera.");
             CohtmlHud.Instance.gameObject.transform.parent = isVR ? PlayerSetup.Instance.vrCamera.transform : PlayerSetup.Instance.desktopCamera.transform;
-            //i think the VR offset may be different between headsets, but i cannot find where in games code they are set
-            CohtmlHud.Instance.gameObject.transform.localPosition = isVR ? new Vector3(-0.2f, -0.391f, 1.244f) : new Vector3(0f, 0f, 1.3f);
-            CohtmlHud.Instance.gameObject.transform.localRotation = Quaternion.Euler(new Vector3(0f, 180f, 0f));
+            
+            //sets hud position, rotation, and scale based on MetaPort isUsingVr
+            CVRTools.ConfigureHudAffinity();
         }
         catch (Exception)
         {
@@ -298,6 +308,40 @@ public class DesktopVRSwitch : MelonMod
         {
             MelonLogger.Error("ReCalibrateAvatar() failed. Is PlayerSetup.Instance invalid?");
             MelonLogger.Msg("PlayerSetup.Instance: " + PlayerSetup.Instance);
+            throw;
+        }
+    }
+
+    //every nameplate canvas uses CameraFacingObject :stare:
+    //might need to use actual Desktop/VR cam instead of Camera.main
+    private static void UpdateCameraFacingObject()
+    {
+        try
+        {
+            CameraFacingObject[] camfaceobjs = Object.FindObjectsOfType<CameraFacingObject>();
+
+            for (int i = 0; i < camfaceobjs.Count(); i++)
+            {
+                camfaceobjs[i].m_Camera = Camera.main;
+            }
+        }
+        catch (Exception)
+        {
+            MelonLogger.Error("Error updating CameraFacingObject objects! Nameplates will be wonk...");
+            throw;
+        }
+    }
+
+    private static void UpdateHudOperations(bool isVR)
+    {
+        try
+        {
+            HudOperations.Instance.worldLoadingItem = isVR ? HudOperations.Instance.worldLoadingItemVr : HudOperations.Instance.worldLoadingItemDesktop;
+            HudOperations.Instance.worldLoadStatus = isVR ? HudOperations.Instance.worldLoadStatusVr : HudOperations.Instance.worldLoadStatusDesktop;
+        }
+        catch (Exception)
+        {
+            MelonLogger.Error("Error updating HudOperations LoadingItem & LoadStatus!");
             throw;
         }
     }
