@@ -5,7 +5,7 @@ Desktop to VR works enough
 
 VR to Desktop works enough
 
-Press Control + F6 to switch.
+Press Control + F6 to switch. (this is an old clip attached, its faster and more reliable now)
 
 https://user-images.githubusercontent.com/37721153/192128515-5630f47b-63ed-45c5-b0eb-0aac46d23731.mp4
 
