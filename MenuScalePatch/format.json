@@ -1,12 +1,12 @@
 {
-  "_id": -1,
+  "_id": 95,
   "name": "MenuScalePatch",
-  "modversion": "1.0.0",
+  "modversion": "1.1.0",
   "gameversion": "2022r168",
   "loaderversion": "0.5.4",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is scaled.",
+  "description": "Corrects MM and QM position when avatar is scaled.\nAdditional option to scale player collision.",
   "searchtags": [
     "menu",
     "scale",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r1/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r2/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "Initial Release.",
+  "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
   "embedcolor": "804221"
 }

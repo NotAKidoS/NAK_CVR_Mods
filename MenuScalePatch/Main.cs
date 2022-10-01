@@ -17,6 +17,8 @@ public class MenuScalePatch : MelonMod
     private static MelonPreferences_Entry<bool> m_entryScaleCollision;
     private static MelonPreferences_Entry<bool> m_entrySkinWidthLimit;
 
+    private static float defaultSkinWidth = 0f;
+
     public override void OnApplicationStart()
     {
         m_categoryMenuScalePatch = MelonPreferences.CreateCategory(nameof(MenuScalePatch));
@@ -41,12 +43,11 @@ public class MenuScalePatch : MelonMod
         
         if (!m_entryScaleCollision.Value)
         {
-            controller.skinWidth = 0.08f;
+            controller.skinWidth = defaultSkinWidth;
             MovementSystem.Instance.UpdateAvatarHeightFactor(1f);
         }
         else
         {
-            controller.skinWidth = (m_entrySkinWidthLimit.Value ? 0.001f : 0.08f);
             float _avatarHeight = Traverse.Create(PlayerSetup.Instance).Field("_avatarHeight").GetValue<float>();
             MovementSystem.Instance.UpdateAvatarHeightFactor(_avatarHeight);
         }
@@ -65,21 +66,29 @@ public class MenuScalePatch : MelonMod
             if (!_controllerScaleCollision) return;
             //avatar height = viewpoint height
             //heightfactor = viewpoint height * scale difference
-            //___controller.stepOffset = 0.0001f; (this is 0.3 or 0 based on groundedraw..)
+
             //unity docs say to not put skinwidth too low, or you chance getting stuck often
-            //because i cant overwrite stepOffset, ill limit height to min of 0.3 to prevent console spam
+            //but removing skinWidth allows your character to completely touch the floor
 
+            //grab the original skinWidth if it wasn't already logged
+            if (defaultSkinWidth == 0f) defaultSkinWidth = ___controller.skinWidth;
+
+            float skinWidth = (m_entrySkinWidthLimit.Value ? 0.001f : defaultSkinWidth);
+            //to prevent falling anims when smol- take skinWidth into maths
+            ___controller.skinWidth = skinWidth;
+            ___groundDistance = ___controller.radius + skinWidth;
+            ___groundCheck.localPosition = ____colliderCenter + Vector3.up * skinWidth;
+
+            //scale charactercontroller collision (take allow small player collider setting into account)
             ___controller.height = Mathf.Max(____avatarHeightFactor, ____minimumColliderRadius);
-            ___controller.radius = Mathf.Max(____avatarHeightFactor / 6f, ____minimumColliderRadius); ;
-            ___controller.center = Vector3.up * (___controller.height * 0.5f);
-            ___groundDistance = ___controller.radius;
+            ___controller.radius = Mathf.Max(____avatarHeightFactor / 6f, ____minimumColliderRadius);
+            ___controller.center = ____colliderCenter + Vector3.up * (___controller.height * 0.5f);
 
+            //match the proxy and force colliders to the scaled charactercontroller 
             ___proxyCollider.height = ___controller.height;
             ___proxyCollider.radius = ___controller.radius;
             ___proxyCollider.center = ___controller.center;
-
             ___forceObject.transform.localScale = new Vector3(___controller.radius + 0.1f, ___controller.height, ___controller.radius + 0.1f);
-            ___groundCheck.localPosition = ____colliderCenter;
         }
 
         [HarmonyPostfix]
@@ -105,7 +114,7 @@ public class MenuScalePatch : MelonMod
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ViewManager), "SetScale")]
-        private static void CheckLegit(float avatarHeight, ref ViewManager __instance, ref float ___cachedScreenAspectRatio, ref float ___cachedAvatarHeight, out bool __state)
+        private static void CheckLegit(float avatarHeight, ref float ___cachedAvatarHeight, out bool __state)
         {
             if (___cachedAvatarHeight == avatarHeight)
             {
