@@ -1,7 +1,7 @@
 {
   "_id": 95,
   "name": "MenuScalePatch",
-  "modversion": "1.1.0",
+  "modversion": "1.1.1",
   "gameversion": "2022r168",
   "loaderversion": "0.5.4",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r2/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r3/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
+  "changelog": "Fixed collision center. Collision no longer disconnects from avatar when moving roomscale.",
   "embedcolor": "804221"
 }
