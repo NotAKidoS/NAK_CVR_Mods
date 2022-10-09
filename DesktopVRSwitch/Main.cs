@@ -5,13 +5,23 @@ using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.MovementSystem;
+using ABI_RC.Core.EventSystem;
 using MelonLoader;
 using RootMotion.FinalIK;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
+using HarmonyLib;
 using Object = UnityEngine.Object;
+
+//Remove VRIK on VR to Desktop
+//Remove LookAtIK on Desktop to VR
+
+//Set Desktop camera to head again...?
+//Recenter collision position (in VR it shifts around)
+
+
 
 namespace DesktopVRSwitch;
 
@@ -64,10 +74,13 @@ public class DesktopVRSwitch : MelonMod
         SetPlayerSetup(VRMode);
         SwitchActiveCameraRigs(VRMode);
         UpdateCameraFacingObject();
-        CreateTempVRIK(VRMode);
-        QuickCalibrate(VRMode);
         RepositionCohtmlHud(VRMode);
         UpdateHudOperations(VRMode);
+
+        yield
+        return new WaitForEndOfFrame();
+
+        RemoveComponents(VRMode);
 
         yield
         return new WaitForEndOfFrame();
@@ -78,16 +91,34 @@ public class DesktopVRSwitch : MelonMod
         return new WaitForEndOfFrame();
 
         //needs to come after SetMovementSystem
-        //UpdateGestureReconizerCam();
+        UpdateGestureReconizerCam();
+
+        yield
+        return new WaitForSeconds(0.5f);
 
         //right here is the fucker most likely to break
         ReloadCVRInputManager();
 
         //some menus have 0.5s wait(), so to be safe
         yield
-        return new WaitForSeconds(1f);
+        return new WaitForSeconds(0.5f);
 
-        Recalibrate();
+        //I am setting the collision center to the avatars position so the collision is set in the same place as where it was after the player moved roomscale in VR
+
+        //need to recenter player avatar as VRIK locomotion moves that directly
+        Vector3 roomscalePos = PlayerSetup.Instance._avatar.transform.position;
+        Quaternion roomscaleRot = PlayerSetup.Instance._avatar.transform.rotation;
+
+        MovementSystem.Instance.enabled = false;
+        MovementSystem.Instance.transform.position = roomscalePos;
+        MovementSystem.Instance.transform.rotation = roomscaleRot;
+        MovementSystem.Instance.enabled = true;
+
+        //collision center is set to match headpos in VR, but desktop doesnt reset it
+        //MovementSystem.Instance.proxyCollider.center = Vector3.zero; //not sure why UpdateColliderCenter doesnt do this
+        MovementSystem.Instance.UpdateColliderCenter(roomscalePos);
+
+        //AssetManagement.Instance.LoadLocalAvatar(this.avatarId);
 
         //tell the game to change VRMode/DesktopMode for Steam/Discord presence
         //RichPresence.PopulatePresence();
@@ -190,45 +221,44 @@ public class DesktopVRSwitch : MelonMod
         }
     }
 
-    private static void CreateTempVRIK(bool isVR)
+    private static void RemoveComponents(bool isVR)
     {
         try
         {
-            if (isVR)
+            if (!isVR)
             {
-                MelonLogger.Msg("Creating temp VRIK component.");
+                MelonLogger.Msg("VRIK component is not needed. Removing.");
                 VRIK ik = (VRIK)PlayerSetup.Instance._avatar.GetComponent(typeof(VRIK));
-                if (ik == null)
+                if (ik != null)
                 {
-                    ik = PlayerSetup.Instance._avatar.AddComponent<VRIK>();
+                    UnityEngine.Object.Destroy(ik);
                 }
-                ik.solver.IKPositionWeight = 0f;
-                ik.enabled = false;
             }
             else
             {
-                MelonLogger.Msg("Temp VRIK component is not needed. Ignoring.");
+                MelonLogger.Msg("LookIK component is not needed. Removing.");
+                LookAtIK ik = (LookAtIK)PlayerSetup.Instance._avatar.GetComponent(typeof(LookAtIK));
+                if (ik != null)
+                {
+                    UnityEngine.Object.Destroy(ik);
+                }
+            }
+
+            MelonLogger.Msg("Removing Viseme and Eye controllers.");
+            CVRVisemeController cvrvisemeController = (CVRVisemeController)PlayerSetup.Instance._avatar.GetComponent(typeof(CVRVisemeController));
+            if (cvrvisemeController != null)
+            {
+                UnityEngine.Object.Destroy(cvrvisemeController);
+            }
+            CVREyeController cvreyeController = (CVREyeController)PlayerSetup.Instance._avatar.GetComponent(typeof(CVREyeController));
+            if (cvreyeController != null)
+            {
+                UnityEngine.Object.Destroy(cvreyeController);
             }
         }
         catch (Exception)
         {
             MelonLogger.Error("Temp creation of VRIK on avatar failed. Is PlayerSetup.Instance invalid?");
-            MelonLogger.Msg("PlayerSetup.Instance: " + PlayerSetup.Instance);
-            throw;
-        }
-    }
-
-    private static void QuickCalibrate(bool isVR)
-    {
-        try
-        {
-            //we invoke calibrate to get VRIK and calibrator instance set up, faster than full recalibrate
-            MelonLogger.Msg("Called CalibrateAvatar() on PlayerSetup.Instance. Expect a few errors from PlayerSetup Update() and LateUpdate().");
-            PlayerSetup.Instance.CalibrateAvatar();
-        }
-        catch (Exception)
-        {
-            MelonLogger.Error("CalibrateAvatar() failed. Is PlayerSetup.Instance invalid?");
             MelonLogger.Msg("PlayerSetup.Instance: " + PlayerSetup.Instance);
             throw;
         }
@@ -315,7 +345,7 @@ public class DesktopVRSwitch : MelonMod
         try
         {
             MelonLogger.Msg("Called ReCalibrateAvatar() on PlayerSetup.Instance. Will take a second...");
-            PlayerSetup.Instance.ReCalibrateAvatar();
+            PlayerSetup.Instance.CalibrateAvatar();
         }
         catch (Exception)
         {
@@ -385,18 +415,18 @@ public class DesktopVRSwitch : MelonMod
     }
 
     //i suck at traverse
-    //private static void UpdateGestureReconizerCam()
-    //{
-    //    try
-    //    {
-    //        MelonLogger.Msg("Set GestureReconizerCam camera to Camera.main.");
-    //        Camera _camera = Traverse.Create(CVRGestureRecognizer.Instance).Field("_camera").GetValue<Camera>();
-    //        _camera = Camera.main;
-    //    }
-    //    catch (Exception)
-    //    {
-    //        MelonLogger.Error("Error updating CVRGestureRecognizer camera!");
-    //        throw;
-    //    }
-    //}
+    private static void UpdateGestureReconizerCam()
+    {
+        try
+        {
+            MelonLogger.Msg("Set GestureReconizerCam camera to Camera.main.");
+            Camera cam = Traverse.Create(CVRGestureRecognizer.Instance).Field("_camera").GetValue() as Camera;
+            cam = Camera.main;
+        }
+        catch (Exception)
+        {
+            MelonLogger.Error("Error updating CVRGestureRecognizer camera!");
+            throw;
+        }
+    }
 }
