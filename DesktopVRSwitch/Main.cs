@@ -6,6 +6,7 @@ using ABI_RC.Core.UI;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.MovementSystem;
 using ABI_RC.Core.EventSystem;
+using ABI_RC.Systems.IK.SubSystems;
 using MelonLoader;
 using RootMotion.FinalIK;
 using System.Collections;
@@ -21,15 +22,34 @@ using Object = UnityEngine.Object;
 //Set Desktop camera to head again...?
 //Recenter collision position (in VR it shifts around)
 
+//tell the game to change VRMode/DesktopMode for Steam/Discord presence
+//RichPresence.PopulatePresence();
+
+//nvm that resets the RichPresence clock- i want people to know how long ive wasted staring at mirror 
+
 
 
 namespace DesktopVRSwitch;
 
 public class DesktopVRSwitch : MelonMod
 {
+    private static MelonPreferences_Category m_categoryDesktopVRSwitch;
+    private static MelonPreferences_Entry<bool> m_entryReloadInstance;
+    private static MelonPreferences_Entry<bool> m_entryTimedErrorCatch;
+    public override void OnApplicationStart()
+    {
+        m_categoryDesktopVRSwitch = MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
+        //m_entryReloadInstance = m_categoryDesktopVRSwitch.CreateEntry<bool>("Rejoin Instance", false, description: "Rejoin instance on switch.");
+        m_entryTimedErrorCatch = m_categoryDesktopVRSwitch.CreateEntry<bool>("Timed Error Catch", true, description: "Attempt to switch back if an error is found after 10 seconds.");
+
+        m_categoryDesktopVRSwitch.SaveToFile(false);
+    }
+
     private static bool isAttemptingSwitch = false;
     private static float timedSwitch = 0f;
     private static bool CurrentMode;
+    private static Vector3 avatarPos;
+    private static Quaternion avatarRot;
 
     public override void OnUpdate()
     {
@@ -50,6 +70,13 @@ public class DesktopVRSwitch : MelonMod
             MelonLogger.Error("Timer exceeded. Something is wrong and coroutine failed partway.");
             MelonCoroutines.Start(AttemptPlatformSwitch(true));
         }
+
+        //correct player position
+        if (isAttemptingSwitch && !MovementSystem.Instance.canMove)
+        {
+            MovementSystem.Instance.TeleportToPosRot(avatarPos, avatarRot, false);
+            MovementSystem.Instance.UpdateColliderCenter(avatarPos);
+        }
     }
 
     private static IEnumerator AttemptPlatformSwitch(bool forceMode = false)
@@ -58,7 +85,15 @@ public class DesktopVRSwitch : MelonMod
         CurrentMode = forceMode ? CurrentMode : MetaPort.Instance.isUsingVr;
         bool VRMode = forceMode ? CurrentMode : !CurrentMode;
 
-        //load or unload SteamVR
+        //store current player position/rotation to correct VR/Desktop offsets
+        avatarPos = PlayerSetup.Instance._avatar.transform.position;
+        avatarRot = PlayerSetup.Instance._avatar.transform.rotation;
+
+        //prevent player from any movement while transitioning
+        MovementSystem.Instance.canMove = false;
+        BodySystem.TrackingEnabled = false;
+
+        //load SteamVR
         InitializeSteamVR(VRMode);
 
         CloseMenuElements(VRMode);
@@ -80,21 +115,11 @@ public class DesktopVRSwitch : MelonMod
         yield
         return new WaitForEndOfFrame();
 
-        RemoveComponents(VRMode);
-
-        yield
-        return new WaitForEndOfFrame();
-
-        SetMovementSystem(VRMode);
-
-        yield
-        return new WaitForEndOfFrame();
-
         //needs to come after SetMovementSystem
-        UpdateGestureReconizerCam();
+        //UpdateGestureReconizerCam();
 
         yield
-        return new WaitForSeconds(0.5f);
+        return new WaitForEndOfFrame();
 
         //right here is the fucker most likely to break
         ReloadCVRInputManager();
@@ -103,27 +128,21 @@ public class DesktopVRSwitch : MelonMod
         yield
         return new WaitForSeconds(0.5f);
 
-        //I am setting the collision center to the avatars position so the collision is set in the same place as where it was after the player moved roomscale in VR
+        //reload current avatar
+        AssetManagement.Instance.LoadLocalAvatar(MetaPort.Instance.currentAvatarGuid);
 
-        //need to recenter player avatar as VRIK locomotion moves that directly
-        Vector3 roomscalePos = PlayerSetup.Instance._avatar.transform.position;
-        Quaternion roomscaleRot = PlayerSetup.Instance._avatar.transform.rotation;
+        yield
+        return new WaitForSeconds(2f);
 
-        MovementSystem.Instance.enabled = false;
-        MovementSystem.Instance.transform.position = roomscalePos;
-        MovementSystem.Instance.transform.rotation = roomscaleRot;
-        MovementSystem.Instance.enabled = true;
+        if (!VRMode)
+            //collision center is set to match headpos in VR, but desktop doesnt reset it
+            MovementSystem.Instance.UpdateColliderCenter(PlayerSetup.Instance._avatar.transform.position);
 
-        //collision center is set to match headpos in VR, but desktop doesnt reset it
-        //MovementSystem.Instance.proxyCollider.center = Vector3.zero; //not sure why UpdateColliderCenter doesnt do this
-        MovementSystem.Instance.UpdateColliderCenter(roomscalePos);
+        //gonna try doing this last
+        DisposeSteamVR(VRMode);
 
-        //AssetManagement.Instance.LoadLocalAvatar(this.avatarId);
-
-        //tell the game to change VRMode/DesktopMode for Steam/Discord presence
-        //RichPresence.PopulatePresence();
-
-        //nvm that resets the RichPresence clock- i want people to know how long ive wasted staring at mirror 
+        MovementSystem.Instance.canMove = true;
+        BodySystem.TrackingEnabled = true;
 
         yield
         return null;
@@ -153,7 +172,11 @@ public class DesktopVRSwitch : MelonMod
             //Combinations of all of these..
             //Its probably really simple, but I just cannot figure out how.
         }
-        else
+    }
+
+    private static void DisposeSteamVR(bool isVR)
+    {
+        if (!isVR)
         {
             //force SteamVR to let go of Chillout
             XRSettings.LoadDeviceByName("None");
@@ -189,6 +212,9 @@ public class DesktopVRSwitch : MelonMod
         {
             MelonLogger.Msg("QuickMenu Instance not found!!!");
         }
+
+        //disable input during switch
+        CVRInputManager.Instance.inputEnabled = false;
     }
 
     private static void SetMetaPort(bool isVR)
@@ -216,49 +242,6 @@ public class DesktopVRSwitch : MelonMod
         catch (Exception)
         {
             MelonLogger.Error("Setting PlayerSetup _inVr failed. Is PlayerSetup.Instance invalid?");
-            MelonLogger.Msg("PlayerSetup.Instance: " + PlayerSetup.Instance);
-            throw;
-        }
-    }
-
-    private static void RemoveComponents(bool isVR)
-    {
-        try
-        {
-            if (!isVR)
-            {
-                MelonLogger.Msg("VRIK component is not needed. Removing.");
-                VRIK ik = (VRIK)PlayerSetup.Instance._avatar.GetComponent(typeof(VRIK));
-                if (ik != null)
-                {
-                    UnityEngine.Object.Destroy(ik);
-                }
-            }
-            else
-            {
-                MelonLogger.Msg("LookIK component is not needed. Removing.");
-                LookAtIK ik = (LookAtIK)PlayerSetup.Instance._avatar.GetComponent(typeof(LookAtIK));
-                if (ik != null)
-                {
-                    UnityEngine.Object.Destroy(ik);
-                }
-            }
-
-            MelonLogger.Msg("Removing Viseme and Eye controllers.");
-            CVRVisemeController cvrvisemeController = (CVRVisemeController)PlayerSetup.Instance._avatar.GetComponent(typeof(CVRVisemeController));
-            if (cvrvisemeController != null)
-            {
-                UnityEngine.Object.Destroy(cvrvisemeController);
-            }
-            CVREyeController cvreyeController = (CVREyeController)PlayerSetup.Instance._avatar.GetComponent(typeof(CVREyeController));
-            if (cvreyeController != null)
-            {
-                UnityEngine.Object.Destroy(cvreyeController);
-            }
-        }
-        catch (Exception)
-        {
-            MelonLogger.Error("Temp creation of VRIK on avatar failed. Is PlayerSetup.Instance invalid?");
             MelonLogger.Msg("PlayerSetup.Instance: " + PlayerSetup.Instance);
             throw;
         }
@@ -299,22 +282,6 @@ public class DesktopVRSwitch : MelonMod
         }
     }
 
-    //hopefully whatever rework was hinted at doesn't immediatly break this
-    private static void SetMovementSystem(bool isVR)
-    {
-        try
-        {
-            MelonLogger.Msg($"Set MovementSystem instance to {isVR}.");
-            MovementSystem.Instance.isVr = true;
-        }
-        catch (Exception)
-        {
-            MelonLogger.Error("Setting MovementSystem isVr failed. Is MovementSystem.Instance invalid?");
-            MelonLogger.Msg("MovementSystem.Instance: " + MovementSystem.Instance);
-            throw;
-        }
-    }
-
     private static void ReloadCVRInputManager()
     {
         try
@@ -340,23 +307,7 @@ public class DesktopVRSwitch : MelonMod
         }
     }
 
-    private static void Recalibrate()
-    {
-        try
-        {
-            MelonLogger.Msg("Called ReCalibrateAvatar() on PlayerSetup.Instance. Will take a second...");
-            PlayerSetup.Instance.CalibrateAvatar();
-        }
-        catch (Exception)
-        {
-            MelonLogger.Error("ReCalibrateAvatar() failed. Is PlayerSetup.Instance invalid?");
-            MelonLogger.Msg("PlayerSetup.Instance: " + PlayerSetup.Instance);
-            throw;
-        }
-    }
-
     //every nameplate canvas uses CameraFacingObject :stare:
-    //might need to use actual Desktop/VR cam instead of Camera.main
     private static void UpdateCameraFacingObject()
     {
         try
@@ -366,7 +317,7 @@ public class DesktopVRSwitch : MelonMod
 
             for (int i = 0; i < camfaceobjs.Count(); i++)
             {
-                camfaceobjs[i].m_Camera = Camera.main;
+                camfaceobjs[i].m_Camera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
             }
         }
         catch (Exception)
@@ -375,29 +326,6 @@ public class DesktopVRSwitch : MelonMod
             throw;
         }
     }
-
-    //cant fix unless i log the original VR gripOrigins with a patch...
-    //private static void SetPickupObjectOrigins()
-    //{
-    //    try
-    //    {
-    //        CVRPickupObject[] pickups = Object.FindObjectsOfType<CVRPickupObject>();
-
-    //        if (pickups.gripOrigin != null)
-    //        {
-    //            Transform x = this.gripOrigin.Find("[Desktop]");
-    //            if (x != null)
-    //            {
-    //                this.gripOrigin = x;
-    //            }
-    //        }
-    //    }
-    //    catch (Exception)
-    //    {
-    //        MelonLogger.Error("Error updating CameraFacingObject objects! Nameplates will be wonk...");
-    //        throw;
-    //    }
-    //}
 
     private static void UpdateHudOperations(bool isVR)
     {
@@ -414,14 +342,14 @@ public class DesktopVRSwitch : MelonMod
         }
     }
 
-    //i suck at traverse
+    //this doesnt seem to work
     private static void UpdateGestureReconizerCam()
     {
         try
         {
             MelonLogger.Msg("Set GestureReconizerCam camera to Camera.main.");
             Camera cam = Traverse.Create(CVRGestureRecognizer.Instance).Field("_camera").GetValue() as Camera;
-            cam = Camera.main;
+            cam = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
         }
         catch (Exception)
         {
