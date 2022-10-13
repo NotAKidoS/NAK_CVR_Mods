@@ -9,6 +9,14 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="resources\blackout_controller.asset" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="resources\blackout_controller.asset" />
+    </ItemGroup>
+
+    <ItemGroup>
         <Reference Include="0Harmony">
             <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\MelonLoader\0Harmony.dll</HintPath>
         </Reference>
@@ -45,6 +53,21 @@
       <Reference Include="UnityEngine.PhysicsModule">
         <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
       </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resource1.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>Resource1.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resource1.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <Target Name="Deploy" AfterTargets="Build">

@@ -1,6 +1,6 @@
-﻿using MelonLoader;
+﻿using Blackout.Properties;
+using MelonLoader;
 using System.Reflection;
-using Blackout.Properties;
 
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
