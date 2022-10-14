@@ -14,6 +14,7 @@ internal class HarmonyPatches
         if (Blackout.inVR != PlayerSetup.Instance._inVr)
         {
             BlackoutController.Instance.SetupBlackoutInstance();
+            BlackoutController.Instance.ChangeBlackoutState(BlackoutController.BlackoutState.Awake);
         }
     }
 }

@@ -2,6 +2,7 @@
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
 using MelonLoader;
+using System.Text;
 using UnityEngine;
 
 namespace Blackout;
@@ -78,17 +79,17 @@ public class BlackoutController : MonoBehaviour
             case BlackoutState.Awake:
                 blackoutAnimator.SetBool("BlackoutState.Drowsy", false);
                 blackoutAnimator.SetBool("BlackoutState.Sleeping", false);
-                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyPartial", DrowsyDimStrength);
+                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyStrength", DrowsyDimStrength);
                 break;
             case BlackoutState.Drowsy:
                 blackoutAnimator.SetBool("BlackoutState.Drowsy", true);
                 blackoutAnimator.SetBool("BlackoutState.Sleeping", false);
-                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyPartial", DrowsyDimStrength);
+                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyStrength", DrowsyDimStrength);
                 break;
             case BlackoutState.Sleeping:
                 blackoutAnimator.SetBool("BlackoutState.Drowsy", false);
                 blackoutAnimator.SetBool("BlackoutState.Sleeping", true);
-                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyPartial", DrowsyDimStrength);
+                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyStrength", DrowsyDimStrength);
                 break;
             default:
                 break;
@@ -99,6 +100,22 @@ public class BlackoutController : MonoBehaviour
         ChangeTargetFPS();
     }
 
+    //initialize BlackoutInstance object
+    void Start()
+    {
+        Instance = this;
+
+        GameObject blackoutAsset = AssetsHandler.GetAsset("Assets/BundledAssets/Blackout/Blackout.prefab");
+        GameObject blackoutGO = Instantiate(blackoutAsset, new Vector3(0, 0, 0), Quaternion.identity);
+
+        if (blackoutGO == null) return;
+
+        blackoutGO.name = "BlackoutInstance";
+        blackoutAnimator = blackoutGO.GetComponent<Animator>();
+        SetupBlackoutInstance();
+    }
+
+    //Automatic State Change
     void Update()
     {
         //only run once a second, angularMovement is "smoothed out" at high FPS otherwise
@@ -126,28 +143,6 @@ public class BlackoutController : MonoBehaviour
                 break;
             default:
                 break;
-        }
-
-        //debug
-        //MelonLogger.Msg("curTime " + curTime);
-        //MelonLogger.Msg("lastAwakeTime " + lastAwakeTime);
-        //MelonLogger.Msg("timeleft " + GetNextStateTimer());
-        //MelonLogger.Msg("current state " + CurrentState);
-    }
-
-    //initialize BlackoutInstance object
-    void Start()
-    {
-        Instance = this;
-
-        GameObject blackoutAsset = AssetsHandler.GetAsset("Assets/BundledAssets/Blackout/Blackout.prefab");
-        GameObject blackoutGO = Instantiate(blackoutAsset, new Vector3(0, 0, 0), Quaternion.identity);
-
-        if (blackoutGO != null)
-        {
-            blackoutGO.name = "BlackoutInstance";
-            blackoutAnimator = blackoutGO.GetComponent<Animator>();
-            SetupBlackoutInstance();
         }
     }
 
@@ -190,7 +185,12 @@ public class BlackoutController : MonoBehaviour
     {
         MelonLogger.Msg(message);
         if (!CohtmlHud.Instance || !HudMessages) return;
-        CohtmlHud.Instance.ViewDropTextImmediate("Blackout", message, GetNextStateTimer().ToString() + " seconds till next state change.");
+
+        StringBuilder secondmessage = new StringBuilder();
+        if (enabled)
+            secondmessage = new StringBuilder(GetNextStateTimer().ToString() + " seconds till next state change.");
+
+        CohtmlHud.Instance.ViewDropTextImmediate("Blackout", message, secondmessage.ToString());
     }
 
     private void ChangeTargetFPS()
