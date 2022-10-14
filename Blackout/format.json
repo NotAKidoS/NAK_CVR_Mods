@@ -1,9 +1,9 @@
 {
-  "_id": -1,
+  "_id": 106,
   "name": "Blackout",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2022r168",
-  "loaderversion": "0.5.4",
+  "loaderversion": "0.5.5",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "Dim screen after set time of sitting still. Should be nice for VR sleeping.\n\nNotable Options:\n Cap FPS while sleeping.\nManual control via UIX\nConfigurable dimming strength.",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r1/Blackout.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r2/Blackout.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/Blackout/",
-  "changelog": "Initial release.",
+  "changelog": "Update to Melonloader 0.5.5.",
   "embedcolor": "#161b22"
 }
