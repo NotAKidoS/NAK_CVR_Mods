@@ -1,23 +1,23 @@
 {
   "_id": 95,
   "name": "Blackout",
-  "modversion": "1.1.0",
+  "modversion": "1.0.0",
   "gameversion": "2022r168",
   "loaderversion": "0.5.4",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is scaled.\nAdditional option to scale player collision.",
+  "description": "Dim screen after set time of sitting still. Should be nice for VR sleeping.\nOptions for lowering FPS while sleeping, manual control via UIX, and customizing movement thresholds for finetuning.",
   "searchtags": [
-    "menu",
-    "scale",
-    "avatarscale",
-    "slider"
+    "black",
+    "dimmer",
+    "sleeping",
+    "sleeper"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r2/Blackout.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r1/Blackout.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/Blackout/",
-  "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
-  "embedcolor": "804221"
+  "changelog": "Initial release.",
+  "embedcolor": "#0d1117"
 }
