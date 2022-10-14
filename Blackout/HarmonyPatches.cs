@@ -1,5 +1,5 @@
-﻿using HarmonyLib;
-using ABI_RC.Core.Player;
+﻿using ABI_RC.Core.Player;
+using HarmonyLib;
 
 namespace Blackout;
 

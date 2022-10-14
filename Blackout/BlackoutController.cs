@@ -1,6 +1,6 @@
 ﻿using ABI_RC.Core.Player;
-using ABI_RC.Core.UI;
 using ABI_RC.Core.Savior;
+using ABI_RC.Core.UI;
 using MelonLoader;
 using UnityEngine;
 
@@ -150,7 +150,7 @@ public class BlackoutController : MonoBehaviour
             SetupBlackoutInstance();
         }
     }
-        
+
     void OnDisable()
     {
         ChangeBlackoutState(BlackoutState.Awake);
