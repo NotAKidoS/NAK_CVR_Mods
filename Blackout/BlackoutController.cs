@@ -151,6 +151,12 @@ public class BlackoutController : MonoBehaviour
         }
     }
 
+    void OnEnable()
+    {
+        curTime = Time.time;
+        lastAwakeTime = curTime;
+    }
+
     void OnDisable()
     {
         ChangeBlackoutState(BlackoutState.Awake);
