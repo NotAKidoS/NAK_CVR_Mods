@@ -6,7 +6,7 @@
   "loaderversion": "0.5.4",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Dim screen after set time of sitting still. Should be nice for VR sleeping.\nOptions for lowering FPS while sleeping, manual control via UIX, and customizing movement thresholds for finetuning.",
+  "description": "Dim screen after set time of sitting still. Should be nice for VR sleeping.\n\nNotable Options:\n Cap FPS while sleeping.\nManual control via UIX\nConfigurable dimming strength.",
   "searchtags": [
     "black",
     "dimmer",
@@ -19,5 +19,5 @@
   "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r1/Blackout.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/Blackout/",
   "changelog": "Initial release.",
-  "embedcolor": "#0d1117"
+  "embedcolor": "#161b22"
 }
