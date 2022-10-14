@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Core.UI;
+using ABI_RC.Core.Savior;
 using MelonLoader;
 using UnityEngine;
 
@@ -47,6 +48,9 @@ public class BlackoutController : MonoBehaviour
     //this is uh, not work well- might rewrite now that i know how this should work
     public bool HudMessages = false;
 
+    //lower FPS while in sleep mode
+    public bool DropFPSOnSleep = false;
+
     public enum BlackoutState
     {
         Awake = 0,
@@ -60,6 +64,7 @@ public class BlackoutController : MonoBehaviour
     private float lastAwakeTime = 0f;
     private int nextUpdate = 1;
     private Animator blackoutAnimator;
+    private int targetFPS;
 
     public void ChangeBlackoutState(BlackoutState newState)
     {
@@ -91,6 +96,7 @@ public class BlackoutController : MonoBehaviour
         BlackoutState prevState = CurrentState;
         CurrentState = newState;
         SendHUDMessage($"Exiting {prevState} and entering {newState} state.");
+        ChangeTargetFPS();
     }
 
     void Update()
@@ -144,18 +150,10 @@ public class BlackoutController : MonoBehaviour
             SetupBlackoutInstance();
         }
     }
-
-    void OnEnabled()
-    {
-        if (!blackoutAnimator) return;
-        blackoutAnimator.gameObject.SetActive(true);
-    }
-
-    void OnDisabled()
+        
+    void OnDisable()
     {
         ChangeBlackoutState(BlackoutState.Awake);
-        if (!blackoutAnimator) return;
-        blackoutAnimator.gameObject.SetActive(false);
     }
 
     public void SetupBlackoutInstance()
@@ -187,6 +185,16 @@ public class BlackoutController : MonoBehaviour
         MelonLogger.Msg(message);
         if (!CohtmlHud.Instance || !HudMessages) return;
         CohtmlHud.Instance.ViewDropTextImmediate("Blackout", message, GetNextStateTimer().ToString() + " seconds till next state change.");
+    }
+
+    private void ChangeTargetFPS()
+    {
+        if (!DropFPSOnSleep) return;
+
+        //store target FPS to restore, i check each time just in case it changed
+        targetFPS = MetaPort.Instance.settings.GetSettingInt("GraphicsFramerateTarget", 0);
+
+        Application.targetFrameRate = (CurrentState == BlackoutState.Sleeping) ? 5 : targetFPS;
     }
 
     private void HandleAwakeState()
