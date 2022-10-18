@@ -59,6 +59,7 @@ public class BlackoutController : MonoBehaviour
         Sleeping,
     }
 
+    private GameObject activeModeCam;
     private Quaternion oldHeadRotation = Quaternion.identity;
     private float angularMovement = 0f;
     private float curTime = 0f;
@@ -125,7 +126,7 @@ public class BlackoutController : MonoBehaviour
         nextUpdate = Mathf.FloorToInt(curTime) + 1;
 
         //get difference between last frame rotation and current rotation
-        Quaternion currentHeadRotation = PlayerSetup.Instance.GetActiveCamera().transform.rotation;
+        Quaternion currentHeadRotation = activeModeCam.transform.rotation;
         angularMovement = Quaternion.Angle(oldHeadRotation, currentHeadRotation);
         oldHeadRotation = currentHeadRotation;
 
@@ -150,16 +151,32 @@ public class BlackoutController : MonoBehaviour
     {
         curTime = Time.time;
         lastAwakeTime = curTime;
+        Camera.onPreRender += OnPreRender;
+        Camera.onPostRender += OnPostRender;
     }
 
     void OnDisable()
     {
         ChangeBlackoutState(BlackoutState.Awake);
+        Camera.onPreRender -= OnPreRender;
+        Camera.onPostRender -= OnPostRender;
+    }
+
+    void OnPreRender(Camera cam)
+    {
+        if (cam != activeModeCam.GetComponent<Camera>()) return;
+        blackoutAnimator.transform.localScale = Vector3.zero;
+    }
+
+    void OnPostRender(Camera cam)
+    {
+        blackoutAnimator.transform.localScale = Vector3.one;
     }
 
     public void SetupBlackoutInstance()
     {
-        blackoutAnimator.transform.parent = PlayerSetup.Instance.GetActiveCamera().transform;
+        activeModeCam = PlayerSetup.Instance.GetActiveCamera();
+        blackoutAnimator.transform.parent = activeModeCam.transform;
         blackoutAnimator.transform.localPosition = Vector3.zero;
         blackoutAnimator.transform.localRotation = Quaternion.identity;
         blackoutAnimator.transform.localScale = Vector3.one;
