@@ -1,8 +1,8 @@
 {
   "_id": 106,
   "name": "Blackout",
-  "modversion": "1.0.1",
-  "gameversion": "2022r168",
+  "modversion": "1.0.2",
+  "gameversion": "2022r169p1",
   "loaderversion": "0.5.5",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r2/Blackout.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r3/Blackout.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/Blackout/",
-  "changelog": "Update to Melonloader 0.5.5.",
+  "changelog": "Fix render queue of sleep mode. Made effect 2x bigger to accommodate extreme FOV & avatar scale. Attempt to render only in active camera.",
   "embedcolor": "#161b22"
 }
