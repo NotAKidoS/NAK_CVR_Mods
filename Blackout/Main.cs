@@ -23,8 +23,8 @@ public class Blackout : MelonMod
         m_entryDropFPSOnSleep = m_categoryBlackout.CreateEntry<bool>("Lower FPS While Sleep", false, description: "Lowers FPS to 5 while in Sleep State.");
         m_entryDrowsyThreshold = m_categoryBlackout.CreateEntry<float>("Drowsy Threshold", 1f, description: "Degrees of movement to return partial vision.");
         m_entryAwakeThreshold = m_categoryBlackout.CreateEntry<float>("Awake Threshold", 12f, description: "Degrees of movement to return full vision.");
-        m_entryDrowsyModeTimer = m_categoryBlackout.CreateEntry<float>("Enter Drowsy Time", 3f, description: "How many minutes without movement until enter drowsy mode.");
-        m_entrySleepModeTimer = m_categoryBlackout.CreateEntry<float>("Enter Sleep Time", 10f, description: "How many seconds without movement until enter sleep mode.");
+        m_entryDrowsyModeTimer = m_categoryBlackout.CreateEntry<float>("Enter Drowsy Time (Minutes)", 3f, description: "How many minutes without movement until enter drowsy mode.");
+        m_entrySleepModeTimer = m_categoryBlackout.CreateEntry<float>("Enter Sleep Time (Seconds)", 10f, description: "How many seconds without movement until enter sleep mode.");
         m_entryDrowsyDimStrength = m_categoryBlackout.CreateEntry<float>("Drowsy Dim Strength", 0.5f, description: "How strong of a dimming effect should drowsy mode have.");
         m_categoryBlackout.SaveToFile(false);
 

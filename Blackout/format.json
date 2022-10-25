@@ -1,7 +1,7 @@
 {
   "_id": 106,
   "name": "Blackout",
-  "modversion": "1.0.2",
+  "modversion": "1.0.3",
   "gameversion": "2022r169p1",
   "loaderversion": "0.5.5",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r3/Blackout.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r4/Blackout.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/Blackout/",
-  "changelog": "Fix render queue of sleep mode. Made effect 2x bigger to accommodate extreme FOV & avatar scale. Attempt to render only in active camera.",
+  "changelog": "Fixed rendering in every camera other than player camera. Should now behave in both automatic and manual modes.",
   "embedcolor": "#161b22"
 }
