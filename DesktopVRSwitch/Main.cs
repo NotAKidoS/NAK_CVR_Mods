@@ -1,42 +1,37 @@
 ﻿using ABI_RC.Core;
+using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
 using ABI_RC.Core.Util.Object_Behaviour;
-using ABI_RC.Systems.MovementSystem;
-using ABI_RC.Core.EventSystem;
+using ABI_RC.Systems.Camera;
 using ABI_RC.Systems.IK.SubSystems;
+using ABI_RC.Systems.MovementSystem;
+using DesktopVRSwitch.Patches;
+using HarmonyLib;
 using MelonLoader;
-using RootMotion.FinalIK;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
-using HarmonyLib;
 using Object = UnityEngine.Object;
-
 
 //tell the game to change VRMode/DesktopMode for Steam/Discord presence
 //RichPresence.PopulatePresence();
 
 //nvm that resets the RichPresence clock- i want people to know how long ive wasted staring at mirror 
 
-
-
 namespace DesktopVRSwitch;
 
 public class DesktopVRSwitch : MelonMod
 {
     private static MelonPreferences_Category m_categoryDesktopVRSwitch;
-    private static MelonPreferences_Entry<bool> m_entryReloadInstance;
     private static MelonPreferences_Entry<bool> m_entryTimedErrorCatch;
-    public override void OnApplicationStart()
+    public override void OnInitializeMelon()
     {
         m_categoryDesktopVRSwitch = MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
-        //m_entryReloadInstance = m_categoryDesktopVRSwitch.CreateEntry<bool>("Rejoin Instance", false, description: "Rejoin instance on switch.");
         m_entryTimedErrorCatch = m_categoryDesktopVRSwitch.CreateEntry<bool>("Timed Error Catch", true, description: "Attempt to switch back if an error is found after 10 seconds.");
-
         m_categoryDesktopVRSwitch.SaveToFile(false);
     }
 
@@ -93,6 +88,7 @@ public class DesktopVRSwitch : MelonMod
         InitializeSteamVR(VRMode);
 
         CloseMenuElements(VRMode);
+        DisableMirrorCanvas();
 
         yield
         return new WaitForEndOfFrame();
@@ -107,12 +103,13 @@ public class DesktopVRSwitch : MelonMod
         UpdateCameraFacingObject();
         RepositionCohtmlHud(VRMode);
         UpdateHudOperations(VRMode);
+        SwitchPickupOrigins();
 
         yield
         return new WaitForEndOfFrame();
 
         //needs to come after SetMovementSystem
-        //UpdateGestureReconizerCam();
+        UpdateGestureReconizerCam();
 
         yield
         return new WaitForEndOfFrame();
@@ -193,7 +190,6 @@ public class DesktopVRSwitch : MelonMod
         {
             MelonLogger.Msg("Closed MainMenu Instance.");
             ViewManager.Instance.UiStateToggle(false);
-            ViewManager.Instance.VrInputChanged(isVR);
         }
         else
         {
@@ -267,7 +263,7 @@ public class DesktopVRSwitch : MelonMod
             MelonLogger.Msg("Parented CohtmlHud to active camera.");
             CohtmlHud.Instance.gameObject.transform.parent = isVR ? PlayerSetup.Instance.vrCamera.transform : PlayerSetup.Instance.desktopCamera.transform;
 
-            //sets hud position, rotation, and scale based on MetaPort isUsingVr
+            //sets hud position, rotation, ~~and scale~~ based on MetaPort isUsingVr
             CVRTools.ConfigureHudAffinity();
             CohtmlHud.Instance.gameObject.transform.localScale = new Vector3(1.2f, 1f, 1.2f);
         }
@@ -339,18 +335,50 @@ public class DesktopVRSwitch : MelonMod
         }
     }
 
-    //this doesnt seem to work
-    private static void UpdateGestureReconizerCam()
+    private static void DisableMirrorCanvas()
     {
         try
         {
-            MelonLogger.Msg("Set GestureReconizerCam camera to Camera.main.");
-            Camera cam = Traverse.Create(CVRGestureRecognizer.Instance).Field("_camera").GetValue() as Camera;
-            cam = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
+            //tell the game we are in mirror mode so itll disable it (if enabled)
+            PortableCamera.Instance.mode = MirroringMode.Mirror;
+            PortableCamera.Instance.ChangeMirroring();
         }
         catch (Exception)
         {
             MelonLogger.Error("Error updating CVRGestureRecognizer camera!");
+            throw;
+        }
+    }
+
+    private static void UpdateGestureReconizerCam()
+    {
+        try
+        {
+            MelonLogger.Msg("Set GestureReconizerCam camera to active camera.");
+            Traverse.Create(CVRGestureRecognizer.Instance).Field("_camera").SetValue(PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>());
+        }
+        catch (Exception)
+        {
+            MelonLogger.Error("Error updating CVRGestureRecognizer camera!");
+            throw;
+        }
+    }
+
+    private static void SwitchPickupOrigins()
+    {
+        try
+        {
+            MelonLogger.Msg("Switched pickup origins.");
+            CVRPickupObjectTracker[] pickups = Object.FindObjectsOfType<CVRPickupObjectTracker>();
+
+            for (int i = 0; i < pickups.Count(); i++)
+            {
+                pickups[i].OnSwitch();
+            }
+        }
+        catch (Exception)
+        {
+            MelonLogger.Error("Error switching pickup origins!");
             throw;
         }
     }
