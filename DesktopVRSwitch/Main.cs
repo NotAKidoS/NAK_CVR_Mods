@@ -16,11 +16,6 @@ using Valve.VR;
 using HarmonyLib;
 using Object = UnityEngine.Object;
 
-//Remove VRIK on VR to Desktop
-//Remove LookAtIK on Desktop to VR
-
-//Set Desktop camera to head again...?
-//Recenter collision position (in VR it shifts around)
 
 //tell the game to change VRMode/DesktopMode for Steam/Discord presence
 //RichPresence.PopulatePresence();
@@ -61,7 +56,8 @@ public class DesktopVRSwitch : MelonMod
             MelonCoroutines.Start(AttemptPlatformSwitch());
 
             //how long we wait until we assume an error occured
-            timedSwitch = Time.time + 10f;
+            if (m_entryTimedErrorCatch.Value)
+                timedSwitch = Time.time + 10f;
         }
 
         //catch if coroutine just decided to not finish... which happens?
@@ -71,7 +67,7 @@ public class DesktopVRSwitch : MelonMod
             MelonCoroutines.Start(AttemptPlatformSwitch(true));
         }
 
-        //correct player position
+        //correct player position while switching
         if (isAttemptingSwitch && !MovementSystem.Instance.canMove)
         {
             MovementSystem.Instance.TeleportToPosRot(avatarPos, avatarRot, false);
@@ -273,6 +269,7 @@ public class DesktopVRSwitch : MelonMod
 
             //sets hud position, rotation, and scale based on MetaPort isUsingVr
             CVRTools.ConfigureHudAffinity();
+            CohtmlHud.Instance.gameObject.transform.localScale = new Vector3(1.2f, 1f, 1.2f);
         }
         catch (Exception)
         {
