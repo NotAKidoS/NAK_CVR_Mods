@@ -1,7 +1,7 @@
 {
   "_id": -1,
   "name": "DesktopVRSwitch",
-  "modversion": "1.0.0",
+  "modversion": "2.0.0",
   "gameversion": "2022r168",
   "loaderversion": "0.5.4",
   "modtype": "Mod",
@@ -16,7 +16,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/r1/DesktopVRSwitch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/r2/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/",
   "changelog": "Initial Release",
   "embedcolor": "3498db"

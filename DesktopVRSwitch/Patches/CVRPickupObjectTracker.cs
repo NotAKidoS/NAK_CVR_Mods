@@ -15,6 +15,8 @@ internal class CVRPickupObject_Patch
     [HarmonyPatch(typeof(CVRPickupObject), "Start")]
     private static void CVRPickupObject_Start_Prefix(ref CVRPickupObject __instance)
     {
+        if (__instance.gripOrigin == null) return;
+
         Transform desktopOrigin = __instance.gripOrigin.Find("[Desktop]");
         if (desktopOrigin == null) return;
 
@@ -44,7 +46,7 @@ public class CVRPickupObjectTracker : MonoBehaviour
 
         if (pickupObject != null)
         {
-            if (pickupObject.IsGrabbedByMe()) pickupObject.Drop();
+            if (pickupObject.IsGrabbedByMe() && pickupObject._controllerRay != null) pickupObject._controllerRay.DropObject(true);
             (previousGripOrigin[pickupObject], pickupObject.gripOrigin) = (pickupObject.gripOrigin, previousGripOrigin[pickupObject]);
         }
     }
