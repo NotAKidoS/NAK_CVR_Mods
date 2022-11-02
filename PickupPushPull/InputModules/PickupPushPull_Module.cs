@@ -37,6 +37,7 @@ public class PickupPushPull_Module : CVRInputModule
     private CVRInputManager _inputManager;
     private ControllerRay desktopControllerRay;
     private float deadzoneRightValue;
+    private bool controlGamepadEnabled;
 
     //SteamVR Input
     private SteamVR_Action_Vector2 vrLookAction;
@@ -66,8 +67,17 @@ public class PickupPushPull_Module : CVRInputModule
 
         UpdateVRBinding();
 
+        controlGamepadEnabled = (bool)MetaPort.Instance.settings.GetSettingsBool("ControlDeadZoneRight", false);
+        MetaPort.Instance.settings.settingBoolChanged.AddListener(new UnityAction<string, bool>(SettingsBoolChanged));
+
         deadzoneRightValue = (float)MetaPort.Instance.settings.GetSettingInt("ControlDeadZoneRight", 0) / 100f;
         MetaPort.Instance.settings.settingIntChanged.AddListener(new UnityAction<string, int>(SettingsIntChanged));
+    }
+
+    private void SettingsBoolChanged(string name, bool value)
+    {
+        if (name == "ControlEnableGamepad")
+            controlGamepadEnabled = value;
     }
 
     private void SettingsIntChanged(string name, int value)
@@ -146,6 +156,8 @@ public class PickupPushPull_Module : CVRInputModule
 
     private void DoGamepadInput()
     {
+        if (!controlGamepadEnabled) return;
+
         //not sure how to make settings for this
         bool button1 = Input.GetButton("Controller Left Button");
         bool button2 = Input.GetButton("Controller Right Button");
