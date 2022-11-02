@@ -1,12 +1,12 @@
 {
   "_id": 91,
   "name": "PickupPushPull",
-  "modversion": "1.1.0",
+  "modversion": "3.0.0",
   "gameversion": "2022r168",
-  "loaderversion": "0.5.4",
+  "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Allows you to push & pull pickups with Gamepad or VR using the right joystick.",
+  "description": "Allows you to push & pull pickups with Mouse, Gamepad, & VR.\nCan also optionally rotate props via keybind.",
   "searchtags": [
     "pull",
     "push",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPP/releases/download/r3/PickupPushPull.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/PickupPP/",
-  "changelog": "Switched to using Harmony Patches.",
+  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPushPull/releases/download/r2/PickupPushPull.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/PickupPushPull/",
+  "changelog": "Switched to input module setup. Desktop will rotate held pickups when zoom bind is pressed. Rotation bind no longer prevents rotation when pickup is not being held.",
   "embedcolor": "804221"
 }

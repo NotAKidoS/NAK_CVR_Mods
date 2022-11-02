@@ -5,187 +5,104 @@ using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 using Valve.VR;
+using PickupPushPull.InputModules;
 
 namespace PickupPushPull;
 
 public class PickupPushPull : MelonMod
 {
-    private static MelonPreferences_Category m_categoryPickupPushPull;
-    private static MelonPreferences_Entry<float> m_entryPushPullSpeed;
-    private static MelonPreferences_Entry<float> m_entryRotateSpeed;
-    private static MelonPreferences_Entry<bool> m_entryEnableRotation;
+    private static MelonPreferences_Category Category_PickupPushPull;
+    private static MelonPreferences_Entry<float> Setting_PushPullSpeed, Setting_RotateSpeed;
+    private static MelonPreferences_Entry<bool> Setting_EnableRotation, Setting_Desktop_UseZoomForRotate;
+    private static MelonPreferences_Entry<BindingOptionsVR.BindHand> Setting_VR_RotateHand;
+    private static MelonPreferences_Entry<BindingOptionsVR.BindingOptions> Setting_VR_RotateBind;
 
-    //not sure if im gonna implement that switch hell for gamepad or mouse yet...
-    private static MelonPreferences_Entry<BindingOptionsVR> m_entryRotateBindsVR;
-    private static MelonPreferences_Entry<BindHandVR> m_entryRotateBindHandVR;
-
-    private enum BindHandVR
+    public override void OnInitializeMelon()
     {
+        Category_PickupPushPull = MelonPreferences.CreateCategory(nameof(PickupPushPull));
+        Category_PickupPushPull.SaveToFile(false);
+
+        //Global settings
+        Setting_PushPullSpeed = Category_PickupPushPull.CreateEntry("Push Pull Speed", 2f, description: "Up/down on right joystick for VR. Left buSettingr + Up/down on right joystick for Gamepad.");
+        Setting_RotateSpeed = Category_PickupPushPull.CreateEntry<float>("Rotate Speed", 6f);
+        Setting_EnableRotation = Category_PickupPushPull.CreateEntry<bool>("Enable Rotation", false, description: "Hold left trigger in VR or right buSettingr on Gamepad.");
+
+        //Desktop settings
+        Setting_Desktop_UseZoomForRotate = Category_PickupPushPull.CreateEntry<bool>("Desktop Use Zoom For Rotate", true, description: "Use zoom bind for rotation while a prop is held.");
+
+        //VR settings
+        Setting_VR_RotateHand = Category_PickupPushPull.CreateEntry("VR Hand", BindingOptionsVR.BindHand.LeftHand);
+
+        //bruh
+        foreach (var setting in Category_PickupPushPull.Entries)
+        {
+            setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
+        }
+
+        //special setting
+        Setting_VR_RotateBind = Category_PickupPushPull.CreateEntry("VR Binding", BindingOptionsVR.BindingOptions.ButtonATouch);
+        Setting_VR_RotateBind.OnEntryValueChangedUntyped.Subscribe(OnUpdateVRBinding);
+
+        MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
+    }
+
+
+    System.Collections.IEnumerator WaitForLocalPlayer()
+    {
+        while (PlayerSetup.Instance == null)
+            yield return null;
+
+        CVRInputManager.Instance.gameObject.AddComponent<PickupPushPull_Module>();
+
+        //update BlackoutController settings after it initializes
+        while (PickupPushPull_Module.Instance == null)
+            yield return null;
+
+        UpdateAllSettings();
+    }
+
+    private void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
+    private void OnUpdateVRBinding(object arg1, object arg2) => UpdateVRBinding();
+
+    private void UpdateAllSettings()
+    {
+        if (!PickupPushPull_Module.Instance) return;
+
+        //Global settings
+        PickupPushPull_Module.Instance.Setting_PushPullSpeed = Setting_PushPullSpeed.Value * 50;
+        PickupPushPull_Module.Instance.Setting_RotationSpeed = Setting_RotateSpeed.Value * 50;
+        PickupPushPull_Module.Instance.Setting_EnableRotation = Setting_EnableRotation.Value;
+        //Desktop settings
+        PickupPushPull_Module.Instance.Desktop_UseZoomForRotate = Setting_Desktop_UseZoomForRotate.Value;
+        //VR settings
+        PickupPushPull_Module.Instance.VR_RotateHand = Setting_VR_RotateHand.Value;
+    }
+
+    private void UpdateVRBinding()
+    {
+        //VR special settings
+        PickupPushPull_Module.Instance.VR_RotateBind = Setting_VR_RotateBind.Value;
+        PickupPushPull_Module.Instance.UpdateVRBinding();
+    }
+}
+
+public class BindingOptionsVR
+{
+    public enum BindHand
+    {
+        Any,
         LeftHand,
         RightHand
     }
-    private enum BindingOptionsVR
+    public enum BindingOptions
     {
+        //Only oculus bindings have by default
         ButtonATouch,
         ButtonBTouch,
+        TriggerTouch,
+        //doesnt work?
         StickTouch,
-        TriggerTouch
-    }
-
-    public override void OnApplicationStart()
-    {
-        m_categoryPickupPushPull = MelonPreferences.CreateCategory(nameof(PickupPushPull));
-        m_entryPushPullSpeed = m_categoryPickupPushPull.CreateEntry("PushPullSpeed", 1f, description: "Up/down on right joystick for VR. Left bumper + Up/down on right joystick for Gamepad.");
-        m_entryRotateSpeed = m_categoryPickupPushPull.CreateEntry<float>("RotateSpeed", 1f);
-        m_entryEnableRotation = m_categoryPickupPushPull.CreateEntry<bool>("EnableRotation", false, description: "Hold left trigger in VR or right bumper on Gamepad.");
-        m_entryRotateBindHandVR = m_categoryPickupPushPull.CreateEntry("VR Hand", BindHandVR.LeftHand);
-        m_entryRotateBindsVR = m_categoryPickupPushPull.CreateEntry("VR Binding", BindingOptionsVR.ButtonATouch);
-
-        m_categoryPickupPushPull.SaveToFile(false);
-        m_entryPushPullSpeed.OnValueChangedUntyped += UpdateSettings;
-        m_entryRotateSpeed.OnValueChangedUntyped += UpdateSettings;
-        m_entryEnableRotation.OnValueChangedUntyped += UpdateSettings;
-
-        UpdateSettings();
-    }
-    private static void UpdateSettings()
-    {
-        HarmonyPatches.ppSpeed = m_entryPushPullSpeed.Value;
-        HarmonyPatches.rotSpeed = m_entryRotateSpeed.Value;
-        HarmonyPatches.enableRot = m_entryEnableRotation.Value;
-        HarmonyPatches.rotBindVR = m_entryRotateBindsVR.Value;
-        HarmonyPatches.rotHandVR = (SteamVR_Input_Sources)m_entryRotateBindHandVR.Value + 1;
-    }
-
-    [HarmonyPatch]
-    private class HarmonyPatches
-    {
-        //UpdateSettings() on app start immediatly overrides these :shrug:
-        public static float ppSpeed = m_entryPushPullSpeed.Value;
-        public static float rotSpeed = m_entryRotateSpeed.Value;
-        public static bool enableRot = m_entryEnableRotation.Value;
-        public static BindingOptionsVR rotBindVR = m_entryRotateBindsVR.Value;
-        public static SteamVR_Input_Sources rotHandVR = (SteamVR_Input_Sources)m_entryRotateBindHandVR.Value + 1;
-
-        private static float objectPitch = 0f;
-        private static float objectYaw = 0f;
-
-        private static bool lockedVRInput = false;
-        private static bool lockedFSInput = false;
-        private static CursorLockMode savedCursorLockState;
-
-        //uses code from https://github.com/ljoonal/CVR-Plugins/tree/main/RotateIt
-        //GPL-3.0 license - Thank you ljoonal for being smart brain :plead:
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(CVRPickupObject), "Update")]
-        public static void GrabbedObjectPatch(ref CVRPickupObject __instance)
-        {
-            // Need to only run when the object is grabbed by the local player
-            if (!__instance.IsGrabbedByMe()) return;
-
-            Quaternion originalRotation = __instance.transform.rotation;
-            Transform referenceTransform = __instance._controllerRay.transform;
-
-            __instance.transform.RotateAround(__instance.transform.position, referenceTransform.right, objectPitch * Time.deltaTime);
-            __instance.transform.RotateAround(__instance.transform.position, referenceTransform.up, objectYaw * Time.deltaTime);
-
-            // Add the new difference between the og rotation and our newly added rotation the the stored offset.
-            __instance.initialRotationalOffset *= Quaternion.Inverse(__instance.transform.rotation) * originalRotation;
-        }
-
-        //Reset object rotation input each frame
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(CVRInputManager), "Update")]
-        private static void BeforeUpdate()
-        {
-            objectPitch = 0f;
-            objectYaw = 0f;
-        }
-
-        //Gamepad & Desktop Input Patch
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(InputModuleGamepad), "UpdateInput")]
-        private static void AfterUpdateInput(ref bool ___enableGamepadInput)
-        {
-
-            bool button1 = Input.GetButton("Controller Left Button") || Input.GetKey(KeyCode.Mouse4) || Input.GetKey(KeyCode.Mouse3);
-            bool button2 = Input.GetButton("Controller Right Button") || Input.GetKey(KeyCode.Mouse3);
-
-            if (button1)
-            {
-                if (!lockedFSInput)
-                {
-                    lockedFSInput = true;
-                    savedCursorLockState = Cursor.lockState;
-                    Cursor.lockState = CursorLockMode.None;
-                    PlayerSetup.Instance._movementSystem.disableCameraControl = true;
-                }
-                if (button2 && enableRot)
-                {
-                    objectPitch += rotSpeed * CVRInputManager.Instance.rawLookVector.y * -1;
-                    objectYaw += rotSpeed * CVRInputManager.Instance.rawLookVector.x;
-                }
-                else
-                {
-                    CVRInputManager.Instance.objectPushPull += CVRInputManager.Instance.rawLookVector.y * ppSpeed * Time.deltaTime;
-                }
-            }
-            else if (lockedFSInput)
-            {
-                lockedFSInput = false;
-                Cursor.lockState = savedCursorLockState;
-                PlayerSetup.Instance._movementSystem.disableCameraControl = false;
-            }
-        }
-
-        //VR Input Patch
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(InputModuleSteamVR), "UpdateInput")]
-        private static void AfterUpdateInputprivate(ref SteamVR_Action_Boolean ___steamVrButtonATouch, ref SteamVR_Action_Boolean ___steamVrButtonBTouch, ref SteamVR_Action_Boolean ___steamVrStickTouch, ref SteamVR_Action_Boolean ___steamVrTriggerTouch)
-        {
-            if (!MetaPort.Instance.isUsingVr) return;
-
-            bool button = false;
-
-            //not really sure this is optimal, i dont know all the cool c# tricks yet
-            switch (rotBindVR)
-            {
-                case BindingOptionsVR.ButtonATouch:
-                    button = ___steamVrButtonATouch.GetState(rotHandVR);
-                    return;
-                case BindingOptionsVR.ButtonBTouch:
-                    button = ___steamVrButtonBTouch.GetState(rotHandVR);
-                    return;
-                case BindingOptionsVR.StickTouch:
-                    button = ___steamVrStickTouch.GetState(rotHandVR);
-                    return;
-                case BindingOptionsVR.TriggerTouch:
-                    button = ___steamVrTriggerTouch.GetState(rotHandVR);
-                    return;
-                default: break;
-            }
-
-            if (button && enableRot)
-            {
-                if (!lockedVRInput)
-                {
-                    lockedVRInput = true;
-                    PlayerSetup.Instance._movementSystem.canRot = false;
-                    PlayerSetup.Instance._movementSystem.disableCameraControl = true;
-                }
-                objectPitch += rotSpeed * (CVRInputManager.Instance.floatDirection / 2f * -1);
-                objectYaw += rotSpeed * CVRInputManager.Instance.rawLookVector.x;
-                return;
-            }
-            else if (lockedVRInput)
-            {
-                lockedVRInput = false;
-                PlayerSetup.Instance._movementSystem.canRot = true;
-                PlayerSetup.Instance._movementSystem.disableCameraControl = false;
-            }
-
-            CVRInputManager.Instance.objectPushPull += CVRInputManager.Instance.floatDirection * ppSpeed * Time.deltaTime;
-        }
+        //Index only
+        GripTouch
     }
 }
