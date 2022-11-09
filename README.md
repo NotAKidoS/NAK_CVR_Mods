@@ -7,10 +7,9 @@ Hold left bumper on Gamepad to use objectPushPull.
 
 You can also rotate props while holding down the selected bind in VR, or right bumper on Gamepad.
 
-_Kind of_ has Desktop support. Use Mouse 4&5 for rotating and push&pull.
+Desktop can use the zoom bind while holding props without pickup origin to rotate with mouse.
 
 As you can tell, i have no fucking clue how to use GitHub.
-
 
 
 https://user-images.githubusercontent.com/37721153/188521473-9d180795-785a-4ba0-b97f-1e9163d1ba14.mp4
