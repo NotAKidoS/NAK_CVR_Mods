@@ -1,4 +1,4 @@
-{
+wa {
   "_id": 95,
   "name": "MenuScalePatch",
   "modversion": "1.1.1",
@@ -16,7 +16,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r3/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r4/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
   "changelog": "Fixed collision center. Collision no longer disconnects from avatar when moving roomscale.",
   "embedcolor": "804221"
