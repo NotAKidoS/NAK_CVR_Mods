@@ -15,7 +15,7 @@ public class MenuScalePatch : MelonMod
     {
         [HarmonyPostfix]
         [HarmonyPatch(typeof(CVR_MenuManager), "SetScale")]
-        private static void SetQMScale(ref CohtmlView ___quickMenu, ref float ____scaleFactor, float avatarHeight)
+        private static void SetQMScale(ref CohtmlView ___quickMenu, ref float ____scaleFactor)
         {
             if (!MetaPort.Instance.isUsingVr)
             {
