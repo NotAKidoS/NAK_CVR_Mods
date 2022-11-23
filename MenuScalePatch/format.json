@@ -1,12 +1,12 @@
-wa {
+{
   "_id": 95,
   "name": "MenuScalePatch",
-  "modversion": "1.1.1",
-  "gameversion": "2022r168",
-  "loaderversion": "0.5.4",
+  "modversion": "2.0.0",
+  "gameversion": "2022r169",
+  "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is scaled.\nAdditional option to scale player collision.",
+  "description": "Corrects MM and QM position when avatar is scaled.",
   "searchtags": [
     "menu",
     "scale",
@@ -18,6 +18,6 @@ wa {
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r4/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "Fixed collision center. Collision no longer disconnects from avatar when moving roomscale.",
+  "changelog": "Removed collision scaling feature as it is now native.",
   "embedcolor": "804221"
 }
