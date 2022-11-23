@@ -1,5 +1,7 @@
 ﻿using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
 using HarmonyLib;
+using MelonLoader;
 
 namespace Blackout;
 
@@ -11,9 +13,10 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(PlayerSetup), "CalibrateAvatar")]
     private static void CheckVRModeOnSwitch()
     {
-        if (Blackout.inVR != PlayerSetup.Instance._inVr)
+        if (Blackout.inVR != MetaPort.Instance.isUsingVr)
         {
-            Blackout.inVR = PlayerSetup.Instance._inVr;
+            MelonLogger.Msg("VRMode change detected! Reinitializing Blackout Instance...");
+            Blackout.inVR = MetaPort.Instance.isUsingVr;
             BlackoutController.Instance.SetupBlackoutInstance();
             BlackoutController.Instance.ChangeBlackoutState(BlackoutController.BlackoutState.Awake);
         }

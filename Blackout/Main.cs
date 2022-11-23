@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
 using MelonLoader;
 
 namespace Blackout;
@@ -28,14 +29,10 @@ public class Blackout : MelonMod
         m_entryDrowsyDimStrength = m_categoryBlackout.CreateEntry<float>("Drowsy Dim Strength", 0.5f, description: "How strong of a dimming effect should drowsy mode have.");
         m_categoryBlackout.SaveToFile(false);
 
-        m_entryEnabled.OnEntryValueChangedUntyped.Subscribe(OnUpdateEnabled);
-        m_entryHudMessages.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-        m_entryDropFPSOnSleep.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-        m_entryDrowsyThreshold.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-        m_entryAwakeThreshold.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-        m_entryDrowsyModeTimer.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-        m_entrySleepModeTimer.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-        m_entryDrowsyDimStrength.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
+        foreach (var setting in m_categoryBlackout.Entries)
+        {
+            setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
+        }
 
         //UIExpansionKit addon
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "UI Expansion Kit"))
@@ -55,7 +52,7 @@ public class Blackout : MelonMod
         while (PlayerSetup.Instance == null)
             yield return null;
 
-        inVR = PlayerSetup.Instance._inVr;
+        inVR = MetaPort.Instance.isUsingVr;
         PlayerSetup.Instance.gameObject.AddComponent<BlackoutController>();
 
         //update BlackoutController settings after it initializes
