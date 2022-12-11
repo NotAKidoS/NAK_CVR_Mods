@@ -1,5 +1,5 @@
 {
-  "_id": -1,
+  "_id": 110,
   "name": "PathCamDisabler",
   "modversion": "1.0.0",
   "gameversion": "2022r169",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/PathCamDisabler/releases/download/r1/PathCamDisabler.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/PathCamDisabler/",
-  "changelog": "sign initials here",
+  "changelog": "initial release\n(i made this in 5 minutes after months of annoyances)",
   "embedcolor": "#9b59b6"
 }
