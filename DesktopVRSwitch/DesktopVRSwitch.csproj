@@ -18,6 +18,9 @@
         <Reference Include="Assembly-CSharp-firstpass">
           <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
+        <Reference Include="Aura2_Core">
+          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Aura2_Core.dll</HintPath>
+        </Reference>
         <Reference Include="cohtml.Net">
           <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\cohtml.Net.dll</HintPath>
         </Reference>
@@ -32,6 +35,12 @@
         </Reference>
         <Reference Include="SteamVR">
           <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\SteamVR.dll</HintPath>
+        </Reference>
+        <Reference Include="UIExpansionKit">
+          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\Mods\UIExpansionKit.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Postprocessing.Runtime">
+          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Unity.Postprocessing.Runtime.dll</HintPath>
         </Reference>
         <Reference Include="Unity.TextMeshPro">
           <HintPath>..\..\..\DakyModsCVR\ManagedLibs\Unity.TextMeshPro.dll</HintPath>
