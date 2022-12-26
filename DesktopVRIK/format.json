@@ -1,0 +1,23 @@
+{
+  "_id": 95,
+  "name": "DesktopVRIK",
+  "modversion": "1.1.0",
+  "gameversion": "2022r168",
+  "loaderversion": "0.5.4",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Corrects MM and QM position when avatar is scaled.\nAdditional option to scale player collision.",
+  "searchtags": [
+    "menu",
+    "scale",
+    "avatarscale",
+    "slider"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/r2/DesktopVRIK.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
+  "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
+  "embedcolor": "804221"
+}
