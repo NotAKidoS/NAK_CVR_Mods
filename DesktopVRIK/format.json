@@ -16,7 +16,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/r1/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v1.0.0/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
   "changelog": "Simplified VRIK calibration to avoid low heel issue.",
   "embedcolor": "9b59b6"
