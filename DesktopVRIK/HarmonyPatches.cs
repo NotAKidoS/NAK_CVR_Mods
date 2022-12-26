@@ -15,12 +15,15 @@ internal class HarmonyPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), "SetupAvatarGeneral")]
-    private static void SetupDesktopIKSystem(ref CVRAvatar ____avatarDescriptor)
+    private static void SetupDesktopIKSystem(ref CVRAvatar ____avatarDescriptor, ref Animator ____animator)
     {
         if (!MetaPort.Instance.isUsingVr && DesktopVRIK.Instance.Setting_Enabled)
         {
-            //this will stop at the useless isVr return (the function is only ever called by vr anyways...)
-            IKSystem.Instance.InitializeAvatar(____avatarDescriptor);
+            if (____avatarDescriptor != null && ____animator != null && ____animator.isHuman)
+            {
+                //this will stop at the useless isVr return (the function is only ever called by vr anyways...)
+                IKSystem.Instance.InitializeAvatar(____avatarDescriptor);
+            }
         }
     }
 
@@ -30,40 +33,25 @@ internal class HarmonyPatches
     {
         if (!MetaPort.Instance.isUsingVr && DesktopVRIK.Instance.Setting_Enabled)
         {
-            //need IKSystem to see VRIK component for setup
-            if (____vrik == null)
+            if (IKSystem.Instance.animator != null && IKSystem.Instance.animator.avatar != null && IKSystem.Instance.animator.avatar.isHuman)
             {
-                ____vrik = avatar.gameObject.AddComponent<VRIK>();
-            }
+                //need IKSystem to see VRIK component for setup
+                if (____vrik == null)
+                {
+                    ____vrik = avatar.gameObject.AddComponent<VRIK>();
+                }
 
-            //ChilloutVR stuffs that makes sure garbage armatures are supported
-            //this places heels in the ground... can i just use my own tpose animation
-            if (DesktopVRIK.Instance.Setting_CompatibilityMode)
-            {
+                //why the fuck does this fix bad armatures and heels in ground ???
                 if (____poseHandler == null)
                 {
                     ____poseHandler = new HumanPoseHandler(IKSystem.Instance.animator.avatar, IKSystem.Instance.animator.transform);
                 }
                 ____poseHandler.GetHumanPose(ref ___humanPose);
-                ____referenceRootPosition = IKSystem.Instance.animator.GetBoneTransform(HumanBodyBones.Hips).position;
-                ____referenceRootRotation = IKSystem.Instance.animator.GetBoneTransform(HumanBodyBones.Hips).rotation;
-                for (int i = 0; i < ___HandCalibrationPoseMuscles.Length; i++)
-                {
-                    IKSystem.Instance.ApplyMuscleValue((MuscleIndex)i, ___HandCalibrationPoseMuscles[i], ref ___humanPose.muscles);
-                }
                 ____poseHandler.SetHumanPose(ref ___humanPose);
-                if (IKSystem.Instance.applyOriginalHipPosition)
-                {
-                    IKSystem.Instance.animator.GetBoneTransform(HumanBodyBones.Hips).position = ____referenceRootPosition;
-                }
-                if (IKSystem.Instance.applyOriginalHipRotation)
-                {
-                    IKSystem.Instance.animator.GetBoneTransform(HumanBodyBones.Hips).rotation = ____referenceRootRotation;
-                }
-            }
 
-            //now I calibrate DesktopVRIK
-            DesktopVRIK.Instance.CalibrateDesktopVRIK(avatar);
+                //now I calibrate DesktopVRIK
+                DesktopVRIK.Instance.CalibrateDesktopVRIK(avatar);
+            }
         }
     }
 

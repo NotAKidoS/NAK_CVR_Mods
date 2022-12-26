@@ -25,6 +25,6 @@ using DesktopVRIK.Properties;
 namespace DesktopVRIK.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.2";
     public const string Author = "NotAKidoS";
 }
