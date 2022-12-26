@@ -31,7 +31,7 @@ internal class HarmonyPatches
             //need IKSystem to see VRIK component for setup
             ____vrik = avatar.gameObject.AddComponent<VRIK>();
             //now I calibrate DesktopVRIK
-            DesktopVRIK.Instance.CalibrateAvatarVRIK(avatar);
+            DesktopVRIK.Instance.CalibrateDesktopVRIK(avatar);
         }
     }
 

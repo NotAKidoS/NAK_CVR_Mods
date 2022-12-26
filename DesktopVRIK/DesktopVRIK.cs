@@ -40,7 +40,7 @@ public class DesktopVRIK : MonoBehaviour
         }
     }
 
-    public void CalibrateAvatarVRIK(CVRAvatar avatar)
+    public void CalibrateDesktopVRIK(CVRAvatar avatar)
     {
         //Generic VRIK calibration shit
 
