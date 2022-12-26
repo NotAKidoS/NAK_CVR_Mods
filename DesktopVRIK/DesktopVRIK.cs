@@ -17,6 +17,8 @@ public class DesktopVRIK : MonoBehaviour
     public bool Setting_EmulateVRChatHipMovement;
     public bool Setting_EmoteVRIK;
     public bool Setting_EmoteLookAtIK;
+    //fuck
+    public bool Setting_CompatibilityMode;
 
     void Start()
     {
