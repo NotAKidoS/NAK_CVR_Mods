@@ -1,23 +1,23 @@
 {
-  "_id": 95,
+  "_id": -1,
   "name": "DesktopVRIK",
-  "modversion": "1.1.0",
-  "gameversion": "2022r168",
-  "loaderversion": "0.5.4",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is scaled.\nAdditional option to scale player collision.",
+  "description": "Adds VRIK to Desktop avatars. No longer will you be a liveless sliding statue~!\nAdds the small feet stepping when looking around on Desktop.\n\nAdditional option to emulate VRChat-like hip movement if you like becoming a fish.",
   "searchtags": [
-    "menu",
-    "scale",
-    "avatarscale",
-    "slider"
+    "desktop",
+    "vrik",
+    "ik",
+    "feet"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/r2/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/r1/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
-  "embedcolor": "804221"
+  "changelog": "Simplified VRIK calibration to avoid low heel issue.",
+  "embedcolor": "9b59b6"
 }

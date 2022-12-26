@@ -1,62 +1,65 @@
 ﻿using ABI.CCK.Components;
 using ABI_RC.Core.Player;
-using ABI_RC.Core.Savior;
-using ABI_RC.Systems.MovementSystem;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.SubSystems;
-using MelonLoader;
-using System.Text;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using ABI_RC.Systems.MovementSystem;
 using RootMotion.FinalIK;
+using UnityEngine;
+using UnityEngine.Events;
 
 namespace DesktopVRIK;
 
-public class NAKDesktopVRIK : MonoBehaviour
+public class DesktopVRIK : MonoBehaviour
 {
-    public static NAKDesktopVRIK Instance;
-    public VRIK vrik;
+    public static DesktopVRIK Instance;
+
+    public bool Setting_Enabled;
+    public bool Setting_EmulateVRChatHipMovement;
+    public bool Setting_EmoteVRIK;
+    public bool Setting_EmoteLookAtIK;
 
     void Start()
     {
         Instance = this;
     }
 
-    void LateUpdate()
+    public void OnPreSolverUpdate()
     {
-        //pretty much zero out VRIK trying to locomote us using autofootstep
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
+        //Reset avatar offset (VRIK will literally make you walk away from root otherwise)
+        IKSystem.vrik.transform.localPosition = Vector3.zero;
+        IKSystem.vrik.transform.localRotation = Quaternion.identity;
+
+        //VRChat hip movement emulation
+        if (Setting_EmulateVRChatHipMovement)
+        {
+            float angle = PlayerSetup.Instance.desktopCamera.transform.localEulerAngles.x;
+            angle = (angle > 180) ? angle - 360 : angle;
+            float weight = (1 - MovementSystem.Instance.movementVector.magnitude);
+            Quaternion rotation = Quaternion.AngleAxis(angle * weight, IKSystem.Instance.avatar.transform.right);
+            IKSystem.vrik.solver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
+        }
     }
 
     public void CalibrateAvatarVRIK(CVRAvatar avatar)
     {
-        //check if VRIK already exists, as it is an allowed component
-        vrik = avatar.gameObject.GetComponent<VRIK>();
-        if (vrik == null)
-        {
-            vrik = avatar.gameObject.AddComponent<VRIK>();
-        }
-
         //Generic VRIK calibration shit
 
-        vrik.fixTransforms = false;
-        vrik.solver.plantFeet = false;
-        vrik.solver.locomotion.weight = 1f;
-        vrik.solver.locomotion.angleThreshold = 30f;
-        vrik.solver.locomotion.maxLegStretch = 0.75f;
+        IKSystem.vrik.fixTransforms = false;
+        IKSystem.vrik.solver.plantFeet = false;
+        IKSystem.vrik.solver.locomotion.weight = 1f;
+        IKSystem.vrik.solver.locomotion.angleThreshold = 30f;
+        IKSystem.vrik.solver.locomotion.maxLegStretch = 0.75f;
         //nuke weights
-        vrik.solver.spine.headClampWeight = 0f;
-        vrik.solver.spine.minHeadHeight = 0f;
-        vrik.solver.leftArm.positionWeight = 0f;
-        vrik.solver.leftArm.rotationWeight = 0f;
-        vrik.solver.rightArm.positionWeight = 0f;
-        vrik.solver.rightArm.rotationWeight = 0f;
-        vrik.solver.leftLeg.positionWeight = 0f;
-        vrik.solver.leftLeg.rotationWeight = 0f;
-        vrik.solver.rightLeg.positionWeight = 0f;
-        vrik.solver.rightLeg.rotationWeight = 0f;
+        IKSystem.vrik.solver.spine.headClampWeight = 0f;
+        IKSystem.vrik.solver.spine.minHeadHeight = 0f;
+        IKSystem.vrik.solver.leftArm.positionWeight = 0f;
+        IKSystem.vrik.solver.leftArm.rotationWeight = 0f;
+        IKSystem.vrik.solver.rightArm.positionWeight = 0f;
+        IKSystem.vrik.solver.rightArm.rotationWeight = 0f;
+        IKSystem.vrik.solver.leftLeg.positionWeight = 0f;
+        IKSystem.vrik.solver.leftLeg.rotationWeight = 0f;
+        IKSystem.vrik.solver.rightLeg.positionWeight = 0f;
+        IKSystem.vrik.solver.rightLeg.rotationWeight = 0f;
 
         //ChilloutVR specific stuff
 
@@ -69,15 +72,20 @@ public class NAKDesktopVRIK : MonoBehaviour
         BodySystem.TrackingRightArmEnabled = false;
         BodySystem.TrackingLeftLegEnabled = false;
         BodySystem.TrackingRightLegEnabled = false;
-        vrik.solver.IKPositionWeight = 0f;
-        vrik.enabled = false;
+        IKSystem.vrik.solver.IKPositionWeight = 0f;
+        IKSystem.vrik.enabled = false;
         //Calibrate HeadIKOffset
-        VRIKCalibrator.CalibrateHead(vrik, headAnchor, IKSystem.Instance.headAnchorPositionOffset, IKSystem.Instance.headAnchorRotationOffset);
-        vrik.enabled = true;
-        vrik.solver.IKPositionWeight = 1f;
-        vrik.solver.spine.maintainPelvisPosition = 0f;
+        VRIKCalibrator.CalibrateHead(IKSystem.vrik, headAnchor, IKSystem.Instance.headAnchorPositionOffset, IKSystem.Instance.headAnchorRotationOffset);
+        IKSystem.vrik.enabled = true;
+        IKSystem.vrik.solver.IKPositionWeight = 1f;
+        IKSystem.vrik.solver.spine.maintainPelvisPosition = 0f;
+        if (IKSystem.vrik != null)
+        {
+            IKSystem.vrik.onPreSolverUpdate.AddListener(new UnityAction(this.OnPreSolverUpdate));
+        }
     }
 
+    //This is built because original build placed IK Targets on all joints.
     private static Transform FindIKTarget(Transform targetParent)
     {
         /**

@@ -11,7 +11,7 @@ using DesktopVRIK.Properties;
 [assembly: AssemblyProduct(nameof(DesktopVRIK))]
 
 [assembly: MelonInfo(
-    typeof(DesktopVRIK.DesktopVRIK),
+    typeof(DesktopVRIK.DesktopVRIKMod),
     nameof(DesktopVRIK),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
