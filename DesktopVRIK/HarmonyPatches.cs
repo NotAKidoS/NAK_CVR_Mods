@@ -29,7 +29,7 @@ internal class HarmonyPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(IKSystem), "InitializeAvatar")]
-    private static void InitializeDesktopAvatarVRIK(CVRAvatar avatar, ref VRIK ____vrik, ref HumanPoseHandler ____poseHandler, ref float[] ___HandCalibrationPoseMuscles, ref Vector3 ____referenceRootPosition, ref Quaternion ____referenceRootRotation, ref HumanPose ___humanPose)
+    private static void InitializeDesktopAvatarVRIK(CVRAvatar avatar, ref VRIK ____vrik, ref HumanPoseHandler ____poseHandler, ref HumanPose ___humanPose)
     {
         if (!MetaPort.Instance.isUsingVr && DesktopVRIK.Instance.Setting_Enabled)
         {

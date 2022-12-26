@@ -7,7 +7,7 @@ public class DesktopVRIKMod : MelonMod
 {
     internal const string SettingsCategory = "DesktopVRIK";
     private static MelonPreferences_Category m_categoryDesktopVRIK;
-    private static MelonPreferences_Entry<bool> m_entryEnabled, m_entryEmulateHipMovement, m_entryEmoteVRIK, m_entryEmoteLookAtIK, m_entryCompatibilityMode;
+    private static MelonPreferences_Entry<bool> m_entryEnabled, m_entryEmulateHipMovement, m_entryEmoteVRIK, m_entryEmoteLookAtIK;
     public override void OnInitializeMelon()
     {
         m_categoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
@@ -15,7 +15,6 @@ public class DesktopVRIKMod : MelonMod
         m_entryEmulateHipMovement = m_categoryDesktopVRIK.CreateEntry<bool>("Emulate Hip Movement", true, description: "Emulates VRChat-like hip movement when moving head up/down on desktop.");
         m_entryEmoteVRIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote VRIK", true, description: "Disable VRIK while emoting. Only disable if you are ok with looking dumb.");
         m_entryEmoteLookAtIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote LookAtIK", true, description: "Disable LookAtIK while emoting. This setting doesn't really matter, as LookAtIK isn't networked while doing an emote.");
-        m_categoryDesktopVRIK.SaveToFile(false);
 
         foreach (var setting in m_categoryDesktopVRIK.Entries)
         {

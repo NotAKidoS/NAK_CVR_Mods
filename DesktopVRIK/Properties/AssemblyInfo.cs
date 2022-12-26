@@ -1,6 +1,6 @@
-﻿using MelonLoader;
+﻿using DesktopVRIK.Properties;
+using MelonLoader;
 using System.Reflection;
-using DesktopVRIK.Properties;
 
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
