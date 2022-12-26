@@ -4,6 +4,7 @@ Adds VRIK to Desktop ChilloutVR avatars. No longer will you be a liveless slidin
 (adds the small feet stepping when looking around on Desktop)
 
 Additional option to emulate VRChat-like hip movement if you like becoming a fish.
+
 Control over disabling VRIK & LookAtIK during Emotes. (this can cause funky behavior)
 
 ---
