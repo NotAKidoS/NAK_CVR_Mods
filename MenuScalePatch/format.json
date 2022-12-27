@@ -1,8 +1,8 @@
 {
   "_id": 95,
   "name": "MenuScalePatch",
-  "modversion": "2.0.0",
-  "gameversion": "2022r169",
+  "modversion": "3.0.0",
+  "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r4/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "Removed collision scaling feature as it is now native.",
+  "changelog": "Removed collision scaling feature as it is now native.\nImplemented adjusted QM scaling for VR.\nAdded menu correction for Desktop so you can use menus while moving.",
   "embedcolor": "804221"
 }
