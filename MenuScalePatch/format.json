@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is scaled.",
+  "description": "Corrects MM and QM position when avatar is being scaled.\n\nDesktop menus will now always follow camera while open.",
   "searchtags": [
     "menu",
     "scale",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/r4/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v3.0.0/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "Removed collision scaling feature as it is now native.\nImplemented adjusted QM scaling for VR.\nAdded menu correction for Desktop so you can use menus while moving.",
+  "changelog": "Removed collision scaling feature as it is now native.\nAdjusted QM scaling for VR.\nAdded menu correction for Desktop so you can use menus while moving.\nImmediate viewpoint correction for Desktop during scaling.",
   "embedcolor": "804221"
 }

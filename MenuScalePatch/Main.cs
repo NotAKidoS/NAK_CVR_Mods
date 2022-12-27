@@ -36,6 +36,7 @@ public class MenuScalePatch : MelonMod
                 ___needsQuickmenuPositionUpdate = false;
                 return;
             }
+            PlayerSetup.Instance.HandleDesktopCameraPosition(true);
             SetMenuPosition(___quickMenu.transform, ____scaleFactor);
             ___needsQuickmenuPositionUpdate = false;
         }
@@ -64,6 +65,7 @@ public class MenuScalePatch : MelonMod
         {
             if (!__state) return;
 
+            PlayerSetup.Instance.HandleDesktopCameraPosition(true);
             SetMenuPosition(__instance.transform, ___scaleFactor);
             ___needsMenuPositionUpdate = false;
         }
