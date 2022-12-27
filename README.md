@@ -2,11 +2,7 @@
 
 just updates the menu position when the game detects a change in avatar scale
 
-additional options to scale player collision & remove collider margin (skinWidth is pushing avatars off the floor by 0.08f)
-
-To fully reach the floor, enable Scale Collision, No Skin Width, & Allow Small Player Collider in Experimental settings.
-
-**Be aware**, as Allow Small Player Collider will allow the collider to reach below 0.3f, which will cause *harmless..?* console errors.
+also forces menu positions to be constantly updated while open on desktop
 
 
 
