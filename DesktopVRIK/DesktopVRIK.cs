@@ -15,20 +15,35 @@ public class DesktopVRIK : MonoBehaviour
 
     public bool Setting_Enabled;
     public bool Setting_EmulateVRChatHipMovement;
+    public bool Setting_EnforceViewPosition;
     public bool Setting_EmoteVRIK;
     public bool Setting_EmoteLookAtIK;
+    public bool Setting_PlantFeet;
+
+    public Transform viewpoint;
+    public Vector3 initialCamPos;
 
     void Start()
     {
         Instance = this;
     }
 
+    public void ChangeViewpointHandling(bool enabled)
+    {
+        Setting_EnforceViewPosition = enabled;
+        if (enabled)
+        {
+            PlayerSetup.Instance.desktopCamera.transform.localPosition = Vector3.zero;
+            return;
+        }
+        PlayerSetup.Instance.desktopCamera.transform.localPosition = initialCamPos;
+    }
+    
     public void OnPreSolverUpdate()
     {
         //Reset avatar offset (VRIK will literally make you walk away from root otherwise)
         IKSystem.vrik.transform.localPosition = Vector3.zero;
         IKSystem.vrik.transform.localRotation = Quaternion.identity;
-
         //VRChat hip movement emulation
         if (Setting_EmulateVRChatHipMovement)
         {
@@ -38,6 +53,7 @@ public class DesktopVRIK : MonoBehaviour
             Quaternion rotation = Quaternion.AngleAxis(angle * weight, IKSystem.Instance.avatar.transform.right);
             IKSystem.vrik.solver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
         }
+        IKSystem.vrik.solver.plantFeet = Setting_PlantFeet;
     }
 
     public void CalibrateDesktopVRIK(CVRAvatar avatar)
@@ -63,8 +79,14 @@ public class DesktopVRIK : MonoBehaviour
 
         //ChilloutVR specific stuff
 
+        //Find eyeoffset
+        initialCamPos = PlayerSetup.Instance.desktopCamera.transform.localPosition;
+        Transform headTransform = IKSystem.Instance.animator.GetBoneTransform(HumanBodyBones.Head);
+        viewpoint = headTransform.Find("LocalHeadPoint");
+        ChangeViewpointHandling(Setting_EnforceViewPosition);
+
         //centerEyeAnchor now is head bone
-        Transform headAnchor = FindIKTarget(IKSystem.Instance.animator.GetBoneTransform(HumanBodyBones.Head));
+        Transform headAnchor = FindIKTarget(headTransform);
         IKSystem.Instance.headAnchorPositionOffset = Vector3.zero;
         IKSystem.Instance.headAnchorRotationOffset = Vector3.zero;
         IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);

@@ -3,6 +3,8 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.SubSystems;
+using ABI_RC.Systems.MovementSystem;
+using ABI_RC.Core.Player.AvatarTracking.Local;
 using HarmonyLib;
 using RootMotion.FinalIK;
 using UnityEngine;
@@ -85,6 +87,23 @@ internal class HarmonyPatches
             if (___lookIK != null)
             {
                 ___lookIK.enabled = true;
+            }
+        }
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerSetup), "HandleDesktopCameraPosition")]
+    private static void Postfix_PlayerSetup_HandleDesktopCameraPosition(bool ignore, ref PlayerSetup __instance, ref MovementSystem ____movementSystem, ref int ___headBobbingLevel)
+    {
+        if (DesktopVRIK.Instance.Setting_EnforceViewPosition)
+        {
+            if (!____movementSystem.disableCameraControl || ignore)
+            {
+                if (___headBobbingLevel == 2 && DesktopVRIK.Instance.viewpoint != null)
+                {
+                    __instance.desktopCamera.transform.localPosition = Vector3.zero;
+                    __instance.desktopCameraRig.transform.position = DesktopVRIK.Instance.viewpoint.position;
+                }
             }
         }
     }
