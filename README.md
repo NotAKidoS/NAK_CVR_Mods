@@ -7,6 +7,11 @@ Additional option to emulate VRChat-like hip movement if you like becoming a fis
 
 Control over disabling VRIK & LookAtIK during Emotes. (this can cause funky behavior)
 
+## Relevant Feedback Posts:
+https://feedback.abinteractive.net/p/desktop-feet-ik-for-avatars
+
+https://feedback.abinteractive.net/p/pivot-desktop-camera-with-head
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
