@@ -10,6 +10,16 @@ using MenuScalePatch.Helpers;
 
 namespace NAK.Melons.MenuScalePatch.HarmonyPatches;
 
+/**
+    ViewManager.SetScale runs once a second when it should only run when aspect ratio changes- CVR bug
+    assuming its caused by cast from int to float getting the screen size, something floating point bleh
+    
+    ViewManager.UpdatePosition & CVR_MenuManager.UpdatePosition are called every second in a scheduled job.
+    (its why ViewManager.SetScale is called, because MM uses aspect ratio in scale calculation)
+
+    I nuke those methods. Fuck them. I cannot disable the jobs though...
+**/
+
 [HarmonyPatch]
 internal class HarmonyPatches
 {
@@ -18,10 +28,7 @@ internal class HarmonyPatches
     private static void SetQMScale(float avatarHeight, ref float ____scaleFactor, out bool __runOriginal)
     {
         ____scaleFactor = avatarHeight / 1.8f;
-        if (MetaPort.Instance.isUsingVr)
-        {
-            ____scaleFactor *= 0.5f;
-        }
+        if (MetaPort.Instance.isUsingVr) ____scaleFactor *= 0.5f;
         MSP_MenuInfo.ScaleFactor = ____scaleFactor;
         __runOriginal = false;
     }
@@ -30,11 +37,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(ViewManager), "SetScale")]
     private static void CheckMMScale(out bool __runOriginal)
     {
-        /**
-            ViewManager.SetScale runs once a second when it should only run when aspect ratio changes- CVR bug
-            assuming its caused by cast from int to float getting the screen size, something floating point bleh
-            i dont need it so i will nuke it >:)
-        **/
+        //bitch
         __runOriginal = false;
     }
 
@@ -48,8 +51,11 @@ internal class HarmonyPatches
     }
     [HarmonyPrefix]
     [HarmonyPatch(typeof(ViewManager), "UpdateMenuPosition")]
-    private static void Prefix_ViewManager_UpdateMenuPosition(out bool __runOriginal)
+    private static void Prefix_ViewManager_UpdateMenuPosition(ref float ___cachedScreenAspectRatio, out bool __runOriginal)
     {
+        //this is called once a second, so ill fix their dumb aspect ratio shit
+        float ratio = (float)Screen.width / (float)Screen.height;
+        MSP_MenuInfo.AspectRatio = 1.7777779f / ratio;
         __runOriginal = false;
     }
 
@@ -96,6 +102,7 @@ internal class HarmonyPatches
     {
         if (MainMenuHelper.Instance == null) return;
         MainMenuHelper.Instance.UpdateWorldAnchors();
+        MainMenuHelper.Instance.ToggleDesktopInputMethod(show);
         MainMenuHelper.Instance.enabled = show;
     }
 

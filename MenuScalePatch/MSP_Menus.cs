@@ -12,6 +12,7 @@ public class MSP_MenuInfo
 {
     //Shared Info
     public static float ScaleFactor = 1f;
+    public static float AspectRatio = 1f;
     public static Transform CameraTransform;
 
     //Settings...?
