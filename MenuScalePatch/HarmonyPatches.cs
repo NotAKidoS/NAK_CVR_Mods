@@ -84,7 +84,7 @@ internal class HarmonyPatches
     {
         if (QuickMenuHelper.Instance == null) return;
         QuickMenuHelper.Instance.UpdateWorldAnchors();
-        QuickMenuHelper.Instance.ToggleDesktopInputMethod(show);
+        MSP_MenuInfo.ToggleDesktopInputMethod(show);
         QuickMenuHelper.Instance.enabled = show;
     }
 
@@ -103,7 +103,7 @@ internal class HarmonyPatches
     {
         if (MainMenuHelper.Instance == null) return;
         MainMenuHelper.Instance.UpdateWorldAnchors();
-        MainMenuHelper.Instance.ToggleDesktopInputMethod(show);
+        MSP_MenuInfo.ToggleDesktopInputMethod(show);
         MainMenuHelper.Instance.enabled = show;
     }
 
@@ -114,4 +114,13 @@ internal class HarmonyPatches
     {
         MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
     }
+
+    //only fixes Desktop QM interaction while using independent head input...
+    //[HarmonyPrefix]
+    //[HarmonyPatch(typeof(ControllerRay), "LateUpdate")]
+    //private static void UpdateMenuPositionForInput()
+    //{
+    //    MainMenuHelper.Instance.UpdateMenuPosition();
+    //    QuickMenuHelper.Instance.UpdateMenuPosition();
+    //}
 }

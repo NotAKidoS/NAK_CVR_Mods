@@ -44,21 +44,18 @@ public class MainMenuHelper : MonoBehaviour
         UpdateMenuPosition();
     }
 
-    void OnDisable()
+    void OnEnable()
     {
         independentHeadTurn = false;
         returnIndependentHeadTurn = false;
         prevIndependentHeadTurn = false;
     }
 
-    public void ToggleDesktopInputMethod(bool flag)
+    void OnDisable()
     {
-        if (MetaPort.Instance.isUsingVr) return;
-        PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
-        CVRInputManager.Instance.inputEnabled = !flag;
-        RootLogic.Instance.ToggleMouse(flag);
-        CVR_MenuManager.Instance.desktopControllerRay.enabled = !flag;
-        Traverse.Create(CVR_MenuManager.Instance).Field("_desktopMouseMode").SetValue(flag);
+        independentHeadTurn = false;
+        returnIndependentHeadTurn = false;
+        prevIndependentHeadTurn = false;
     }
 
     public void CreateWorldAnchors()
@@ -103,6 +100,7 @@ public class MainMenuHelper : MonoBehaviour
             return;
         }
 
+        float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
         bool independentHeadTurnChanged = CVRInputManager.Instance.independentHeadTurn != prevIndependentHeadTurn;
         if (independentHeadTurnChanged)
         {
@@ -110,10 +108,10 @@ public class MainMenuHelper : MonoBehaviour
             //if pressing but not already enabled
             if (prevIndependentHeadTurn)
             {
-                if (!independentHeadTurn)
+                if (!independentHeadTurn && angle == 0f)
                 {
                     UpdateWorldAnchors();
-                    ToggleDesktopInputMethod(!prevIndependentHeadTurn);
+                    MSP_MenuInfo.ToggleDesktopInputMethod(!prevIndependentHeadTurn);
                     independentHeadTurn = true;
                 }
                 returnIndependentHeadTurn = false;
@@ -126,12 +124,11 @@ public class MainMenuHelper : MonoBehaviour
 
         if (returnIndependentHeadTurn)
         {
-            float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
             if (angle == 0f)
             {
                 independentHeadTurn = false;
                 returnIndependentHeadTurn = false;
-                ToggleDesktopInputMethod(!prevIndependentHeadTurn);
+                MSP_MenuInfo.ToggleDesktopInputMethod(!prevIndependentHeadTurn);
             }
         }
 
