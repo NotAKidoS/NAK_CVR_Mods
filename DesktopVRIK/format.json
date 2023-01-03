@@ -1,12 +1,12 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "1.0.2",
+  "modversion": "1.0.3",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Adds VRIK to Desktop avatars. No longer will you be a liveless sliding statue~!\nAdds the small feet stepping when looking around on Desktop.\n\nAdditional option to emulate VRChat-like hip movement if you like being fish.\nThis mod pairs well with Avatar Motion Tweaker by SDraw.",
+  "description": "Adds VRIK to Desktop avatars. No longer will you be a liveless sliding statue~!\nAdds the small feet stepping when looking around on Desktop.\n\nAdditional option to emulate VRChat-like hip movement if you like being fish.",
   "searchtags": [
     "desktop",
     "vrik",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v1.0.2/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v1.0.3/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "Simplified VRIK calibration to avoid low heel issue.\nRemoved rushed compatibility mode & implemented integrity checks for valid Humanoid rigs.",
+  "changelog": "- Simplified VRIK calibration to avoid low heel issue.\n- Removed rushed compatibility mode.\n- Added checks for valid Humanoid rigs.\n- Added PlantFeet & EnforceViewPosition Settings.",
   "embedcolor": "9b59b6"
 }
