@@ -5,100 +5,28 @@ using cohtml;
 using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
+using NAK.Melons.MenuScalePatch.Helpers;
 
-namespace MenuScalePatch;
+namespace NAK.Melons.MenuScalePatch;
 
 public class MenuScalePatch : MelonMod
 {
-    [HarmonyPatch]
-    private class HarmonyPatches
+    private static MelonPreferences_Category m_categoryMenuScalePatch;
+    private static MelonPreferences_Entry<bool> m_entryWorldAnchorVRQM;
+    public override void OnInitializeMelon()
     {
-        internal static bool adjustedMenuPosition = false;
-        internal static void SetMenuPosition(Transform menuTransform, float scale)
+        m_categoryMenuScalePatch = MelonPreferences.CreateCategory(nameof(MenuScalePatch));
+        m_entryWorldAnchorVRQM = m_categoryMenuScalePatch.CreateEntry<bool>("World Anchor VR QM", false, description: "Should place QM in World Space while VR.");
+
+        foreach (var setting in m_categoryMenuScalePatch.Entries)
         {
-            Transform rotationPivot = PlayerSetup.Instance._movementSystem.rotationPivot;
-            if (!MetaPort.Instance.isUsingVr)
-            {
-                menuTransform.eulerAngles = rotationPivot.eulerAngles;
-            }
-            menuTransform.position = rotationPivot.position + rotationPivot.forward * 1f * scale;
-            adjustedMenuPosition = true;
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(CVR_MenuManager), "SetScale")]
-        private static void SetQMScale(ref CohtmlView ___quickMenu, ref bool ___needsQuickmenuPositionUpdate, ref float ____scaleFactor, ref GameObject ____leftVrAnchor)
-        {
-            if (MetaPort.Instance.isUsingVr)
-            {
-                ___quickMenu.transform.position = ____leftVrAnchor.transform.position;
-                ___quickMenu.transform.rotation = ____leftVrAnchor.transform.rotation;
-                ___needsQuickmenuPositionUpdate = false;
-                return;
-            }
-            PlayerSetup.Instance.HandleDesktopCameraPosition(true);
-            SetMenuPosition(___quickMenu.transform, ____scaleFactor);
-            ___needsQuickmenuPositionUpdate = false;
-        }
-
-        /**
-            ViewManager.SetScale runs once a second when it should only run when aspect ratio changes- CVR bug
-            assuming its caused by cast from int to float getting the screen size, something floating point bleh
-            attempting to ignore that call if there wasnt actually a change
-        **/
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(ViewManager), "SetScale")]
-        private static void CheckMMScale(float avatarHeight, ref float ___cachedAvatarHeight, out bool __state)
-        {
-            if (___cachedAvatarHeight == avatarHeight)
-            {
-                __state = false;
-                return;
-            }
-            __state = true;
-        }
-
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(ViewManager), "SetScale")]
-        private static void SetMMScale(ref ViewManager __instance, ref bool ___needsMenuPositionUpdate, ref float ___scaleFactor, bool __state)
-        {
-            if (!__state) return;
-
-            PlayerSetup.Instance.HandleDesktopCameraPosition(true);
-            SetMenuPosition(__instance.transform, ___scaleFactor);
-            ___needsMenuPositionUpdate = false;
-        }
-
-        /**
-            Following code resets the menu position on LateUpdate so you can use the menu while moving/falling.
-            It is Desktop only. QM inputs still don't work because they do their input checks in LateUpdate???
-        **/
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(CVR_MenuManager), "LateUpdate")]
-        private static void DesktopQMFix(ref CohtmlView ___quickMenu, ref bool ___needsQuickmenuPositionUpdate, ref float ____scaleFactor, ref bool ____quickMenuOpen)
-        {
-            if (MetaPort.Instance.isUsingVr) return;
-            if (____quickMenuOpen && !adjustedMenuPosition)
-            {
-                SetMenuPosition(___quickMenu.transform, ____scaleFactor);
-                ___needsQuickmenuPositionUpdate = false;
-            }
-            adjustedMenuPosition = false;
-        }
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(ViewManager), "LateUpdate")]
-        private static void DesktopMMFix(ref ViewManager __instance, ref bool ___needsMenuPositionUpdate, ref float ___scaleFactor, bool __state, ref bool ____gameMenuOpen)
-        {
-            if (MetaPort.Instance.isUsingVr) return;
-            if (____gameMenuOpen && !adjustedMenuPosition)
-            {
-                SetMenuPosition(__instance.transform, ___scaleFactor);
-                ___needsMenuPositionUpdate = false;
-            }
-            adjustedMenuPosition = false;
+            setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
         }
     }
+
+    private void UpdateAllSettings()
+    {
+        MSP_MenuInfo.WorldAnchorQM = m_entryWorldAnchorVRQM.Value;
+    }
+    private void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
 }
