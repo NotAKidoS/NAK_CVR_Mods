@@ -1,14 +1,20 @@
 # MenuScalePatch
 
-just updates the menu position when the game detects a change in avatar scale
+Originally forced menu position to update while scaling. Now changes ChilloutVR menu behavior to feel less clunky.
 
-additional options to scale player collision & remove collider margin (skinWidth is pushing avatars off the floor by 0.08f)
+## Features:
+* Menu position properly updates at end of update cycle.
+  * This makes sure menu is always correctly positioned while moving and scaling.
+  * This also allows for menus to be used while moving. (this is iffy though)
 
-To fully reach the floor, enable Scale Collision, No Skin Width, & Allow Small Player Collider in Experimental settings.
+* Adds independent head moving support while on Desktop. (makes selecting users easier)
+  * Hold ALT while on Desktop. Native feature that now works while in a menu.
 
-**Be aware**, as Allow Small Player Collider will allow the collider to reach below 0.3f, which will cause *harmless..?* console errors.
+* Implemented world anchors for menus. They can now be placed in the world, but still attached to you.
+  * This is used for independent head movement internally, as well as a toggle for VR QM.
 
-
+* Main Menu in VR is now attached to player rig.
+  * Menu will now follow you while moving in world space, but not while moving in play space.
 
 https://user-images.githubusercontent.com/37721153/189479474-41e93dff-a695-42f2-9d20-6a895a723039.mp4
 
