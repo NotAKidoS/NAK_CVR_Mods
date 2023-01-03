@@ -8,8 +8,9 @@ using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 using System.Reflection;
+using NAK.Melons.MenuScalePatch.Helpers;
 
-namespace NAK.Melons.MenuScalePatch.Helpers;
+namespace MenuScalePatch.Helpers;
 
 /**
 
@@ -51,6 +52,7 @@ public class QuickMenuHelper : MonoBehaviour
 
     public void ToggleDesktopInputMethod(bool flag)
     {
+        if (MetaPort.Instance.isUsingVr) return;
         PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
         CVRInputManager.Instance.inputEnabled = !flag;
         RootLogic.Instance.ToggleMouse(flag);
@@ -64,15 +66,15 @@ public class QuickMenuHelper : MonoBehaviour
         GameObject vrAnchor = new GameObject("MSP_QMVR_Anchor");
         vrAnchor.transform.parent = PlayerSetup.Instance.vrCameraRig.transform;
         vrAnchor.transform.localPosition = Vector3.zero;
-        this.worldAnchor = vrAnchor.transform;
+        worldAnchor = vrAnchor.transform;
     }
 
     public void UpdateWorldAnchors()
     {
-        if (this.worldAnchor == null || MSP_MenuInfo.CameraTransform == null) return;
+        if (worldAnchor == null || MSP_MenuInfo.CameraTransform == null) return;
 
-        this.worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
-        this.worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
+        worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
+        worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
     }
 
     public void UpdateMenuPosition()
@@ -123,26 +125,26 @@ public class QuickMenuHelper : MonoBehaviour
     {
         if (MSP_MenuInfo.CameraTransform == null || MSP_MenuInfo.DisableQMHelper) return;
 
-        Transform activeAnchor = independentHeadTurn ? this.worldAnchor : MSP_MenuInfo.CameraTransform;
-        this.transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
-        this.transform.eulerAngles = activeAnchor.eulerAngles;
-        this.transform.position = activeAnchor.position + activeAnchor.transform.forward * 1f * MSP_MenuInfo.ScaleFactor;
+        Transform activeAnchor = independentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
+        transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
+        transform.eulerAngles = activeAnchor.eulerAngles;
+        transform.position = activeAnchor.position + activeAnchor.transform.forward * 1f * MSP_MenuInfo.ScaleFactor;
     }
 
     //VR Quick Menu
     public void HandleVRPosition()
     {
-        if (this.handAnchor == null || MSP_MenuInfo.DisableQMHelper_VR) return;
+        if (handAnchor == null || MSP_MenuInfo.DisableQMHelper_VR) return;
 
         if (MSP_MenuInfo.WorldAnchorQM)
         {
-            this.transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
-            this.transform.eulerAngles = this.worldAnchor.eulerAngles;
-            this.transform.position = this.worldAnchor.position + this.worldAnchor.transform.forward * 1f * MSP_MenuInfo.ScaleFactor;
+            transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
+            transform.eulerAngles = worldAnchor.eulerAngles;
+            transform.position = worldAnchor.position + worldAnchor.transform.forward * 1f * MSP_MenuInfo.ScaleFactor;
             return;
         }
-        this.transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
-        this.transform.position = this.handAnchor.position;
-        this.transform.rotation = this.handAnchor.rotation;
+        transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
+        transform.position = handAnchor.position;
+        transform.rotation = handAnchor.rotation;
     }
 }

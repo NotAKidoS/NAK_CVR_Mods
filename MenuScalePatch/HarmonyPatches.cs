@@ -6,6 +6,7 @@ using cohtml;
 using HarmonyLib;
 using NAK.Melons.MenuScalePatch.Helpers;
 using UnityEngine;
+using MenuScalePatch.Helpers;
 
 namespace NAK.Melons.MenuScalePatch.HarmonyPatches;
 

@@ -8,8 +8,9 @@ using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 using System.Reflection;
+using NAK.Melons.MenuScalePatch.Helpers;
 
-namespace NAK.Melons.MenuScalePatch.Helpers;
+namespace MenuScalePatch.Helpers;
 
 //TODO: Implement desktop ratio scaling back to MM
 
@@ -52,6 +53,7 @@ public class MainMenuHelper : MonoBehaviour
 
     public void ToggleDesktopInputMethod(bool flag)
     {
+        if (MetaPort.Instance.isUsingVr) return;
         PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
         CVRInputManager.Instance.inputEnabled = !flag;
         RootLogic.Instance.ToggleMouse(flag);
@@ -65,12 +67,12 @@ public class MainMenuHelper : MonoBehaviour
         GameObject vrAnchor = new GameObject("MSP_MMVR_Anchor");
         vrAnchor.transform.parent = PlayerSetup.Instance.vrCameraRig.transform;
         vrAnchor.transform.localPosition = Vector3.zero;
-        this.worldAnchor = vrAnchor.transform;
+        worldAnchor = vrAnchor.transform;
     }
 
     public void UpdateWorldAnchors()
     {
-        if (this.worldAnchor == null || MSP_MenuInfo.CameraTransform == null) return;
+        if (worldAnchor == null || MSP_MenuInfo.CameraTransform == null) return;
 
         if (MetaPort.Instance.isUsingVr)
         {
@@ -78,18 +80,18 @@ public class MainMenuHelper : MonoBehaviour
             float minTilt = MetaPort.Instance.settings.GetSettingsFloat("GeneralMinimumMenuTilt", 0f);
             if (zRotation <= minTilt || zRotation >= 360f - minTilt)
             {
-                this.worldAnchor.rotation = Quaternion.LookRotation(MSP_MenuInfo.CameraTransform.forward, Vector3.up);
+                worldAnchor.rotation = Quaternion.LookRotation(MSP_MenuInfo.CameraTransform.forward, Vector3.up);
             }
             else
             {
-                this.worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
+                worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
             }
-            this.worldAnchor.position = MSP_MenuInfo.CameraTransform.position + MSP_MenuInfo.CameraTransform.forward * 2f * MSP_MenuInfo.ScaleFactor;
+            worldAnchor.position = MSP_MenuInfo.CameraTransform.position + MSP_MenuInfo.CameraTransform.forward * 2f * MSP_MenuInfo.ScaleFactor;
         }
         else
         {
-            this.worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
-            this.worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
+            worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
+            worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
         }
     }
 
@@ -141,19 +143,18 @@ public class MainMenuHelper : MonoBehaviour
     {
         if (MSP_MenuInfo.CameraTransform == null || MSP_MenuInfo.DisableMMHelper) return;
 
-        Transform activeAnchor = independentHeadTurn ? this.worldAnchor : MSP_MenuInfo.CameraTransform;
-        this.transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor, 0.9f * MSP_MenuInfo.ScaleFactor, 1f);
-        this.transform.eulerAngles = activeAnchor.eulerAngles;
-        this.transform.position = activeAnchor.position + activeAnchor.forward * 1f * MSP_MenuInfo.ScaleFactor;
+        Transform activeAnchor = independentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
+        transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor, 0.9f * MSP_MenuInfo.ScaleFactor, 1f);
+        transform.eulerAngles = activeAnchor.eulerAngles;
+        transform.position = activeAnchor.position + activeAnchor.forward * 1f * MSP_MenuInfo.ScaleFactor;
     }
 
     //VR Main Menu
     public void HandleVRPosition()
     {
-        if (this.worldAnchor == null || MSP_MenuInfo.DisableMMHelper_VR) return;
-        this.transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor * 1.8f, 0.9f * MSP_MenuInfo.ScaleFactor * 1.8f, 1f);
-        this.transform.position = this.worldAnchor.position;
-        this.transform.eulerAngles = this.worldAnchor.eulerAngles;
+        if (worldAnchor == null || MSP_MenuInfo.DisableMMHelper_VR) return;
+        transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor * 1.8f, 0.9f * MSP_MenuInfo.ScaleFactor * 1.8f, 1f);
+        transform.position = worldAnchor.position;
+        transform.eulerAngles = worldAnchor.eulerAngles;
     }
 }
-
