@@ -55,7 +55,8 @@ internal class HarmonyPatches
     {
         //this is called once a second, so ill fix their dumb aspect ratio shit
         float ratio = (float)Screen.width / (float)Screen.height;
-        MSP_MenuInfo.AspectRatio = 1.7777779f / ratio;
+        float clamp = Mathf.Clamp(ratio, 0f, 1.8f);
+        MSP_MenuInfo.AspectRatio = 1.7777779f / clamp;
         __runOriginal = false;
     }
 
