@@ -1,10 +1,4 @@
-﻿using ABI_RC.Core.InteractionSystem;
-using ABI_RC.Core.Player;
-using ABI_RC.Core.Savior;
-using cohtml;
-using HarmonyLib;
-using MelonLoader;
-using UnityEngine;
+﻿using MelonLoader;
 using NAK.Melons.MenuScalePatch.Helpers;
 
 namespace NAK.Melons.MenuScalePatch;

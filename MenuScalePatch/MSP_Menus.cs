@@ -1,16 +1,11 @@
-﻿using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnityEngine;
+﻿using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
-using ABI_RC.Core;
 using ABI_RC.Systems.MovementSystem;
 using HarmonyLib;
+using System.Reflection;
+using UnityEngine;
 
 namespace NAK.Melons.MenuScalePatch.Helpers;
 
@@ -46,16 +41,22 @@ public class MSP_MenuInfo
     public static void HandleIndependentLookInput()
     {
         //angle of independent look axis
-        float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
-        bool isPressed = CVRInputManager.Instance.independentHeadTurn;
+        bool isPressed = CVRInputManager.Instance.independentHeadTurn || CVRInputManager.Instance.independentHeadToggle;
         if (isPressed && !independentHeadTurn)
         {
             independentHeadTurn = true;
             MSP_MenuInfo.ToggleDesktopInputMethod(false);
-        }else if (!isPressed && independentHeadTurn && angle == 0f)
+            QuickMenuHelper.Instance.UpdateWorldAnchors();
+            MainMenuHelper.Instance.UpdateWorldAnchors();
+        }
+        else if (!isPressed && independentHeadTurn)
         {
-            independentHeadTurn = false;
-            MSP_MenuInfo.ToggleDesktopInputMethod(true);
+            float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
+            if (angle == 0f)
+            {
+                independentHeadTurn = false;
+                MSP_MenuInfo.ToggleDesktopInputMethod(true);
+            }
         }
     }
 }
