@@ -28,11 +28,6 @@ public class MainMenuHelper : MonoBehaviour
     public static MainMenuHelper Instance;
     public Transform worldAnchor;
 
-    static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
-    private bool independentHeadTurn = false;
-    private bool returnIndependentHeadTurn = false;
-    private bool prevIndependentHeadTurn = false;
-
     void Start()
     {
         Instance = this;
@@ -41,21 +36,8 @@ public class MainMenuHelper : MonoBehaviour
 
     void LateUpdate()
     {
+        MSP_MenuInfo.HandleIndependentLookInput();
         UpdateMenuPosition();
-    }
-
-    void OnEnable()
-    {
-        independentHeadTurn = false;
-        returnIndependentHeadTurn = false;
-        prevIndependentHeadTurn = false;
-    }
-
-    void OnDisable()
-    {
-        independentHeadTurn = false;
-        returnIndependentHeadTurn = false;
-        prevIndependentHeadTurn = false;
     }
 
     public void CreateWorldAnchors()
@@ -99,39 +81,6 @@ public class MainMenuHelper : MonoBehaviour
             HandleVRPosition();
             return;
         }
-
-        float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
-        bool independentHeadTurnChanged = CVRInputManager.Instance.independentHeadTurn != prevIndependentHeadTurn;
-        if (independentHeadTurnChanged)
-        {
-            prevIndependentHeadTurn = CVRInputManager.Instance.independentHeadTurn;
-            //if pressing but not already enabled
-            if (prevIndependentHeadTurn)
-            {
-                if (!independentHeadTurn && angle == 0f)
-                {
-                    UpdateWorldAnchors();
-                    MSP_MenuInfo.ToggleDesktopInputMethod(!prevIndependentHeadTurn);
-                    independentHeadTurn = true;
-                }
-                returnIndependentHeadTurn = false;
-            }
-            else
-            {
-                returnIndependentHeadTurn = true;
-            }
-        }
-
-        if (returnIndependentHeadTurn)
-        {
-            if (angle == 0f)
-            {
-                independentHeadTurn = false;
-                returnIndependentHeadTurn = false;
-                MSP_MenuInfo.ToggleDesktopInputMethod(!prevIndependentHeadTurn);
-            }
-        }
-
         HandleDesktopPosition();
     }
 
@@ -139,8 +88,7 @@ public class MainMenuHelper : MonoBehaviour
     public void HandleDesktopPosition()
     {
         if (MSP_MenuInfo.CameraTransform == null || MSP_MenuInfo.DisableMMHelper) return;
-
-        Transform activeAnchor = independentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
+        Transform activeAnchor = MSP_MenuInfo.independentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
         transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor, 0.9f * MSP_MenuInfo.ScaleFactor, 1f);
         transform.eulerAngles = activeAnchor.eulerAngles;
         transform.position = activeAnchor.position + activeAnchor.forward * 1f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.AspectRatio;

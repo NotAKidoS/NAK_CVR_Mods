@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,11 +33,29 @@ public class MSP_MenuInfo
     public static void ToggleDesktopInputMethod(bool flag)
     {
         if (MetaPort.Instance.isUsingVr) return;
-        MelonLoader.MelonLogger.Msg("Toggled Desktop Input");
         PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
         CVRInputManager.Instance.inputEnabled = !flag;
         RootLogic.Instance.ToggleMouse(flag);
         CVR_MenuManager.Instance.desktopControllerRay.enabled = !flag;
         Traverse.Create(CVR_MenuManager.Instance).Field("_desktopMouseMode").SetValue(flag);
+    }
+
+    static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
+    public static bool independentHeadTurn = false;
+
+    public static void HandleIndependentLookInput()
+    {
+        //angle of independent look axis
+        float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
+        bool isPressed = CVRInputManager.Instance.independentHeadTurn;
+        if (isPressed && !independentHeadTurn)
+        {
+            independentHeadTurn = true;
+            MSP_MenuInfo.ToggleDesktopInputMethod(false);
+        }else if (!isPressed && independentHeadTurn && angle == 0f)
+        {
+            independentHeadTurn = false;
+            MSP_MenuInfo.ToggleDesktopInputMethod(true);
+        }
     }
 }

@@ -78,13 +78,16 @@ internal class HarmonyPatches
     }
 
     //hook quickmenu open/close
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     [HarmonyPatch(typeof(CVR_MenuManager), "ToggleQuickMenu", new Type[] { typeof(bool) })]
-    private static void Postfix_CVR_MenuManager_ToggleQuickMenu(bool show)
+    private static void Postfix_CVR_MenuManager_ToggleQuickMenu(bool show, ref bool ____quickMenuOpen)
     {
         if (QuickMenuHelper.Instance == null) return;
-        QuickMenuHelper.Instance.UpdateWorldAnchors();
-        MSP_MenuInfo.ToggleDesktopInputMethod(show);
+        if (show != ____quickMenuOpen)
+        {
+            QuickMenuHelper.Instance.UpdateWorldAnchors();
+            MSP_MenuInfo.ToggleDesktopInputMethod(show);
+        }
         QuickMenuHelper.Instance.enabled = show;
     }
 
@@ -97,13 +100,16 @@ internal class HarmonyPatches
     }
 
     //hook menu open/close
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     [HarmonyPatch(typeof(ViewManager), "UiStateToggle", new Type[] { typeof(bool) })]
-    private static void Postfix_ViewManager_UiStateToggle(bool show)
+    private static void Postfix_ViewManager_UiStateToggle(bool show, ref bool ____gameMenuOpen)
     {
         if (MainMenuHelper.Instance == null) return;
-        MainMenuHelper.Instance.UpdateWorldAnchors();
-        MSP_MenuInfo.ToggleDesktopInputMethod(show);
+        if (show != ____gameMenuOpen)
+        {
+            MainMenuHelper.Instance.UpdateWorldAnchors();
+            MSP_MenuInfo.ToggleDesktopInputMethod(show);
+        }
         MainMenuHelper.Instance.enabled = show;
     }
 
@@ -114,13 +120,4 @@ internal class HarmonyPatches
     {
         MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
     }
-
-    //only fixes Desktop QM interaction while using independent head input...
-    //[HarmonyPrefix]
-    //[HarmonyPatch(typeof(ControllerRay), "LateUpdate")]
-    //private static void UpdateMenuPositionForInput()
-    //{
-    //    MainMenuHelper.Instance.UpdateMenuPosition();
-    //    QuickMenuHelper.Instance.UpdateMenuPosition();
-    //}
 }
