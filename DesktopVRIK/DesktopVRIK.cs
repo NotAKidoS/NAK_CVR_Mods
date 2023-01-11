@@ -13,12 +13,13 @@ public class DesktopVRIK : MonoBehaviour
 {
     public static DesktopVRIK Instance;
 
-    public bool Setting_Enabled;
-    public bool Setting_EmulateVRChatHipMovement;
-    public bool Setting_EnforceViewPosition;
-    public bool Setting_EmoteVRIK;
-    public bool Setting_EmoteLookAtIK;
-    public bool Setting_PlantFeet;
+    public bool Setting_Enabled, 
+        Setting_EmulateVRChatHipMovement,
+        Setting_EnforceViewPosition, 
+        Setting_EmoteVRIK, 
+        Setting_EmoteLookAtIK,
+        Setting_PlantFeet;
+    public float Setting_EmulateVRChatHipMovementWeight;
 
     public Transform viewpoint;
     public Vector3 initialCamPos;
@@ -49,7 +50,7 @@ public class DesktopVRIK : MonoBehaviour
         {
             float angle = PlayerSetup.Instance.desktopCamera.transform.localEulerAngles.x;
             angle = (angle > 180) ? angle - 360 : angle;
-            float weight = (1 - MovementSystem.Instance.movementVector.magnitude);
+            float weight = (Setting_EmulateVRChatHipMovementWeight - MovementSystem.Instance.movementVector.magnitude);
             Quaternion rotation = Quaternion.AngleAxis(angle * weight, IKSystem.Instance.avatar.transform.right);
             IKSystem.vrik.solver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
         }

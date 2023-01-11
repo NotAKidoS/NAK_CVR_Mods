@@ -78,6 +78,8 @@ internal class HarmonyPatches
             {
                 ___lookIK.enabled = false;
             }
+            IKSystem.vrik.transform.localPosition = Vector3.zero;
+            IKSystem.vrik.transform.localRotation = Quaternion.identity;
         }
         else if (!____emotePlaying && emotePlayed)
         {
@@ -88,6 +90,8 @@ internal class HarmonyPatches
             {
                 ___lookIK.enabled = true;
             }
+            IKSystem.vrik.transform.localPosition = Vector3.zero;
+            IKSystem.vrik.transform.localRotation = Quaternion.identity;
         }
     }
 
