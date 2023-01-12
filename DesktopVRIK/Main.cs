@@ -20,7 +20,7 @@ public class DesktopVRIKMod : MelonMod
         m_categoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
         m_entryEnabled = m_categoryDesktopVRIK.CreateEntry<bool>("Enabled", true, description: "Attempt to give Desktop VRIK on avatar load.");
         m_entryEmulateHipMovement = m_categoryDesktopVRIK.CreateEntry<bool>("Emulate Hip Movement", true, description: "Emulates VRChat-like hip movement when moving head up/down on desktop.");
-        m_entryEmulateVRChatHipMovementWeight = m_categoryDesktopVRIK.CreateEntry<float>("Hip Movement Weight", 1f, description: "The weight modifier for the hip movement.");
+        m_entryEmulateVRChatHipMovementWeight = m_categoryDesktopVRIK.CreateEntry<float>("Hip Movement Weight", 0.5f, description: "The weight modifier for the hip movement.");
         m_entryEnforceViewPosition = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce View Position", false, description: "Corrects view position to use VRIK offsets.");
         m_entryEmoteVRIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote VRIK", true, description: "Disable VRIK while emoting. Only disable if you are ok with looking dumb.");
         m_entryEmoteLookAtIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote LookAtIK", true, description: "Disable LookAtIK while emoting. This setting doesn't really matter, as LookAtIK isn't networked while doing an emote.");

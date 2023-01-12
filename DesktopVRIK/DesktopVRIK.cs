@@ -59,6 +59,12 @@ public class DesktopVRIK : MonoBehaviour
 
     public void CalibrateDesktopVRIK(CVRAvatar avatar)
     {
+        //Stuff to make bad armatures work (Fuck you Default Robot Kyle)
+        IKSystem.Instance.animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+        avatar.transform.localPosition = Vector3.zero;
+        Quaternion originalRotation = avatar.transform.rotation;
+        avatar.transform.rotation = Quaternion.identity;
+
         //Generic VRIK calibration shit
 
         IKSystem.vrik.fixTransforms = false;
@@ -89,7 +95,7 @@ public class DesktopVRIK : MonoBehaviour
         //centerEyeAnchor now is head bone
         Transform headAnchor = FindIKTarget(headTransform);
         IKSystem.Instance.headAnchorPositionOffset = Vector3.zero;
-        IKSystem.Instance.headAnchorRotationOffset = Vector3.zero;
+        IKSystem.Instance.headAnchorRotationOffset = headAnchor.rotation.eulerAngles; //set to head bone world rotation (Fuck you Default Robot Kyle)
         IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);
         BodySystem.TrackingLeftArmEnabled = false;
         BodySystem.TrackingRightArmEnabled = false;
@@ -97,8 +103,10 @@ public class DesktopVRIK : MonoBehaviour
         BodySystem.TrackingRightLegEnabled = false;
         IKSystem.vrik.solver.IKPositionWeight = 0f;
         IKSystem.vrik.enabled = false;
-        //Calibrate HeadIKOffset
+
+        //Calibrate HeadIKOffset *(this is fucked on some avatars, (Fuck you Default Robot Kyle) but setting headAnchorRotationOffset to head rotation fixes (Fuck you Default Robot Kyle))*
         VRIKCalibrator.CalibrateHead(IKSystem.vrik, headAnchor, IKSystem.Instance.headAnchorPositionOffset, IKSystem.Instance.headAnchorRotationOffset);
+
         IKSystem.vrik.enabled = true;
         IKSystem.vrik.solver.IKPositionWeight = 1f;
         IKSystem.vrik.solver.spine.maintainPelvisPosition = 0f;
@@ -106,6 +114,10 @@ public class DesktopVRIK : MonoBehaviour
         {
             IKSystem.vrik.onPreSolverUpdate.AddListener(new UnityAction(this.OnPreSolverUpdate));
         }
+
+        //(Fuck you Default Robot Kyle).. oh wait nvm, not related
+        avatar.transform.rotation = originalRotation;
+        IKSystem.Instance.ResetIK();
     }
 
     //This is built because original build placed IK Targets on all joints.

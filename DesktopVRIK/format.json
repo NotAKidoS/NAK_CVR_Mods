@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "1.0.3",
+  "modversion": "1.0.4",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v1.0.3/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "- Simplified VRIK calibration to avoid low heel issue.\n- Removed rushed compatibility mode.\n- Added checks for valid Humanoid rigs.\n- Added PlantFeet & EnforceViewPosition Settings.",
+  "changelog": "- Simplified VRIK calibration to avoid low heel issue.\n- Removed rushed compatibility mode.\n- Added checks for valid Humanoid rigs.\n- Added PlantFeet & EnforceViewPosition Settings.\n- Added Weight option for the VRChat-like hip movement.",
   "embedcolor": "9b59b6"
 }
