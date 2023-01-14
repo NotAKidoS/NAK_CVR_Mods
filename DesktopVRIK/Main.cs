@@ -43,6 +43,7 @@ public class DesktopVRIKMod : MelonMod
 
     System.Collections.IEnumerator WaitForLocalPlayer()
     {
+        AssetsHandler.Load();
         while (PlayerSetup.Instance == null)
             yield return null;
         PlayerSetup.Instance.gameObject.AddComponent<DesktopVRIK>();

@@ -105,8 +105,6 @@ class IKSystemPatches
         {
             if (IKSystem.Instance.animator != null && IKSystem.Instance.animator.avatar != null && IKSystem.Instance.animator.avatar.isHuman)
             {
-                IKSystem.Instance.animator.enabled = false;
-
                 //why the fuck does this fix bad armatures and heels in ground ??? (this one is suprisingly not because of Default Robot Kyle) ... (Fuck you Default Robot Kyle)
                 if (____poseHandler == null)
                 {
@@ -120,14 +118,8 @@ class IKSystemPatches
                 }
                 ____poseHandler.SetHumanPose(ref ___humanPose);
 
-                //need IKSystem to see VRIK component for setup
-                if (____vrik == null)
-                {
-                    ____vrik = avatar.gameObject.AddComponent<VRIK>();
-                }
-
-                //now I calibrate DesktopVRIK
-                DesktopVRIK.Instance.CalibrateDesktopVRIK(avatar);
+                ____vrik = DesktopVRIK.Instance.AlternativeCalibration(avatar);
+                IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);
             }
         }
     }
