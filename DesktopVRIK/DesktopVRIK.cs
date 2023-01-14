@@ -52,96 +52,6 @@ public class DesktopVRIK : MonoBehaviour
         PlayerSetup.Instance.desktopCamera.transform.localPosition = initialCamPos;
     }
 
-    public void OnPreSolverUpdate()
-    {
-        //this order matters, rotation offset will be choppy if avatar is not cenetered first
-        //Reset avatar offset (VRIK will literally make you walk away from root otherwise)
-        IKSystem.vrik.transform.localPosition = Vector3.zero;
-        IKSystem.vrik.transform.localRotation = Quaternion.identity;
-        //VRChat hip movement emulation
-        if (Setting_EmulateVRChatHipMovementWeight != 0)
-        {
-            float angle = PlayerSetup.Instance.desktopCamera.transform.localEulerAngles.x;
-            if (angle > 180) angle -= 360;
-            float leanAmount = angle * (1 - MovementSystem.Instance.movementVector.magnitude) * Setting_EmulateVRChatHipMovementWeight;
-            Quaternion rotation = Quaternion.AngleAxis(leanAmount, IKSystem.Instance.avatar.transform.right);
-            IKSystem.vrik.solver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
-        }
-        IKSystem.vrik.solver.plantFeet = true;
-    }
-
-    public void CalibrateDesktopVRIK(CVRAvatar avatar)
-    {
-        //ikpose layer (specified by avatar author)
-        int? ikposeLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("IKPose");
-        int? locoLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("Locomotion/Emotes");
-
-        if (ikposeLayerIndex != -1)
-        {
-            PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 1f);
-            if (locoLayerIndex != -1)
-            {
-                PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 0f);
-            }
-            IKSystem.Instance.animator.Update(0f);
-        }
-
-
-        //Stuff to make bad armatures work (Fuck you Default Robot Kyle)
-        avatar.transform.localPosition = Vector3.zero;
-        Quaternion originalRotation = avatar.transform.rotation;
-        avatar.transform.rotation = Quaternion.identity;
-
-        //Generic VRIK calibration shit
-
-        IKSystem.vrik.fixTransforms = false;
-        IKSystem.vrik.solver.plantFeet = false;
-        IKSystem.vrik.solver.locomotion.weight = 1f;
-        IKSystem.vrik.solver.locomotion.angleThreshold = 30f;
-        IKSystem.vrik.solver.locomotion.maxLegStretch = 0.75f;
-        //nuke weights
-        IKSystem.vrik.AutoDetectReferences();
-        IKSystem.vrik.solver.spine.headClampWeight = 0f;
-        IKSystem.vrik.solver.spine.minHeadHeight = 0f;
-        IKSystem.vrik.solver.leftArm.positionWeight = 0f;
-        IKSystem.vrik.solver.leftArm.rotationWeight = 0f;
-        IKSystem.vrik.solver.rightArm.positionWeight = 0f;
-        IKSystem.vrik.solver.rightArm.rotationWeight = 0f;
-        IKSystem.vrik.solver.leftLeg.positionWeight = 0f;
-        IKSystem.vrik.solver.leftLeg.rotationWeight = 0f;
-        IKSystem.vrik.solver.rightLeg.positionWeight = 0f;
-        IKSystem.vrik.solver.rightLeg.rotationWeight = 0f;
-
-        //ChilloutVR specific stuff
-
-
-        
-        IKSystem.vrik.enabled = false;
-
-        //Calibrate HeadIKOffset *(this is fucked on some avatars, (Fuck you Default Robot Kyle) but setting headAnchorRotationOffset to head rotation fixes (Fuck you Default Robot Kyle))*
-
-        IKSystem.vrik.enabled = true;
-        IKSystem.vrik.solver.IKPositionWeight = 1f;
-        IKSystem.vrik.solver.spine.maintainPelvisPosition = 0f;
-        if (IKSystem.vrik != null)
-        {
-            IKSystem.vrik.onPreSolverUpdate.AddListener(new UnityAction(this.OnPreSolverUpdate));
-        }
-
-        if (ikposeLayerIndex != -1)
-        {
-            PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 0f);
-            if (locoLayerIndex != -1)
-            {
-                PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 1f);
-            }
-        }
-
-        avatar.transform.rotation = originalRotation;
-        IKSystem.Instance.ResetIK();
-        IKSystem.Instance.animator.enabled = true;
-    }
-
     public void AlternativeOnPreSolverUpdate()
     {
         //this order matters, rotation offset will be choppy if avatar is not cenetered first
@@ -185,6 +95,20 @@ public class DesktopVRIK : MonoBehaviour
         //originalRotation = avatar.transform.rotation;
         //avatar.transform.rotation = Quaternion.identity;
 
+        //ikpose layer (specified by avatar author)
+        int? ikposeLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("IKPose");
+        int? locoLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("Locomotion/Emotes");
+
+        if (ikposeLayerIndex != -1)
+        {
+            PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 1f);
+            if (locoLayerIndex != -1)
+            {
+                PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 0f);
+            }
+            IKSystem.Instance.animator.Update(0f);
+        }
+
         //Generic VRIK calibration shit
         VRIK vrik = avatar.gameObject.AddComponent<VRIK>();
         vrik.AutoDetectReferences();
@@ -197,7 +121,7 @@ public class DesktopVRIK : MonoBehaviour
         //nuke weights
         vrik.solver.spine.headClampWeight = 0f;
         vrik.solver.spine.minHeadHeight = 0f;
-        vrik.solver.spine.pelvisPositionWeight = 0f;
+        //vrik.solver.spine.pelvisPositionWeight = 0f;
         vrik.solver.leftArm.positionWeight = 0f;
         vrik.solver.leftArm.rotationWeight = 0f;
         vrik.solver.rightArm.positionWeight = 0f;
@@ -232,6 +156,15 @@ public class DesktopVRIK : MonoBehaviour
         //force immediate calibration before animator decides to fuck us
         vrik.solver.SetToReferences(vrik.references);
         vrik.solver.Initiate(vrik.transform);
+
+        if (ikposeLayerIndex != -1)
+        {
+            PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 0f);
+            if (locoLayerIndex != -1)
+            {
+                PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 1f);
+            }
+        }
 
         if (Setting_TestIKPoseController)
         {
