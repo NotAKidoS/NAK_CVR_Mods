@@ -114,26 +114,11 @@ public class DesktopVRIK : MonoBehaviour
 
         //ChilloutVR specific stuff
 
-        //Find eyeoffset
-        initialCamPos = PlayerSetup.Instance.desktopCamera.transform.localPosition;
-        Transform headTransform = IKSystem.Instance.animator.GetBoneTransform(HumanBodyBones.Head);
-        viewpoint = headTransform.Find("LocalHeadPoint");
-        ChangeViewpointHandling(Setting_EnforceViewPosition);
 
-        //centerEyeAnchor now is head bone
-        Transform headAnchor = FindIKTarget(headTransform);
-        IKSystem.Instance.headAnchorPositionOffset = Vector3.zero;
-        IKSystem.Instance.headAnchorRotationOffset = headAnchor.rotation.eulerAngles; //set to head bone world rotation (Fuck you Default Robot Kyle)
-        IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);
-        BodySystem.TrackingLeftArmEnabled = false;
-        BodySystem.TrackingRightArmEnabled = false;
-        BodySystem.TrackingLeftLegEnabled = false;
-        BodySystem.TrackingRightLegEnabled = false;
-        IKSystem.vrik.solver.IKPositionWeight = 0f;
+        
         IKSystem.vrik.enabled = false;
 
         //Calibrate HeadIKOffset *(this is fucked on some avatars, (Fuck you Default Robot Kyle) but setting headAnchorRotationOffset to head rotation fixes (Fuck you Default Robot Kyle))*
-        VRIKCalibrator.CalibrateHead(IKSystem.vrik, headAnchor, IKSystem.Instance.headAnchorPositionOffset, IKSystem.Instance.headAnchorRotationOffset);
 
         IKSystem.vrik.enabled = true;
         IKSystem.vrik.solver.IKPositionWeight = 1f;
@@ -155,35 +140,6 @@ public class DesktopVRIK : MonoBehaviour
         avatar.transform.rotation = originalRotation;
         IKSystem.Instance.ResetIK();
         IKSystem.Instance.animator.enabled = true;
-    }
-
-    //This is built because original build placed IK Targets on all joints.
-    private static Transform FindIKTarget(Transform targetParent)
-    {
-        /**
-            I want creators to be able to specify their own custom IK Targets, so they can move them around with animations if they want.
-            We check for existing target objects, and if none are found we make our own.
-            Naming scheme is parentobject name + " IK Target".
-        **/
-        Transform parentTransform = targetParent.transform;
-        string targetName = parentTransform.name + " IK Target";
-
-        //check for existing target
-        foreach (object obj in parentTransform)
-        {
-            Transform childTransform = (Transform)obj;
-            if (childTransform.name == targetName)
-            {
-                return childTransform;
-            }
-        }
-
-        //create new target if none are found
-        GameObject newTarget = new GameObject(targetName);
-        newTarget.transform.parent = parentTransform;
-        newTarget.transform.localPosition = Vector3.zero;
-        newTarget.transform.localRotation = Quaternion.identity;
-        return newTarget.transform;
     }
 
     public void AlternativeOnPreSolverUpdate()
@@ -216,7 +172,7 @@ public class DesktopVRIK : MonoBehaviour
     }
 
     public Animator animator;
-    public Quaternion originalRotation;
+    //public Quaternion originalRotation;
     public RuntimeAnimatorController runtimeAnimatorController;
 
     public VRIK AlternativeCalibration(CVRAvatar avatar)
@@ -226,22 +182,12 @@ public class DesktopVRIK : MonoBehaviour
 
         //Stuff to make bad armatures work (Fuck you Default Robot Kyle)
         avatar.transform.localPosition = Vector3.zero;
-        originalRotation = avatar.transform.rotation;
-        avatar.transform.rotation = Quaternion.identity;
-
-        //force immediate calibration before animator decides to fuck us
-        VRIK vrik = avatar.gameObject.AddComponent<VRIK>();
-        vrik.AutoDetectReferences();
-        vrik.solver.SetToReferences(vrik.references);
-        vrik.solver.Initiate(vrik.transform);
-
-        if (Setting_TestIKPoseController)
-        {
-            //Destroy(vrik);
-            return vrik;
-        }
+        //originalRotation = avatar.transform.rotation;
+        //avatar.transform.rotation = Quaternion.identity;
 
         //Generic VRIK calibration shit
+        VRIK vrik = avatar.gameObject.AddComponent<VRIK>();
+        vrik.AutoDetectReferences();
 
         vrik.fixTransforms = true;
         vrik.solver.plantFeet = false;
@@ -271,17 +217,39 @@ public class DesktopVRIK : MonoBehaviour
         IKSystem.Instance.headAnchorPositionOffset = Vector3.zero;
 
         //Custom funky AF head ik shit
+        foreach (Transform transform in headIKTarget)
+        {
+            if (transform.name == "Head IK Target")
+            {
+                Destroy(transform.gameObject);
+            }
+        }
         headIKTarget.position = avatarHeadBone.position;
         headIKTarget.rotation = Quaternion.identity;
         VRIKCalibrator.CalibrateHead(vrik, headIKTarget.transform, IKSystem.Instance.headAnchorPositionOffset, IKSystem.Instance.headAnchorRotationOffset);
         headIKTarget.localRotation = Quaternion.identity;
+
+        //force immediate calibration before animator decides to fuck us
+        vrik.solver.SetToReferences(vrik.references);
+        vrik.solver.Initiate(vrik.transform);
+
+        if (Setting_TestIKPoseController)
+        {
+            animator.enabled = false;
+            return vrik;
+        }
+
+        //Find eyeoffset
+        initialCamPos = PlayerSetup.Instance.desktopCamera.transform.localPosition;
+        viewpoint = avatarHeadBone.Find("LocalHeadPoint");
+        ChangeViewpointHandling(Setting_EnforceViewPosition);
 
         if (vrik != null)
         {
             vrik.onPreSolverUpdate.AddListener(new UnityAction(this.AlternativeOnPreSolverUpdate));
         }
 
-        avatar.transform.rotation = originalRotation;
+        //avatar.transform.rotation = originalRotation;
         IKSystem.Instance.ResetIK();
 
         return vrik;
