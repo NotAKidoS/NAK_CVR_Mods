@@ -117,7 +117,7 @@ class IKSystemPatches
                     IKSystem.Instance.ApplyMuscleValue((MuscleIndex)i, IKPoseMuscles[i], ref ___humanPose.muscles);
                 }
                 ____poseHandler.SetHumanPose(ref ___humanPose);
-                
+
                 ____vrik = DesktopVRIK.Instance.AlternativeCalibration(avatar);
                 IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);
             }

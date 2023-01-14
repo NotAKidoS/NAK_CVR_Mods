@@ -31,7 +31,7 @@ public class DesktopVRIK : MonoBehaviour
         // create the shared Head IK Target
         headIKTarget = new GameObject("[DesktopVRIK] Head IK Target").transform;
         headIKTarget.parent = PlayerSetup.Instance.transform;
-        headIKTarget.localPosition = new Vector3(0f,1.8f,0f);
+        headIKTarget.localPosition = new Vector3(0f, 1.8f, 0f);
         headIKTarget.localRotation = Quaternion.identity;
     }
 
@@ -88,18 +88,17 @@ public class DesktopVRIK : MonoBehaviour
         //avatar.transform.rotation = Quaternion.identity;
 
         //ikpose layer (specified by avatar author)
-        //int? ikposeLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("IKPose");
-        //int? locoLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("Locomotion/Emotes");
-
-        //if (ikposeLayerIndex != -1)
-        //{
-        //    PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 1f);
-        //    if (locoLayerIndex != -1)
-        //    {
-        //        PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 0f);
-        //    }
-        //    IKSystem.Instance.animator.Update(0f);
-        //}
+        int ikposeLayerIndex = animator.GetLayerIndex("IKPose");
+        int locoLayerIndex = animator.GetLayerIndex("Locomotion/Emotes");
+        if (ikposeLayerIndex != -1)
+        {
+            animator.SetLayerWeight(ikposeLayerIndex, 1f);
+            if (locoLayerIndex != -1)
+            {
+                animator.SetLayerWeight(locoLayerIndex, 0f);
+            }
+            animator.Update(0f);
+        }
 
         //Generic VRIK calibration shit
         VRIK vrik = avatar.gameObject.AddComponent<VRIK>();
@@ -149,14 +148,14 @@ public class DesktopVRIK : MonoBehaviour
         vrik.solver.SetToReferences(vrik.references);
         vrik.solver.Initiate(vrik.transform);
 
-        //if (ikposeLayerIndex != -1)
-        //{
-        //    PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 0f);
-        //    if (locoLayerIndex != -1)
-        //    {
-        //        PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 1f);
-        //    }
-        //}
+        if (ikposeLayerIndex != -1)
+        {
+            animator.SetLayerWeight(ikposeLayerIndex, 0f);
+            if (locoLayerIndex != -1)
+            {
+                animator.SetLayerWeight(locoLayerIndex, 1f);
+            }
+        }
 
         //Find eyeoffset
         initialCamPos = PlayerSetup.Instance.desktopCamera.transform.localPosition;

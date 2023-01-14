@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using BTKUILib;
+﻿using BTKUILib;
 using BTKUILib.UIObjects;
+using System.Runtime.CompilerServices;
 
 namespace NAK.Melons.DesktopVRIK.BTKUI_Integration;
 
