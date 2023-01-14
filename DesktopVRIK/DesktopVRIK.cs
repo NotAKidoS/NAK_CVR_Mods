@@ -83,7 +83,7 @@ public class DesktopVRIK : MonoBehaviour
 
         IKSystem.vrik.fixTransforms = false;
         IKSystem.vrik.solver.plantFeet = false;
-        IKSystem.vrik.solver.locomotion.weight = 0f;
+        IKSystem.vrik.solver.locomotion.weight = 1f;
         IKSystem.vrik.solver.locomotion.angleThreshold = 30f;
         IKSystem.vrik.solver.locomotion.maxLegStretch = 0.75f;
         //nuke weights
@@ -141,6 +141,7 @@ public class DesktopVRIK : MonoBehaviour
 
         avatar.transform.rotation = originalRotation;
         IKSystem.Instance.ResetIK();
+        IKSystem.Instance.animator.enabled = true;
     }
 
     //This is built because original build placed IK Targets on all joints.
