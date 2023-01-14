@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v2.0.0/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "- Simplified VRIK calibration to avoid low heel issue.\n- Removed rushed compatibility mode.\n- Added checks for valid Humanoid rigs.\n- Added PlantFeet & EnforceViewPosition Settings.\n- Added Weight option for the VRChat-like hip movement.\n- Simplified config, added BTKUILib support.\n- Reworked calibration to support almost every avatar.\n- Added custom avatar-defined IKPose support.",
+  "changelog": "- Simplified VRIK calibration to avoid low heel issue.\n- Added checks for valid Humanoid rigs.\n- Added PlantFeet & EnforceViewPosition Settings.\n- Added Weight option for the VRChat-like hip movement.\n- Simplified config, added BTKUILib support.\n- Reworked calibration to support almost every avatar.",
   "embedcolor": "9b59b6"
 }

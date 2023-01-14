@@ -22,7 +22,6 @@ public class DesktopVRIKMod : MelonMod
         m_entryEnforceViewPosition = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce View Position", false, description: "Corrects view position to use VRIK offsets.");
         m_entryEmoteVRIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote VRIK", true, description: "Disable VRIK while emoting. Only disable if you are ok with looking dumb.");
         m_entryEmoteLookAtIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote LookAtIK", true, description: "Disable LookAtIK while emoting. This setting doesn't really matter, as LookAtIK isn't networked while doing an emote.");
-        m_entryAllowRootSlipping = m_categoryDesktopVRIK.CreateEntry<bool>("Allow Root Slipping", false, description: "Allows avatar root to slip out from under itself, to emulate more wacky VRChat behavior.");
 
         foreach (var setting in m_categoryDesktopVRIK.Entries)
         {
@@ -45,7 +44,6 @@ public class DesktopVRIKMod : MelonMod
 
     System.Collections.IEnumerator WaitForLocalPlayer()
     {
-        AssetsHandler.Load();
         while (PlayerSetup.Instance == null)
             yield return null;
         PlayerSetup.Instance.gameObject.AddComponent<DesktopVRIK>();
@@ -61,7 +59,6 @@ public class DesktopVRIKMod : MelonMod
         DesktopVRIK.Setting_EmulateVRChatHipMovementWeight = Mathf.Clamp01(m_entryEmulateVRChatHipMovementWeight.Value);
         DesktopVRIK.Setting_EmoteVRIK = m_entryEmoteVRIK.Value;
         DesktopVRIK.Setting_EmoteLookAtIK = m_entryEmoteLookAtIK.Value;
-        DesktopVRIK.Setting_AllowRootSlipping = m_entryAllowRootSlipping.Value;
         DesktopVRIK.Instance.ChangeViewpointHandling(m_entryEnforceViewPosition.Value);
     }
 
