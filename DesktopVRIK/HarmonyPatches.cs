@@ -105,7 +105,6 @@ class IKSystemPatches
         {
             if (IKSystem.Instance.animator != null && IKSystem.Instance.animator.avatar != null && IKSystem.Instance.animator.avatar.isHuman)
             {
-                //why the fuck does this fix bad armatures and heels in ground ??? (this one is suprisingly not because of Default Robot Kyle) ... (Fuck you Default Robot Kyle)
                 if (____poseHandler == null)
                 {
                     ____poseHandler = new HumanPoseHandler(IKSystem.Instance.animator.avatar, IKSystem.Instance.animator.transform);

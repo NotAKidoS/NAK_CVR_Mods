@@ -18,6 +18,7 @@ public class DesktopVRIK : MonoBehaviour
         Setting_EmoteVRIK,
         Setting_EmoteLookAtIK;
     public static float Setting_EmulateVRChatHipMovementWeight;
+    public static float Setting_HipThrustMultiplier = 0.1f;
 
     public Transform viewpoint;
     public Vector3 initialCamPos;
@@ -60,12 +61,15 @@ public class DesktopVRIK : MonoBehaviour
         IKSystem.vrik.transform.localPosition = Vector3.zero;
         IKSystem.vrik.transform.localRotation = Quaternion.identity;
 
+        float movementVector = (1 - MovementSystem.Instance.movementVector.magnitude);
+        IKSystem.vrik.solver.spine.positionWeight = Setting_HipThrustMultiplier * movementVector;
+
         //VRChat hip movement emulation
         if (Setting_EmulateVRChatHipMovementWeight != 0)
         {
             float angle = PlayerSetup.Instance.desktopCamera.transform.localEulerAngles.x;
             if (angle > 180) angle -= 360;
-            float leanAmount = angle * (1 - MovementSystem.Instance.movementVector.magnitude) * Setting_EmulateVRChatHipMovementWeight;
+            float leanAmount = angle * movementVector * Setting_EmulateVRChatHipMovementWeight;
             Quaternion rotation = Quaternion.AngleAxis(leanAmount, IKSystem.Instance.avatar.transform.right);
             IKSystem.vrik.solver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
         }
@@ -110,9 +114,13 @@ public class DesktopVRIK : MonoBehaviour
         vrik.solver.locomotion.angleThreshold = 30f;
         vrik.solver.locomotion.maxLegStretch = 0.75f;
         //nuke weights
-        vrik.solver.spine.headClampWeight = 0f;
+        vrik.solver.spine.headClampWeight = 1f;
         vrik.solver.spine.minHeadHeight = 0f;
-        //vrik.solver.spine.pelvisPositionWeight = 0f;
+
+        //calm ur ass
+        vrik.solver.spine.positionWeight = 0.1f;
+
+        vrik.solver.spine.pelvisPositionWeight = 0f;
         vrik.solver.leftArm.positionWeight = 0f;
         vrik.solver.leftArm.rotationWeight = 0f;
         vrik.solver.rightArm.positionWeight = 0f;
@@ -128,6 +136,7 @@ public class DesktopVRIK : MonoBehaviour
         BodySystem.TrackingRightArmEnabled = false;
         BodySystem.TrackingLeftLegEnabled = false;
         BodySystem.TrackingRightLegEnabled = false;
+        BodySystem.TrackingPositionWeight = 0f;
         IKSystem.Instance.headAnchorRotationOffset = Vector3.zero;
         IKSystem.Instance.headAnchorPositionOffset = Vector3.zero;
 
