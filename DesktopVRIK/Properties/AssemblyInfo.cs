@@ -6,13 +6,13 @@ using System.Reflection;
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(DesktopVRIK))]
+[assembly: AssemblyTitle(nameof(NAK.Melons.DesktopVRIK))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(DesktopVRIK))]
+[assembly: AssemblyProduct(nameof(NAK.Melons.DesktopVRIK))]
 
 [assembly: MelonInfo(
-    typeof(DesktopVRIK.DesktopVRIKMod),
-    nameof(DesktopVRIK),
+    typeof(NAK.Melons.DesktopVRIK.DesktopVRIKMod),
+    nameof(NAK.Melons.DesktopVRIK),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/DesktopVRIK"
@@ -21,10 +21,11 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
+[assembly: MelonOptionalDependencies("BTKUILib")]
 
 namespace DesktopVRIK.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.4";
+    public const string Version = "1.0.5";
     public const string Author = "NotAKidoS";
 }

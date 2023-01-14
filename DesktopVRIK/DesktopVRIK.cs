@@ -7,19 +7,17 @@ using RootMotion.FinalIK;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace DesktopVRIK;
+namespace NAK.Melons.DesktopVRIK;
 
 public class DesktopVRIK : MonoBehaviour
 {
     public static DesktopVRIK Instance;
 
-    public bool Setting_Enabled, 
-        Setting_EmulateVRChatHipMovement,
-        Setting_EnforceViewPosition, 
-        Setting_EmoteVRIK, 
-        Setting_EmoteLookAtIK,
-        Setting_PlantFeet;
-    public float Setting_EmulateVRChatHipMovementWeight;
+    public static bool Setting_Enabled,
+        Setting_EnforceViewPosition,
+        Setting_EmoteVRIK,
+        Setting_EmoteLookAtIK;
+    public static float Setting_EmulateVRChatHipMovementWeight;
 
     public Transform viewpoint;
     public Vector3 initialCamPos;
@@ -31,6 +29,7 @@ public class DesktopVRIK : MonoBehaviour
 
     public void ChangeViewpointHandling(bool enabled)
     {
+        if (Setting_EnforceViewPosition == enabled) return;
         Setting_EnforceViewPosition = enabled;
         if (enabled)
         {
@@ -39,28 +38,43 @@ public class DesktopVRIK : MonoBehaviour
         }
         PlayerSetup.Instance.desktopCamera.transform.localPosition = initialCamPos;
     }
-    
+
     public void OnPreSolverUpdate()
     {
+        //this order matters, rotation offset will be choppy if avatar is not cenetered first
         //Reset avatar offset (VRIK will literally make you walk away from root otherwise)
         IKSystem.vrik.transform.localPosition = Vector3.zero;
         IKSystem.vrik.transform.localRotation = Quaternion.identity;
         //VRChat hip movement emulation
-        if (Setting_EmulateVRChatHipMovement)
+        if (Setting_EmulateVRChatHipMovementWeight != 0)
         {
             float angle = PlayerSetup.Instance.desktopCamera.transform.localEulerAngles.x;
-            angle = (angle > 180) ? angle - 360 : angle;
-            float weight = (Setting_EmulateVRChatHipMovementWeight - MovementSystem.Instance.movementVector.magnitude);
-            Quaternion rotation = Quaternion.AngleAxis(angle * weight, IKSystem.Instance.avatar.transform.right);
+            if (angle > 180) angle -= 360;
+            float leanAmount = angle * (1 - MovementSystem.Instance.movementVector.magnitude) * Setting_EmulateVRChatHipMovementWeight;
+            Quaternion rotation = Quaternion.AngleAxis(leanAmount, IKSystem.Instance.avatar.transform.right);
             IKSystem.vrik.solver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
         }
-        IKSystem.vrik.solver.plantFeet = Setting_PlantFeet;
+        IKSystem.vrik.solver.plantFeet = true;
     }
 
     public void CalibrateDesktopVRIK(CVRAvatar avatar)
     {
+        //ikpose layer (specified by avatar author)
+        int? ikposeLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("IKPose");
+        int? locoLayerIndex = PlayerSetup.Instance.animatorManager.GetAnimatorLayerIndex("Locomotion/Emotes");
+
+        if (ikposeLayerIndex != -1)
+        {
+            PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 1f);
+            if (locoLayerIndex != -1)
+            {
+                PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 0f);
+            }
+            IKSystem.Instance.animator.Update(0f);
+        }
+
+
         //Stuff to make bad armatures work (Fuck you Default Robot Kyle)
-        IKSystem.Instance.animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
         avatar.transform.localPosition = Vector3.zero;
         Quaternion originalRotation = avatar.transform.rotation;
         avatar.transform.rotation = Quaternion.identity;
@@ -69,10 +83,11 @@ public class DesktopVRIK : MonoBehaviour
 
         IKSystem.vrik.fixTransforms = false;
         IKSystem.vrik.solver.plantFeet = false;
-        IKSystem.vrik.solver.locomotion.weight = 1f;
+        IKSystem.vrik.solver.locomotion.weight = 0f;
         IKSystem.vrik.solver.locomotion.angleThreshold = 30f;
         IKSystem.vrik.solver.locomotion.maxLegStretch = 0.75f;
         //nuke weights
+        IKSystem.vrik.AutoDetectReferences();
         IKSystem.vrik.solver.spine.headClampWeight = 0f;
         IKSystem.vrik.solver.spine.minHeadHeight = 0f;
         IKSystem.vrik.solver.leftArm.positionWeight = 0f;
@@ -115,7 +130,15 @@ public class DesktopVRIK : MonoBehaviour
             IKSystem.vrik.onPreSolverUpdate.AddListener(new UnityAction(this.OnPreSolverUpdate));
         }
 
-        //(Fuck you Default Robot Kyle).. oh wait nvm, not related
+        if (ikposeLayerIndex != -1)
+        {
+            PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("IKPose", 0f);
+            if (locoLayerIndex != -1)
+            {
+                PlayerSetup.Instance.animatorManager.SetAnimatorLayerWeight("Locomotion/Emotes", 1f);
+            }
+        }
+
         avatar.transform.rotation = originalRotation;
         IKSystem.Instance.ResetIK();
     }
