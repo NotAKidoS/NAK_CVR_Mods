@@ -9,22 +9,38 @@ public static class BTKUI_Integration
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static void Init()
     {
-        Page miscPage = QuickMenuAPI.MiscTabPage;
-        Category CategoryUI = miscPage.AddCategory("DesktopVRIK");
+        //Add myself to the Misc Menu
 
-        var setting_Enabled = CategoryUI.AddToggle(DesktopVRIKMod.m_entryEnabled.DisplayName, DesktopVRIKMod.m_entryEnabled.Description, DesktopVRIKMod.m_entryEnabled.Value);
+        Page miscPage = QuickMenuAPI.MiscTabPage;
+        Category miscCategory = miscPage.AddCategory("DesktopVRIK");
+
+        var setting_Enabled = miscCategory.AddToggle(DesktopVRIKMod.m_entryEnabled.DisplayName, DesktopVRIKMod.m_entryEnabled.Description, DesktopVRIKMod.m_entryEnabled.Value);
         setting_Enabled.OnValueUpdated += b => DesktopVRIKMod.m_entryEnabled.Value = b;
 
-        var setting_EnforceViewPosition = CategoryUI.AddToggle(DesktopVRIKMod.m_entryEnforceViewPosition.DisplayName, DesktopVRIKMod.m_entryEnforceViewPosition.Description, DesktopVRIKMod.m_entryEnforceViewPosition.Value);
+        //Add my own page to not clog up Misc Menu
+
+        Page desktopVRIKPage = miscCategory.AddPage("DesktopVRIK Settings", "", "Configure the settings for DesktopVRIK.", "DesktopVRIK");
+        desktopVRIKPage.MenuTitle = "DesktopVRIK Settings";
+        desktopVRIKPage.MenuSubtitle = "Simplified settings for VRIK on Desktop.";
+
+        Category desktopVRIKCategory = desktopVRIKPage.AddCategory("DesktopVRIK");
+
+        var setting_Enabled_2 = desktopVRIKCategory.AddToggle(DesktopVRIKMod.m_entryEnabled.DisplayName, DesktopVRIKMod.m_entryEnabled.Description, DesktopVRIKMod.m_entryEnabled.Value);
+        setting_Enabled_2.OnValueUpdated += b => DesktopVRIKMod.m_entryEnabled.Value = b;
+
+        var setting_EnforceViewPosition = desktopVRIKCategory.AddToggle(DesktopVRIKMod.m_entryEnforceViewPosition.DisplayName, DesktopVRIKMod.m_entryEnforceViewPosition.Description, DesktopVRIKMod.m_entryEnforceViewPosition.Value);
         setting_EnforceViewPosition.OnValueUpdated += b => DesktopVRIKMod.m_entryEnforceViewPosition.Value = b;
 
-        var setting_DisableEmoteVRIK = CategoryUI.AddToggle(DesktopVRIKMod.m_entryEmoteVRIK.DisplayName, DesktopVRIKMod.m_entryEmoteVRIK.Description, DesktopVRIKMod.m_entryEmoteVRIK.Value);
+        var setting_DisableEmoteVRIK = desktopVRIKCategory.AddToggle(DesktopVRIKMod.m_entryEmoteVRIK.DisplayName, DesktopVRIKMod.m_entryEmoteVRIK.Description, DesktopVRIKMod.m_entryEmoteVRIK.Value);
         setting_DisableEmoteVRIK.OnValueUpdated += b => DesktopVRIKMod.m_entryEmoteVRIK.Value = b;
 
-        var setting_DisableEmoteLookAtIK = CategoryUI.AddToggle(DesktopVRIKMod.m_entryEmoteLookAtIK.DisplayName, DesktopVRIKMod.m_entryEmoteLookAtIK.Description, DesktopVRIKMod.m_entryEmoteLookAtIK.Value);
+        var setting_DisableEmoteLookAtIK = desktopVRIKCategory.AddToggle(DesktopVRIKMod.m_entryEmoteLookAtIK.DisplayName, DesktopVRIKMod.m_entryEmoteLookAtIK.Description, DesktopVRIKMod.m_entryEmoteLookAtIK.Value);
         setting_DisableEmoteLookAtIK.OnValueUpdated += b => DesktopVRIKMod.m_entryEmoteLookAtIK.Value = b;
 
-        var setting_EmulateHipMovementWeight = miscPage.AddSlider(DesktopVRIKMod.m_entryEmulateVRChatHipMovementWeight.DisplayName, DesktopVRIKMod.m_entryEmulateVRChatHipMovementWeight.Description, DesktopVRIKMod.m_entryEmulateVRChatHipMovementWeight.Value, 0f, 1f);
-        setting_EmulateHipMovementWeight.OnValueUpdated += f => DesktopVRIKMod.m_entryEmulateVRChatHipMovementWeight.Value = f;
+        var setting_BodyLeanWeight = desktopVRIKPage.AddSlider(DesktopVRIKMod.m_entryBodyLeanWeight.DisplayName, DesktopVRIKMod.m_entryBodyLeanWeight.Description, DesktopVRIKMod.m_entryBodyLeanWeight.Value, 0f, 1f, 1);
+        setting_BodyLeanWeight.OnValueUpdated += f => DesktopVRIKMod.m_entryBodyLeanWeight.Value = f;
+
+        var setting_BodyAngleLimit = desktopVRIKPage.AddSlider(DesktopVRIKMod.m_entryBodyAngleLimit.DisplayName, DesktopVRIKMod.m_entryBodyAngleLimit.Description, DesktopVRIKMod.m_entryBodyAngleLimit.Value, 0f, 90f, 0);
+        setting_BodyAngleLimit.OnValueUpdated += f => DesktopVRIKMod.m_entryBodyAngleLimit.Value = f;
     }
 }

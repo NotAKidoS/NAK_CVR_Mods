@@ -13,15 +13,19 @@ public class DesktopVRIKMod : MelonMod
         m_entryEmoteVRIK,
         m_entryEmoteLookAtIK,
         m_entryAllowRootSlipping;
-    internal static MelonPreferences_Entry<float> m_entryEmulateVRChatHipMovementWeight;
+    internal static MelonPreferences_Entry<float> 
+        m_entryBodyLeanWeight,
+        m_entryBodyAngleLimit;
     public override void OnInitializeMelon()
     {
         m_categoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
         m_entryEnabled = m_categoryDesktopVRIK.CreateEntry<bool>("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
-        m_entryEmulateVRChatHipMovementWeight = m_categoryDesktopVRIK.CreateEntry<float>("Body Movement Weight", 0.5f, description: "Emulates VRChat-like body movement when looking up/down. Set to 0 to disable.");
         m_entryEnforceViewPosition = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce View Position", false, description: "Corrects view position to use VRIK offsets.");
         m_entryEmoteVRIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote VRIK", true, description: "Disable VRIK while emoting. Only disable if you are ok with looking dumb.");
         m_entryEmoteLookAtIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote LookAtIK", true, description: "Disable LookAtIK while emoting. This setting doesn't really matter, as LookAtIK isn't networked while doing an emote.");
+
+        m_entryBodyLeanWeight = m_categoryDesktopVRIK.CreateEntry<float>("Body Lean Weight", 0.3f, description: "Emulates old VRChat-like body leaning when looking up/down. Set to 0 to disable.");
+        m_entryBodyAngleLimit = m_categoryDesktopVRIK.CreateEntry<float>("Body Angle Limit", 45f, description: "Emulates VRChat-like body and head offset when rotating left/right. Set to 0 to disable.");
 
         foreach (var setting in m_categoryDesktopVRIK.Entries)
         {
@@ -46,7 +50,10 @@ public class DesktopVRIKMod : MelonMod
     {
         while (PlayerSetup.Instance == null)
             yield return null;
+
+        DesktopVRIK_Helper.CreateInstance();
         PlayerSetup.Instance.gameObject.AddComponent<DesktopVRIK>();
+
         while (DesktopVRIK.Instance == null)
             yield return null;
         UpdateAllSettings();
@@ -56,7 +63,8 @@ public class DesktopVRIKMod : MelonMod
     {
         if (!DesktopVRIK.Instance) return;
         DesktopVRIK.Setting_Enabled = m_entryEnabled.Value;
-        DesktopVRIK.Setting_EmulateVRChatHipMovementWeight = Mathf.Clamp01(m_entryEmulateVRChatHipMovementWeight.Value);
+        DesktopVRIK.Setting_BodyLeanWeight = Mathf.Clamp01(m_entryBodyLeanWeight.Value);
+        DesktopVRIK.Setting_BodyAngleLimit = Mathf.Clamp(m_entryBodyAngleLimit.Value, 0f, 90f);
         DesktopVRIK.Setting_EmoteVRIK = m_entryEmoteVRIK.Value;
         DesktopVRIK.Setting_EmoteLookAtIK = m_entryEmoteLookAtIK.Value;
         DesktopVRIK.Instance.ChangeViewpointHandling(m_entryEnforceViewPosition.Value);
