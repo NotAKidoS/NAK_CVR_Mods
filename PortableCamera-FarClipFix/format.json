@@ -1,0 +1,24 @@
+{
+  "_id": 95,
+  "name": "PortableCameraAdditions",
+  "modversion": "3.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Corrects MM and QM position when avatar is being scaled.\n\nDesktop menus will now always follow camera while open.",
+  "searchtags": [
+    "menu",
+    "scale",
+    "avatarscale",
+    "slider"
+  ],
+  "requirements": [
+    "None"
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/releases/download/v3.0.0/PortableCameraAdditions.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/",
+  "changelog": "Removed collision scaling feature as it is now native.\nAdjusted QM scaling for VR.\nAdded menu correction for Desktop so you can use menus while moving.\nImmediate viewpoint correction for Desktop during scaling.",
+  "embedcolor": "804221"
+}
