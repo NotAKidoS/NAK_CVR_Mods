@@ -79,12 +79,16 @@ public class DesktopVRSwitchHelper : MonoBehaviour
     public void LateUpdate()
     {
         if (!isAttemptingSwitch) return;
-        BodySystem.TrackingEnabled = false;
-        BodySystem.TrackingPositionWeight = 0f;
-        PlayerSetup.Instance._avatar.transform.position = avatarWorldPos;
-        PlayerSetup.Instance._avatar.transform.rotation = avatarWorldRot;
-        MovementSystem.Instance.TeleportToPosRot(avatarWorldPos, avatarWorldRot, false);
-        MovementSystem.Instance.UpdateColliderCenter(avatarWorldPos);
+
+        if (!PlayerSetup.Instance.avatarIsLoading && PlayerSetup.Instance._avatar != null)
+        {
+            BodySystem.TrackingEnabled = false;
+            BodySystem.TrackingPositionWeight = 0f;
+            PlayerSetup.Instance._avatar.transform.position = avatarWorldPos;
+            PlayerSetup.Instance._avatar.transform.rotation = avatarWorldRot;
+            MovementSystem.Instance.TeleportToPosRot(avatarWorldPos, avatarWorldRot, false);
+            MovementSystem.Instance.UpdateColliderCenter(avatarWorldPos);
+        }
     }
 
     internal static IEnumerator AttemptPlatformSwitch(bool forceMode = false)
@@ -113,6 +117,7 @@ public class DesktopVRSwitchHelper : MonoBehaviour
         yield
         return new WaitForEndOfFrame();
 
+        SetCheckVR(VRMode);
         SetMetaPort(VRMode);
 
         //reset rich presence
@@ -256,6 +261,22 @@ public class DesktopVRSwitchHelper : MonoBehaviour
             throw;
         }
     }
+
+    internal static void SetCheckVR(bool isVR)
+    {
+        try
+        {
+            MelonLogger.Msg($"Set CheckVR hasVrDeviceLoaded to {isVR}.");
+            CheckVR.Instance.hasVrDeviceLoaded = isVR;
+        }
+        catch
+        {
+            MelonLogger.Error("Setting CheckVR hasVrDeviceLoaded failed. Is CheckVR.Instance invalid?");
+            MelonLogger.Msg("CheckVR.Instance: " + CheckVR.Instance);
+            throw;
+        }
+    }
+
     internal static void SetMetaPort(bool isVR)
     {
         try
