@@ -25,6 +25,6 @@ using System.Reflection;
 namespace DesktopVRSwitch.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "3.0.0";
+    public const string Version = "3.0.5";
     public const string Author = "NotAKidoS";
 }

@@ -1,21 +1,5 @@
-﻿using ABI_RC.Core;
-using ABI_RC.Core.EventSystem;
-using ABI_RC.Core.InteractionSystem;
-using ABI_RC.Core.Player;
-using ABI_RC.Core.Savior;
-using ABI_RC.Core.UI;
-using ABI_RC.Core.Util.Object_Behaviour;
-using ABI_RC.Systems.Camera;
-using ABI_RC.Systems.IK.SubSystems;
-using ABI_RC.Systems.MovementSystem;
-using DesktopVRSwitch.Patches;
-using HarmonyLib;
+﻿using ABI_RC.Core.Player;
 using MelonLoader;
-using System.Collections;
-using UnityEngine;
-using UnityEngine.XR;
-using Valve.VR;
-using Object = UnityEngine.Object;
 
 //tell the game to change VRMode/DesktopMode for Steam/Discord presence
 //RichPresence.PopulatePresence();
