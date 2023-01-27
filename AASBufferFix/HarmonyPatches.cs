@@ -13,7 +13,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(PuppetMaster), "Start")]
     private static void Postfix_PuppetMaster_Start(ref PuppetMaster __instance)
     {
-        AASBufferFix externalBuffer = __instance.AddComponentIfMissing<AASBufferFix>();
+        AASBufferHelper externalBuffer = __instance.AddComponentIfMissing<AASBufferHelper>();
         externalBuffer.puppetMaster = __instance;
     }
 
@@ -21,7 +21,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(PuppetMaster), "AvatarInstantiated")]
     private static void Postfix_PuppetMaster_AvatarInstantiated(ref PuppetMaster __instance, ref Animator ____animator)
     {
-        AASBufferFix externalBuffer = __instance.GetComponent<AASBufferFix>();
+        AASBufferHelper externalBuffer = __instance.GetComponent<AASBufferHelper>();
         if (externalBuffer != null) externalBuffer.OnAvatarInstantiated(____animator);
     }
 
@@ -29,7 +29,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(PuppetMaster), "AvatarDestroyed")]
     private static void Postfix_PuppetMaster_AvatarDestroyed(ref PuppetMaster __instance)
     {
-        AASBufferFix externalBuffer = __instance.GetComponent<AASBufferFix>();
+        AASBufferHelper externalBuffer = __instance.GetComponent<AASBufferHelper>();
         if (externalBuffer != null) externalBuffer.OnAvatarDestroyed();
     }
 
@@ -37,7 +37,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(PuppetMaster), "ApplyAdvancedAvatarSettings")]
     private static bool Prefix_PuppetMaster_ApplyAdvancedAvatarSettings(float[] settingsFloat, int[] settingsInt, byte[] settingsByte, ref PuppetMaster __instance)
     {
-        AASBufferFix externalBuffer = __instance.GetComponent<AASBufferFix>();
+        AASBufferHelper externalBuffer = __instance.GetComponent<AASBufferHelper>();
         if (externalBuffer != null && !externalBuffer.isAcceptingAAS)
         {
             externalBuffer.OnApplyAAS(settingsFloat, settingsInt, settingsByte);
@@ -50,7 +50,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(CVRAnimatorManager), "ApplyAdvancedAvatarSettingsFromBuffer")]
     private static bool Prefix_PuppetMaster_ApplyAdvancedAvatarSettingsFromBuffer(ref Animator ____animator)
     {
-        AASBufferFix externalBuffer = ____animator.GetComponentInParent<AASBufferFix>();
+        AASBufferHelper externalBuffer = ____animator.GetComponentInParent<AASBufferHelper>();
         if (externalBuffer != null && !externalBuffer.isAcceptingAAS)
         {
             //dont apply if stable buffer no exist

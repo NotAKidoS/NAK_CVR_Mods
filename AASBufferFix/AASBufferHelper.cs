@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NAK.Melons.AASBufferFix;
 
-public class AASBufferFix : MonoBehaviour
+public class AASBufferHelper : MonoBehaviour
 {
     public bool isAcceptingAAS = true;
 
@@ -74,12 +74,14 @@ public class AASBufferFix : MonoBehaviour
     {
         isAcceptingAAS = true;
         puppetMaster?.ApplyAdvancedAvatarSettings(aasBufferFloat, aasBufferInt, aasBufferByte);
+        Destroy(this);
     }
 
     public void ApplyExternalAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
     {
         isAcceptingAAS = true;
         puppetMaster?.ApplyAdvancedAvatarSettings(settingsFloat, settingsInt, settingsByte);
+        Destroy(this);
     }
 
     public void StoreExternalAASBuffer(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
