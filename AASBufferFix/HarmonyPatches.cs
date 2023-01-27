@@ -40,7 +40,7 @@ internal class HarmonyPatches
         AASBufferFix externalBuffer = __instance.GetComponent<AASBufferFix>();
         if (externalBuffer != null && !externalBuffer.isAcceptingAAS)
         {
-            externalBuffer.StoreExternalAASBuffer(settingsFloat, settingsInt, settingsByte);
+            externalBuffer.OnApplyAAS(settingsFloat, settingsInt, settingsByte);
             return false;
         }
         return true;

@@ -5,122 +5,95 @@ namespace NAK.Melons.AASBufferFix;
 
 public class AASBufferFix : MonoBehaviour
 {
-    public PuppetMaster puppetMaster;
+    public bool isAcceptingAAS = true;
 
-    public bool isAcceptingAAS = false;
+    internal PuppetMaster puppetMaster;
 
-    public float[] aasBufferFloat = new float[0];
-    public int[] aasBufferInt = new int[0];
-    public byte[] aasBufferByte = new byte[0];
+    //outside buffers that dont get nuked on avatar load
+    private float[] aasBufferFloat = new float[0];
+    private int[] aasBufferInt = new int[0];
+    private byte[] aasBufferByte = new byte[0];
 
-    public int aasFootprint = -1;
-    public int avatarFootprint = -1;
+    //footprint is each parameter bit type count multiplied together
+    private int aasFootprint = -1;
+    private int avatarFootprint = 0;
 
     public void Start()
     {
         puppetMaster = GetComponent<PuppetMaster>();
     }
 
-    public void StoreExternalAASBuffer(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
-    {
-        //resize buffer if size changed, only should happen on first new avatar load
-        if (aasBufferFloat.Length == settingsFloat.Length)
-            aasBufferFloat = new float[settingsFloat.Length];
-
-        if (aasBufferInt.Length == settingsInt.Length)
-            aasBufferInt = new int[settingsInt.Length];
-
-        if (aasBufferByte.Length == settingsByte.Length)
-            aasBufferByte = new byte[settingsByte.Length];
-
-        aasBufferFloat = settingsFloat;
-        aasBufferInt = settingsInt;
-        aasBufferByte = settingsByte;
-
-        //haha shit lazy implementation
-        aasFootprint = ((aasBufferFloat.Length * 32) + 1) * ((aasBufferInt.Length * 32) + 1) * ((aasBufferByte.Length * 8) + 1);
-
-        CheckForFootprintMatch();
-    }
-
     public void OnAvatarInstantiated(Animator animator)
     {
-        avatarFootprint = GenerateAvatarFootprint(animator);
-        CheckForFootprintMatch();
+        //create the loaded avatar footprint
+        avatarFootprint = Utils.GenerateAnimatorAASFootprint(animator);
+
+        //previous "bad data" now matches, apply buffered data
+        if (SyncDataMatchesExpected())
+        {
+            ApplyExternalAASBuffer();
+        }
     }
 
     public void OnAvatarDestroyed()
     {
-        isAcceptingAAS = false;
-        //clear buffer
-        aasBufferFloat = new float[0];
-        aasBufferInt = new int[0];
-        aasBufferByte = new byte[0];
-        avatarFootprint = 0;
         aasFootprint = -1;
+        avatarFootprint = 0;
+        isAcceptingAAS = false;
     }
 
-    public void CheckForFootprintMatch()
+    public void OnApplyAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
     {
-        //only apply if avatar footprints match
-        if (aasFootprint == avatarFootprint)
-        {
-            isAcceptingAAS = true;
-            puppetMaster?.ApplyAdvancedAvatarSettings(aasBufferFloat, aasBufferInt, aasBufferByte);
-        }
-    }
+        //create the synced data footprint
+        aasFootprint = ((settingsFloat.Length * 32) + 1) * ((settingsInt.Length * 32) + 1) * ((settingsByte.Length * 8) + 1);
 
-    public int GenerateAvatarFootprint(Animator animator)
-    {
-        int avatarFloatCount = 0;
-        int avatarIntCount = 0;
-        int avatarBoolCount = 0;
-
-        foreach (AnimatorControllerParameter animatorControllerParameter in animator.parameters)
+        if (!SyncDataMatchesExpected())
         {
-            if (animatorControllerParameter.name.Length > 0 && animatorControllerParameter.name[0] != '#' && !coreParameters.Contains(animatorControllerParameter.name))
+            if (avatarFootprint == 0)
             {
-                AnimatorControllerParameterType type = animatorControllerParameter.type;
-                switch (type)
-                {
-                    case AnimatorControllerParameterType.Float:
-                        avatarFloatCount += 32;
-                        break;
-                    case (AnimatorControllerParameterType)2:
-                        break;
-                    case AnimatorControllerParameterType.Int:
-                        avatarIntCount += 32;
-                        break;
-                    case AnimatorControllerParameterType.Bool:
-                        avatarBoolCount++;
-                        break;
-                    default:
-                        //we dont count triggers
-                        break;
-                }
+                //we are receiving synced data, but the avatar has not loaded on our end
+                //we can only assume the data is correct, and store it for later
+                StoreExternalAASBuffer(settingsFloat, settingsInt, settingsByte);
+                return;
             }
+
+            //avatar is loaded on our screen, but wearer is syncing bad data
+            //we will need to wait until it has loaded on their end
+
+            //there is also a chance the avatar is hidden, so the animator returned 1 on initialization
+            //(this was only one encounter during testing, someone being hidden by safety on world load)
         }
-
-        //bool to byte
-        avatarBoolCount = ((int)Math.Ceiling((double)avatarBoolCount / 8) * 8);
-
-        //create the footprint
-        return (avatarFloatCount + 1) * (avatarIntCount + 1) * (avatarBoolCount + 1);
+        else
+        {
+            //synced data matches what we expect
+            ApplyExternalAAS(settingsFloat, settingsInt, settingsByte);
+        }
     }
 
-    private static HashSet<string> coreParameters = new HashSet<string>
+    public void ApplyExternalAASBuffer()
     {
-        "MovementX",
-        "MovementY",
-        "Grounded",
-        "Emote",
-        "GestureLeft",
-        "GestureRight",
-        "Toggle",
-        "Sitting",
-        "Crouching",
-        "CancelEmote",
-        "Prone",
-        "Flying"
-    };
+        isAcceptingAAS = true;
+        puppetMaster?.ApplyAdvancedAvatarSettings(aasBufferFloat, aasBufferInt, aasBufferByte);
+    }
+
+    public void ApplyExternalAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
+    {
+        isAcceptingAAS = true;
+        puppetMaster?.ApplyAdvancedAvatarSettings(settingsFloat, settingsInt, settingsByte);
+    }
+
+    public void StoreExternalAASBuffer(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
+    {
+        Array.Resize(ref aasBufferFloat, settingsFloat.Length);
+        Array.Resize(ref aasBufferInt, settingsInt.Length);
+        Array.Resize(ref aasBufferByte, settingsByte.Length);
+        Array.Copy(settingsFloat, aasBufferFloat, settingsFloat.Length);
+        Array.Copy(settingsInt, aasBufferInt, settingsInt.Length);
+        Array.Copy(settingsByte, aasBufferByte, settingsByte.Length);
+    }
+
+    public bool SyncDataMatchesExpected()
+    {
+        return aasFootprint == avatarFootprint;
+    }
 }
