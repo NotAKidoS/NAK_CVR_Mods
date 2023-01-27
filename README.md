@@ -9,6 +9,8 @@ https://feedback.abinteractive.net/p/aas-buffer-is-nuked-on-remote-load
 Avatars will no longer load in naked or transition to the wrong state on load. 
 
 AAS will also not be updated unless the expected data matches what is received.
+
+The avatar will stay in the default animator state until AAS data is received that is deemed correct.
     
 ---
 
