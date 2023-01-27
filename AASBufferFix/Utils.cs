@@ -41,9 +41,7 @@ public class Utils
         }
 
         //bool to byte
-        avatarBoolCount = ((int)Math.Ceiling((double)avatarBoolCount / 8) * 8);
-        avatarFloatCount *= 32;
-        avatarIntCount *= 32;
+        avatarBoolCount = ((int)Math.Ceiling((double)avatarBoolCount / 8));
 
         //create the footprint
         return (avatarFloatCount + 1) * (avatarIntCount + 1) * (avatarBoolCount + 1);

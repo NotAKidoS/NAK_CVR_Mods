@@ -45,7 +45,7 @@ public class AASBufferFix : MonoBehaviour
     public void OnApplyAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
     {
         //create the synced data footprint
-        aasFootprint = ((settingsFloat.Length * 32) + 1) * ((settingsInt.Length * 32) + 1) * ((settingsByte.Length * 8) + 1);
+        aasFootprint = (settingsFloat.Length + 1) * ((settingsInt.Length) + 1) * ((settingsByte.Length) + 1);
 
         if (!SyncDataMatchesExpected())
         {
