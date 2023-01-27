@@ -5,7 +5,7 @@ namespace NAK.Melons.AASBufferFix;
 
 public class AASBufferHelper : MonoBehaviour
 {
-    public bool isAcceptingAAS = true;
+    public bool isAcceptingAAS = false;
 
     internal PuppetMaster puppetMaster;
 
@@ -41,11 +41,11 @@ public class AASBufferHelper : MonoBehaviour
         avatarFootprint = 0;
         isAcceptingAAS = false;
     }
-
+    
     public void OnApplyAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
     {
         //create the synced data footprint
-        aasFootprint = (settingsFloat.Length + 1) * ((settingsInt.Length) + 1) * ((settingsByte.Length) + 1);
+        aasFootprint = (settingsFloat.Length + 1) * (settingsInt.Length + 1) * (settingsByte.Length + 1);
 
         if (!SyncDataMatchesExpected())
         {
@@ -60,8 +60,13 @@ public class AASBufferHelper : MonoBehaviour
             //avatar is loaded on our screen, but wearer is syncing bad data
             //we will need to wait until it has loaded on their end
 
-            //there is also a chance the avatar is hidden, so the animator returned 1 on initialization
-            //(this was only one encounter during testing, someone being hidden by safety on world load)
+            //there is also a chance the avatar is hidden, so the avatar footprint returned 1 on initialization
+            //(this was only one encounter during testing, someone being hidden by safety on world load) (x, 1)
+            //these avatars do attempt to sync AAS, but the avatar footprint will never match
+
+            //there is also a chance the avatar is an old avatar before AAS, so they do not sync any data
+            //and have an avatar footprint of 1 (-1, 1)
+            //these avatars do not seem to attempt AAS syncing, so it isnt much of a problem
         }
         else
         {
