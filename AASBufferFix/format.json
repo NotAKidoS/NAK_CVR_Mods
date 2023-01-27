@@ -1,7 +1,7 @@
 {
-  "_id": -1,
+  "_id": 126,
   "name": "AASBufferFix",
-  "modversion": "1.0.1",
+  "modversion": "1.0.3",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/AASBufferFix/releases/download/v1.0.1/AASBufferFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/AASBufferFix/releases/download/v1.0.3/AASBufferFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/AASBufferFix/",
-  "changelog": "- Initial Release",
+  "changelog": "- Initial Release\n- Fixed extremely rare condition where AAS would be applied before ready.\n- Don't destroy helper on first load...'",
   "embedcolor": "9b59b6"
 }

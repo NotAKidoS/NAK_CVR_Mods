@@ -79,14 +79,12 @@ public class AASBufferHelper : MonoBehaviour
     {
         isAcceptingAAS = true;
         puppetMaster?.ApplyAdvancedAvatarSettings(aasBufferFloat, aasBufferInt, aasBufferByte);
-        Destroy(this);
     }
 
     public void ApplyExternalAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
     {
         isAcceptingAAS = true;
         puppetMaster?.ApplyAdvancedAvatarSettings(settingsFloat, settingsInt, settingsByte);
-        Destroy(this);
     }
 
     public void StoreExternalAASBuffer(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
