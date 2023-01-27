@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "AASBufferFix",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes two AAS buffer issues. Remote avatars with AAS will no longer experience wardrobe malfunctions on initialization.\n\nAAS will not be applied unless the synced data matches what is expected of the loaded avatar.",
+  "searchtags": [
+    "aas",
+    "sync",
+    "naked",
+    "buffer"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/AASBufferFix/releases/download/v1.0.0/AASBufferFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/AASBufferFix/",
+  "changelog": "- Initial Release",
+  "embedcolor": "9b59b6"
+}
