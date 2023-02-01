@@ -1,104 +1,122 @@
 ﻿using ABI_RC.Core.Player;
 using UnityEngine;
 
-namespace NAK.Melons.AASBufferFix;
-
-public class AASBufferHelper : MonoBehaviour
+namespace NAK.Melons.AASBufferFix
 {
-    public bool isAcceptingAAS = false;
-
-    internal PuppetMaster puppetMaster;
-
-    //outside buffers that dont get nuked on avatar load
-    private float[] aasBufferFloat = new float[0];
-    private int[] aasBufferInt = new int[0];
-    private byte[] aasBufferByte = new byte[0];
-
-    //footprint is each parameter bit type count multiplied together
-    private int aasFootprint = -1;
-    private int avatarFootprint = 0;
-
-    public void Start()
+    public class AASBufferHelper : MonoBehaviour
     {
-        puppetMaster = GetComponent<PuppetMaster>();
-    }
+        //public stuff
+        public bool GameHandlesAAS { get; private set; }
 
-    public void OnAvatarInstantiated(Animator animator)
-    {
-        //create the loaded avatar footprint
-        avatarFootprint = Utils.GenerateAnimatorAASFootprint(animator);
+        //internal references
+        private PuppetMaster _puppetMaster;
 
-        //previous "bad data" now matches, apply buffered data
-        if (SyncDataMatchesExpected())
+        //outside aas buffers
+        private float[] _aasBufferFloat = new float[0];
+        private int[] _aasBufferInt = new int[0];
+        private byte[] _aasBufferByte = new byte[0];
+
+        //calculated footprints
+        private int _aasFootprint = -1;
+        private int _avatarFootprint = 0;
+
+        private void Start() => _puppetMaster = GetComponent<PuppetMaster>();
+
+        public void OnAvatarInstantiated(Animator animator)
         {
-            ApplyExternalAASBuffer();
-        }
-    }
 
-    public void OnAvatarDestroyed()
-    {
-        aasFootprint = -1;
-        avatarFootprint = 0;
-        isAcceptingAAS = false;
-    }
-    
-    public void OnApplyAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
-    {
-        //create the synced data footprint
-        aasFootprint = (settingsFloat.Length + 1) * (settingsInt.Length + 1) * (settingsByte.Length + 1);
+            ///MelonLoader.MelonLogger.Msg("[OnInit] Remote avatar initialized. Generating avatar animator footprint.");
 
-        if (!SyncDataMatchesExpected())
-        {
-            if (avatarFootprint == 0)
+            _avatarFootprint = Utils.GenerateAnimatorAASFootprint(animator);
+
+            // avatar does not contain proper AAS
+            // this is likely because the avatar was made before AAS, or is blocked/hidden
+            if (_avatarFootprint == 1)
             {
-                //we are receiving synced data, but the avatar has not loaded on our end
-                //we can only assume the data is correct, and store it for later
+                ///MelonLoader.MelonLogger.Msg("[OnInit] Avatar does not contain valid AAS.");
+                // we will let the game handle this by setting IsAcceptingAAS to true
+                GameHandlesAAS = true;
+                return;
+            }
+
+            ///MelonLoader.MelonLogger.Msg($"[OnInit] Avatar footprint is : {_avatarFootprint}");
+
+            //check if we received expected AAS while we loaded the avatar, and if so, apply it now
+            if (SyncDataMatchesExpected())
+            {
+                ///MelonLoader.MelonLogger.Msg("[OnInit] Valid buffered AAS found. Applying AAS immediatly.");
+                ApplyExternalAASBuffer();
+                return;
+            }
+
+            //we loaded avatar faster than wearer
+            ///MelonLoader.MelonLogger.Msg("[OnInit] Remote avatar initialized faster than wearer. Waiting on valid AAS before applying.");
+        }
+
+        public void OnAvatarDestroyed()
+        {
+            GameHandlesAAS = false;
+            _aasFootprint = -1;
+            _avatarFootprint = 0;
+        }
+
+        public void OnApplyAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
+        {
+            //avatar is still loading on our side, we must assume AAS data is correct and store it until we load
+            //there is also a chance it errored
+            if (_avatarFootprint == 0)
+            {
+                ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar is still loading on our end.");
+                // Calculate AAS footprint to compare against later.
+                _aasFootprint = (settingsFloat.Length + 1) * (settingsInt.Length + 1) * (settingsByte.Length + 1);
                 StoreExternalAASBuffer(settingsFloat, settingsInt, settingsByte);
                 return;
             }
 
-            //avatar is loaded on our screen, but wearer is syncing bad data
-            //we will need to wait until it has loaded on their end
+            //avatar is loaded on our end, and is not blocked by filter
+            //this does run if it is manually hidden or distance hidden
 
-            //there is also a chance the avatar is hidden, so the avatar footprint returned 1 on initialization
-            //(this was only one encounter during testing, someone being hidden by safety on world load) (x, 1)
-            //these avatars do attempt to sync AAS, but the avatar footprint will never match
+            ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar is loaded on our side and is not blocked. Comparing for expected values.");
+            ///MelonLoader.MelonLogger.Msg($"[OnSync] Avatar Footprint is : {_avatarFootprint}");
 
-            //there is also a chance the avatar is an old avatar before AAS, so they do not sync any data
-            //and have an avatar footprint of 1 (-1, 1)
-            //these avatars do not seem to attempt AAS syncing, so it isnt much of a problem
+            // Calculate AAS footprint to compare against.
+            _aasFootprint = (settingsFloat.Length + 1) * (settingsInt.Length + 1) * (settingsByte.Length + 1);
+
+            //if it matches, apply the settings and let game take over
+            if (SyncDataMatchesExpected())
+            {
+                ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar values matched and have been applied.");
+                ApplyExternalAAS(settingsFloat, settingsInt, settingsByte);
+                return;
+            }
+
+            //if it did not match, that means the avatar we see on our side is different than what the remote user is wearing and syncing
+            ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar loaded is different than wearer. The wearer is likely still loading the avatar!");
+            StoreExternalAASBuffer(settingsFloat, settingsInt, settingsByte);
         }
-        else
+
+        private void ApplyExternalAASBuffer()
         {
-            //synced data matches what we expect
-            ApplyExternalAAS(settingsFloat, settingsInt, settingsByte);
+            GameHandlesAAS = true;
+            _puppetMaster?.ApplyAdvancedAvatarSettings(_aasBufferFloat, _aasBufferInt, _aasBufferByte);
         }
-    }
 
-    public void ApplyExternalAASBuffer()
-    {
-        isAcceptingAAS = true;
-        puppetMaster?.ApplyAdvancedAvatarSettings(aasBufferFloat, aasBufferInt, aasBufferByte);
-    }
+        private void ApplyExternalAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
+        {
+            GameHandlesAAS = true;
+            _puppetMaster?.ApplyAdvancedAvatarSettings(settingsFloat, settingsInt, settingsByte);
+        }
 
-    public void ApplyExternalAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
-    {
-        isAcceptingAAS = true;
-        puppetMaster?.ApplyAdvancedAvatarSettings(settingsFloat, settingsInt, settingsByte);
-    }
+        private void StoreExternalAASBuffer(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
+        {
+            Array.Resize(ref _aasBufferFloat, settingsFloat.Length);
+            Array.Resize(ref _aasBufferInt, settingsInt.Length);
+            Array.Resize(ref _aasBufferByte, settingsByte.Length);
+            Array.Copy(settingsFloat, _aasBufferFloat, settingsFloat.Length);
+            Array.Copy(settingsInt, _aasBufferInt, settingsInt.Length);
+            Array.Copy(settingsByte, _aasBufferByte, settingsByte.Length);
+        }
 
-    public void StoreExternalAASBuffer(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
-    {
-        Array.Resize(ref aasBufferFloat, settingsFloat.Length);
-        Array.Resize(ref aasBufferInt, settingsInt.Length);
-        Array.Resize(ref aasBufferByte, settingsByte.Length);
-        Array.Copy(settingsFloat, aasBufferFloat, settingsFloat.Length);
-        Array.Copy(settingsInt, aasBufferInt, settingsInt.Length);
-        Array.Copy(settingsByte, aasBufferByte, settingsByte.Length);
-    }
-
-    public bool SyncDataMatchesExpected()
-    {
-        return aasFootprint == avatarFootprint;
+        private bool SyncDataMatchesExpected() => _aasFootprint == _avatarFootprint;
     }
 }

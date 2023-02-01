@@ -14,7 +14,6 @@ internal class HarmonyPatches
     private static void Postfix_PuppetMaster_Start(ref PuppetMaster __instance)
     {
         AASBufferHelper externalBuffer = __instance.AddComponentIfMissing<AASBufferHelper>();
-        externalBuffer.puppetMaster = __instance;
     }
 
     [HarmonyPostfix]
@@ -38,7 +37,7 @@ internal class HarmonyPatches
     private static bool Prefix_PuppetMaster_ApplyAdvancedAvatarSettings(float[] settingsFloat, int[] settingsInt, byte[] settingsByte, ref PuppetMaster __instance)
     {
         AASBufferHelper externalBuffer = __instance.GetComponent<AASBufferHelper>();
-        if (externalBuffer != null && !externalBuffer.isAcceptingAAS)
+        if (externalBuffer != null && !externalBuffer.GameHandlesAAS)
         {
             externalBuffer.OnApplyAAS(settingsFloat, settingsInt, settingsByte);
             return false;
@@ -51,7 +50,7 @@ internal class HarmonyPatches
     private static bool Prefix_PuppetMaster_ApplyAdvancedAvatarSettingsFromBuffer(ref Animator ____animator)
     {
         AASBufferHelper externalBuffer = ____animator.GetComponentInParent<AASBufferHelper>();
-        if (externalBuffer != null && !externalBuffer.isAcceptingAAS)
+        if (externalBuffer != null && !externalBuffer.GameHandlesAAS)
         {
             //dont apply if stable buffer no exist
             return false;
