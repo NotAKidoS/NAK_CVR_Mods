@@ -5,7 +5,7 @@ using MelonLoader;
 using System.Text;
 using UnityEngine;
 
-namespace Blackout;
+namespace NAK.Melons.Blackout;
 
 /*
 
@@ -30,28 +30,37 @@ namespace Blackout;
 public class BlackoutController : MonoBehaviour
 {
     public static BlackoutController Instance;
-
+    
+    // The current state of the player's consciousness.
     public BlackoutState CurrentState = BlackoutState.Awake;
 
-    //degrees of movement to give partial vision
-    public float drowsyThreshold = 1f;
-    //degrees of movement to give complete vision
-    public float wakeThreshold = 12f;
+    // Should the states automatically change based on time?
+    public bool AutomaticStateChange = true;
+    // Should the sleep state be automatically transitioned to? Some may prefer drowsy state only due to dimming.
+    public bool AutoSleepState = true;
 
-    //how long without movement until the screen dims
-    public float DrowsyModeTimer = 3f;   // MINUTES
-    //how long should the wake state last before return
-    public float SleepModeTimer = 10f; // SECONDS
+    // The minimum amount of movement required to partially restore vision.
+    public float drowsyThreshold = 2f;
+    // The minimum amount of movement required to fully restore vision.
+    public float wakeThreshold = 4f;
 
-    //how much does DrowsyMode affect the screen
-    public float DrowsyDimStrength = 0.5f;
+    // The amount of time the player must remain still to enter drowsy state (in minutes).
+    public float DrowsyModeTimer = 3f;
+    // The amount of time the player must remain in drowsy state before entering sleep state (in seconds).
+    public float SleepModeTimer = 10f;
 
-    //this is uh, not work well- might rewrite now that i know how this should work
-    public bool HudMessages = false;
+    // The amount by which DrowsyMode affects the screen.
+    public float DrowsyDimStrength = 0.6f;
+    // Should DrowsyDimStrength be affected by velocity?
+    public bool DrowsyVelocityMultiplier = true;
 
-    //lower FPS while in sleep mode
+    // Whether to display HUD messages.
+    public bool HudMessages = true;
+
+    // Whether to lower the frame rate while in sleep mode.
     public bool DropFPSOnSleep = false;
 
+    // The available states of consciousness.
     public enum BlackoutState
     {
         Awake = 0,
@@ -60,14 +69,16 @@ public class BlackoutController : MonoBehaviour
     }
 
     private Camera activeModeCam;
-    private Quaternion oldHeadRotation = Quaternion.identity;
-    private float angularMovement = 0f;
+    private Vector3 headVelocity = Vector3.zero;
+    private Vector3 lastHeadPos = Vector3.zero;
     private float curTime = 0f;
     private float lastAwakeTime = 0f;
-    private int nextUpdate = 1;
     private Animator blackoutAnimator;
     private int targetFPS;
 
+    public void ChangeBlackoutStateFromInt(int state) => ChangeBlackoutState((BlackoutState)state);
+
+    // Changes the player's state of consciousness.
     public void ChangeBlackoutState(BlackoutState newState)
     {
         if (!blackoutAnimator) return;
@@ -75,47 +86,61 @@ public class BlackoutController : MonoBehaviour
 
         lastAwakeTime = curTime;
 
+        // Update the blackout animator based on the new state.
         switch (newState)
         {
             case BlackoutState.Awake:
                 blackoutAnimator.SetBool("BlackoutState.Drowsy", false);
                 blackoutAnimator.SetBool("BlackoutState.Sleeping", false);
-                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyStrength", DrowsyDimStrength);
+                drowsyMagnitude = 0f;
                 break;
             case BlackoutState.Drowsy:
                 blackoutAnimator.SetBool("BlackoutState.Drowsy", true);
                 blackoutAnimator.SetBool("BlackoutState.Sleeping", false);
-                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyStrength", DrowsyDimStrength);
+                drowsyMagnitude = 0f;
                 break;
             case BlackoutState.Sleeping:
                 blackoutAnimator.SetBool("BlackoutState.Drowsy", false);
                 blackoutAnimator.SetBool("BlackoutState.Sleeping", true);
-                blackoutAnimator.SetFloat("BlackoutSetting.DrowsyStrength", DrowsyDimStrength);
+                drowsyMagnitude = 1f;
                 break;
             default:
                 break;
         }
+
+        // Update the current state and send a HUD message if enabled.
         BlackoutState prevState = CurrentState;
         CurrentState = newState;
         SendHUDMessage($"Exiting {prevState} and entering {newState} state.");
         ChangeTargetFPS();
     }
 
-    //initialize BlackoutInstance object
+    public void AdjustDrowsyDimStrength(float multiplier = 1f)
+    {
+        blackoutAnimator.SetFloat("BlackoutSetting.DrowsyStrength", DrowsyDimStrength * multiplier);
+    }
+
+    // Initialize the BlackoutInstance object.
     void Start()
     {
         Instance = this;
 
+        // Get the blackout asset and instantiate it.
         GameObject blackoutAsset = AssetsHandler.GetAsset("Assets/BundledAssets/Blackout/Blackout.prefab");
         GameObject blackoutGO = Instantiate(blackoutAsset, new Vector3(0, 0, 0), Quaternion.identity);
-
-        if (blackoutGO == null) return;
-
         blackoutGO.name = "BlackoutInstance";
+
+        // Get the blackout animator component.
         blackoutAnimator = blackoutGO.GetComponent<Animator>();
+        if (!blackoutAnimator)
+        {
+            MelonLogger.Error("Blackout: Could not find blackout animator component!");
+            return;
+        }
+
         SetupBlackoutInstance();
 
-        //we dont want this to ever disable (unless in awake state maybe?
+        //we dont want this to ever disable
         Camera.onPreRender += OnPreRender;
         Camera.onPostRender += OnPostRender;
     }
@@ -123,41 +148,45 @@ public class BlackoutController : MonoBehaviour
     //Automatic State Change
     void Update()
     {
-        //only run once a second, angularMovement is "smoothed out" at high FPS otherwise
-        //for the sake of responsivness while user is in a sleepy state, this might be removed to prevent confusion...
-        curTime = Time.time;
-        if (!(curTime >= nextUpdate)) return;
-        nextUpdate = Mathf.FloorToInt(curTime) + 1;
+        //get the current position of the player's head
+        Vector3 curHeadPos = activeModeCam.transform.position;
+        //calculate the player's head velocity by taking the difference in position
+        headVelocity = (curHeadPos - lastHeadPos) / Time.deltaTime;
+        //store the current head position for use in the next frame
+        lastHeadPos = curHeadPos;
 
-        //get difference between last frame rotation and current rotation
-        Quaternion currentHeadRotation = activeModeCam.transform.rotation;
-        angularMovement = Quaternion.Angle(oldHeadRotation, currentHeadRotation);
-        oldHeadRotation = currentHeadRotation;
-
-        //handle current state
-        switch (CurrentState)
+        if (AutomaticStateChange)
         {
-            case BlackoutState.Awake:
-                HandleAwakeState();
-                break;
-            case BlackoutState.Drowsy:
-                HandleDrowsyState();
-                break;
-            case BlackoutState.Sleeping:
-                HandleSleepingState();
-                break;
-            default:
-                break;
+            curTime = Time.time;
+            //handle current state
+            switch (CurrentState)
+            {
+                case BlackoutState.Awake:
+                    HandleAwakeState();
+                    break;
+                case BlackoutState.Drowsy:
+                    HandleDrowsyState();
+                    break;
+                case BlackoutState.Sleeping:
+                    HandleSleepingState();
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            CalculateDimmingMultiplier();
         }
     }
 
-    void OnEnable()
+    public void OnEnable()
     {
         curTime = Time.time;
         lastAwakeTime = curTime;
     }
 
-    void OnDisable()
+    public void OnDisable()
     {
         ChangeBlackoutState(BlackoutState.Awake);
     }
@@ -204,8 +233,17 @@ public class BlackoutController : MonoBehaviour
         if (!CohtmlHud.Instance || !HudMessages) return;
 
         StringBuilder secondmessage = new StringBuilder();
-        if (enabled)
-            secondmessage = new StringBuilder(GetNextStateTimer().ToString() + " seconds till next state change.");
+        if (AutomaticStateChange)
+        {
+            if (CurrentState == BlackoutState.Drowsy && !AutoSleepState)
+            {
+                secondmessage = new StringBuilder("AutoSleepState is disabled. Staying in Drowsy State.");
+            }
+            else
+            {
+                secondmessage = new StringBuilder(GetNextStateTimer().ToString() + " seconds till next state change.");
+            }
+        }
 
         CohtmlHud.Instance.ViewDropTextImmediate("Blackout", message, secondmessage.ToString());
     }
@@ -223,7 +261,7 @@ public class BlackoutController : MonoBehaviour
     private void HandleAwakeState()
     {
         //small movement should reset sleep timer
-        if (angularMovement > drowsyThreshold)
+        if (headVelocity.magnitude > drowsyThreshold)
         {
             lastAwakeTime = curTime;
         }
@@ -233,23 +271,51 @@ public class BlackoutController : MonoBehaviour
             ChangeBlackoutState(BlackoutState.Drowsy);
         }
     }
+
+    public float fadeSpeed = 0.8f; // The speed at which the value fades back to 0 or increases
+    public float minimumThreshold = 0.5f; // The minimum value that the drowsy magnitude can have
+    public float drowsyMagnitude = 0f;
+
+    private void CalculateDimmingMultiplier()
+    {
+        if (!DrowsyVelocityMultiplier)
+        {
+            AdjustDrowsyDimStrength();
+            return;
+        }
+
+        float normalizedMagnitude = headVelocity.magnitude / wakeThreshold;
+        float targetMagnitude = 1f - normalizedMagnitude;
+        targetMagnitude = Mathf.Max(targetMagnitude, minimumThreshold);
+        drowsyMagnitude = Mathf.Lerp(drowsyMagnitude, targetMagnitude, fadeSpeed * Time.deltaTime);
+        AdjustDrowsyDimStrength(drowsyMagnitude);
+    }
+
     private void HandleDrowsyState()
     {
         //hard movement should exit drowsy state
-        if (angularMovement > wakeThreshold)
+        if (headVelocity.magnitude > wakeThreshold)
         {
             ChangeBlackoutState(BlackoutState.Awake);
+            return;
+        }
+        //small movement should reset sleep timer
+        if (headVelocity.magnitude > drowsyThreshold)
+        {
+            lastAwakeTime = curTime;
         }
         //enter full sleep mode
-        if (curTime > lastAwakeTime + SleepModeTimer)
+        if (AutoSleepState && curTime > lastAwakeTime + SleepModeTimer)
         {
             ChangeBlackoutState(BlackoutState.Sleeping);
         }
+        CalculateDimmingMultiplier();
     }
+
     private void HandleSleepingState()
     {
         //small movement should enter drowsy state
-        if (angularMovement > drowsyThreshold)
+        if (headVelocity.magnitude > drowsyThreshold)
         {
             ChangeBlackoutState(BlackoutState.Drowsy);
         }

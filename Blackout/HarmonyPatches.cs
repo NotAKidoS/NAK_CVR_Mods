@@ -3,7 +3,7 @@ using ABI_RC.Core.Savior;
 using HarmonyLib;
 using MelonLoader;
 
-namespace Blackout;
+namespace NAK.Melons.Blackout.HarmonyPatches;
 
 [HarmonyPatch]
 internal class HarmonyPatches

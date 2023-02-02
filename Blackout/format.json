@@ -1,12 +1,12 @@
 {
   "_id": 106,
   "name": "Blackout",
-  "modversion": "1.0.4",
-  "gameversion": "2022r169",
+  "modversion": "2.0.0",
+  "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Dim screen after set time of sitting still. Should be nice for VR sleeping.\n\nNotable Options:\n Cap FPS while sleeping.\nManual control via UIX\nConfigurable dimming strength.",
+  "description": "Dim screen after set time of sitting still. Should be nice for VR sleeping.\n\nNotable Options:\n Cap FPS while sleeping.\nManual control via BTKUILib\nConfigurable dimming strength.",
   "searchtags": [
     "black",
     "dimmer",
@@ -14,10 +14,11 @@
     "sleeper"
   ],
   "requirements": [
-    "None"
+    "BTKUILib",
+    "UIExpansionKit"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/r5/Blackout.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/v2.0.0/Blackout.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/Blackout/",
-  "changelog": "Small tweak to fix VRMode change detection with latest experimental.",
+  "changelog": "- Added BTKUILib support.\n- Added dimming strength velocity multiplier option.\n- Added option to not use Automatic Sleep State.\n- Dimming strengh now updates in realtime when configuring.",
   "embedcolor": "#161b22"
 }

@@ -2,43 +2,58 @@
 using ABI_RC.Core.Savior;
 using MelonLoader;
 
-namespace Blackout;
+namespace NAK.Melons.Blackout;
 
 public class Blackout : MelonMod
 {
     internal static bool inVR;
     internal const string SettingsCategory = "Blackout";
 
-    private static MelonPreferences_Category m_categoryBlackout;
-    private static MelonPreferences_Entry<bool> m_entryEnabled, m_entryHudMessages, m_entryDropFPSOnSleep;
-    private static MelonPreferences_Entry<float>
+    internal static MelonPreferences_Category m_categoryBlackout;
+    internal static MelonPreferences_Entry<bool>
+        m_entryEnabled,
+        m_entryAutoSleepState,
+        m_entryHudMessages,
+        m_entryDropFPSOnSleep,
+        m_entryDrowsyVelocityMultiplier;
+    internal static MelonPreferences_Entry<float>
         m_entryDrowsyThreshold, m_entryAwakeThreshold,
         m_entryDrowsyModeTimer, m_entrySleepModeTimer,
         m_entryDrowsyDimStrength;
 
     public override void OnInitializeMelon()
     {
-        m_categoryBlackout = MelonPreferences.CreateCategory(nameof(Blackout));
-        m_entryEnabled = m_categoryBlackout.CreateEntry<bool>("Automatic State Change", true, description: "Dim screen when there is no movement for a while.");
-        m_entryHudMessages = m_categoryBlackout.CreateEntry<bool>("Hud Messages", false, description: "Notify on state change.");
-        m_entryDropFPSOnSleep = m_categoryBlackout.CreateEntry<bool>("Lower FPS While Sleep", false, description: "Lowers FPS to 5 while in Sleep State.");
-        m_entryDrowsyThreshold = m_categoryBlackout.CreateEntry<float>("Drowsy Threshold", 1f, description: "Degrees of movement to return partial vision.");
-        m_entryAwakeThreshold = m_categoryBlackout.CreateEntry<float>("Awake Threshold", 12f, description: "Degrees of movement to return full vision.");
+        m_categoryBlackout = MelonPreferences.CreateCategory(SettingsCategory);
+        m_entryEnabled = m_categoryBlackout.CreateEntry<bool>("Automatic State Change", true, description: "Should the screen automatically dim if head is still for enough time?");
+        m_entryEnabled.OnEntryValueChangedUntyped.Subscribe(OnUpdateEnabled);
+        m_entryHudMessages = m_categoryBlackout.CreateEntry<bool>("Hud Messages", true, description: "Notify on state change.");
+        m_entryDropFPSOnSleep = m_categoryBlackout.CreateEntry<bool>("Limit FPS While Sleep", false, description: "Limits FPS to 5 while in Sleep State. This only works in Desktop, as SteamVR/HMD handles VR FPS.");
+        m_entryDrowsyVelocityMultiplier = m_categoryBlackout.CreateEntry<bool>("Drowsy Velocity Multiplier", true, description: "Should head velocity act as a multiplier to Drowsy Dim Strength?");
+        m_entryAutoSleepState = m_categoryBlackout.CreateEntry<bool>("Auto Sleep State", true, description: "Should the sleep state be used during Automatic State Change?");
+        m_entryDrowsyThreshold = m_categoryBlackout.CreateEntry<float>("Drowsy Threshold", 2f, description: "Velocity to return partial vision.");
+        m_entryAwakeThreshold = m_categoryBlackout.CreateEntry<float>("Awake Threshold", 4f, description: "Velocity to return full vision.");
         m_entryDrowsyModeTimer = m_categoryBlackout.CreateEntry<float>("Enter Drowsy Time (Minutes)", 3f, description: "How many minutes without movement until enter drowsy mode.");
         m_entrySleepModeTimer = m_categoryBlackout.CreateEntry<float>("Enter Sleep Time (Seconds)", 10f, description: "How many seconds without movement until enter sleep mode.");
-        m_entryDrowsyDimStrength = m_categoryBlackout.CreateEntry<float>("Drowsy Dim Strength", 0.5f, description: "How strong of a dimming effect should drowsy mode have.");
-        m_categoryBlackout.SaveToFile(false);
+        m_entryDrowsyDimStrength = m_categoryBlackout.CreateEntry<float>("Drowsy Dim Strength", 0.6f, description: "How strong of a dimming effect should drowsy mode have.");
 
         foreach (var setting in m_categoryBlackout.Entries)
         {
-            setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
+            if (!setting.OnEntryValueChangedUntyped.GetSubscribers().Any())
+                setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
         }
 
         //UIExpansionKit addon
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "UI Expansion Kit"))
         {
             MelonLogger.Msg("Initializing UIExpansionKit support.");
-            UiExtensionsAddon.Init();
+            UIExpansionKitAddon.Init();
+        }
+
+        //BTKUILib addon
+        if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
+        {
+            MelonLogger.Msg("Initializing BTKUILib support.");
+            BTKUIAddon.Init();
         }
 
         MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
@@ -60,32 +75,37 @@ public class Blackout : MelonMod
             yield return null;
 
         UpdateAllSettings();
+        OnEnabled();
     }
 
     private void OnEnabled()
     {
         if (!BlackoutController.Instance) return;
-        BlackoutController.Instance.enabled = m_entryEnabled.Value;
+        if (m_entryEnabled.Value)
+        {
+            BlackoutController.Instance.OnEnable();
+        }
+        else
+        {
+            BlackoutController.Instance.OnDisable();
+        }
+        BlackoutController.Instance.AutomaticStateChange = m_entryEnabled.Value;
     }
 
     private void UpdateAllSettings()
     {
         if (!BlackoutController.Instance) return;
-        BlackoutController.Instance.enabled = m_entryEnabled.Value;
         BlackoutController.Instance.HudMessages = m_entryHudMessages.Value;
+        BlackoutController.Instance.AutoSleepState = m_entryAutoSleepState.Value;
         BlackoutController.Instance.DropFPSOnSleep = m_entryDropFPSOnSleep.Value;
         BlackoutController.Instance.drowsyThreshold = m_entryDrowsyThreshold.Value;
         BlackoutController.Instance.wakeThreshold = m_entryAwakeThreshold.Value;
         BlackoutController.Instance.DrowsyModeTimer = m_entryDrowsyModeTimer.Value;
         BlackoutController.Instance.SleepModeTimer = m_entrySleepModeTimer.Value;
         BlackoutController.Instance.DrowsyDimStrength = m_entryDrowsyDimStrength.Value;
+        BlackoutController.Instance.DrowsyVelocityMultiplier = m_entryDrowsyVelocityMultiplier.Value;
     }
 
     private void OnUpdateEnabled(object arg1, object arg2) => OnEnabled();
     private void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
-
-    //UIExpansionKit actions
-    internal static void AwakeState() => BlackoutController.Instance.ChangeBlackoutState(BlackoutController.BlackoutState.Awake);
-    internal static void DrowsyState() => BlackoutController.Instance.ChangeBlackoutState(BlackoutController.BlackoutState.Drowsy);
-    internal static void SleepingState() => BlackoutController.Instance.ChangeBlackoutState(BlackoutController.BlackoutState.Sleeping);
 }

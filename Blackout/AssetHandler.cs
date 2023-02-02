@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using UnityEngine;
 
-namespace Blackout;
+namespace NAK.Melons.Blackout;
 
 /*
 
