@@ -29,8 +29,8 @@ public class PickupPushPull_Module : CVRInputModule
     public bool Desktop_UseZoomForRotate = true;
 
     //VR settings
-    public BindingOptionsVR.BindHand VR_RotateHand;
-    public BindingOptionsVR.BindingOptions VR_RotateBind;
+    public BindingOptionsVR.BindHand VR_RotateHand = BindingOptionsVR.BindHand.LeftHand;
+    public BindingOptionsVR.BindingOptions VR_RotateBind = BindingOptionsVR.BindingOptions.ButtonATouch;
     private SteamVR_Action_Boolean VR_RotateBind_Boolean;
 
     //Local stuff
@@ -49,10 +49,10 @@ public class PickupPushPull_Module : CVRInputModule
 
     public new void Start()
     {
-        base.Start();
         _inputManager = CVRInputManager.Instance;
         Instance = this;
-
+        base.Start();
+        
         //Get desktop controller ray
         desktopControllerRay = PlayerSetup.Instance.desktopCamera.GetComponent<ControllerRay>();
 
@@ -65,13 +65,13 @@ public class PickupPushPull_Module : CVRInputModule
         steamVrButtonATouch = (SteamVR_Action_Boolean)EI_SteamVR_Info.im_steamVrButtonATouch.GetValue(inputModuleSteamVR);
         steamVrButtonBTouch = (SteamVR_Action_Boolean)EI_SteamVR_Info.im_steamVrButtonBTouch.GetValue(inputModuleSteamVR);
 
-        UpdateVRBinding();
-
         controlGamepadEnabled = (bool)MetaPort.Instance.settings.GetSettingsBool("ControlDeadZoneRight", false);
         MetaPort.Instance.settings.settingBoolChanged.AddListener(new UnityAction<string, bool>(SettingsBoolChanged));
 
         deadzoneRightValue = (float)MetaPort.Instance.settings.GetSettingInt("ControlDeadZoneRight", 0) / 100f;
         MetaPort.Instance.settings.settingIntChanged.AddListener(new UnityAction<string, int>(SettingsIntChanged));
+
+        UpdateVRBinding();
     }
 
     private void SettingsBoolChanged(string name, bool value)
@@ -122,7 +122,7 @@ public class PickupPushPull_Module : CVRInputModule
         objectRotation = Vector2.zero;
 
         CVRPickupObject desktopObject = (CVRPickupObject)_grabbedObject.GetValue(desktopControllerRay);
-        if (desktopObject != null)
+        if (desktopObject != null && desktopObject.gripType == CVRPickupObject.GripType.Free)
         {
             //Desktop Input
             DoDesktopInput();
@@ -132,11 +132,7 @@ public class PickupPushPull_Module : CVRInputModule
 
         //VR Input
         if (!MetaPort.Instance.isUsingVr) return;
-
-        CVRPickupObject vrObject = (CVRPickupObject)_grabbedObject.GetValue(PlayerSetup.Instance.leftRay);
-        CVRPickupObject vrObject2 = (CVRPickupObject)_grabbedObject.GetValue(PlayerSetup.Instance.rightRay);
-        if (vrObject != null || vrObject2 != null)
-            DoSteamVRInput();
+        DoSteamVRInput();
     }
 
     private void DoDesktopInput()
@@ -180,19 +176,26 @@ public class PickupPushPull_Module : CVRInputModule
 
     private void DoSteamVRInput()
     {
-        bool button = VR_RotateBind_Boolean.GetState((SteamVR_Input_Sources)VR_RotateHand);
+        CVRPickupObject leftObject = (CVRPickupObject)_grabbedObject.GetValue(PlayerSetup.Instance.leftRay);
+        CVRPickupObject rightObject = (CVRPickupObject)_grabbedObject.GetValue(PlayerSetup.Instance.rightRay);
+        if (leftObject == null && rightObject == null) return;
 
-        //I get my own lookVector cause fucking CVR alters **rawLookVector** with digital deadzones >:(((
-        Vector2 rawLookVector = new(CVRTools.AxisDeadZone(vrLookAction.GetAxis(SteamVR_Input_Sources.Any).x, deadzoneRightValue, true), CVRTools.AxisDeadZone(vrLookAction.GetAxis(SteamVR_Input_Sources.Any).y, deadzoneRightValue, true));
+        bool canRotate = (leftObject != null && leftObject.gripType == CVRPickupObject.GripType.Free) ||
+                       (rightObject != null && rightObject.gripType == CVRPickupObject.GripType.Free);
 
-        if (Setting_EnableRotation && button)
+        if (Setting_EnableRotation && canRotate && VR_RotateBind_Boolean.GetState((SteamVR_Input_Sources)VR_RotateHand))
         {
+            Vector2 rawLookVector = new Vector2(CVRTools.AxisDeadZone(vrLookAction.GetAxis(SteamVR_Input_Sources.Any).x, deadzoneRightValue, true),
+                                                CVRTools.AxisDeadZone(vrLookAction.GetAxis(SteamVR_Input_Sources.Any).y, deadzoneRightValue, true));
+
             objectRotation.x += Setting_RotationSpeed * rawLookVector.x;
             objectRotation.y += Setting_RotationSpeed * rawLookVector.y * -1;
+
             _inputManager.lookVector = Vector2.zero;
             return;
         }
 
         CVRInputManager.Instance.objectPushPull += CVRInputManager.Instance.floatDirection * Setting_PushPullSpeed * Time.deltaTime;
     }
+
 }

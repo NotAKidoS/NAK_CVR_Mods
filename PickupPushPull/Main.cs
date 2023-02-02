@@ -20,7 +20,6 @@ public class PickupPushPull : MelonMod
     public override void OnInitializeMelon()
     {
         Category_PickupPushPull = MelonPreferences.CreateCategory(nameof(PickupPushPull));
-        Category_PickupPushPull.SaveToFile(false);
 
         //Global settings
         Setting_PushPullSpeed = Category_PickupPushPull.CreateEntry("Push Pull Speed", 2f, description: "Up/down on right joystick for VR. Left buSettingr + Up/down on right joystick for Gamepad.");
@@ -58,6 +57,7 @@ public class PickupPushPull : MelonMod
         while (PickupPushPull_Module.Instance == null)
             yield return null;
 
+        UpdateVRBinding();
         UpdateAllSettings();
     }
 
@@ -77,7 +77,7 @@ public class PickupPushPull : MelonMod
         //VR settings
         PickupPushPull_Module.Instance.VR_RotateHand = Setting_VR_RotateHand.Value;
     }
-
+    
     private void UpdateVRBinding()
     {
         //VR special settings

@@ -17,7 +17,10 @@ internal class HarmonyPatches
     public static void GrabbedObjectPatch(ref CVRPickupObject __instance)
     {
         // Need to only run when the object is grabbed by the local player
-        if (!__instance.IsGrabbedByMe()) return;
+        if (__instance._controllerRay == null) return;
+
+        //and only if its a prop we support
+        if (__instance.gripType == CVRPickupObject.GripType.Origin) return;
 
         Quaternion originalRotation = __instance.transform.rotation;
         Transform referenceTransform = __instance._controllerRay.transform;

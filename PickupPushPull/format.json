@@ -1,12 +1,12 @@
 {
   "_id": 91,
   "name": "PickupPushPull",
-  "modversion": "3.0.0",
-  "gameversion": "2022r168",
+  "modversion": "3.0.1",
+  "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Allows you to push & pull pickups with Mouse, Gamepad, & VR.\nCan also optionally rotate props via keybind.",
+  "description": "Allows you to push & pull pickups with Mouse, Gamepad, & VR.\nCan also optionally rotate props via keybind.\n\nIndex users will need to manually bind the missing SteamVR binds.",
   "searchtags": [
     "pull",
     "push",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPushPull/releases/download/r2/PickupPushPull.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPushPull/releases/download/v3.0.1/PickupPushPull.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/PickupPushPull/",
-  "changelog": "Switched to input module setup. Desktop will rotate held pickups when zoom bind is pressed. Rotation bind no longer prevents rotation when pickup is not being held.",
+  "changelog": "- Fixed issue where saved preferences weren't properly applied on startup.\n- Rotation is now only limited while holding a prop that can be rotated, instead of when the rotation bind is held.",
   "embedcolor": "804221"
 }
