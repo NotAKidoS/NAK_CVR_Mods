@@ -1,5 +1,5 @@
 # FuckToes
-Prevents VRIK from autodetecting toes.
+Prevents VRIK from autodetecting toes in HalfbodyIK.
 
 Optionally can be applied in FBT, but toes in FBT are nice so you are a monster if so.
 
