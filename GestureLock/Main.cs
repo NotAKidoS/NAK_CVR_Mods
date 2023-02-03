@@ -5,56 +5,65 @@ using HarmonyLib;
 using MelonLoader;
 using Valve.VR;
 
-namespace GestureLock;
+//I legitimately threw this at ChatGPT to rewrite cause i couldn't be bothered.
 
-public class GestureLock : MelonMod
+namespace NAK.Melons.GestureLock
 {
-    [HarmonyPatch]
-    private class HarmonyPatches
+    public class GestureLockMod : MelonMod
     {
-        private static bool isLocked = false;
-        private static bool toggleLock = false;
-        private static float oldGestureLeft = 0;
-        private static float oldGestureRight = 0;
-
-        //Read VR Buttons
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(InputModuleSteamVR), "UpdateInput")]
-        private static void AfterUpdateInput(ref SteamVR_Action_Boolean ___steamVrIndexGestureToggle, ref VRTrackerManager ____trackerManager)
+        [HarmonyPatch]
+        private class HarmonyPatches
         {
-            if (!MetaPort.Instance.isUsingVr) return;
+            private static bool isLocked;
+            private static float oldGestureLeft;
+            private static float oldGestureRight;
 
-            toggleLock = false;
-            if (___steamVrIndexGestureToggle.stateDown)
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(InputModuleSteamVR), "UpdateInput")]
+            private static void Postfix_InputModuleSteamVR_UpdateInput
+            (
+                ref CVRInputManager ____inputManager,
+                ref VRTrackerManager ____trackerManager,
+                ref SteamVR_Action_Boolean ___steamVrIndexGestureToggle
+            )
             {
-                if (!____trackerManager.trackerNames.Contains("knuckles"))
+                if (!MetaPort.Instance.isUsingVr)
                 {
-                    toggleLock = true;
+                    return;
+                }
+
+                if (___steamVrIndexGestureToggle.stateDown && !____trackerManager.trackerNames.Contains("knuckles"))
+                {
+                    isLocked = !isLocked;
+                    oldGestureLeft = ____inputManager.gestureLeft;
+                    oldGestureRight = ____inputManager.gestureRight;
+                    CohtmlHud.Instance.ViewDropTextImmediate("", "Gesture Lock", "Gestures " + (isLocked ? "Locked" : "Unlocked"));
                 }
             }
-        }
 
-        //Apply GestureLock
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(CVRInputManager), "Update")]
-        private static void AfterUpdate(ref float ___gestureLeftRaw, ref float ___gestureLeft, ref float ___gestureRightRaw, ref float ___gestureRight)
-        {
-            if (!MetaPort.Instance.isUsingVr) return;
+            [HarmonyPostfix]
+            [HarmonyPatch(typeof(CVRInputManager), "Update")]
+            private static void Postfix_CVRInputManager_Update
+            (
+                ref float ___gestureLeft,
+                ref float ___gestureRight,
+                ref float ___gestureLeftRaw,
+                ref float ___gestureRightRaw
+            )
+            {
+                if (!MetaPort.Instance.isUsingVr)
+                {
+                    return;
+                }
 
-            if (toggleLock)
-            {
-                isLocked = !isLocked;
-                oldGestureLeft = ___gestureLeft;
-                oldGestureRight = ___gestureRight;
-                MelonLogger.Msg("Gestures " + (isLocked ? "Locked" : "Unlocked"));
-                CohtmlHud.Instance.ViewDropTextImmediate("", "Gesture Lock ", "Gestures " + (isLocked ? "Locked" : "Unlocked"));
-            }
-            if (isLocked)
-            {
-                //___gestureLeftRaw = oldGestureLeft;
-                ___gestureLeft = oldGestureLeft;
-                //___gestureRightRaw = oldGestureRight;
-                ___gestureRight = oldGestureRight;
+                if (isLocked)
+                {
+                    // Dont override raw, other systems like the camera gesture recognizer need it.
+                    //gestureLeftRaw = gestureLeft;
+                    //gestureRightRaw = gestureRight;
+                    ___gestureLeft = oldGestureLeft;
+                    ___gestureRight = oldGestureRight;
+                }
             }
         }
     }
