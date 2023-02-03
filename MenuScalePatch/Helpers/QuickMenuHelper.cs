@@ -12,23 +12,26 @@ namespace NAK.Melons.MenuScalePatch.Helpers;
 
 **/
 
-[DefaultExecutionOrder(999999)]
+[DefaultExecutionOrder(20000)]
 public class QuickMenuHelper : MonoBehaviour
 {
     public static QuickMenuHelper Instance;
     public Transform worldAnchor;
     public Transform handAnchor;
+    public bool NeedsPositionUpdate;
 
-    void Start()
+    void Awake()
     {
         Instance = this;
-        CreateWorldAnchors();
     }
 
     void LateUpdate()
     {
-        MSP_MenuInfo.HandleIndependentLookInput();
-        UpdateMenuPosition();
+        if (MSP_MenuInfo.UseIndependentHeadTurn)
+            MSP_MenuInfo.HandleIndependentLookInput();
+        if (MSP_MenuInfo.PlayerAnchorMenus || MetaPort.Instance.isUsingVr)
+            UpdateMenuPosition();
+        if (NeedsPositionUpdate) UpdateMenuPosition();
     }
 
     public void CreateWorldAnchors()
@@ -40,15 +43,17 @@ public class QuickMenuHelper : MonoBehaviour
         worldAnchor = vrAnchor.transform;
     }
 
-    public void UpdateWorldAnchors()
+    public void UpdateWorldAnchors(bool updateMenuPos = false)
     {
         if (worldAnchor == null || MSP_MenuInfo.CameraTransform == null) return;
         worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
         worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
+        if (updateMenuPos) UpdateMenuPosition();
     }
 
     public void UpdateMenuPosition()
     {
+        NeedsPositionUpdate = false;
         if (MetaPort.Instance.isUsingVr)
         {
             HandleVRPosition();

@@ -12,33 +12,38 @@ namespace NAK.Melons.MenuScalePatch.Helpers;
 public class MSP_MenuInfo
 {
     //Shared Info
-    public static float ScaleFactor = 1f;
-    public static float AspectRatio = 1f;
-    public static Transform CameraTransform;
+    internal static float ScaleFactor = 1f;
+    internal static float AspectRatio = 1f;
+    internal static Transform CameraTransform;
 
     //Settings...?
-    public static bool WorldAnchorQM;
+    internal static bool WorldAnchorQM = false;
+    internal static bool UseIndependentHeadTurn = true;
+    internal static bool PlayerAnchorMenus = true;
 
     //if other mods need to disable?
-    public static bool DisableQMHelper;
-    public static bool DisableQMHelper_VR;
-    public static bool DisableMMHelper;
-    public static bool DisableMMHelper_VR;
+    internal static bool DisableQMHelper;
+    internal static bool DisableQMHelper_VR;
+    internal static bool DisableMMHelper;
+    internal static bool DisableMMHelper_VR;
 
-    public static void ToggleDesktopInputMethod(bool flag)
+    //reflection (traverse sucks ass)
+    private static readonly FieldInfo _desktopMouseMode = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
+
+    internal static void ToggleDesktopInputMethod(bool flag)
     {
         if (MetaPort.Instance.isUsingVr) return;
         PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
         CVRInputManager.Instance.inputEnabled = !flag;
         RootLogic.Instance.ToggleMouse(flag);
         CVR_MenuManager.Instance.desktopControllerRay.enabled = !flag;
-        Traverse.Create(CVR_MenuManager.Instance).Field("_desktopMouseMode").SetValue(flag);
+        _desktopMouseMode.SetValue(CVR_MenuManager.Instance, flag);
     }
 
-    static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
-    public static bool independentHeadTurn = false;
+    internal static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
+    internal static bool independentHeadTurn = false;
 
-    public static void HandleIndependentLookInput()
+    internal static void HandleIndependentLookInput()
     {
         //angle of independent look axis
         bool isPressed = CVRInputManager.Instance.independentHeadTurn || CVRInputManager.Instance.independentHeadToggle;

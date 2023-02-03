@@ -2,6 +2,7 @@
 using ABI_RC.Core.Savior;
 using UnityEngine;
 
+
 namespace NAK.Melons.MenuScalePatch.Helpers;
 
 //TODO: Implement desktop ratio scaling back to MM
@@ -14,22 +15,25 @@ namespace NAK.Melons.MenuScalePatch.Helpers;
 
 **/
 
-[DefaultExecutionOrder(999999)]
+[DefaultExecutionOrder(20000)]
 public class MainMenuHelper : MonoBehaviour
 {
     public static MainMenuHelper Instance;
     public Transform worldAnchor;
+    public bool NeedsPositionUpdate;
 
-    void Start()
+    void Awake()
     {
         Instance = this;
-        CreateWorldAnchors();
     }
 
     void LateUpdate()
     {
-        MSP_MenuInfo.HandleIndependentLookInput();
-        UpdateMenuPosition();
+        if (MSP_MenuInfo.UseIndependentHeadTurn)
+            MSP_MenuInfo.HandleIndependentLookInput();
+        if (MSP_MenuInfo.PlayerAnchorMenus)
+            UpdateMenuPosition();
+        if (NeedsPositionUpdate) UpdateMenuPosition();
     }
 
     public void CreateWorldAnchors()
@@ -41,7 +45,7 @@ public class MainMenuHelper : MonoBehaviour
         worldAnchor = vrAnchor.transform;
     }
 
-    public void UpdateWorldAnchors()
+    public void UpdateWorldAnchors(bool updateMenuPos = false)
     {
         if (worldAnchor == null || MSP_MenuInfo.CameraTransform == null) return;
 
@@ -64,10 +68,12 @@ public class MainMenuHelper : MonoBehaviour
             worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
             worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
         }
+        if (updateMenuPos) UpdateMenuPosition();
     }
 
     public void UpdateMenuPosition()
     {
+        NeedsPositionUpdate = false;
         if (MetaPort.Instance.isUsingVr)
         {
             HandleVRPosition();
