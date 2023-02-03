@@ -1,12 +1,12 @@
 {
   "_id": 95,
   "name": "MenuScalePatch",
-  "modversion": "3.0.0",
+  "modversion": "4.0.0",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is being scaled.\n\nDesktop menus will now always follow camera while open.",
+  "description": "Corrects MM and QM position when avatar is being scaled.\n\nOptional setting to enable Independent Head Turn while in menus.\nOptional setting to force menus to always follow player.",
   "searchtags": [
     "menu",
     "scale",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v3.0.0/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v4.0.0/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "Removed collision scaling feature as it is now native.\nAdjusted QM scaling for VR.\nAdded menu correction for Desktop so you can use menus while moving.\nImmediate viewpoint correction for Desktop during scaling.",
+  "changelog": "- Added option for menus to be attached to you in Desktop and VR.\n- Added option to use independent head movement while in a menu.",
   "embedcolor": "804221"
 }
