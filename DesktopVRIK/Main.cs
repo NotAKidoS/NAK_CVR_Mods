@@ -11,9 +11,8 @@ public class DesktopVRIKMod : MelonMod
     internal static MelonPreferences_Entry<bool> m_entryEnabled,
         m_entryEnforceViewPosition,
         m_entryEmoteVRIK,
-        m_entryEmoteLookAtIK,
-        m_entryAllowRootSlipping;
-    internal static MelonPreferences_Entry<float> 
+        m_entryEmoteLookAtIK;
+    internal static MelonPreferences_Entry<float>
         m_entryBodyLeanWeight,
         m_entryBodyAngleLimit;
     public override void OnInitializeMelon()
@@ -24,8 +23,8 @@ public class DesktopVRIKMod : MelonMod
         m_entryEmoteVRIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote VRIK", true, description: "Disable VRIK while emoting. Only disable if you are ok with looking dumb.");
         m_entryEmoteLookAtIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote LookAtIK", true, description: "Disable LookAtIK while emoting. This setting doesn't really matter, as LookAtIK isn't networked while doing an emote.");
 
-        m_entryBodyLeanWeight = m_categoryDesktopVRIK.CreateEntry<float>("Body Lean Weight", 0.3f, description: "Emulates old VRChat-like body leaning when looking up/down. Set to 0 to disable.");
-        m_entryBodyAngleLimit = m_categoryDesktopVRIK.CreateEntry<float>("Body Angle Limit", 45f, description: "Emulates VRChat-like body and head offset when rotating left/right. Set to 0 to disable.");
+        m_entryBodyLeanWeight = m_categoryDesktopVRIK.CreateEntry<float>("Body Lean Weight", 0.5f, description: "Emulates old VRChat-like body leaning when looking up/down. Set to 0 to disable.");
+        m_entryBodyAngleLimit = m_categoryDesktopVRIK.CreateEntry<float>("Body Angle Limit", 0f, description: "Emulates VRChat-like body and head offset when rotating left/right. Set to 0 to disable. (this setting only affects the feet due to chillout not setting up the player controller for VRIK)");
 
         foreach (var setting in m_categoryDesktopVRIK.Entries)
         {
@@ -36,7 +35,7 @@ public class DesktopVRIKMod : MelonMod
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
         {
             MelonLogger.Msg("Initializing BTKUILib support.");
-            BTKUI_Integration.BTKUI_Integration.Init();
+            BTKUIAddon.Init();
         }
 
         //Apply patches (i stole)

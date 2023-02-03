@@ -51,7 +51,7 @@ internal class DesktopVRIK_Helper : MonoBehaviour
             globalWeight *= IKSystem.vrik.solver.locomotion.weight;
 
             //the most important thing ever
-            IKSystem.vrik.solver.spine.rotationWeight = globalWeight;
+            //IKSystem.vrik.solver.spine.rotationWeight = globalWeight;
 
             HeadIK_FollowPosition();
 

@@ -17,12 +17,11 @@ public class DesktopVRIK : MonoBehaviour
         Setting_Enabled,
         Setting_EnforceViewPosition,
         Setting_EmoteVRIK,
-        Setting_EmoteLookAtIK,
-        Setting_Internal_PlantFeet = true;
+        Setting_EmoteLookAtIK;
 
     public static float
-        Setting_BodyLeanWeight = 0.3f,
-        Setting_BodyAngleLimit = 45f;
+        Setting_BodyLeanWeight = 0.5f,
+        Setting_BodyAngleLimit = 0f;
 
     public Transform viewpoint;
     public Vector3 eyeOffset;
@@ -46,14 +45,15 @@ public class DesktopVRIK : MonoBehaviour
 
     public void AlternativeOnPreSolverUpdate()
     {
-        //set IK offsets (this is a really fucking weird way to do this)
+        //this order matters, rotation offset will be choppy if avatar is not cenetered first
+
         DesktopVRIK_Helper.Instance?.OnUpdateVRIK();
 
         //Reset avatar offset (VRIK will literally make you walk away from root otherwise)
         IKSystem.vrik.transform.localPosition = Vector3.zero;
         IKSystem.vrik.transform.localRotation = Quaternion.identity;
 
-        IKSystem.vrik.solver.plantFeet = Setting_Internal_PlantFeet;
+        IKSystem.vrik.solver.plantFeet = true;
     }
 
     public Animator animator;
@@ -79,17 +79,27 @@ public class DesktopVRIK : MonoBehaviour
             animator.Update(0f);
         }
 
-        //Generic VRIK calibration shit
         VRIK vrik = avatar.gameObject.AddComponent<VRIK>();
         vrik.AutoDetectReferences();
 
+        //fuck toes
+        vrik.references.leftToes = null;
+        vrik.references.rightToes = null;
+
         vrik.fixTransforms = true;
         vrik.solver.plantFeet = false;
-        vrik.solver.locomotion.weight = 0f;
         vrik.solver.locomotion.angleThreshold = 30f;
         vrik.solver.locomotion.maxLegStretch = 0.75f;
-        //nuke weights
-        vrik.solver.spine.minHeadHeight = 0f;
+        vrik.solver.spine.minHeadHeight = -100f;
+
+        vrik.solver.spine.bodyRotStiffness = 0.15f;
+        vrik.solver.spine.headClampWeight = 1f;
+        vrik.solver.spine.maintainPelvisPosition = 1f;
+        vrik.solver.spine.neckStiffness = 0f;
+
+        vrik.solver.locomotion.weight = 0f;
+        vrik.solver.spine.bodyPosStiffness = 0f;
+        vrik.solver.spine.positionWeight = 0f;
         vrik.solver.spine.pelvisPositionWeight = 0f;
         vrik.solver.leftArm.positionWeight = 0f;
         vrik.solver.leftArm.rotationWeight = 0f;
@@ -101,27 +111,11 @@ public class DesktopVRIK : MonoBehaviour
         vrik.solver.rightLeg.rotationWeight = 0f;
         vrik.solver.IKPositionWeight = 0f;
 
-        //calm ur ass
-        vrik.solver.spine.positionWeight = 0f;
-
-
-        //related to body & head rotation offset/limit
-        vrik.solver.spine.headClampWeight = 1f;
-        vrik.solver.spine.bodyRotStiffness = 0.8f;
-        //makes chest between feet and head direction
-        vrik.solver.spine.chestClampWeight = 0.5f;
-        //needed to make head 1:1 with camera still
-        vrik.solver.spine.neckStiffness = 1f;
-
-
-        //ChilloutVR specific
         BodySystem.TrackingLeftArmEnabled = false;
         BodySystem.TrackingRightArmEnabled = false;
         BodySystem.TrackingLeftLegEnabled = false;
         BodySystem.TrackingRightLegEnabled = false;
         BodySystem.TrackingPositionWeight = 0f;
-        IKSystem.Instance.headAnchorRotationOffset = Vector3.zero;
-        IKSystem.Instance.headAnchorPositionOffset = Vector3.zero;
 
         //Custom funky AF head ik shit
         foreach (Transform transform in DesktopVRIK_Helper.Instance.ik_HeadFollower)

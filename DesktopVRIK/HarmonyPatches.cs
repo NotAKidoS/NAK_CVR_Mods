@@ -139,7 +139,7 @@ class IKSystemPatches
                 ____poseHandler.SetHumanPose(ref ___humanPose);
 
                 ____vrik = DesktopVRIK.Instance.AlternativeCalibration(avatar);
-                IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);
+                IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);  
             }
         }
     }
