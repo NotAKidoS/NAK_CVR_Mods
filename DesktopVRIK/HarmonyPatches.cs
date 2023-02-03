@@ -72,26 +72,47 @@ class PlayerSetupPatches
                 {
                     BodySystem.TrackingEnabled = !____emotePlaying;
                     IKSystem.vrik.solver?.Reset();
+                    DesktopVRIK_Helper.Instance?.OnResetIK();
                 }
             }
         }
     }
 
-    [HarmonyPostfix]
+
+    //should probably patch movement system instead
+    [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerSetup), "HandleDesktopCameraPosition")]
-    private static void Postfix_PlayerSetup_HandleDesktopCameraPosition(bool ignore, ref PlayerSetup __instance, ref MovementSystem ____movementSystem, ref int ___headBobbingLevel)
+    private static void Prefix_PlayerSetup_HandleDesktopCameraPosition
+    (
+        bool ignore, 
+        ref PlayerSetup __instance, 
+        ref MovementSystem 
+        ____movementSystem, 
+        ref int ___headBobbingLevel
+    )
     {
-        if (DesktopVRIK.Setting_Enabled && DesktopVRIK.Setting_EnforceViewPosition)
+        if (___headBobbingLevel != 2)
         {
-            if (!____movementSystem.disableCameraControl || ignore)
-            {
-                if (___headBobbingLevel == 2 && DesktopVRIK.Instance.viewpoint != null)
-                {
-                    __instance.desktopCamera.transform.localPosition = Vector3.zero;
-                    __instance.desktopCameraRig.transform.position = DesktopVRIK.Instance.viewpoint.position;
-                }
-            }
+            return;
         }
+
+        if (!DesktopVRIK.Setting_Enabled || !DesktopVRIK.Setting_EnforceViewPosition)
+        {
+            return;
+        }
+
+        if (____movementSystem.disableCameraControl && !ignore)
+        {
+            return;
+        }
+
+        if (DesktopVRIK.Instance.viewpoint == null)
+        {
+            return;
+        }
+
+        __instance.desktopCamera.transform.position = DesktopVRIK.Instance.viewpoint.position;
+        return;
     }
 }
 
@@ -118,7 +139,7 @@ class IKSystemPatches
                 ____poseHandler.SetHumanPose(ref ___humanPose);
 
                 ____vrik = DesktopVRIK.Instance.AlternativeCalibration(avatar);
-                IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);
+                IKSystem.Instance.ApplyAvatarScaleToIk(avatar.viewPosition.y);  
             }
         }
     }

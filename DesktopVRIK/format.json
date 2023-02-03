@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "2.0.2",
+  "modversion": "2.0.3",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -14,10 +14,10 @@
     "feet"
   ],
   "requirements": [
-    "None"
+    "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v2.0.2/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v2.0.3/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "- Fixed butt from slipping out underneath you and thrusting when leaning.\n- Fixed VRIK bleeding into locomotion animations.",
+  "changelog": "- Tweaks to VRIK settings so BetterInteractDesktop & PickupArmMovement better behave alongside VRIK.\n- Tweaks to BTKUI integration.",
   "embedcolor": "9b59b6"
 }
