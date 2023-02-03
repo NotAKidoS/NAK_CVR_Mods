@@ -3,6 +3,8 @@ Prevents VRIK from autodetecting toes in HalfbodyIK.
 
 Optionally can be applied in FBT, but toes in FBT are nice so you are a monster if so.
 
+![fuckthetoes](https://user-images.githubusercontent.com/37721153/216518012-ae3b1dde-17ea-419a-a875-48d57e13f3dd.png)
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
