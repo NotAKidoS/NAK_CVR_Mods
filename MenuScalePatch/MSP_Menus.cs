@@ -28,16 +28,20 @@ public class MSP_MenuInfo
     internal static bool DisableMMHelper_VR;
 
     //reflection (traverse sucks ass)
-    private static readonly FieldInfo _desktopMouseMode = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static readonly FieldInfo _desktopMouseModeQM = typeof(ViewManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static readonly FieldInfo _desktopMouseModeMM = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
 
     internal static void ToggleDesktopInputMethod(bool flag)
     {
         if (MetaPort.Instance.isUsingVr) return;
-        PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
-        CVRInputManager.Instance.inputEnabled = !flag;
+
+        _desktopMouseModeQM.SetValue(ViewManager.Instance, flag);
+        _desktopMouseModeMM.SetValue(CVR_MenuManager.Instance, flag);
+        
         RootLogic.Instance.ToggleMouse(flag);
+        CVRInputManager.Instance.inputEnabled = !flag;
+        PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
         CVR_MenuManager.Instance.desktopControllerRay.enabled = !flag;
-        _desktopMouseMode.SetValue(CVR_MenuManager.Instance, flag);
     }
 
     internal static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);

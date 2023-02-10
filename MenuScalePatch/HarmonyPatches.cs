@@ -193,48 +193,4 @@ internal class HarmonyPatches
             MenuScalePatch.Logger.Error(e);
         }
     }
-
-    //[HarmonyTranspiler]
-    //[HarmonyPatch(typeof(ControllerRay), "LateUpdate")]
-    private static IEnumerable<CodeInstruction> Transpiler_ControllerRay_UpdateInput(
-        IEnumerable<CodeInstruction> instructions, ILGenerator il)
-    {
-
-        // Stop calling move mouse events on the menus, the ones that instantiate and the send the event (easy)
-        // Makes this: "component.View.MouseEvent(mouseEventData1);" go POOF
-        instructions = new CodeMatcher(instructions)
-            .MatchForward(false,
-                new CodeMatch(OpCodes.Ldloc_S),
-                new CodeMatch(i => i.opcode == OpCodes.Callvirt && i.operand is MethodInfo { Name: "get_View" }),
-                new CodeMatch(OpCodes.Ldloc_S),
-                new CodeMatch(i => i.opcode == OpCodes.Callvirt && i.operand is MethodInfo { Name: "MouseEvent" }))
-            .Repeat(matcher => matcher
-                .SetInstructionAndAdvance(new CodeInstruction(OpCodes.Nop))
-                .SetInstructionAndAdvance(new CodeInstruction(OpCodes.Nop))
-                .SetInstructionAndAdvance(new CodeInstruction(OpCodes.Nop))
-                .SetInstructionAndAdvance(new CodeInstruction(OpCodes.Nop))
-            )
-            .InstructionEnumeration();
-
-        // Look for the if flag2 and replace flag 2 with false, for the ones that create the event and send inline (hard ;_;)
-        // Makes this: "if (flag2 && this._mouseDownOnMenu != ControllerRay.Menu.None || ..." into:
-        // this: "if (false && this._mouseDownOnMenu != ControllerRay.Menu.None || ..."
-        instructions = new CodeMatcher(instructions)
-            .MatchForward(false,
-                new CodeMatch(OpCodes.Ldloc_2),
-                new CodeMatch(OpCodes.Brfalse),
-                new CodeMatch(OpCodes.Ldarg_0),
-                new CodeMatch(i =>
-                    i.opcode == OpCodes.Ldfld && i.operand is FieldInfo { Name: "_mouseDownOnMenu" }),
-                new CodeMatch(OpCodes.Brtrue),
-                new CodeMatch(OpCodes.Ldarg_0),
-                new CodeMatch(i =>
-                    i.opcode == OpCodes.Ldfld && i.operand is FieldInfo { Name: "_mouseDownOnMenu" }),
-                new CodeMatch(OpCodes.Ldc_I4_1),
-                new CodeMatch(OpCodes.Bne_Un))
-            .SetOpcodeAndAdvance(OpCodes.Ldc_I4_0) // replace flag2 with false
-            .InstructionEnumeration();
-
-        return instructions;
-    }
 }
