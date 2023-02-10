@@ -22,10 +22,11 @@ using System.Reflection;
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: MelonOptionalDependencies("BTKUILib")]
+[assembly: HarmonyDontPatchAll]
 
 namespace DesktopVRIK.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "2.0.2";
+    public const string Version = "2.0.5";
     public const string Author = "NotAKidoS";
 }
