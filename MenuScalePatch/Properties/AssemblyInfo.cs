@@ -1,18 +1,18 @@
 ﻿using MelonLoader;
-using MenuScalePatch.Properties;
+using NAK.Melons.MenuScalePatch.Properties;
 using System.Reflection;
 
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(MenuScalePatch))]
+[assembly: AssemblyTitle(nameof(NAK.Melons.MenuScalePatch))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(MenuScalePatch))]
+[assembly: AssemblyProduct(nameof(NAK.Melons.MenuScalePatch))]
 
 [assembly: MelonInfo(
     typeof(NAK.Melons.MenuScalePatch.MenuScalePatch),
-    nameof(MenuScalePatch),
+    nameof(NAK.Melons.MenuScalePatch),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/MenuScalePatch"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 
-namespace MenuScalePatch.Properties;
+namespace NAK.Melons.MenuScalePatch.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "4.2.1";
