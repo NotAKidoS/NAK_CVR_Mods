@@ -4,7 +4,7 @@ namespace NAK.Melons.FuckToes;
 
 public class FuckToesMod : MelonMod
 {
-    internal const string SettingsCategory = "Fuck Toes";
+    internal const string SettingsCategory = "FuckToes";
     internal static MelonPreferences_Category m_categoryFuckToes;
     internal static MelonPreferences_Entry<bool> m_entryEnabledVR, m_entryEnabledFBT;
     public override void OnInitializeMelon()
