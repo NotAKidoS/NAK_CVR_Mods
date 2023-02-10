@@ -3,7 +3,6 @@ using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.MovementSystem;
-using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
 
@@ -28,8 +27,11 @@ public class MSP_MenuInfo
     internal static bool DisableMMHelper_VR;
 
     //reflection (traverse sucks ass)
-    private static readonly FieldInfo _desktopMouseModeQM = typeof(ViewManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
-    private static readonly FieldInfo _desktopMouseModeMM = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
+    internal static readonly FieldInfo _desktopMouseModeQM = typeof(ViewManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
+    internal static readonly FieldInfo _desktopMouseModeMM = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
+    internal static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
+
+    internal static bool independentHeadTurn = false;
 
     internal static void ToggleDesktopInputMethod(bool flag)
     {
@@ -37,15 +39,12 @@ public class MSP_MenuInfo
 
         _desktopMouseModeQM.SetValue(ViewManager.Instance, flag);
         _desktopMouseModeMM.SetValue(CVR_MenuManager.Instance, flag);
-        
+
         RootLogic.Instance.ToggleMouse(flag);
         CVRInputManager.Instance.inputEnabled = !flag;
         PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
         CVR_MenuManager.Instance.desktopControllerRay.enabled = !flag;
     }
-
-    internal static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
-    internal static bool independentHeadTurn = false;
 
     internal static void HandleIndependentLookInput()
     {

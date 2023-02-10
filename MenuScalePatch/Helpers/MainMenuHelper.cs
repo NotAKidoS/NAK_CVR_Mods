@@ -33,7 +33,8 @@ public class MainMenuHelper : MonoBehaviour
             MSP_MenuInfo.HandleIndependentLookInput();
         if (MSP_MenuInfo.PlayerAnchorMenus)
             UpdateMenuPosition();
-        if (NeedsPositionUpdate) UpdateMenuPosition();
+        if (NeedsPositionUpdate)
+            UpdateMenuPosition();
     }
 
     public void CreateWorldAnchors()

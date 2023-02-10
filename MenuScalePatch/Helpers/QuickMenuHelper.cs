@@ -31,7 +31,8 @@ public class QuickMenuHelper : MonoBehaviour
             MSP_MenuInfo.HandleIndependentLookInput();
         if (MSP_MenuInfo.PlayerAnchorMenus || MetaPort.Instance.isUsingVr)
             UpdateMenuPosition();
-        if (NeedsPositionUpdate) UpdateMenuPosition();
+        if (NeedsPositionUpdate)
+            UpdateMenuPosition();
     }
 
     public void CreateWorldAnchors()
