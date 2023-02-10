@@ -1,4 +1,4 @@
-﻿using AASBufferFix.Properties;
+﻿using NAK.Melons.AASBufferFix.Properties;
 using MelonLoader;
 using System.Reflection;
 
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 
-namespace AASBufferFix.Properties;
+namespace NAK.Melons.AASBufferFix.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.4";
