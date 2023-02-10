@@ -1,4 +1,4 @@
-﻿using PickupPushPull.Properties;
+﻿using NAK.Melons.PickupPushPull.Properties;
 using MelonLoader;
 using System.Reflection;
 
@@ -6,13 +6,13 @@ using System.Reflection;
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(PickupPushPull))]
+[assembly: AssemblyTitle(nameof(NAK.Melons.PickupPushPull))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(PickupPushPull))]
+[assembly: AssemblyProduct(nameof(NAK.Melons.PickupPushPull))]
 
 [assembly: MelonInfo(
-    typeof(PickupPushPull.PickupPushPull),
-    nameof(PickupPushPull),
+    typeof(NAK.Melons.PickupPushPull.PickupPushPull),
+    nameof(NAK.Melons.PickupPushPull),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/PickupPushPull"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 
-namespace PickupPushPull.Properties;
+namespace NAK.Melons.PickupPushPull.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "3.0.1";

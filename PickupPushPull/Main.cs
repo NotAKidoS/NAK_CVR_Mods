@@ -5,9 +5,9 @@ using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 using Valve.VR;
-using PickupPushPull.InputModules;
+using NAK.Melons.PickupPushPull.InputModules;
 
-namespace PickupPushPull;
+namespace NAK.Melons.PickupPushPull;
 
 public class PickupPushPull : MelonMod
 {
