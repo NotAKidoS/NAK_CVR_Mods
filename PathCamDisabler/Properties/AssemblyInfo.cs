@@ -1,18 +1,17 @@
-﻿using PathCamDisabler.Properties;
-using MelonLoader;
+﻿using MelonLoader;
 using System.Reflection;
-
+using NAK.Melons.PathCamDisabler.Properties;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(PathCamDisabler))]
+[assembly: AssemblyTitle(nameof(NAK.Melons.PathCamDisabler))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(PathCamDisabler))]
+[assembly: AssemblyProduct(nameof(NAK.Melons.PathCamDisabler))]
 
 [assembly: MelonInfo(
-    typeof(PathCamDisabler.PathCamDisabler),
-    nameof(PathCamDisabler),
+    typeof(NAK.Melons.PathCamDisabler.PathCamDisablerMod),
+    nameof(NAK.Melons.PathCamDisabler),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/PathCamDisabler"
@@ -22,9 +21,9 @@ using System.Reflection;
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 
-namespace PathCamDisabler.Properties;
+namespace NAK.Melons.PathCamDisabler.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }

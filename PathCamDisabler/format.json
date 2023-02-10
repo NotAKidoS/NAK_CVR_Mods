@@ -1,12 +1,12 @@
 {
   "_id": 110,
   "name": "PathCamDisabler",
-  "modversion": "1.0.0",
-  "gameversion": "2022r169",
+  "modversion": "1.0.1",
+  "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Disables path camera controller to free up your numkeys. Additional option to disable the flight binding. \n\n Won't do much for VR. Can toggle with UIExpansionKit or similar.",
+  "description": "Adds option to disable the Path Camera Controller to free up your numkeys.\nAdditional option to disable flight binding.",
   "searchtags": [
     "numpad",
     "camera",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PathCamDisabler/releases/download/r1/PathCamDisabler.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/PathCamDisabler/releases/download/v1.0.1/PathCamDisabler.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/PathCamDisabler/",
-  "changelog": "initial release\n(i made this in 5 minutes after months of annoyances)",
+  "changelog": "- Organizational changes.\n- No longer using SaveToFile().",
   "embedcolor": "#9b59b6"
 }
