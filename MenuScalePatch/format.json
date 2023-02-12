@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v4.2.2/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "- Fixed hitching & potential crash when opening menu after a long time of it being closed.\n- Don't disable CohtmlView, only enable it.'",
+  "changelog": "- Fixed hitching & potential crash when opening menu after a long time of it being closed. Don't disable CohtmlView, only enable it.",
   "embedcolor": "804221"
 }

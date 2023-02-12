@@ -8,7 +8,7 @@ public class MenuScalePatch : MelonMod
     internal static MelonLogger.Instance Logger;
     internal static MelonPreferences_Category m_categoryMenuScalePatch;
     internal static MelonPreferences_Entry<bool> 
-        m_entryWorldAnchorVRQM,
+        //m_entryWorldAnchorVRQM,
         m_entryUseIndependentHeadTurn,
         m_entryPlayerAnchorMenus;
     public override void OnInitializeMelon()
