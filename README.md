@@ -11,6 +11,8 @@ Avatars will no longer load in naked or transition to the wrong state on load.
 AAS will also not be updated unless the expected data matches what is received.
 
 The avatar will stay in the default animator state until AAS data is received that is deemed correct.
+
+You will no longer sync garbage AAS while switching avatar.
     
 ---
 
