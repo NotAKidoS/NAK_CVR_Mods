@@ -124,7 +124,7 @@ internal class HarmonyPatches
         if (show != ____quickMenuOpen)
         {
             ____quickMenuOpen = show;
-            __instance.quickMenu.enabled = show;
+            __instance.quickMenu.enabled = true;
             __instance.quickMenuAnimator.SetBool("Open", show);
             QuickMenuHelper.Instance.enabled = show;
             QuickMenuHelper.Instance.UpdateWorldAnchors(show);
@@ -152,7 +152,7 @@ internal class HarmonyPatches
         if (show != ____gameMenuOpen)
         {
             ____gameMenuOpen = show;
-            __instance.gameMenuView.enabled = show;
+            __instance.gameMenuView.enabled = true;
             __instance.uiMenuAnimator.SetBool("Open", show);
             MainMenuHelper.Instance.enabled = show;
             MainMenuHelper.Instance.UpdateWorldAnchors(show);
