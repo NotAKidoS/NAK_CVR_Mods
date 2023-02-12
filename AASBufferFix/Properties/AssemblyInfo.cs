@@ -1,5 +1,5 @@
-﻿using NAK.Melons.AASBufferFix.Properties;
-using MelonLoader;
+﻿using MelonLoader;
+using NAK.Melons.AASBufferFix.Properties;
 using System.Reflection;
 
 
@@ -11,7 +11,7 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.Melons.AASBufferFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.AASBufferFix.AASBufferFixMod),
+    typeof(NAK.Melons.AASBufferFix.AASBufferFix),
     nameof(NAK.Melons.AASBufferFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
@@ -25,6 +25,6 @@ using System.Reflection;
 namespace NAK.Melons.AASBufferFix.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.4";
+    public const string Version = "1.0.5";
     public const string Author = "NotAKidoS";
 }

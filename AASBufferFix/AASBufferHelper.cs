@@ -1,10 +1,13 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI.CCK.Components;
+using ABI_RC.Core.Player;
 using UnityEngine;
 
 namespace NAK.Melons.AASBufferFix
 {
     public class AASBufferHelper : MonoBehaviour
     {
+        ///public bool DebuggingFlag = false;
+
         //public stuff
         public bool GameHandlesAAS { get; private set; }
 
@@ -24,33 +27,38 @@ namespace NAK.Melons.AASBufferFix
 
         public void OnAvatarInstantiated(Animator animator)
         {
-
-            ///MelonLoader.MelonLogger.Msg("[OnInit] Remote avatar initialized. Generating avatar animator footprint.");
-
-            _avatarFootprint = Utils.GenerateAnimatorAASFootprint(animator);
-
-            // avatar does not contain proper AAS
-            // this is likely because the avatar was made before AAS, or is blocked/hidden
-            if (_avatarFootprint == 1)
+            //check if avatar uses Avatar Advanced Settings
+            ///SendDebug("[OnInit] Remote avatar initialized. Checking for AAS...");
+            CVRAvatar avatar = animator.GetComponent<CVRAvatar>();
+            if (avatar != null && !avatar.avatarUsesAdvancedSettings)
             {
-                ///MelonLoader.MelonLogger.Msg("[OnInit] Avatar does not contain valid AAS.");
-                // we will let the game handle this by setting IsAcceptingAAS to true
                 GameHandlesAAS = true;
                 return;
             }
 
-            ///MelonLoader.MelonLogger.Msg($"[OnInit] Avatar footprint is : {_avatarFootprint}");
+            //check if AAS footprint is valid
+            ///SendDebug("[OnInit] Avatar uses AAS. Generating AAS footprint...");
+            _avatarFootprint = Utils.GenerateAnimatorAASFootprint(animator);
+            if (_avatarFootprint == 1)
+            {
+                // we will let the game handle this by setting GameHandlesAAS to true
+                ///SendDebug("[OnInit] Avatar does not contain valid AAS. It is likely hidden or blocked.");
+                GameHandlesAAS = true;
+                return;
+            }
+
+            ///SendDebug($"[OnInit] Avatar footprint is : {_avatarFootprint}");
 
             //check if we received expected AAS while we loaded the avatar, and if so, apply it now
             if (SyncDataMatchesExpected())
             {
-                ///MelonLoader.MelonLogger.Msg("[OnInit] Valid buffered AAS found. Applying AAS immediatly.");
+                ///SendDebug("[OnInit] Valid buffered AAS found. Applying buffer...");
                 ApplyExternalAASBuffer();
                 return;
             }
 
             //we loaded avatar faster than wearer
-            ///MelonLoader.MelonLogger.Msg("[OnInit] Remote avatar initialized faster than wearer. Waiting on valid AAS before applying.");
+            ///SendDebug("[OnInit] Remote avatar initialized faster than wearer. Waiting on valid AAS...");
         }
 
         public void OnAvatarDestroyed()
@@ -60,38 +68,36 @@ namespace NAK.Melons.AASBufferFix
             _avatarFootprint = 0;
         }
 
-        public void OnApplyAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
+        public void OnReceiveAAS(float[] settingsFloat, int[] settingsInt, byte[] settingsByte)
         {
-            //avatar is still loading on our side, we must assume AAS data is correct and store it until we load
-            //there is also a chance it errored
-            if (_avatarFootprint == 0)
-            {
-                ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar is still loading on our end.");
-                // Calculate AAS footprint to compare against later.
-                _aasFootprint = (settingsFloat.Length + 1) * (settingsInt.Length + 1) * (settingsByte.Length + 1);
-                StoreExternalAASBuffer(settingsFloat, settingsInt, settingsByte);
-                return;
-            }
-
-            //avatar is loaded on our end, and is not blocked by filter
-            //this does run if it is manually hidden or distance hidden
-
-            ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar is loaded on our side and is not blocked. Comparing for expected values.");
-            ///MelonLoader.MelonLogger.Msg($"[OnSync] Avatar Footprint is : {_avatarFootprint}");
-
             // Calculate AAS footprint to compare against.
             _aasFootprint = (settingsFloat.Length + 1) * (settingsInt.Length + 1) * (settingsByte.Length + 1);
 
             //if it matches, apply the settings and let game take over
             if (SyncDataMatchesExpected())
             {
-                ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar values matched and have been applied.");
+                ///SendDebug("[OnSync] Avatar values matched and have been applied.");
                 ApplyExternalAAS(settingsFloat, settingsInt, settingsByte);
                 return;
             }
 
+            //avatar is still loading on our side, we must assume AAS data is correct and store it until we load
+            //there is also a chance it errored
+            //if (_avatarFootprint == 0)
+            //{
+            //    ///SendDebug("[OnSync] Avatar is still loading on our end.");
+            //    StoreExternalAASBuffer(settingsFloat, settingsInt, settingsByte);
+            //    return;
+            //}
+
+            //avatar is loaded on our end, and is not blocked by filter
+            //this does run if it is manually hidden or distance hidden
+
+            ///SendDebug("[OnSync] Avatar is loaded on our side and is not blocked. Comparing for expected values.");
+            ///SendDebug($"[OnSync] Avatar Footprint is : {_avatarFootprint}");
+
             //if it did not match, that means the avatar we see on our side is different than what the remote user is wearing and syncing
-            ///MelonLoader.MelonLogger.Msg("[OnSync] Avatar loaded is different than wearer. The wearer is likely still loading the avatar!");
+            ///SendDebug("[OnSync] Avatar loaded is different than wearer. The wearer is likely still loading the avatar!");
             StoreExternalAASBuffer(settingsFloat, settingsInt, settingsByte);
         }
 
@@ -118,5 +124,11 @@ namespace NAK.Melons.AASBufferFix
         }
 
         private bool SyncDataMatchesExpected() => _aasFootprint == _avatarFootprint;
+
+        ///private void SendDebug(string message)
+        ///{
+        ///    if (!DebuggingFlag) return;
+        ///    AASBufferFix.Logger.Msg(message);
+        ///}
     }
 }

@@ -39,7 +39,7 @@ internal class HarmonyPatches
         AASBufferHelper externalBuffer = __instance.GetComponent<AASBufferHelper>();
         if (externalBuffer != null && !externalBuffer.GameHandlesAAS)
         {
-            externalBuffer.OnApplyAAS(settingsFloat, settingsInt, settingsByte);
+            externalBuffer.OnReceiveAAS(settingsFloat, settingsInt, settingsByte);
             return false;
         }
         return true;
@@ -47,7 +47,7 @@ internal class HarmonyPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(CVRAnimatorManager), "ApplyAdvancedAvatarSettingsFromBuffer")]
-    private static bool Prefix_PuppetMaster_ApplyAdvancedAvatarSettingsFromBuffer(ref Animator ____animator)
+    private static bool Prefix_CVRAnimatorManager_ApplyAdvancedAvatarSettingsFromBuffer(ref Animator ____animator)
     {
         AASBufferHelper externalBuffer = ____animator.GetComponentInParent<AASBufferHelper>();
         if (externalBuffer != null && !externalBuffer.GameHandlesAAS)
@@ -55,6 +55,15 @@ internal class HarmonyPatches
             //dont apply if stable buffer no exist
             return false;
         }
+        return true;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(PlayerSetup), "SendAdvancedAvatarSettings")]
+    private static bool Prefix_PlayerSetup_SendAdvancedAvatarSettings(ref PlayerSetup __instance)
+    {
+        //dont sync wrong settings to remote users
+        if (__instance.avatarIsLoading) return false;
         return true;
     }
 }

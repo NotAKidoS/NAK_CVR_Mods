@@ -2,10 +2,11 @@
 
 namespace NAK.Melons.AASBufferFix;
 
-public class AASBufferFixMod : MelonMod
+public class AASBufferFix : MelonMod
 {
+    ///public static MelonLogger.Instance Logger;
     public override void OnInitializeMelon()
     {
-        //boobs
+        ///Logger = LoggerInstance;
     }
 }
