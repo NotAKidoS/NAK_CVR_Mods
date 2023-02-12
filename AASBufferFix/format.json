@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/AASBufferFix/releases/download/v1.0.5/AASBufferFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/AASBufferFix/",
-  "changelog": "- Don't send AAS while switching avatar. This *should* mean using this mod makes you less likely to show naked for others.\nThis isn't perfect though, as remote users without this mod still have a null buffer applied on avatar load.'",
+  "changelog": "- Don't send AAS while switching avatar.\n\nPlease read the changelog for [v1.0.5](https://github.com/NotAKidOnSteam/AASBufferFix/releases/tag/v1.0.5) for better understanding of why syncing nothing may be worse than syncing garbage AAS.",
   "embedcolor": "9b59b6"
 }
