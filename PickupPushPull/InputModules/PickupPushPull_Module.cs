@@ -65,7 +65,7 @@ public class PickupPushPull_Module : CVRInputModule
         steamVrButtonATouch = (SteamVR_Action_Boolean)EI_SteamVR_Info.im_steamVrButtonATouch.GetValue(inputModuleSteamVR);
         steamVrButtonBTouch = (SteamVR_Action_Boolean)EI_SteamVR_Info.im_steamVrButtonBTouch.GetValue(inputModuleSteamVR);
 
-        controlGamepadEnabled = (bool)MetaPort.Instance.settings.GetSettingsBool("ControlDeadZoneRight", false);
+        controlGamepadEnabled = (bool)MetaPort.Instance.settings.GetSettingsBool("ControlEnableGamepad", false);
         MetaPort.Instance.settings.settingBoolChanged.AddListener(new UnityAction<string, bool>(SettingsBoolChanged));
 
         deadzoneRightValue = (float)MetaPort.Instance.settings.GetSettingInt("ControlDeadZoneRight", 0) / 100f;

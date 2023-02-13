@@ -1,7 +1,7 @@
 {
   "_id": 91,
   "name": "PickupPushPull",
-  "modversion": "3.0.1",
+  "modversion": "3.0.2",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPushPull/releases/download/v3.0.1/PickupPushPull.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPushPull/releases/download/v3.0.2/PickupPushPull.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/PickupPushPull/",
-  "changelog": "- Fixed issue where saved preferences weren't properly applied on startup.\n- Rotation is now only limited while holding a prop that can be rotated, instead of when the rotation bind is held.",
+  "changelog": "- Fixed issue where ControlEnableGamepad setting was improperly checked on startup.",
   "embedcolor": "804221"
 }
