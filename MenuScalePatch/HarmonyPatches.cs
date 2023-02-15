@@ -129,7 +129,7 @@ internal class HarmonyPatches
             //shouldnt run if switching menus on desktop
             if (!MetaPort.Instance.isUsingVr)
             {
-                if (!show && MainMenuHelper.Instance.enabled)
+                if (!show && MainMenuHelper.Instance.MenuIsOpen)
                 {
                     return false;
                 }
@@ -144,7 +144,7 @@ internal class HarmonyPatches
     //hook menu open/close
     [HarmonyPrefix]
     [HarmonyPatch(typeof(ViewManager), "UiStateToggle", new Type[] { typeof(bool) })]
-    private static bool Postfix_ViewManager_UiStateToggle(bool show, ref ViewManager __instance, ref bool ____gameMenuOpen)
+    private static bool Prefix_ViewManager_UiStateToggle(bool show, ref ViewManager __instance, ref bool ____gameMenuOpen)
     {
         if (MainMenuHelper.Instance == null) return true;
         if (show != ____gameMenuOpen)
@@ -157,7 +157,7 @@ internal class HarmonyPatches
             //shouldnt run if switching menus on desktop
             if (!MetaPort.Instance.isUsingVr)
             {
-                if (!show && QuickMenuHelper.Instance.enabled)
+                if (!show && QuickMenuHelper.Instance.MenuIsOpen)
                 {
                     return false;
                 }
