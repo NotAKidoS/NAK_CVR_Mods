@@ -21,6 +21,7 @@ public class MainMenuHelper : MonoBehaviour
     public static MainMenuHelper Instance;
     public Transform worldAnchor;
     public bool NeedsPositionUpdate;
+    public bool MenuIsOpen;
 
     void Awake()
     {
@@ -29,12 +30,15 @@ public class MainMenuHelper : MonoBehaviour
 
     void LateUpdate()
     {
-        if (MSP_MenuInfo.UseIndependentHeadTurn)
-            MSP_MenuInfo.HandleIndependentLookInput();
-        if (MSP_MenuInfo.PlayerAnchorMenus)
-            UpdateMenuPosition();
-        if (NeedsPositionUpdate)
-            UpdateMenuPosition();
+        if (MenuIsOpen)
+        {
+            if (MSP_MenuInfo.UseIndependentHeadTurn)
+                MSP_MenuInfo.HandleIndependentLookInput();
+            if (MSP_MenuInfo.PlayerAnchorMenus)
+                UpdateMenuPosition();
+            if (NeedsPositionUpdate)
+                UpdateMenuPosition();
+        }
     }
 
     public void CreateWorldAnchors()

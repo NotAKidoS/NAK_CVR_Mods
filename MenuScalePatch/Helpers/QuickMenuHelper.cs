@@ -19,6 +19,7 @@ public class QuickMenuHelper : MonoBehaviour
     public Transform worldAnchor;
     public Transform handAnchor;
     public bool NeedsPositionUpdate;
+    public bool MenuIsOpen;
 
     void Awake()
     {
@@ -27,12 +28,15 @@ public class QuickMenuHelper : MonoBehaviour
 
     void LateUpdate()
     {
-        if (MSP_MenuInfo.UseIndependentHeadTurn)
-            MSP_MenuInfo.HandleIndependentLookInput();
-        if (MSP_MenuInfo.PlayerAnchorMenus || MetaPort.Instance.isUsingVr)
-            UpdateMenuPosition();
-        if (NeedsPositionUpdate)
-            UpdateMenuPosition();
+        if (MenuIsOpen)
+        {
+            if (MSP_MenuInfo.UseIndependentHeadTurn)
+                MSP_MenuInfo.HandleIndependentLookInput();
+            if (MSP_MenuInfo.PlayerAnchorMenus || MetaPort.Instance.isUsingVr)
+                UpdateMenuPosition();
+            if (NeedsPositionUpdate)
+                UpdateMenuPosition();
+        }   
     }
 
     public void CreateWorldAnchors()

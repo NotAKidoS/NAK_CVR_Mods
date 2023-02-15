@@ -25,6 +25,6 @@ using System.Reflection;
 namespace NAK.Melons.MenuScalePatch.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.2.2";
+    public const string Version = "4.2.3";
     public const string Author = "NotAKidoS";
 }
