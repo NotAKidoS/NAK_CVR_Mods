@@ -16,19 +16,16 @@
             <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Assembly-CSharp.dll</HintPath>
         </Reference>
         <Reference Include="Assembly-CSharp-firstpass">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
         </Reference>
         <Reference Include="Aura2_Core">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Aura2_Core.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Aura2_Core.dll</HintPath>
         </Reference>
         <Reference Include="cohtml.Net">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\cohtml.Net.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\cohtml.Net.dll</HintPath>
         </Reference>
         <Reference Include="Cohtml.Runtime">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Cohtml.Runtime.dll</HintPath>
-        </Reference>
-        <Reference Include="Giamoz">
-          <HintPath>..\..\Giamoz\Giamoz\bin\Debug\net472\Giamoz.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Cohtml.Runtime.dll</HintPath>
         </Reference>
         <Reference Include="MelonLoader">
             <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\MelonLoader\MelonLoader.dll</HintPath>
@@ -37,16 +34,16 @@
           <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\SteamVR.dll</HintPath>
         </Reference>
         <Reference Include="UIExpansionKit">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\Mods\UIExpansionKit.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\Mods\UIExpansionKit.dll</HintPath>
         </Reference>
         <Reference Include="Unity.Postprocessing.Runtime">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Unity.Postprocessing.Runtime.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Unity.Postprocessing.Runtime.dll</HintPath>
         </Reference>
         <Reference Include="Unity.TextMeshPro">
-          <HintPath>..\..\..\DakyModsCVR\ManagedLibs\Unity.TextMeshPro.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\Unity.TextMeshPro.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.AnimationModule">
-          <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+          <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
         </Reference>
         <Reference Include="UnityEngine.CoreModule">
             <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
@@ -55,13 +52,16 @@
         <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.PhysicsModule">
-        <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.VRModule">
-        <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.VRModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VRModule">
+        <HintPath>C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.VRModule.dll</HintPath>
       </Reference>
       <Reference Include="UnityEngine.XRModule">
-        <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.XRModule.dll</HintPath>
+        <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\ChilloutVR_Data\Managed\UnityEngine.XRModule.dll</HintPath>
       </Reference>
     </ItemGroup>
 
