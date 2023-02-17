@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "TrackedControllerFix",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Allows your controllers to track while the SteamVR overlay is open. This also fixes Quest/Touch controllers feeling slow during fast movements.",
+  "searchtags": [
+    "vr",
+    "quest",
+    "controller",
+    "tracking"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/TrackedControllerFix/releases/download/v1.0.0/TrackedControllerFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/TrackedControllerFix/",
+  "changelog": "Initial Release",
+  "embedcolor": "3498db"
+}
