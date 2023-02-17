@@ -1,11 +1,15 @@
 ﻿using ABI.CCK.Components;
+<<<<<<< Updated upstream
 using ABI_RC.Core.Savior;
 using HarmonyLib;
 using MelonLoader;
+=======
+>>>>>>> Stashed changes
 using UnityEngine;
 
 //Thanks Ben! I was scared of transpiler so I reworked a bit...
 
+<<<<<<< Updated upstream
 namespace DesktopVRSwitch.Patches;
 
 [HarmonyPatch]
@@ -59,3 +63,31 @@ public class CVRPickupObjectTracker : MonoBehaviour
             previousGripOrigin.Remove(pickupObject);
     }
 }
+=======
+namespace NAK.Melons.DesktopVRSwitch.Patches;
+
+public class CVRPickupObjectTracker : MonoBehaviour
+{
+    public CVRPickupObject pickupObject;
+    public Transform storedGripOrigin;
+
+    void Start()
+    {
+        VRModeSwitchTracker.OnPostVRModeSwitch += PostVRModeSwitch;
+    }
+
+    void OnDestroy()
+    {
+        VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
+    }
+
+    public void PostVRModeSwitch(bool enterXR, Camera activeCamera)
+    {
+        if (pickupObject != null)
+        {
+            if (pickupObject._controllerRay != null) pickupObject._controllerRay.DropObject(true);
+            (storedGripOrigin, pickupObject.gripOrigin) = (pickupObject.gripOrigin, storedGripOrigin);
+        }
+    }
+}
+>>>>>>> Stashed changes
