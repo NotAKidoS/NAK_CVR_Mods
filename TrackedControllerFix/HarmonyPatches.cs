@@ -22,6 +22,8 @@ internal class PlayerSetupPatches
         vrRightHandTracker = __instance.vrRightHandTracker.AddComponent<SteamVR_TrackedObject>();
         vrLeftHandPose = __instance.vrLeftHandTracker.GetComponent<SteamVR_Behaviour_Pose>();
         vrRightHandPose = __instance.vrRightHandTracker.GetComponent<SteamVR_Behaviour_Pose>();
+        vrLeftHandPose.enabled = false;
+        vrRightHandPose.enabled = false;
     }
 
     [HarmonyPrefix]
@@ -32,11 +34,13 @@ internal class PlayerSetupPatches
         // but this is the best way to support DesktopVRSwitch & not redo the controller inputs
         if (vrLeftHandTracker != null)
         {
+            vrLeftHandPose.enabled = true;
             vrLeftHandTracker.SetDeviceIndex(vrLeftHandPose.GetDeviceIndex());
             vrLeftHandPose.enabled = false;
         }
         if (vrRightHandTracker != null)
         {
+            vrRightHandPose.enabled = true;
             vrRightHandTracker.SetDeviceIndex(vrRightHandPose.GetDeviceIndex());
             vrRightHandPose.enabled = false;
         }
