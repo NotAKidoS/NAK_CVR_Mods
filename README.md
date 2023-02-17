@@ -9,18 +9,6 @@ There used to be a table here detailing what did and did not work after switchin
 
 Almost all base game features & systems that differ when in VR are now updated after switch. There are still very likely small quirks that need ironing out still, but everything major is now fixed and accounted for. 
 
-When you attempt to switch, SteamVR should automatically be launched if an HMD is connected and not already running.
-
-
-**Things that have been tested.**
-* Desktop to VR to FBT to Desktop.
-* Restarting SteamVR without restarting ChilloutVR. 
-* Reentering VR with different controllers. (Touch to Knuckles)
-
-**Things that have not been tested**
-* Reconnecting to SteamVR with a different VR headset.
-
-
 ## There are two versions of this mod!
 **DesktopVRSwitch** is built for the Stable branch of ChilloutVR. (OpenVR)
 
