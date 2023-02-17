@@ -3,31 +3,20 @@ Allows you to switch between Desktop and VR with a keybind.
 
 Press Control + F6 to switch.
 
-While this mod is a nice convienence feature to have access to, not every chillout system or mod is built to support it. Keep in mind there **will be issues**, so don't get mad if you do end up having to restart. **:stare:**
+## There are two versions of this mod!
+**DesktopVRSwitch** is built for the Stable branch of ChilloutVR. (OpenVR)
 
-Please take a look at the table below for what may not function as intended after switch. A lot of them can be remedied by rejoining your current instance.
+**DesktopXRSwitch** is built for the Experimental branch of ChilloutVR (OpenXR)
 
-| Function  | Working | Note |
-| ------------- | ------------- | ------------- |
-| Discord/Steam RPC  | None  | Rich Presence will report the first mode you launched in. (might correct on world change)  |
-| CVRPickupObject  | None  | Pickups will use the grip origin set during spawn. The game overrides the default VR origin with [Desktop] origin if available, so I cannot revert to VR origins when switching from Desktop. |
-| CVRWorld UpdatePostProcessing | Not Implemented  | GraphicsAO and other specific post processing settings are not currently set on switch. |
-| SceneLoaded worldCamera | Not Implemented  | World-set camera settings are not currently set for both Desktop & VR cameras. |
-| ControllerRay vrActive  | Not Sure | I haven't had any issues with this, so I haven't bothered looking into it.  |
-| CVRWorld CopyRefCamValues | Not Implemented  | This may not cause issues, but farclip is not set on the opposite modes transition effects when you load a world.  |
-| CameraFacingObject | Maybe | All CameraFacingObject behaviors have their camera changed to the active main camera on switch. Not sure if this is a good solution, but required for nameplates to face your viewpoint. |
-| CoHtmlHud | Yes | CoHtmlHud is parented to the active camera on switch. |
-| HudOperations  | Kind Of | HudOperations is set to use the correct gameobjects to show loading info on the bottom right of the hud, but it seems to not be placed correctly. |
-| CheckVR | No | Not needed. We initialize SteamVR ourselves and MetaPort only checks it on Start. |
-| MetaPort  | Yes | This is the most important as everything checks here for VRMode. Some systems will cache VRMode on start though, which is where issues with switching occur. |
-| PlayerSetup | Yes | Also highly important. PlayerSetup caches VRMode from MetaPort to run correct calibration. To prevent errors, a dummy VRIK component is created before running a quick calibration to prevent PlayerSetup from erroring when switching to VR. |
-| MovementSystem | Yes | MovementSystem constantly checks MetaPort for VRMode each frame, so while it isn't directly needed I still set the cached VRMode to true. |
-| CVRInputManager | Yes..?  | We set CVRInputManager.reload to have input & menus reload next frame, but also set independentHeadToggle and others to false to prevent the game from locking head control. |
-| GesturePlaneTest | Testing | GestureReconizer will use the original launch camera for reference, which means you cannot pull the camera out with gestures when switched. It is the only part of the game that makes a cached result from VRMode private, so I have to dick around with Traverse/Harmony. :stare: |
+Once the Experimental branch of ChilloutVR hits Stable, the mod name will be changing from VR -> XR.
 
-(an old clip from the first few tests, no longer using melonprefs as uiexpansionkit kinda gets nuked on menu reload)
+---
 
-https://user-images.githubusercontent.com/37721153/192128515-5630f47b-63ed-45c5-b0eb-0aac46d23731.mp4
+There used to be a table here detailing what did and did not work after switching, but I have worked to make that list unnecessary.
+
+Almost all base game features & systems that differ when in VR are now updated after switch. There are still very likely small quirks that need ironing out still, but everything major is now fixed and accounted for. 
+
+Desktop to VR to FBT. Restarting SteamVR without restarting ChilloutVR. Reconnecting to SteamVR with a different VR headset.
 
 ---
 
