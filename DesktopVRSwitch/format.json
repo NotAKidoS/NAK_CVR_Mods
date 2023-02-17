@@ -1,8 +1,8 @@
 {
   "_id": 103,
   "name": "DesktopVRSwitch",
-  "modversion": "3.0.0",
-  "gameversion": "2022r169p1",
+  "modversion": "4.3.0",
+  "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/r3/DesktopVRSwitch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/v4.3.0/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/",
-  "changelog": "Initial CVRMG Release",
+  "changelog": "Backported from the Experimental build and patched up to handle OpenVR.",
   "embedcolor": "3498db"
 }
