@@ -5,8 +5,6 @@ Press Control + F6 to switch.
 
 ---
 
-There used to be a table here detailing what did and did not work after switching, but I have worked to make that list unnecessary.
-
 Almost all base game features & systems that differ when in VR are now updated after switch. There are still very likely small quirks that need ironing out still, but everything major is now fixed and accounted for. 
 
 ## There are two versions of this mod!
