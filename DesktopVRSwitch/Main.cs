@@ -1,5 +1,18 @@
 ﻿using MelonLoader;
 
+/**
+    I know the TryCatchHell thing might be a bit exessive, but it is
+    built so if a user that happens to have access to a build I do not,
+    I will have a good idea of what broke and where, and what to look out
+    for when updates/experimentals release. (which has happened a few times)
+
+    It is also just in case other mods break or tweak functionality that
+    could fuck with switching. Or if they try to detect switching and break...
+
+    The VRModeSwitchTracker system is also built so I can easily & quickly make adjustments to
+    components that may or may not change between builds without breaking the rest of the mod.
+**/
+
 namespace NAK.Melons.DesktopVRSwitch;
 
 public class DesktopVRSwitchMod : MelonMod
@@ -19,6 +32,7 @@ public class DesktopVRSwitchMod : MelonMod
         ApplyPatches(typeof(HarmonyPatches.CameraFacingObjectPatches));
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
         ApplyPatches(typeof(HarmonyPatches.MovementSystemPatches));
+        ApplyPatches(typeof(HarmonyPatches.VRTrackerManagerPatches));
     }
 
     private void ApplyPatches(Type type)

@@ -25,6 +25,17 @@ internal class TryCatchHell
         }
     }
 
+    internal static void CloseCohtmlMenus()
+    {
+        TryCatchWrapper(() =>
+        {
+            DesktopVRSwitchMod.Logger.Msg("Closing ViewManager & CVR_MenuManager menus.");
+            ViewManager.Instance.UiStateToggle(false);
+            CVR_MenuManager.Instance.ToggleQuickMenu(false);
+        },
+        "Setting CheckVR hasVrDeviceLoaded failed.");
+    }
+
     internal static void SetCheckVR(bool isVR)
     {
         TryCatchWrapper(() =>
@@ -120,6 +131,8 @@ internal class TryCatchHell
             CVRInputManager.Instance.gestureLeftRaw = 0f;
             CVRInputManager.Instance.gestureRight = 0f;
             CVRInputManager.Instance.gestureRightRaw = 0f;
+            //turn off finger tracking input
+            CVRInputManager.Instance.individualFingerTracking = false;
         },
         "Failed to reset CVRInputManager inputs.");
     }

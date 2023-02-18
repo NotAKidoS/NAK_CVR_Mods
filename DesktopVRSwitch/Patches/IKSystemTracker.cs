@@ -1,9 +1,8 @@
 ﻿using ABI_RC.Systems.IK;
-using ABI_RC.Systems.IK.SubSystems;
 using ABI_RC.Systems.IK.TrackingModules;
 using HarmonyLib;
-using UnityEngine;
 using System.Reflection;
+using UnityEngine;
 
 namespace NAK.Melons.DesktopVRSwitch.Patches;
 
@@ -44,6 +43,11 @@ public class IKSystemTracker : MonoBehaviour
             var steamVRTrackingModule = CreateSteamVRTrackingModule();
             ikSystem.AddTrackingModule(steamVRTrackingModule);
         }
+
+        //make it so you dont instantly end up in FBT from Desktop
+        IKSystem.firstAvatarLoaded = false;
+        //turn of finger tracking just in case user switched controllers
+        ikSystem.FingerSystem.controlActive = false;
     }
 
     //thanks for marking the constructor as internal

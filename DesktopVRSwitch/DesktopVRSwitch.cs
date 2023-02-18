@@ -96,6 +96,9 @@ public class DesktopVRSwitch : MonoBehaviour
     //one frame after switch attempt
     public void AfterVRModeSwitch(bool enterVR)
     {
+        //close the menus
+        TryCatchHell.CloseCohtmlMenus();
+
         //these two must come first
         TryCatchHell.SetCheckVR(enterVR);
         TryCatchHell.SetMetaPort(enterVR);
