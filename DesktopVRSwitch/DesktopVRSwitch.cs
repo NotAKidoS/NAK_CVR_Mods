@@ -89,40 +89,40 @@ public class DesktopVRSwitch : MonoBehaviour
     }
 
     //one frame after switch attempt
-    public void FailedVRModeSwitch(bool enterVR)
+    public void FailedVRModeSwitch(bool isVR)
     {
         //let tracked objects know a switch failed
-        VRModeSwitchTracker.FailVRModeSwitch(enterVR);
+        VRModeSwitchTracker.FailVRModeSwitch(isVR);
     }
 
     //one frame before switch attempt
-    public void PreVRModeSwitch(bool enterVR)
+    public void PreVRModeSwitch(bool isVR)
     {
         //let tracked objects know we are attempting to switch
-        VRModeSwitchTracker.PreVRModeSwitch(enterVR);
+        VRModeSwitchTracker.PreVRModeSwitch(isVR);
     }
 
     //one frame after switch attempt
-    public void PostVRModeSwitch(bool enterVR)
+    public void PostVRModeSwitch(bool isVR)
     {
         //close the menus
         TryCatchHell.CloseCohtmlMenus();
 
         //the base of VR checks
-        TryCatchHell.SetCheckVR(enterVR);
-        TryCatchHell.SetMetaPort(enterVR);
+        TryCatchHell.SetCheckVR(isVR);
+        TryCatchHell.SetMetaPort(isVR);
 
         //game basics for functional gameplay post switch
-        TryCatchHell.RepositionCohtmlHud(enterVR);
-        TryCatchHell.UpdateHudOperations(enterVR);
+        TryCatchHell.RepositionCohtmlHud(isVR);
+        TryCatchHell.UpdateHudOperations(isVR);
         TryCatchHell.DisableMirrorCanvas();
-        TryCatchHell.SwitchActiveCameraRigs(enterVR);
+        TryCatchHell.SwitchActiveCameraRigs(isVR);
         TryCatchHell.ResetCVRInputManager();
         TryCatchHell.UpdateRichPresence();
         TryCatchHell.UpdateGestureReconizerCam();
 
         //let tracked objects know we switched
-        VRModeSwitchTracker.PostVRModeSwitch(enterVR);
+        VRModeSwitchTracker.PostVRModeSwitch(isVR);
 
         //reload avatar by default, optional for debugging
         if (_reloadLocalAvatar)

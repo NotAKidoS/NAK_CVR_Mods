@@ -22,7 +22,7 @@ public class VRTrackerManagerTracker : MonoBehaviour
         VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
     }
 
-    public void PostVRModeSwitch(bool enterVR, Camera activeCamera)
+    public void PostVRModeSwitch(bool isVR, Camera activeCamera)
     {
         //force the VRTrackerManager to reset anything its stored
         //this makes it get correct Left/Right hand if entering VR with different controllers

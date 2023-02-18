@@ -25,6 +25,6 @@ using System.Reflection;
 namespace NAK.Melons.DesktopVRSwitch.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.3.1";
+    public const string Version = "4.3.2";
     public const string Author = "NotAKidoS";
 }

@@ -10,35 +10,35 @@ public class VRModeSwitchTracker
     public static event UnityAction<bool, Camera> OnPostVRModeSwitch;
     public static event UnityAction<bool, Camera> OnFailVRModeSwitch;
 
-    public static void PreVRModeSwitch(bool enterVR)
+    public static void PreVRModeSwitch(bool isVR)
     {
         TryCatchHell.TryCatchWrapper(() =>
         {
             DesktopVRSwitchMod.Logger.Msg("Invoking VRModeSwitchTracker.OnPreVRModeSwitch.");
             Camera activeCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
-            VRModeSwitchTracker.OnPreVRModeSwitch?.Invoke(enterVR, activeCamera);
+            VRModeSwitchTracker.OnPreVRModeSwitch?.Invoke(isVR, activeCamera);
         },
         "Error while invoking VRModeSwitchTracker.OnPreVRModeSwitch. Did someone do a fucky?");
     }
 
-    public static void PostVRModeSwitch(bool enterVR)
+    public static void PostVRModeSwitch(bool isVR)
     {
         TryCatchHell.TryCatchWrapper(() =>
         {
             DesktopVRSwitchMod.Logger.Msg("Invoking VRModeSwitchTracker.OnPostVRModeSwitch.");
             Camera activeCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
-            VRModeSwitchTracker.OnPostVRModeSwitch?.Invoke(enterVR, activeCamera);
+            VRModeSwitchTracker.OnPostVRModeSwitch?.Invoke(isVR, activeCamera);
         },
         "Error while invoking VRModeSwitchTracker.OnPostVRModeSwitch. Did someone do a fucky?");
     }
 
-    public static void FailVRModeSwitch(bool enterVR)
+    public static void FailVRModeSwitch(bool isVR)
     {
         TryCatchHell.TryCatchWrapper(() =>
         {
             DesktopVRSwitchMod.Logger.Msg("Invoking VRModeSwitchTracker.OnFailVRModeSwitch.");
             Camera activeCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
-            VRModeSwitchTracker.OnFailVRModeSwitch?.Invoke(enterVR, activeCamera);
+            VRModeSwitchTracker.OnFailVRModeSwitch?.Invoke(isVR, activeCamera);
         },
         "Error while invoking OnFailVRModeSwitch.OnPreVRModeSwitch. Did someone do a fucky?");
     }

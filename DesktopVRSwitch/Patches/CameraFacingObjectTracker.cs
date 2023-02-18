@@ -17,7 +17,7 @@ public class CameraFacingObjectTracker : MonoBehaviour
         VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
     }
 
-    public void PostVRModeSwitch(bool enterVR, Camera activeCamera)
+    public void PostVRModeSwitch(bool isVR, Camera activeCamera)
     {
         cameraFacingObject.m_Camera = activeCamera;
     }

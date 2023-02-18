@@ -22,7 +22,7 @@ public class MovementSystemTracker : MonoBehaviour
         VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
     }
 
-    public void PreVRModeSwitch(bool enterVR, Camera activeCamera)
+    public void PreVRModeSwitch(bool isVR, Camera activeCamera)
     {
         //correct rotationPivot y position, so we dont teleport up/down
         Vector3 position = movementSystem.rotationPivot.transform.position;
@@ -36,11 +36,11 @@ public class MovementSystemTracker : MonoBehaviour
         //so the user can still switch even if avatar is null (if it failed to load for example).
     }
 
-    public void PostVRModeSwitch(bool enterVR, Camera activeCamera)
+    public void PostVRModeSwitch(bool isVR, Camera activeCamera)
     {
         //lazy way of correcting Desktop & VR offset issue (game does the maths)
         movementSystem.TeleportToPosRot(preSwitchWorldPosition, preSwitchWorldRotation, false);
         //recenter desktop collision to player object
-        if (!enterVR) movementSystem.UpdateColliderCenter(movementSystem.transform.position);
+        if (!isVR) movementSystem.UpdateColliderCenter(movementSystem.transform.position);
     }
 }

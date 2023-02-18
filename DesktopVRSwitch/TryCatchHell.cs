@@ -177,4 +177,3 @@ internal class TryCatchHell
         "Failed to update CVRGestureRecognizer camera.");
     }
 }
-

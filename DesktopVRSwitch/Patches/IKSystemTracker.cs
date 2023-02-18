@@ -22,13 +22,13 @@ public class IKSystemTracker : MonoBehaviour
         VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
     }
 
-    public void PostVRModeSwitch(bool enterVR, Camera activeCamera)
+    public void PostVRModeSwitch(bool isVR, Camera activeCamera)
     {
         var _trackingModules = _traverseModules.GetValue<List<TrackingModule>>();
         SteamVRTrackingModule openVRTrackingModule = _trackingModules.FirstOrDefault(m => m is SteamVRTrackingModule) as SteamVRTrackingModule;
         if (openVRTrackingModule != null)
         {
-            if (enterVR)
+            if (isVR)
             {
                 openVRTrackingModule.ModuleStart();
             }
