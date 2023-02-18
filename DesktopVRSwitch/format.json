@@ -1,7 +1,7 @@
 {
   "_id": 103,
   "name": "DesktopVRSwitch",
-  "modversion": "4.3.0",
+  "modversion": "4.3.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/v4.3.0/DesktopVRSwitch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/v4.3.1/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/",
-  "changelog": "Backported from the Experimental build and patched up to handle OpenVR.",
+  "changelog": "- Backported rewrite from Experimental & patched up to handle OpenVR.\n- Reinitialize SteamVR input on switch incase user restarted SteamVR or changed controllers. Correct fixedDeltaTime when entering Desktop.\n- Many tweaks to ensure everything in-game functions as expected.",
   "embedcolor": "3498db"
 }
