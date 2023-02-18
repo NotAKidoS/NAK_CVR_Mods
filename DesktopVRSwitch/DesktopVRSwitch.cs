@@ -45,14 +45,11 @@ public class DesktopVRSwitch : MonoBehaviour
 
     private IEnumerator StartVRSystem()
     {
-        BeforeVRModeSwitch(true);
+
+        PreVRModeSwitch(true);
         XRSettings.LoadDeviceByName("OpenVR");
-        yield return null;
-        if (string.IsNullOrEmpty(XRSettings.loadedDeviceName))
-        {
-            DesktopVRSwitchMod.Logger.Error("Initializing VR Failed. Is there no VR device connected?");
-        }
-        else
+        yield return null; //wait a frame before checking
+        if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
         {
             DesktopVRSwitchMod.Logger.Msg("Starting SteamVR...");
             XRSettings.enabled = true;
@@ -62,48 +59,60 @@ public class DesktopVRSwitch : MonoBehaviour
             //which in ChilloutVR, it is, because all those settings are default
             SteamVR_Input.Initialize(true);
             yield return null;
-            AfterVRModeSwitch(true);
+            PostVRModeSwitch(true);
+            yield break;
         }
+        DesktopVRSwitchMod.Logger.Error("Initializing VR Failed. Is there no VR device connected?");
+        FailedVRModeSwitch(true);
         yield break;
     }
 
     private IEnumerator StopVR()
     {
-        BeforeVRModeSwitch(false);
+        PreVRModeSwitch(false);
         yield return null;
         if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
         {
+            //SteamVR.SafeDispose(); //might fuck with SteamVRTrackingModule
             //deactivate the action set so SteamVR_Input.Initialize can reactivate
             SteamVR_Input.actionSets[0].Deactivate(SteamVR_Input_Sources.Any);
-            SteamVR.SafeDispose(); //idk
             XRSettings.LoadDeviceByName("");
             XRSettings.enabled = false;
             yield return null;
-            //reset physics time to Desktop default
-            Time.fixedDeltaTime = 0.02f;
-            AfterVRModeSwitch(false);
+            Time.fixedDeltaTime = 0.02f; //reset physics time to Desktop default
+            PostVRModeSwitch(false);
+            yield break;
         }
+        DesktopVRSwitchMod.Logger.Error("Attempted to exit VR without a VR device loaded.");
+        FailedVRModeSwitch(true);
         yield break;
     }
 
+    //one frame after switch attempt
+    public void FailedVRModeSwitch(bool enterVR)
+    {
+        //let tracked objects know a switch failed
+        VRModeSwitchTracker.FailVRModeSwitch(enterVR);
+    }
+
     //one frame before switch attempt
-    public void BeforeVRModeSwitch(bool enterVR)
+    public void PreVRModeSwitch(bool enterVR)
     {
         //let tracked objects know we are attempting to switch
         VRModeSwitchTracker.PreVRModeSwitch(enterVR);
     }
 
     //one frame after switch attempt
-    public void AfterVRModeSwitch(bool enterVR)
+    public void PostVRModeSwitch(bool enterVR)
     {
         //close the menus
         TryCatchHell.CloseCohtmlMenus();
 
-        //these two must come first
+        //the base of VR checks
         TryCatchHell.SetCheckVR(enterVR);
         TryCatchHell.SetMetaPort(enterVR);
 
-        //the bulk of funni changes
+        //game basics for functional gameplay post switch
         TryCatchHell.RepositionCohtmlHud(enterVR);
         TryCatchHell.UpdateHudOperations(enterVR);
         TryCatchHell.DisableMirrorCanvas();

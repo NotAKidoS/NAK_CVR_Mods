@@ -8,6 +8,7 @@ public class VRModeSwitchTracker
 {
     public static event UnityAction<bool, Camera> OnPreVRModeSwitch;
     public static event UnityAction<bool, Camera> OnPostVRModeSwitch;
+    public static event UnityAction<bool, Camera> OnFailVRModeSwitch;
 
     public static void PreVRModeSwitch(bool enterVR)
     {
@@ -29,5 +30,16 @@ public class VRModeSwitchTracker
             VRModeSwitchTracker.OnPostVRModeSwitch?.Invoke(enterVR, activeCamera);
         },
         "Error while invoking VRModeSwitchTracker.OnPostVRModeSwitch. Did someone do a fucky?");
+    }
+
+    public static void FailVRModeSwitch(bool enterVR)
+    {
+        TryCatchHell.TryCatchWrapper(() =>
+        {
+            DesktopVRSwitchMod.Logger.Msg("Invoking VRModeSwitchTracker.OnFailVRModeSwitch.");
+            Camera activeCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
+            VRModeSwitchTracker.OnFailVRModeSwitch?.Invoke(enterVR, activeCamera);
+        },
+        "Error while invoking OnFailVRModeSwitch.OnPreVRModeSwitch. Did someone do a fucky?");
     }
 }
