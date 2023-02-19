@@ -38,6 +38,8 @@ public class MovementSystemTracker : MonoBehaviour
 
     public void PostVRModeSwitch(bool isVR, Camera activeCamera)
     {
+        //immediatly update camera to new camera transform
+        movementSystem.rotationPivot = activeCamera.transform;
         //lazy way of correcting Desktop & VR offset issue (game does the maths)
         movementSystem.TeleportToPosRot(preSwitchWorldPosition, preSwitchWorldRotation, false);
         //recenter desktop collision to player object

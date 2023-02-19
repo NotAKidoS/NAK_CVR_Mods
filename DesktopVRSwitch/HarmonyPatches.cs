@@ -89,6 +89,13 @@ internal class IKSystemPatches
     {
         __instance.gameObject.AddComponent<IKSystemTracker>();
     }
+
+    [HarmonyPostfix] //lazy fix so i dont need to wait few frames
+    [HarmonyPatch(typeof(TrackingPoint), "Initialize")]
+    private static void Postfix_TrackingPoint_Initialize(ref TrackingPoint __instance)
+    {
+        __instance.referenceTransform.localScale = Vector3.one;
+    }
 }
 
 internal class VRTrackerManagerPatches

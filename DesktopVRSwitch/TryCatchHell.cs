@@ -176,4 +176,14 @@ internal class TryCatchHell
         },
         "Failed to update CVRGestureRecognizer camera.");
     }
+
+    internal static void UpdateMenuCoreData(bool isVR)
+    {
+        TryCatchWrapper(() =>
+        {
+            DesktopVRSwitchMod.Logger.Msg("Updating CVR_Menu_Data core data.");
+            CVR_MenuManager.Instance.coreData.core.inVr = isVR;
+        },
+        "Failed to update CVR_Menu_Data core data.");
+    }
 }

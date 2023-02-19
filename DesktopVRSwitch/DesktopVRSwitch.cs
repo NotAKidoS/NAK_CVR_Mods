@@ -8,7 +8,7 @@ namespace NAK.Melons.DesktopVRSwitch;
 
 public class DesktopVRSwitch : MonoBehaviour
 {
-    //Settings
+    //Debug Setting
     public bool _reloadLocalAvatar = true;
 
     //Internal Stuff
@@ -120,6 +120,7 @@ public class DesktopVRSwitch : MonoBehaviour
         TryCatchHell.ResetCVRInputManager();
         TryCatchHell.UpdateRichPresence();
         TryCatchHell.UpdateGestureReconizerCam();
+        TryCatchHell.UpdateMenuCoreData(isVR);
 
         //let tracked objects know we switched
         VRModeSwitchTracker.PostVRModeSwitch(isVR);

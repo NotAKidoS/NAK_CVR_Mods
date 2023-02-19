@@ -1,7 +1,7 @@
 {
   "_id": 103,
   "name": "DesktopVRSwitch",
-  "modversion": "4.3.4",
+  "modversion": "4.3.5",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/v4.3.4/DesktopVRSwitch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/releases/download/v4.3.5/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRSwitch/",
-  "changelog": "- Backported rewrite from Experimental & patched up to handle OpenVR.\n- Reinitialize SteamVR input on switch incase user restarted SteamVR or changed controllers. Correct fixedDeltaTime when entering Desktop.\n- Many tweaks to ensure everything in-game functions as expected.\n- Tweak to initial switch position for correcting offsets.",
+  "changelog": "- Reinitialize SteamVR input on switch. Correct fixedDeltaTime when entering Desktop.\n- Tweak to initial switch position for correcting offsets.\n- Fixed FBT tracking point initial size.\n- Update core menu data so QM Recalibrate/SeatedPlay button works.",
   "embedcolor": "3498db"
 }

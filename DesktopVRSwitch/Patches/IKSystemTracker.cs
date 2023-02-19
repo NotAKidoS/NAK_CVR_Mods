@@ -45,7 +45,7 @@ public class IKSystemTracker : MonoBehaviour
         }
 
         //make it so you dont instantly end up in FBT from Desktop
-        IKSystem.firstAvatarLoaded = false;
+        IKSystem.firstAvatarLoaded = DesktopVRSwitchMod.mSetting_EnterCalibrationOnSwitch.Value;
         //turn of finger tracking just in case user switched controllers
         ikSystem.FingerSystem.controlActive = false;
     }

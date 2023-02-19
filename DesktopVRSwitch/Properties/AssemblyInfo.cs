@@ -20,11 +20,12 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
+[assembly: MelonColor(ConsoleColor.DarkCyan)]
 [assembly: HarmonyDontPatchAll]
 
 namespace NAK.Melons.DesktopVRSwitch.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.3.4";
+    public const string Version = "4.3.5";
     public const string Author = "NotAKidoS";
 }
