@@ -85,7 +85,7 @@ public class DesktopVRSwitch : MonoBehaviour
             yield break;
         }
         DesktopVRSwitchMod.Logger.Error("Attempted to exit VR without a VR device loaded.");
-        FailedVRModeSwitch(true);
+        FailedVRModeSwitch(false);
         yield break;
     }
 
