@@ -8,8 +8,9 @@ namespace NAK.Melons.DesktopVRSwitch;
 
 public class DesktopVRSwitch : MonoBehaviour
 {
-    //Debug Setting
+    //Debug Settings
     public bool _reloadLocalAvatar = true;
+    public bool _softVRSwitch = false;
 
     //Internal Stuff
     private bool _switchInProgress = false;
@@ -91,6 +92,7 @@ public class DesktopVRSwitch : MonoBehaviour
     //one frame after switch attempt
     public void FailedVRModeSwitch(bool isVR)
     {
+        if (_softVRSwitch) return;
         //let tracked objects know a switch failed
         VRModeSwitchTracker.FailVRModeSwitch(isVR);
     }
@@ -98,6 +100,7 @@ public class DesktopVRSwitch : MonoBehaviour
     //one frame before switch attempt
     public void PreVRModeSwitch(bool isVR)
     {
+        if (_softVRSwitch) return;
         //let tracked objects know we are attempting to switch
         VRModeSwitchTracker.PreVRModeSwitch(isVR);
     }
@@ -105,6 +108,7 @@ public class DesktopVRSwitch : MonoBehaviour
     //one frame after switch attempt
     public void PostVRModeSwitch(bool isVR)
     {
+        if (_softVRSwitch) return;
         //close the menus
         TryCatchHell.CloseCohtmlMenus();
 

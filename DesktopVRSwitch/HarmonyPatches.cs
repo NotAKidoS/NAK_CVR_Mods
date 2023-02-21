@@ -3,6 +3,7 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.IK;
+using ABI_RC.Systems.IK.TrackingModules;
 using ABI_RC.Systems.MovementSystem;
 using HarmonyLib;
 using NAK.Melons.DesktopVRSwitch.Patches;
@@ -95,6 +96,16 @@ internal class IKSystemPatches
     private static void Postfix_TrackingPoint_Initialize(ref TrackingPoint __instance)
     {
         __instance.referenceTransform.localScale = Vector3.one;
+    }
+    [HarmonyPostfix] //lazy fix so device indecies can change properly
+    [HarmonyPatch(typeof(SteamVRTrackingModule), "ModuleDestroy")]
+    private static void Postfix_SteamVRTrackingModule_ModuleDestroy(ref SteamVRTrackingModule __instance)
+    {
+        for (int i = 0; i < __instance.TrackingPoints.Count; i++)
+        {
+            UnityEngine.Object.Destroy(__instance.TrackingPoints[i].referenceGameObject);
+        }
+        __instance.TrackingPoints.Clear();
     }
 }
 
