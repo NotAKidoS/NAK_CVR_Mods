@@ -1,5 +1,4 @@
-﻿using ABI_RC.Core.Player;
-using MelonLoader;
+﻿using MelonLoader;
 using UnityEngine;
 
 namespace NAK.Melons.DesktopVRIK;
@@ -8,68 +7,70 @@ public class DesktopVRIKMod : MelonMod
 {
     internal const string SettingsCategory = "DesktopVRIK";
     internal static MelonPreferences_Category m_categoryDesktopVRIK;
-    internal static MelonPreferences_Entry<bool> m_entryEnabled,
+    internal static MelonPreferences_Entry<bool>
+        m_entryEnabled,
         m_entryEnforceViewPosition,
-        m_entryEmoteVRIK,
-        m_entryEmoteLookAtIK;
+        m_entryResetIKOnLand,
+        m_entryPlantFeet,
+        m_entryUseVRIKToes,
+        m_entryFindUnmappedToes;
     internal static MelonPreferences_Entry<float>
         m_entryBodyLeanWeight,
-        m_entryBodyAngleLimit;
+        m_entryBodyHeadingLimit,
+        m_entryPelvisHeadingWeight,
+        m_entryChestHeadingWeight;
     public override void OnInitializeMelon()
     {
         m_categoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
         m_entryEnabled = m_categoryDesktopVRIK.CreateEntry<bool>("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
         m_entryEnforceViewPosition = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce View Position", false, description: "Corrects view position to use VRIK offsets.");
-        m_entryEmoteVRIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote VRIK", true, description: "Disable VRIK while emoting. Only disable if you are ok with looking dumb.");
-        m_entryEmoteLookAtIK = m_categoryDesktopVRIK.CreateEntry<bool>("Disable Emote LookAtIK", true, description: "Disable LookAtIK while emoting. This setting doesn't really matter, as LookAtIK isn't networked while doing an emote.");
+        m_entryResetIKOnLand = m_categoryDesktopVRIK.CreateEntry<bool>("Reset IK On Land", true, description: "Reset Solver IK when landing on the ground.");
+        m_entryPlantFeet = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled. This prevents the little hover when you stop moving.");
+        m_entryUseVRIKToes = m_categoryDesktopVRIK.CreateEntry<bool>("Use VRIK Toes", false, description: "Should VRIK use your humanoid toes for IK solving? This can cause your feet to idle behind you.");
+        m_entryFindUnmappedToes = m_categoryDesktopVRIK.CreateEntry<bool>("Find Unmapped Toes", false, description: "Should DesktopVRIK look for unmapped toe bones if humanoid rig does not have any?");
 
         m_entryBodyLeanWeight = m_categoryDesktopVRIK.CreateEntry<float>("Body Lean Weight", 0.5f, description: "Emulates old VRChat-like body leaning when looking up/down. Set to 0 to disable.");
-        m_entryBodyAngleLimit = m_categoryDesktopVRIK.CreateEntry<float>("Body Angle Limit", 0f, description: "Emulates VRChat-like body and head offset when rotating left/right. Set to 0 to disable. (this setting only affects the feet due to chillout not setting up the player controller for VRIK)");
+        m_entryBodyHeadingLimit = m_categoryDesktopVRIK.CreateEntry<float>("Body Heading Limit", 20f, description: "Emulates VRChat-like body and head offset when rotating left/right. Set to 0 to disable.");
+        m_entryPelvisHeadingWeight = m_categoryDesktopVRIK.CreateEntry<float>("Pelvis Heading Weight", 0.25f, description: "How much the pelvis will face the heading limit. Set to 0 to align with head.");
+        m_entryChestHeadingWeight = m_categoryDesktopVRIK.CreateEntry<float>("Chest Heading Weight", 0.75f, description: "How much the chest will face the heading limit. Set to 0 to align with head.");
 
         foreach (var setting in m_categoryDesktopVRIK.Entries)
         {
             setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
         }
 
-        //BTKUILib Misc Support
-        if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
-        {
-            MelonLogger.Msg("Initializing BTKUILib support.");
-            BTKUIAddon.Init();
-        }
-
-        //Apply patches (i stole)
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
 
-        MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
+        InitializeIntegrations();
     }
 
-    System.Collections.IEnumerator WaitForLocalPlayer()
-    {
-        while (PlayerSetup.Instance == null)
-            yield return null;
-
-        DesktopVRIK_Helper.CreateInstance();
-        PlayerSetup.Instance.gameObject.AddComponent<DesktopVRIK>();
-
-        while (DesktopVRIK.Instance == null)
-            yield return null;
-        UpdateAllSettings();
-    }
-
-    private void UpdateAllSettings()
+    internal static void UpdateAllSettings()
     {
         if (!DesktopVRIK.Instance) return;
-        DesktopVRIK.Setting_Enabled = m_entryEnabled.Value;
-        DesktopVRIK.Setting_BodyLeanWeight = Mathf.Clamp01(m_entryBodyLeanWeight.Value);
-        DesktopVRIK.Setting_BodyAngleLimit = Mathf.Clamp(m_entryBodyAngleLimit.Value, 0f, 90f);
-        DesktopVRIK.Setting_EmoteVRIK = m_entryEmoteVRIK.Value;
-        DesktopVRIK.Setting_EmoteLookAtIK = m_entryEmoteLookAtIK.Value;
-        DesktopVRIK.Instance.ChangeViewpointHandling(m_entryEnforceViewPosition.Value);
+        // DesktopVRIK Settings
+        DesktopVRIK.Instance.Setting_Enabled = m_entryEnabled.Value;
+        DesktopVRIK.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(m_entryBodyLeanWeight.Value);
+        DesktopVRIK.Instance.Setting_ResetOnLand = m_entryResetIKOnLand.Value;
+        DesktopVRIK.Instance.Setting_PlantFeet = m_entryPlantFeet.Value;
+        DesktopVRIK.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(m_entryBodyHeadingLimit.Value, 0f, 90f);
+        DesktopVRIK.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(m_entryPelvisHeadingWeight.Value));
+        DesktopVRIK.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(m_entryChestHeadingWeight.Value));
+        // Calibration Settings
+        DesktopVRIK.Instance.Calibrator.Setting_UseVRIKToes = m_entryUseVRIKToes.Value;
+        DesktopVRIK.Instance.Calibrator.Setting_FindUnmappedToes = m_entryFindUnmappedToes.Value;
     }
-
     private void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
+
+    private static void InitializeIntegrations()
+    {
+        //BTKUILib Misc Tab
+        if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
+        {
+            MelonLogger.Msg("Initializing BTKUILib support.");
+            //BTKUIAddon.Init();
+        }
+    }
 
     private void ApplyPatches(Type type)
     {
