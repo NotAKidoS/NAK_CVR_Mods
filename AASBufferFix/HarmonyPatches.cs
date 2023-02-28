@@ -13,7 +13,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(PuppetMaster), "Start")]
     private static void Postfix_PuppetMaster_Start(ref PuppetMaster __instance)
     {
-        AASBufferHelper externalBuffer = __instance.AddComponentIfMissing<AASBufferHelper>();
+        __instance.AddComponentIfMissing<AASBufferHelper>();
     }
 
     [HarmonyPostfix]
@@ -63,7 +63,6 @@ internal class HarmonyPatches
     private static bool Prefix_PlayerSetup_SendAdvancedAvatarSettings(ref PlayerSetup __instance)
     {
         //dont sync wrong settings to remote users
-        if (__instance.avatarIsLoading) return false;
-        return true;
+        return !__instance.avatarIsLoading;
     }
 }
