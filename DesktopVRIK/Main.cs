@@ -23,8 +23,7 @@ public class DesktopVRIKMod : MelonMod
     {
         m_categoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
         m_entryEnabled = m_categoryDesktopVRIK.CreateEntry<bool>("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
-        m_entryEnforceViewPosition = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce View Position", false, description: "Corrects view position to use VRIK offsets.");
-        m_entryResetIKOnLand = m_categoryDesktopVRIK.CreateEntry<bool>("Reset IK On Land", true, description: "Reset Solver IK when landing on the ground.");
+        //m_entryEnforceViewPosition = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce View Position", false, description: "Corrects view position to use VRIK offsets.");
         m_entryPlantFeet = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled. This prevents the little hover when you stop moving.");
         m_entryUseVRIKToes = m_categoryDesktopVRIK.CreateEntry<bool>("Use VRIK Toes", false, description: "Should VRIK use your humanoid toes for IK solving? This can cause your feet to idle behind you.");
         m_entryFindUnmappedToes = m_categoryDesktopVRIK.CreateEntry<bool>("Find Unmapped Toes", false, description: "Should DesktopVRIK look for unmapped toe bones if humanoid rig does not have any?");
@@ -50,12 +49,13 @@ public class DesktopVRIKMod : MelonMod
         if (!DesktopVRIK.Instance) return;
         // DesktopVRIK Settings
         DesktopVRIK.Instance.Setting_Enabled = m_entryEnabled.Value;
-        DesktopVRIK.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(m_entryBodyLeanWeight.Value);
-        DesktopVRIK.Instance.Setting_ResetOnLand = m_entryResetIKOnLand.Value;
         DesktopVRIK.Instance.Setting_PlantFeet = m_entryPlantFeet.Value;
+
+        DesktopVRIK.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(m_entryBodyLeanWeight.Value);
         DesktopVRIK.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(m_entryBodyHeadingLimit.Value, 0f, 90f);
         DesktopVRIK.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(m_entryPelvisHeadingWeight.Value));
         DesktopVRIK.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(m_entryChestHeadingWeight.Value));
+
         // Calibration Settings
         DesktopVRIK.Instance.Calibrator.Setting_UseVRIKToes = m_entryUseVRIKToes.Value;
         DesktopVRIK.Instance.Calibrator.Setting_FindUnmappedToes = m_entryFindUnmappedToes.Value;
@@ -68,7 +68,7 @@ public class DesktopVRIKMod : MelonMod
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
         {
             MelonLogger.Msg("Initializing BTKUILib support.");
-            //BTKUIAddon.Init();
+            BTKUIAddon.Init();
         }
     }
 

@@ -16,10 +16,7 @@ public class DesktopVRIK : MonoBehaviour
     // DesktopVRIK Settings
     public bool
         Setting_Enabled = true,
-        Setting_HipMovement = true,
-        Setting_ResetOnLand = true,
-        Setting_PlantFeet = true,
-        Setting_EnforceViewPosition;
+        Setting_PlantFeet = true;
     public float
         Setting_BodyLeanWeight,
         Setting_BodyHeadingLimit,
