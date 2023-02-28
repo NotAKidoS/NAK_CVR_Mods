@@ -30,7 +30,6 @@ public class DesktopVRIK : MonoBehaviour
     private float
         ik_SimulatedRootAngle;
     private bool
-        ms_lastGrounded,
         ps_emoteIsPlaying;
     static readonly FieldInfo ms_isGrounded = typeof(MovementSystem).GetField("_isGrounded", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -45,24 +44,29 @@ public class DesktopVRIK : MonoBehaviour
     {
         if (!Setting_Enabled) return;
         Calibrator.SetupDesktopVRIK();
-        ik_SimulatedRootAngle = transform.eulerAngles.y;
+        ResetDesktopVRIK();
     }
 
-    //public void OnReCalibrateAvatar()
-    //{
-    //    Calibrator.RecalibrateDesktopVRIK();
-    //    ik_SimulatedRootAngle = transform.eulerAngles.y;
-    //}
-
-    public bool OnApplyAvatarScaleToIk(float height)
+    public bool OnSetupIKScaling(float avatarHeight, float scaleDifference)
     {
         if (Calibrator.vrik != null)
         {
-            Calibrator.vrik.solver.locomotion.footDistance = Calibrator.initialFootDistance * height;
-            Calibrator.vrik.solver.locomotion.stepThreshold = Calibrator.initialStepThreshold * height;
+            Calibrator.vrik.solver.locomotion.footDistance = Calibrator.initialFootDistance * scaleDifference;
+            Calibrator.vrik.solver.locomotion.stepThreshold = Calibrator.initialStepThreshold * scaleDifference;
+            DesktopVRIK.ScaleStepHeight(Calibrator.vrik.solver.locomotion.stepHeight, Calibrator.initialStepHeight * scaleDifference);
+            Calibrator.vrik.solver.Reset();
+            ResetDesktopVRIK();
+
             return true;
         }
         return false;
+    }
+
+    public static void ScaleStepHeight(AnimationCurve stepHeightCurve, float mag)
+    {
+        Keyframe[] keyframes = stepHeightCurve.keys;
+        keyframes[1].value = mag;
+        stepHeightCurve.keys = keyframes;
     }
 
     public void OnPlayerSetupUpdate(bool isEmotePlaying)
@@ -79,12 +83,21 @@ public class DesktopVRIK : MonoBehaviour
             }
             BodySystem.TrackingEnabled = !isEmotePlaying;
             Calibrator.vrik.solver?.Reset();
+            ResetDesktopVRIK();
         }
+    }
+
+    public void ResetDesktopVRIK()
+    {
+        ik_SimulatedRootAngle = transform.eulerAngles.y;
     }
 
     public void OnPreSolverUpdate()
     {
-        if (ps_emoteIsPlaying) return;
+        if (ps_emoteIsPlaying) 
+        { 
+            return;
+        }
 
         bool isGrounded = (bool)ms_isGrounded.GetValue(MovementSystem.Instance);
 
@@ -102,16 +115,6 @@ public class DesktopVRIK : MonoBehaviour
 
         // This is nice for walk cycles
         //Calibrator.vrik.solver.spine.rotateChestByHands = Setting_RotateChestByHands * weight;
-
-        //reset solver if weight changes dramatically
-        if (Setting_ResetOnLand)
-        {
-            if (isGrounded && !ms_lastGrounded)
-            {
-                Calibrator.vrik.solver.Reset();
-            }
-            ms_lastGrounded = isGrounded;
-        }
 
         // Old VRChat hip movement emulation
         if (Setting_BodyLeanWeight > 0)

@@ -40,12 +40,12 @@ class PlayerSetupPatches
         DesktopVRIK.Instance?.OnPlayerSetupUpdate(____emotePlaying);
     }
 
-    //[HarmonyPostfix]
-    //[HarmonyPatch(typeof(PlayerSetup), "ReCalibrateAvatar")]
-    //static void Postfix_PlayerSetup_ReCalibrateAvatar()
-    //{
-    //    DesktopVRIK.Instance?.OnReCalibrateAvatar();
-    //}
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(PlayerSetup), "SetupIKScaling")]
+    private static bool Prefix_PlayerSetup_SetupIKScaling(float height, ref Vector3 ___scaleDifference)
+    {
+        return !(bool)DesktopVRIK.Instance?.OnSetupIKScaling(height, 1f + ___scaleDifference.y);
+    }
 }
 
 class IKSystemPatches
@@ -55,12 +55,5 @@ class IKSystemPatches
     private static void Postfix_IKSystem_Start(ref IKSystem __instance)
     {
         __instance.gameObject.AddComponent<DesktopVRIK>();
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(IKSystem), "ApplyAvatarScaleToIk")]
-    private static bool Prefix_IKSystem_ApplyAvatarScaleToIk(float height)
-    {
-        return !(bool)DesktopVRIK.Instance?.OnApplyAvatarScaleToIk(height);
     }
 }

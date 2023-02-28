@@ -30,45 +30,33 @@ public class DesktopVRIKCalibrator
         _lookIKTraverse = Traverse.Create(playerSetup).Field("lookIK");
     }
 
-    //Settings
+    // Settings
     public bool Setting_UseVRIKToes = true;
     public bool Setting_FindUnmappedToes = true;
 
-    //DesktopVRIK
+    // DesktopVRIK
     public CVRAvatar avatar;
     public Animator animator;
     public Transform avatarTransform;
     public VRIK vrik;
     public LookAtIK lookAtIK;
+    // Calibration
     public HumanPoseHandler humanPoseHandler;
     public HumanPose initialHumanPose;
+    // Calibrator
     public bool fixTransformsRequired;
-    public float initialFootDistance;
-    public float initialStepThreshold;
+    public float initialFootDistance, initialStepThreshold, initialStepHeight;
 
-    //Traverse
+    // Traverse
     private IKSystem ikSystem;
     private PlayerSetup playerSetup;
-    private Traverse _vrikTraverse;
-    private Traverse _lookIKTraverse;
-    private Traverse _avatarTraverse;
-    private Traverse _animatorManagerTraverse;
-    private Traverse _poseHandlerTraverse;
-    private Traverse _avatarRootHeightTraverse;
-
-    //public void RecalibrateDesktopVRIK()
-    //{
-    //    if (avatar != null)
-    //    {
-    //        //calibrate VRIK
-    //        CalibrateDesktopVRIK();
-    //    }
-    //    else
-    //    {
-    //        //we never calibrated
-    //        SetupDesktopVRIK();
-    //    }
-    //}
+    private Traverse 
+        _vrikTraverse, 
+        _lookIKTraverse, 
+        _avatarTraverse, 
+        _animatorManagerTraverse, 
+        _poseHandlerTraverse, 
+        _avatarRootHeightTraverse;
 
     public void SetupDesktopVRIK()
     {
@@ -92,9 +80,9 @@ public class DesktopVRIKCalibrator
         //calibrate VRIK
         PrepareAvatarVRIK();
         SetAvatarIKPose(true);
-        CalculateInitialIKScaling();
         CalibrateHeadIK();
         ForceInitiateVRIKSolver();
+        CalculateInitialIKScaling();
         SetAvatarIKPose(false);
     }
 
@@ -220,17 +208,18 @@ public class DesktopVRIKCalibrator
 
     private void CalculateInitialIKScaling()
     {
-        // Get distance between feets and thighs (fixes some weird armatures)
+        // Get distance between feets and thighs
         float footDistance = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.rightFoot.position);
-        float thighDistance = Vector3.Distance(vrik.references.leftThigh.position, vrik.references.rightThigh.position);
-        float greatestDistance = Mathf.Min(footDistance, thighDistance);
-        initialFootDistance = greatestDistance * 0.5f;
-        initialStepThreshold = greatestDistance * 0.4f;
+        initialFootDistance = footDistance * 0.5f;
+        initialStepThreshold = footDistance * 0.4f;
+        initialStepHeight = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.leftCalf.position) * 0.2f;
 
-        //set initial values now, as avatars without scaling dont apply it
+        // Set initial values
         vrik.solver.locomotion.footDistance = initialFootDistance;
         vrik.solver.locomotion.stepThreshold = initialStepThreshold;
+        DesktopVRIK.ScaleStepHeight(vrik.solver.locomotion.stepHeight, initialStepHeight);
     }
+
 
     private void CalibrateHeadIK()
     {
@@ -262,17 +251,22 @@ public class DesktopVRIKCalibrator
         if (enforceTPose)
         {
             humanPoseHandler.GetHumanPose(ref initialHumanPose);
-            humanPoseHandler.GetHumanPose(ref ikSystem.humanPose);
-            for (int i = 0; i < IKPoseMuscles.Length; i++)
-            {
-                IKSystem.Instance.ApplyMuscleValue((MuscleIndex)i, IKPoseMuscles[i], ref ikSystem.humanPose.muscles);
-            }
-            humanPoseHandler.SetHumanPose(ref ikSystem.humanPose);
+            SetCustomPose(IKPoseMuscles);
         }
         else
         {
             humanPoseHandler.SetHumanPose(ref initialHumanPose);
         }
+    }
+
+    private void SetCustomPose(float[] muscleValues)
+    {
+        humanPoseHandler.GetHumanPose(ref ikSystem.humanPose);
+        for (int i = 0; i < muscleValues.Length; i++)
+        {
+            IKSystem.Instance.ApplyMuscleValue((MuscleIndex)i, muscleValues[i], ref ikSystem.humanPose.muscles);
+        }
+        humanPoseHandler.SetHumanPose(ref ikSystem.humanPose);
     }
 
     private void ForceInitiateVRIKSolver()
@@ -286,17 +280,8 @@ public class DesktopVRIKCalibrator
     {
         fixTransformsRequired = false;
 
-        Transform leftShoulderBone = vrik.references.leftShoulder;
-        Transform rightShoulderBone = vrik.references.rightShoulder;
-        Transform assumedChest = leftShoulderBone?.parent;
-
-        // Repair chest & spine bone references (valve models were messed up)
-        if (assumedChest != null && rightShoulderBone.parent == assumedChest &&
-            vrik.references.chest != assumedChest)
-        {
-            vrik.references.chest = assumedChest;
-            vrik.references.spine = assumedChest.parent;
-        }
+        //might not work over netik
+        FixChestAndSpineReferences();
 
         if (!Setting_UseVRIKToes)
         {
@@ -305,32 +290,44 @@ public class DesktopVRIKCalibrator
         }
         else if (Setting_FindUnmappedToes)
         {
-            Transform leftToes = vrik.references.leftToes;
-            Transform rightToes = vrik.references.rightToes;
-            if (leftToes == null && rightToes == null)
-            {
-                leftToes = FindUnmappedToe(vrik.references.leftFoot);
-                rightToes = FindUnmappedToe(vrik.references.rightFoot);
-                if (leftToes != null && rightToes != null)
-                {
-                    fixTransformsRequired = true;
-                    vrik.references.leftToes = leftToes;
-                    vrik.references.rightToes = rightToes;
-                }
-            }
+            //doesnt work with netik, but its toes...
+            FindAndSetUnmappedToes();
         }
 
-        // Fix error when there is no finger bones
-        // Making up bullshit cause VRIK is evil otherwise
-        if (vrik.references.leftHand.childCount == 0)
+        //bullshit fix to not cause death
+        FixFingerBonesError();
+    }
+
+    private void FixChestAndSpineReferences()
+    {
+        Transform leftShoulderBone = vrik.references.leftShoulder;
+        Transform rightShoulderBone = vrik.references.rightShoulder;
+        Transform assumedChest = leftShoulderBone?.parent;
+
+        if (assumedChest != null && rightShoulderBone.parent == assumedChest &&
+            vrik.references.chest != assumedChest)
         {
-            vrik.solver.leftArm.wristToPalmAxis = Vector3.up;
-            vrik.solver.leftArm.palmToThumbAxis = -Vector3.forward;
+            vrik.references.chest = assumedChest;
+            vrik.references.spine = assumedChest.parent;
         }
-        if (vrik.references.rightHand.childCount == 0)
+    }
+
+    private void FindAndSetUnmappedToes()
+    {
+        Transform leftToes = vrik.references.leftToes;
+        Transform rightToes = vrik.references.rightToes;
+
+        if (leftToes == null && rightToes == null)
         {
-            vrik.solver.rightArm.wristToPalmAxis = Vector3.up;
-            vrik.solver.rightArm.palmToThumbAxis = Vector3.forward;
+            leftToes = FindUnmappedToe(vrik.references.leftFoot);
+            rightToes = FindUnmappedToe(vrik.references.rightFoot);
+
+            if (leftToes != null && rightToes != null)
+            {
+                vrik.references.leftToes = leftToes;
+                vrik.references.rightToes = rightToes;
+                fixTransformsRequired = true;
+            }
         }
     }
 
@@ -346,6 +343,21 @@ public class DesktopVRIKCalibrator
         }
 
         return null;
+    }
+
+    private void FixFingerBonesError()
+    {
+        FixFingerBones(vrik.references.leftHand, vrik.solver.leftArm);
+        FixFingerBones(vrik.references.rightHand, vrik.solver.rightArm);
+    }
+
+    private void FixFingerBones(Transform hand, IKSolverVR.Arm armSolver)
+    {
+        if (hand.childCount == 0)
+        {
+            armSolver.wristToPalmAxis = Vector3.up;
+            armSolver.palmToThumbAxis = hand == vrik.references.leftHand ? -Vector3.forward : Vector3.forward;
+        }
     }
 
     private static readonly float[] IKPoseMuscles = new float[]
