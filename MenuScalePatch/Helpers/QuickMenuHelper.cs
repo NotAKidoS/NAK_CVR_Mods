@@ -36,7 +36,7 @@ public class QuickMenuHelper : MonoBehaviour
                 UpdateMenuPosition();
             if (NeedsPositionUpdate)
                 UpdateMenuPosition();
-        }   
+        }
     }
 
     public void CreateWorldAnchors()

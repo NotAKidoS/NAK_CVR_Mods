@@ -1,10 +1,9 @@
-﻿using ABI_RC.Core.InteractionSystem;
+﻿using ABI_RC.Core;
+using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using HarmonyLib;
 using NAK.Melons.MenuScalePatch.Helpers;
-using System.Reflection;
-using System.Reflection.Emit;
 using UnityEngine;
 
 namespace NAK.Melons.MenuScalePatch.HarmonyPatches;
@@ -12,11 +11,6 @@ namespace NAK.Melons.MenuScalePatch.HarmonyPatches;
 /**
     ViewManager.SetScale runs once a second when it should only run when aspect ratio changes- CVR bug
     assuming its caused by cast from int to float getting the screen size, something floating point bleh
-    
-    ViewManager.UpdatePosition & CVR_MenuManager.UpdatePosition are called every second in a scheduled job.
-    (its why ViewManager.SetScale is called, because MM uses aspect ratio in scale calculation)
-
-    I nuke those methods. Fuck them. I cannot disable the jobs though...
 **/
 
 [HarmonyPatch]
@@ -68,7 +62,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(CVR_MenuManager), "UpdateMenuPosition")]
     private static bool Prefix_CVR_MenuManager_UpdateMenuPosition()
     {
-        return false;
+        return !QuickMenuHelper.Instance.MenuIsOpen;
     }
 
     [HarmonyPrefix]
@@ -79,7 +73,7 @@ internal class HarmonyPatches
         float ratio = (float)Screen.width / (float)Screen.height;
         float clamp = Mathf.Clamp(ratio, 0f, 1.8f);
         MSP_MenuInfo.AspectRatio = 1.7777779f / clamp;
-        return false;
+        return !MainMenuHelper.Instance.MenuIsOpen;
     }
 
     //Set QM stuff
@@ -179,8 +173,8 @@ internal class HarmonyPatches
 
     //Support for changing VRMode during runtime.
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), "CalibrateAvatar")]
-    private static void Postfix_PlayerSetup_CalibrateAvatar()
+    [HarmonyPatch(typeof(CVRTools), "ConfigureHudAffinity")]
+    private static void Postfix_CVRTools_ConfigureHudAffinity()
     {
         try
         {

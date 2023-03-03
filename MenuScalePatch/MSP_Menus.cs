@@ -20,13 +20,13 @@ public class MSP_MenuInfo
     internal static bool UseIndependentHeadTurn = true;
     internal static bool PlayerAnchorMenus = true;
 
-    //if other mods need to disable?
-    internal static bool DisableQMHelper;
-    internal static bool DisableQMHelper_VR;
-    internal static bool DisableMMHelper;
-    internal static bool DisableMMHelper_VR;
+    //Debug/Integration
+    public static bool DisableQMHelper;
+    public static bool DisableQMHelper_VR;
+    public static bool DisableMMHelper;
+    public static bool DisableMMHelper_VR;
 
-    //reflection (traverse sucks ass)
+    //reflection
     internal static readonly FieldInfo _desktopMouseModeQM = typeof(ViewManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
     internal static readonly FieldInfo _desktopMouseModeMM = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
     internal static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
