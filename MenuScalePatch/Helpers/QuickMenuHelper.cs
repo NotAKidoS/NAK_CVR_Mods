@@ -28,14 +28,16 @@ public class QuickMenuHelper : MonoBehaviour
 
     void LateUpdate()
     {
-        if (MenuIsOpen)
+        if (!MenuIsOpen) return;
+
+        if (MSP_MenuInfo.PlayerAnchorMenus || NeedsPositionUpdate || MetaPort.Instance.isUsingVr)
         {
-            if (MSP_MenuInfo.UseIndependentHeadTurn)
-                MSP_MenuInfo.HandleIndependentLookInput();
-            if (MSP_MenuInfo.PlayerAnchorMenus || MetaPort.Instance.isUsingVr)
-                UpdateMenuPosition();
-            if (NeedsPositionUpdate)
-                UpdateMenuPosition();
+            UpdateMenuPosition();
+        }
+
+        if (MSP_MenuInfo.UseIndependentHeadTurn)
+        {
+            MSP_MenuInfo.HandleIndependentLookInput();
         }
     }
 
@@ -51,7 +53,8 @@ public class QuickMenuHelper : MonoBehaviour
     public void UpdateWorldAnchors(bool updateMenuPos = false)
     {
         if (worldAnchor == null || MSP_MenuInfo.CameraTransform == null) return;
-        worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
+
+        worldAnchor.rotation = MSP_MenuInfo.CameraTransform.rotation;
         worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
         if (updateMenuPos) UpdateMenuPosition();
     }
@@ -74,7 +77,7 @@ public class QuickMenuHelper : MonoBehaviour
 
         Transform activeAnchor = MSP_MenuInfo.independentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
         transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
-        transform.eulerAngles = activeAnchor.eulerAngles;
+        transform.rotation = activeAnchor.rotation;
         transform.position = activeAnchor.position + activeAnchor.transform.forward * 1f * MSP_MenuInfo.ScaleFactor;
     }
 
@@ -86,8 +89,8 @@ public class QuickMenuHelper : MonoBehaviour
         if (MSP_MenuInfo.WorldAnchorQM)
         {
             transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
-            transform.eulerAngles = worldAnchor.eulerAngles;
             transform.position = worldAnchor.position + worldAnchor.transform.forward * 1f * MSP_MenuInfo.ScaleFactor;
+            transform.rotation = worldAnchor.rotation;
             return;
         }
         transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);

@@ -62,6 +62,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(CVR_MenuManager), "UpdateMenuPosition")]
     private static bool Prefix_CVR_MenuManager_UpdateMenuPosition()
     {
+        if (QuickMenuHelper.Instance == null) return true;
         return !QuickMenuHelper.Instance.MenuIsOpen;
     }
 
@@ -69,6 +70,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(ViewManager), "UpdateMenuPosition")]
     private static bool Prefix_ViewManager_UpdateMenuPosition(ref float ___cachedScreenAspectRatio)
     {
+        if (MainMenuHelper.Instance == null) return true;
         //this is called once a second, so ill fix their dumb aspect ratio shit
         float ratio = (float)Screen.width / (float)Screen.height;
         float clamp = Mathf.Clamp(ratio, 0f, 1.8f);

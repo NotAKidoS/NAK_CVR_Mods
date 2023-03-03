@@ -30,14 +30,16 @@ public class MainMenuHelper : MonoBehaviour
 
     void LateUpdate()
     {
-        if (MenuIsOpen)
+        if (!MenuIsOpen) return;
+        
+        if (MSP_MenuInfo.PlayerAnchorMenus || NeedsPositionUpdate)
         {
-            if (MSP_MenuInfo.UseIndependentHeadTurn)
-                MSP_MenuInfo.HandleIndependentLookInput();
-            if (MSP_MenuInfo.PlayerAnchorMenus)
-                UpdateMenuPosition();
-            if (NeedsPositionUpdate)
-                UpdateMenuPosition();
+            UpdateMenuPosition();
+        }
+
+        if (MSP_MenuInfo.UseIndependentHeadTurn)
+        {
+            MSP_MenuInfo.HandleIndependentLookInput();
         }
     }
 
@@ -64,13 +66,13 @@ public class MainMenuHelper : MonoBehaviour
             }
             else
             {
-                worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
+                worldAnchor.rotation = MSP_MenuInfo.CameraTransform.rotation;
             }
             worldAnchor.position = MSP_MenuInfo.CameraTransform.position + MSP_MenuInfo.CameraTransform.forward * 2f * MSP_MenuInfo.ScaleFactor;
         }
         else
         {
-            worldAnchor.eulerAngles = MSP_MenuInfo.CameraTransform.eulerAngles;
+            worldAnchor.rotation = MSP_MenuInfo.CameraTransform.rotation;
             worldAnchor.position = MSP_MenuInfo.CameraTransform.position;
         }
         if (updateMenuPos) UpdateMenuPosition();
@@ -93,8 +95,8 @@ public class MainMenuHelper : MonoBehaviour
         if (MSP_MenuInfo.CameraTransform == null || MSP_MenuInfo.DisableMMHelper) return;
         Transform activeAnchor = MSP_MenuInfo.independentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
         transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor, 0.9f * MSP_MenuInfo.ScaleFactor, 1f);
-        transform.eulerAngles = activeAnchor.eulerAngles;
         transform.position = activeAnchor.position + activeAnchor.forward * 1f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.AspectRatio;
+        transform.rotation = activeAnchor.rotation;
     }
 
     //VR Main Menu
@@ -103,6 +105,6 @@ public class MainMenuHelper : MonoBehaviour
         if (worldAnchor == null || MSP_MenuInfo.DisableMMHelper_VR) return;
         transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor * 1.8f, 0.9f * MSP_MenuInfo.ScaleFactor * 1.8f, 1f);
         transform.position = worldAnchor.position;
-        transform.eulerAngles = worldAnchor.eulerAngles;
+        transform.rotation = worldAnchor.rotation;
     }
 }

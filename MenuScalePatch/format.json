@@ -1,7 +1,7 @@
 {
   "_id": 95,
   "name": "MenuScalePatch",
-  "modversion": "4.2.2",
+  "modversion": "4.2.5",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v4.2.2/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v4.2.4/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "- Fixed hitching & potential crash when opening menu after a long time of it being closed. Don't disable CohtmlView, only enable it.",
+  "changelog": "- Tweaked independent head turn implementation. Menu will now recenter after head has returned to target angle.",
   "embedcolor": "804221"
 }

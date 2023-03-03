@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
-using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.MovementSystem;
 using System.Reflection;
@@ -31,7 +30,7 @@ public class MSP_MenuInfo
     internal static readonly FieldInfo _desktopMouseModeMM = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
     internal static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
 
-    internal static bool independentHeadTurn = false;
+    internal static bool isIndependentHeadTurn = false;
 
     internal static void ToggleDesktopInputMethod(bool flag)
     {
@@ -42,7 +41,6 @@ public class MSP_MenuInfo
 
         RootLogic.Instance.ToggleMouse(flag);
         CVRInputManager.Instance.inputEnabled = !flag;
-        PlayerSetup.Instance._movementSystem.disableCameraControl = flag;
         CVR_MenuManager.Instance.desktopControllerRay.enabled = !flag;
     }
 
@@ -50,20 +48,22 @@ public class MSP_MenuInfo
     {
         //angle of independent look axis
         bool isPressed = CVRInputManager.Instance.independentHeadTurn || CVRInputManager.Instance.independentHeadToggle;
-        if (isPressed && !independentHeadTurn)
+        if (isPressed && !isIndependentHeadTurn)
         {
-            independentHeadTurn = true;
+            isIndependentHeadTurn = true;
             MSP_MenuInfo.ToggleDesktopInputMethod(false);
             QuickMenuHelper.Instance.UpdateWorldAnchors();
             MainMenuHelper.Instance.UpdateWorldAnchors();
         }
-        else if (!isPressed && independentHeadTurn)
+        else if (!isPressed && isIndependentHeadTurn)
         {
             float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
             if (angle == 0f)
             {
-                independentHeadTurn = false;
+                isIndependentHeadTurn = false;
                 MSP_MenuInfo.ToggleDesktopInputMethod(true);
+                QuickMenuHelper.Instance.NeedsPositionUpdate = true;
+                MainMenuHelper.Instance.NeedsPositionUpdate = true;
             }
         }
     }
