@@ -47,7 +47,7 @@ public class MainMenuHelper : MonoBehaviour
     {
         //VR specific anchor
         GameObject vrAnchor = new GameObject("MSP_MMVR_Anchor");
-        vrAnchor.transform.parent = PlayerSetup.Instance.vrCameraRig.transform;
+        vrAnchor.transform.parent = PlayerSetup.Instance.transform;
         vrAnchor.transform.localPosition = Vector3.zero;
         worldAnchor = vrAnchor.transform;
     }
@@ -93,6 +93,7 @@ public class MainMenuHelper : MonoBehaviour
     public void HandleDesktopPosition()
     {
         if (MSP_MenuInfo.CameraTransform == null || MSP_MenuInfo.DisableMMHelper) return;
+
         Transform activeAnchor = MSP_MenuInfo.isIndependentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
         transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor, 0.9f * MSP_MenuInfo.ScaleFactor, 1f);
         transform.position = activeAnchor.position + activeAnchor.forward * 1f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.AspectRatio;
@@ -103,6 +104,7 @@ public class MainMenuHelper : MonoBehaviour
     public void HandleVRPosition()
     {
         if (worldAnchor == null || MSP_MenuInfo.DisableMMHelper_VR) return;
+
         transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor * 1.8f, 0.9f * MSP_MenuInfo.ScaleFactor * 1.8f, 1f);
         transform.position = worldAnchor.position;
         transform.rotation = worldAnchor.rotation;
