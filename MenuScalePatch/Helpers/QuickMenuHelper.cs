@@ -37,7 +37,7 @@ public class QuickMenuHelper : MonoBehaviour
 
         if (MSP_MenuInfo.UseIndependentHeadTurn)
         {
-            MSP_MenuInfo.HandleIndependentLookInput();
+            MSP_MenuInfo.HandleIndependentHeadTurnInput();
         }
     }
 

@@ -46,7 +46,7 @@ public class MSP_MenuInfo
         CVR_MenuManager.Instance.desktopControllerRay.enabled = !flag;
     }
 
-    internal static void HandleIndependentLookInput()
+    internal static void HandleIndependentHeadTurnInput()
     {
         //angle of independent look axis
         bool isPressed = CVRInputManager.Instance.independentHeadTurn || CVRInputManager.Instance.independentHeadToggle;

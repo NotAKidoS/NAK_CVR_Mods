@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v4.2.4/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v4.2.5/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
-  "changelog": "- Tweaked independent head turn implementation. Menu will now recenter after head has returned to target angle.",
+  "changelog": "- Fixed hitching & potential crash when opening menu after a long time of it being closed. Don't disable CohtmlView, only enable it.\n- Let game update menu position while its closed.\n- Tweaked independent head turn handling to ensure menu is correctly positioned on recenter if PlayerAnchorMenus is disabled.",
   "embedcolor": "804221"
 }

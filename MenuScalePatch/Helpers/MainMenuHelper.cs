@@ -31,7 +31,7 @@ public class MainMenuHelper : MonoBehaviour
     void LateUpdate()
     {
         if (!MenuIsOpen) return;
-        
+
         if (MSP_MenuInfo.PlayerAnchorMenus || NeedsPositionUpdate)
         {
             UpdateMenuPosition();
@@ -39,7 +39,7 @@ public class MainMenuHelper : MonoBehaviour
 
         if (MSP_MenuInfo.UseIndependentHeadTurn)
         {
-            MSP_MenuInfo.HandleIndependentLookInput();
+            MSP_MenuInfo.HandleIndependentHeadTurnInput();
         }
     }
 
