@@ -28,7 +28,9 @@ public class MSP_MenuInfo
     //reflection
     internal static readonly FieldInfo _desktopMouseModeQM = typeof(ViewManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
     internal static readonly FieldInfo _desktopMouseModeMM = typeof(CVR_MenuManager).GetField("_desktopMouseMode", BindingFlags.NonPublic | BindingFlags.Instance);
+    internal static readonly FieldInfo ms_followAngleX = typeof(MovementSystem).GetField("_followAngleX", BindingFlags.NonPublic | BindingFlags.Instance);
     internal static readonly FieldInfo ms_followAngleY = typeof(MovementSystem).GetField("_followAngleY", BindingFlags.NonPublic | BindingFlags.Instance);
+    internal static readonly FieldInfo ms_manualAngleX = typeof(MovementSystem).GetField("_manualAngleX", BindingFlags.NonPublic | BindingFlags.Instance);
 
     internal static bool isIndependentHeadTurn = false;
 
@@ -57,8 +59,10 @@ public class MSP_MenuInfo
         }
         else if (!isPressed && isIndependentHeadTurn)
         {
-            float angle = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
-            if (angle == 0f)
+            float angleX = (float)ms_followAngleX.GetValue(MovementSystem.Instance);
+            float angleY = (float)ms_followAngleY.GetValue(MovementSystem.Instance);
+            float manualAngleX = (float)ms_manualAngleX.GetValue(MovementSystem.Instance);
+            if (angleY == 0f && angleX == manualAngleX)
             {
                 isIndependentHeadTurn = false;
                 MSP_MenuInfo.ToggleDesktopInputMethod(true);
