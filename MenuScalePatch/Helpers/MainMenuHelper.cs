@@ -47,7 +47,7 @@ public class MainMenuHelper : MonoBehaviour
     {
         //VR specific anchor
         GameObject vrAnchor = new GameObject("MSP_MMVR_Anchor");
-        vrAnchor.transform.parent = PlayerSetup.Instance.transform;
+        vrAnchor.transform.parent = PlayerSetup.Instance.vrCameraRig.transform;
         vrAnchor.transform.localPosition = Vector3.zero;
         worldAnchor = vrAnchor.transform;
     }
