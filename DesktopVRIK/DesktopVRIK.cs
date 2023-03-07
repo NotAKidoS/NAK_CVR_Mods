@@ -1,169 +1,145 @@
-﻿using ABI.CCK.Components;
-using ABI_RC.Core.Player;
-using ABI_RC.Systems.IK;
+﻿using ABI_RC.Core.Player;
 using ABI_RC.Systems.IK.SubSystems;
 using ABI_RC.Systems.MovementSystem;
 using RootMotion.FinalIK;
+using System.Reflection;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace NAK.Melons.DesktopVRIK;
 
 public class DesktopVRIK : MonoBehaviour
 {
     public static DesktopVRIK Instance;
+    public DesktopVRIKCalibrator Calibrator;
 
-    public static bool
-        Setting_Enabled,
-        Setting_EnforceViewPosition,
-        Setting_EmoteVRIK,
-        Setting_EmoteLookAtIK;
+    // DesktopVRIK Settings
+    public bool
+        Setting_Enabled = true,
+        Setting_PlantFeet = true;
+    public float
+        Setting_BodyLeanWeight,
+        Setting_BodyHeadingLimit,
+        Setting_PelvisHeadingWeight,
+        Setting_ChestHeadingWeight;
 
-    public static float
-        Setting_BodyLeanWeight = 0.5f,
-        Setting_BodyAngleLimit = 0f;
-
-    public Transform viewpoint;
-    public Vector3 eyeOffset;
+    // Internal Stuff
+    bool ps_emoteIsPlaying;
+    float ik_SimulatedRootAngle;
+    Transform desktopCameraTransform;
+    static readonly FieldInfo ms_isGrounded = typeof(MovementSystem).GetField("_isGrounded", BindingFlags.NonPublic | BindingFlags.Instance);
+    bool forceSteps;
+    bool forceStepsNow;
 
     void Start()
     {
+        desktopCameraTransform = PlayerSetup.Instance.desktopCamera.transform;
+        Calibrator = new DesktopVRIKCalibrator();
         Instance = this;
+        DesktopVRIKMod.UpdateAllSettings();
     }
 
-    public void ChangeViewpointHandling(bool enabled)
+    public void OnSetupAvatarDesktop()
     {
-        if (Setting_EnforceViewPosition == enabled) return;
-        Setting_EnforceViewPosition = enabled;
-        if (enabled)
-        {
-            PlayerSetup.Instance.desktopCamera.transform.localPosition = Vector3.zero;
-            return;
-        }
-        PlayerSetup.Instance.desktopCamera.transform.localPosition = eyeOffset;
+        if (!Setting_Enabled) return;
+        Calibrator.CalibrateDesktopVRIK();
+        ResetDesktopVRIK();
     }
 
-    public void AlternativeOnPreSolverUpdate()
+    public bool OnSetupIKScaling(float scaleDifference)
     {
-        //this order matters, rotation offset will be choppy if avatar is not cenetered first
+        if (Calibrator.vrik == null) return false;
 
-        DesktopVRIK_Helper.Instance?.OnUpdateVRIK();
+        VRIKUtils.ApplyScaleToVRIK
+        (
+            Calibrator.vrik,
+            Calibrator.initialFootDistance,
+            Calibrator.initialStepThreshold,
+            Calibrator.initialStepHeight,
+            scaleDifference
+        );
 
-        //Reset avatar offset (VRIK will literally make you walk away from root otherwise)
-        IKSystem.vrik.transform.localPosition = Vector3.zero;
-        IKSystem.vrik.transform.localRotation = Quaternion.identity;
-
-        IKSystem.vrik.solver.plantFeet = true;
+        ResetDesktopVRIK();
+        return true;
     }
 
-    public Animator animator;
-
-    public VRIK AlternativeCalibration(CVRAvatar avatar)
+    public void OnPlayerSetupUpdate(bool isEmotePlaying)
     {
-        animator = avatar.GetComponent<Animator>();
-        Transform avatarHeadBone = animator.GetBoneTransform(HumanBodyBones.Head);
+        bool changed = isEmotePlaying != ps_emoteIsPlaying;
+        if (!changed) return;
 
-        //Stuff to make bad armatures work (Fuck you Default Robot Kyle)
-        avatar.transform.localPosition = Vector3.zero;
+        ps_emoteIsPlaying = isEmotePlaying;
 
-        //ikpose layer (specified by avatar author)
-        int ikposeLayerIndex = animator.GetLayerIndex("IKPose");
-        int locoLayerIndex = animator.GetLayerIndex("Locomotion/Emotes");
-        if (ikposeLayerIndex != -1)
+        Calibrator.avatarTransform.localPosition = Vector3.zero;
+        Calibrator.avatarTransform.localRotation = Quaternion.identity;
+
+        if (Calibrator.lookAtIK != null)
+            Calibrator.lookAtIK.enabled = !isEmotePlaying;
+
+        BodySystem.TrackingEnabled = !isEmotePlaying;
+
+        Calibrator.vrik.solver?.Reset();
+        ResetDesktopVRIK();
+    }
+
+
+    public void ResetDesktopVRIK()
+    {
+        ik_SimulatedRootAngle = transform.eulerAngles.y;
+    }
+
+    public void OnPreSolverUpdate()
+    {
+        if (ps_emoteIsPlaying) return;
+
+        var movementSystem = MovementSystem.Instance;
+        var vrikSolver = Calibrator.vrik.solver;
+        var avatarTransform = Calibrator.avatarTransform;
+
+        bool isGrounded = (bool)ms_isGrounded.GetValue(movementSystem);
+
+        // Calculate weight
+        float weight = vrikSolver.IKPositionWeight;
+        weight *= 1f - movementSystem.movementVector.magnitude;
+        weight *= isGrounded ? 1f : 0f;
+
+        // Reset avatar offset
+        avatarTransform.localPosition = Vector3.zero;
+        avatarTransform.localRotation = Quaternion.identity;
+
+        // Set plant feet
+        vrikSolver.plantFeet = Setting_PlantFeet;
+
+        // Emulate old VRChat hip movement
+        if (Setting_BodyLeanWeight > 0)
         {
-            animator.SetLayerWeight(ikposeLayerIndex, 1f);
-            if (locoLayerIndex != -1)
-            {
-                animator.SetLayerWeight(locoLayerIndex, 0f);
-            }
-            animator.Update(0f);
+            float weightedAngle = Setting_BodyLeanWeight * weight;
+            float angle = desktopCameraTransform.localEulerAngles.x;
+            angle = angle > 180 ? angle - 360 : angle;
+            Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, avatarTransform.right);
+            vrikSolver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
         }
 
-        VRIK vrik = avatar.gameObject.AddComponent<VRIK>();
-        vrik.AutoDetectReferences();
-
-        //fuck toes
-        vrik.references.leftToes = null;
-        vrik.references.rightToes = null;
-
-        vrik.fixTransforms = true;
-        vrik.solver.plantFeet = false;
-        vrik.solver.locomotion.angleThreshold = 30f;
-        vrik.solver.locomotion.maxLegStretch = 0.75f;
-        vrik.solver.spine.minHeadHeight = -100f;
-
-        vrik.solver.spine.bodyRotStiffness = 0.15f;
-        vrik.solver.spine.headClampWeight = 1f;
-        vrik.solver.spine.maintainPelvisPosition = 1f;
-        vrik.solver.spine.neckStiffness = 0f;
-
-        vrik.solver.locomotion.weight = 0f;
-        vrik.solver.spine.bodyPosStiffness = 0f;
-        vrik.solver.spine.positionWeight = 0f;
-        vrik.solver.spine.pelvisPositionWeight = 0f;
-        vrik.solver.leftArm.positionWeight = 0f;
-        vrik.solver.leftArm.rotationWeight = 0f;
-        vrik.solver.rightArm.positionWeight = 0f;
-        vrik.solver.rightArm.rotationWeight = 0f;
-        vrik.solver.leftLeg.positionWeight = 0f;
-        vrik.solver.leftLeg.rotationWeight = 0f;
-        vrik.solver.rightLeg.positionWeight = 0f;
-        vrik.solver.rightLeg.rotationWeight = 0f;
-        vrik.solver.IKPositionWeight = 0f;
-
-        BodySystem.TrackingLeftArmEnabled = false;
-        BodySystem.TrackingRightArmEnabled = false;
-        BodySystem.TrackingLeftLegEnabled = false;
-        BodySystem.TrackingRightLegEnabled = false;
-        BodySystem.TrackingPositionWeight = 0f;
-
-        //Custom funky AF head ik shit
-        foreach (Transform transform in DesktopVRIK_Helper.Instance.ik_HeadFollower)
+        // Make root heading follow within a set limit
+        if (Setting_BodyHeadingLimit > 0)
         {
-            if (transform.name == "Head IK Target")
+            float weightedAngleLimit = Setting_BodyHeadingLimit * weight;
+            float currentAngle = Mathf.DeltaAngle(transform.eulerAngles.y, ik_SimulatedRootAngle);
+            float angleMaxDelta = Mathf.Abs(currentAngle);
+            if (angleMaxDelta > weightedAngleLimit)
             {
-                Destroy(transform.gameObject);
+                currentAngle = Mathf.Sign(currentAngle) * weightedAngleLimit;
+                ik_SimulatedRootAngle = Mathf.MoveTowardsAngle(ik_SimulatedRootAngle, transform.eulerAngles.y, angleMaxDelta - weightedAngleLimit);
+            }
+            vrikSolver.spine.rootHeadingOffset = currentAngle;
+            if (Setting_PelvisHeadingWeight > 0)
+            {
+                vrikSolver.AddRotationOffset(IKSolverVR.RotationOffset.Pelvis, new Vector3(0f, currentAngle * Setting_PelvisHeadingWeight, 0f));
+                vrikSolver.AddRotationOffset(IKSolverVR.RotationOffset.Chest, new Vector3(0f, -currentAngle * Setting_PelvisHeadingWeight, 0f));
+            }
+            if (Setting_ChestHeadingWeight > 0)
+            {
+                vrikSolver.AddRotationOffset(IKSolverVR.RotationOffset.Chest, new Vector3(0f, currentAngle * Setting_ChestHeadingWeight, 0f));
             }
         }
-
-        DesktopVRIK_Helper.Instance.avatar_HeadBone = avatarHeadBone;
-        DesktopVRIK_Helper.Instance.ik_HeadFollower.position = avatarHeadBone.position;
-        DesktopVRIK_Helper.Instance.ik_HeadFollower.rotation = Quaternion.identity;
-        VRIKCalibrator.CalibrateHead(vrik, DesktopVRIK_Helper.Instance.ik_HeadFollower.transform, IKSystem.Instance.headAnchorPositionOffset, IKSystem.Instance.headAnchorRotationOffset);
-        DesktopVRIK_Helper.Instance.ik_HeadFollower.localRotation = Quaternion.identity;
-
-        //force immediate calibration before animator decides to fuck us
-        vrik.solver.SetToReferences(vrik.references);
-        vrik.solver.Initiate(vrik.transform);
-
-        if (ikposeLayerIndex != -1)
-        {
-            animator.SetLayerWeight(ikposeLayerIndex, 0f);
-            if (locoLayerIndex != -1)
-            {
-                animator.SetLayerWeight(locoLayerIndex, 1f);
-            }
-        }
-
-        //Find eyeoffset
-        eyeOffset = PlayerSetup.Instance.desktopCamera.transform.localPosition;
-        viewpoint = avatarHeadBone.Find("LocalHeadPoint");
-        ChangeViewpointHandling(Setting_EnforceViewPosition);
-
-        //reset ikpose layer
-        if (ikposeLayerIndex != -1)
-        {
-            animator.SetLayerWeight(ikposeLayerIndex, 0f);
-            if (locoLayerIndex != -1)
-            {
-                animator.SetLayerWeight(locoLayerIndex, 1f);
-            }
-        }
-
-        vrik?.onPreSolverUpdate.AddListener(new UnityAction(this.AlternativeOnPreSolverUpdate));
-
-        DesktopVRIK_Helper.Instance?.OnResetIK();
-
-        return vrik;
     }
 }

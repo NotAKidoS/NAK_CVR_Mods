@@ -1,7 +1,6 @@
-﻿using DesktopVRIK.Properties;
-using MelonLoader;
+﻿using MelonLoader;
+using NAK.Melons.DesktopVRIK.Properties;
 using System.Reflection;
-
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
@@ -24,9 +23,9 @@ using System.Reflection;
 [assembly: MelonOptionalDependencies("BTKUILib")]
 [assembly: HarmonyDontPatchAll]
 
-namespace DesktopVRIK.Properties;
+namespace NAK.Melons.DesktopVRIK.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "2.0.5";
+    public const string Version = "4.0.1";
     public const string Author = "NotAKidoS";
 }

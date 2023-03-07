@@ -1,23 +1,25 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "2.0.5",
+  "modversion": "4.0.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Adds VRIK to Desktop avatars. No longer will you be a liveless sliding statue~!\nAdds the small feet stepping when looking around on Desktop.\n\nAdditional option to emulate VRChat-like hip movement if you like being fish.",
+  "description": "Adds VRIK to Desktop avatars. No longer will you be a liveless sliding statue~!\nAdds the small feet stepping when looking around on Desktop.\n\nIt is highly recommended to use AvatarMotionTweaker alongside this mod.",
   "searchtags": [
     "desktop",
     "vrik",
     "ik",
-    "feet"
+    "feet",
+    "fish"
   ],
   "requirements": [
-    "BTKUILib"
+    "BTKUILib",
+    "AvatarMotionTweaker"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v2.0.5/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v4.0.1/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "- Tweaks to VRIK settings so BetterInteractDesktop & PickupArmMovement better behave alongside VRIK.\n- Tweaks to BTKUI integration.",
+  "changelog": "- Implemented fixes for terrible armatures that had broken knee bending, initial hip rotation, and initial step calculations.\n- Added pelvis & chest weight sliders for heading angle limit option.\n- Implemented bandaid fixes for disabled animator and avatars without fingers.\n- Added options to use or remove toes from VRIK and find unmapped non-humanoid toe bones.\n- Contact me if you find an avatar that is still broken.",
   "embedcolor": "9b59b6"
 }

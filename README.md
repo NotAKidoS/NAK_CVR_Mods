@@ -3,9 +3,16 @@ Adds VRIK to Desktop ChilloutVR avatars. No longer will you be a liveless slidin
 
 (adds the small feet stepping when looking around on Desktop)
 
-Additional option to emulate VRChat-like hip movement if you like becoming a fish.
+https://user-images.githubusercontent.com/37721153/221870123-fbe4f5e8-8d6e-4a43-aa5e-f2188e6491a9.mp4
 
-Control over disabling VRIK & LookAtIK during Emotes. (this can cause funky behavior)
+## Configuration:
+* Configurable body lean weight. Set to 0 to disable.
+
+* Configurable max root heading angle with chest/pelvis weight settings. Set to 0 to disable.
+
+* Options to disable VRIK from using mapped toes &/or find unmapped (non-human) toe bones.
+
+* Autofixes for avatars without fingers & incorrect chest/spine bone mapping (might not play well with netik).
 
 ## Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/desktop-feet-ik-for-avatars
@@ -22,4 +29,3 @@ https://documentation.abinteractive.net/official/legal/tos/#7-modding-our-games
 > Use of this mod is done so at the user's own risk and the creator cannot be held responsible for any issues arising from its use.
 
 > To the best of my knowledge, I have adhered to the Modding Guidelines established by Alpha Blend Interactive.
-
