@@ -344,7 +344,7 @@ public class DesktopVRIKCalibrator
         // Get distance between feets and thighs
         float footDistance = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.rightFoot.position);
         initialFootDistance = footDistance * 0.5f;
-        initialStepThreshold = footDistance * 0.4f;
+        initialStepThreshold = footDistance * 0.8f;
         initialStepHeight = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.leftCalf.position) * 0.2f;
     }
 
