@@ -1,11 +1,13 @@
-﻿using HarmonyLib;
-using RootMotion.FinalIK;
+﻿using RootMotion.FinalIK;
 using UnityEngine;
+using System.Reflection;
 
 namespace NAK.Melons.DesktopVRIK;
 
 public static class VRIKUtils
 {
+    static readonly FieldInfo vrik_bendNormalRelToPelvis = typeof(IKSolverVR.Leg).GetField("bendNormalRelToPelvis", BindingFlags.NonPublic | BindingFlags.Instance);
+    
     public static void ConfigureVRIKReferences(VRIK vrik, bool useVRIKToes, bool findUnmappedToes, out bool foundUnmappedToes)
     {
         foundUnmappedToes = false;
@@ -121,15 +123,12 @@ public static class VRIKUtils
         vrik.solver.leftLeg.bendToTargetWeight = 0f;
         vrik.solver.rightLeg.bendToTargetWeight = 0f;
 
-        var leftLeg_bendNormalRelToPelvisTraverse = Traverse.Create(vrik.solver.leftLeg).Field("bendNormalRelToPelvis");
-        var rightLeg_bendNormalRelToPelvisTraverse = Traverse.Create(vrik.solver.rightLeg).Field("bendNormalRelToPelvis");
-
         var pelvis_localRotationInverse = Quaternion.Inverse(vrik.references.pelvis.localRotation);
         var leftLeg_bendNormalRelToPelvis = pelvis_localRotationInverse * leftKneeNormal;
         var rightLeg_bendNormalRelToPelvis = pelvis_localRotationInverse * rightKneeNormal;
 
-        leftLeg_bendNormalRelToPelvisTraverse.SetValue(leftLeg_bendNormalRelToPelvis);
-        rightLeg_bendNormalRelToPelvisTraverse.SetValue(rightLeg_bendNormalRelToPelvis);
+        vrik_bendNormalRelToPelvis.SetValue(vrik.solver.leftLeg, leftLeg_bendNormalRelToPelvis);
+        vrik_bendNormalRelToPelvis.SetValue(vrik.solver.rightLeg, rightLeg_bendNormalRelToPelvis);
     }
 
     private static Vector3 GetNormalFromArray(Vector3[] positions)
