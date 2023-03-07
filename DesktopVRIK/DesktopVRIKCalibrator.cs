@@ -355,8 +355,7 @@ public class DesktopVRIKCalibrator
         vrik.solver.locomotion.stepThreshold = initialStepThreshold;
         DesktopVRIK.ScaleStepHeight(vrik.solver.locomotion.stepHeight, initialStepHeight);
     }
-
-
+    
     private void SetupDesktopHeadIKTarget()
     {
         // Lazy HeadIKTarget calibration

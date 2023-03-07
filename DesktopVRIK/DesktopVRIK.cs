@@ -24,14 +24,14 @@ public class DesktopVRIK : MonoBehaviour
         Setting_ChestHeadingWeight;
 
     // Internal Stuff
-    private float
-        ik_SimulatedRootAngle;
-    private bool
-        ps_emoteIsPlaying;
+    bool ps_emoteIsPlaying;
+    float ik_SimulatedRootAngle;
+    Transform desktopCameraTransform;
     static readonly FieldInfo ms_isGrounded = typeof(MovementSystem).GetField("_isGrounded", BindingFlags.NonPublic | BindingFlags.Instance);
 
     void Start()
     {
+        desktopCameraTransform = PlayerSetup.Instance.desktopCamera.transform;
         Calibrator = new DesktopVRIKCalibrator();
         Instance = this;
         DesktopVRIKMod.UpdateAllSettings();
@@ -72,8 +72,8 @@ public class DesktopVRIK : MonoBehaviour
         if (changed)
         {
             ps_emoteIsPlaying = isEmotePlaying;
-            Calibrator.vrik.transform.localPosition = Vector3.zero;
-            Calibrator.vrik.transform.localRotation = Quaternion.identity;
+            Calibrator.avatarTransform.localPosition = Vector3.zero;
+            Calibrator.avatarTransform.localRotation = Quaternion.identity;
             if (Calibrator.lookAtIK != null)
             {
                 Calibrator.lookAtIK.enabled = !isEmotePlaying;
@@ -104,22 +104,19 @@ public class DesktopVRIK : MonoBehaviour
         weight *= isGrounded ? 1f : 0f;
 
         // Reset avatar offset (VRIK will literally make you walk away from root otherwise)
-        Calibrator.vrik.transform.localPosition = Vector3.zero;
-        Calibrator.vrik.transform.localRotation = Quaternion.identity;
+        Calibrator.avatarTransform.localPosition = Vector3.zero;
+        Calibrator.avatarTransform.localRotation = Quaternion.identity;
 
         // Plant feet is nice for Desktop
         Calibrator.vrik.solver.plantFeet = Setting_PlantFeet;
-
-        // This is nice for walk cycles
-        //Calibrator.vrik.solver.spine.rotateChestByHands = Setting_RotateChestByHands * weight;
 
         // Old VRChat hip movement emulation
         if (Setting_BodyLeanWeight > 0)
         {
             float weightedAngle = Setting_BodyLeanWeight * weight;
-            float angle = PlayerSetup.Instance.desktopCamera.transform.localEulerAngles.x;
+            float angle = desktopCameraTransform.localEulerAngles.x;
             angle = (angle > 180) ? angle - 360 : angle;
-            Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, IKSystem.Instance.avatar.transform.right);
+            Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, Calibrator.avatarTransform.right);
             Calibrator.vrik.solver.AddRotationOffset(IKSolverVR.RotationOffset.Head, rotation);
         }
 
