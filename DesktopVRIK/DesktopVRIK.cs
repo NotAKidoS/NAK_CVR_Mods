@@ -27,8 +27,6 @@ public class DesktopVRIK : MonoBehaviour
     float ik_SimulatedRootAngle;
     Transform desktopCameraTransform;
     static readonly FieldInfo ms_isGrounded = typeof(MovementSystem).GetField("_isGrounded", BindingFlags.NonPublic | BindingFlags.Instance);
-    bool forceSteps;
-    bool forceStepsNow;
 
     void Start()
     {
