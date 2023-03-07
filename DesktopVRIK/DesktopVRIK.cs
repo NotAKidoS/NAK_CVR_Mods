@@ -40,7 +40,7 @@ public class DesktopVRIK : MonoBehaviour
     public void OnSetupAvatarDesktop()
     {
         if (!Setting_Enabled) return;
-        Calibrator.SetupDesktopVRIK();
+        Calibrator.CalibrateDesktopVRIK();
         ResetDesktopVRIK();
     }
 
@@ -51,7 +51,7 @@ public class DesktopVRIK : MonoBehaviour
             Calibrator.vrik.solver.locomotion.footDistance = Calibrator.initialFootDistance * scaleDifference;
             Calibrator.vrik.solver.locomotion.stepThreshold = Calibrator.initialStepThreshold * scaleDifference;
             DesktopVRIK.ScaleStepHeight(Calibrator.vrik.solver.locomotion.stepHeight, Calibrator.initialStepHeight * scaleDifference);
-            Calibrator.vrik.solver.Reset();
+            //Calibrator.vrik.solver.Reset();
             ResetDesktopVRIK();
 
             return true;
