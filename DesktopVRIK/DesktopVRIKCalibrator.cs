@@ -16,8 +16,6 @@ public class DesktopVRIKCalibrator
     // Settings
     public bool Setting_UseVRIKToes = true;
     public bool Setting_FindUnmappedToes = true;
-    public bool Setting_ExperimentalKneeBend = true;
-    public bool Setting_DebugCalibrationPose = false;
 
     // Avatar Component References
     public CVRAvatar avatar;
@@ -27,26 +25,26 @@ public class DesktopVRIKCalibrator
     public LookAtIK lookAtIK;
 
     // Calibrated Values
-    public float 
-        initialFootDistance, 
-        initialStepThreshold, 
+    public float
+        initialFootDistance,
+        initialStepThreshold,
         initialStepHeight;
 
     // Calibration Internals
-    bool DebugCalibrationPose;
     bool fixTransformsRequired;
     Vector3 leftKneeNormal, rightKneeNormal;
     HumanPose initialHumanPose;
     HumanPoseHandler humanPoseHandler;
+
     // Traverse
     IKSystem ikSystem;
     PlayerSetup playerSetup;
     Traverse
-        _vrikTraverse, 
-        _lookIKTraverse, 
-        _avatarTraverse, 
-        _animatorManagerTraverse, 
-        _poseHandlerTraverse, 
+        _vrikTraverse,
+        _lookIKTraverse,
+        _avatarTraverse,
+        _animatorManagerTraverse,
+        _poseHandlerTraverse,
         _avatarRootHeightTraverse;
 
     public DesktopVRIKCalibrator()
@@ -68,15 +66,10 @@ public class DesktopVRIKCalibrator
 
     public void CalibrateDesktopVRIK()
     {
-        PreInitialize();
-
-        // Don't do anything else if just debugging calibration pose
-        DebugCalibrationPose = !DebugCalibrationPose;
-        if (Setting_DebugCalibrationPose && DebugCalibrationPose)
-        {
-            ForceCalibrationPose();
-            return;
-        }
+        // Scan avatar for issues/references
+        ScanAvatarForCalibration();
+        // Prepare CVR IKSystem for external VRIK
+        PrepareIKSystem();
 
         // Add VRIK and configure
         PrepareAvatarVRIK();
@@ -86,51 +79,42 @@ public class DesktopVRIKCalibrator
         PostInitialize();
     }
 
-    public void ForceCalibrationPose(bool toggle = true)
-    {
-        animator.enabled = !toggle;
-        SetHumanPose(0f);
-        //SetAvatarIKPose(toggle);
-    }
-
-    private void PreInitialize()
-    {
-        // Scan avatar for issues/references
-        ScanAvatarForCalibration();
-        // Prepare CVR IKSystem for external VRIK
-        PrepareIKSystem();
-    }
-
     private void Initialize()
     {
         // Calculate bend normals with motorcycle pose
         SetHumanPose(0f);
-        CalculateKneeBendNormals();
+        VRIKUtils.CalculateKneeBendNormals(vrik, out leftKneeNormal, out rightKneeNormal);
 
+        // Calculate initial IK scaling values with IKPose
         SetAvatarIKPose(true);
+        VRIKUtils.CalculateInitialIKScaling(vrik, out initialFootDistance, out initialStepThreshold, out initialStepHeight);
 
         // Setup HeadIK target & calculate initial footstep values
         SetupDesktopHeadIKTarget();
-        CalculateInitialIKScaling();
 
         // Initiate VRIK manually
-        ForceInitiateVRIKSolver();
+        VRIKUtils.InitiateVRIKSolver(vrik);
 
+        // Return avatar to original pose
         SetAvatarIKPose(false);
     }
 
     private void PostInitialize()
     {
-        ApplyKneeBendNormals();
-        ApplyInitialIKScaling();
+        VRIKUtils.ApplyScaleToVRIK
+        (
+            vrik,
+            initialFootDistance,
+            initialStepThreshold,
+            initialStepHeight,
+            1f
+        );
+        VRIKUtils.ApplyKneeBendNormals(vrik, leftKneeNormal, rightKneeNormal);
         vrik.onPreSolverUpdate.AddListener(new UnityAction(DesktopVRIK.Instance.OnPreSolverUpdate));
     }
-    
+
     private void ScanAvatarForCalibration()
     {
-        // Reset some stuff to default
-        fixTransformsRequired = false;
-
         // Find required avatar components
         avatar = playerSetup._avatar.GetComponent<CVRAvatar>();
         animator = avatar.GetComponent<Animator>();
@@ -138,22 +122,15 @@ public class DesktopVRIKCalibrator
         lookAtIK = _lookIKTraverse.GetValue<LookAtIK>();
 
         // Apply some fixes for weird setups
-        if (!animator.enabled)
-        {
-            fixTransformsRequired = true;
-            DesktopVRIKMod.Logger.Error("Avatar has Animator disabled by default!");
-        }
+        fixTransformsRequired = !animator.enabled;
 
-        // Center avatar local offsets
+        // Center avatar local position
         avatarTransform.localPosition = Vector3.zero;
-        //avatarTransform.localRotation = Quaternion.identity;
 
-        // Store original human pose
-        if (humanPoseHandler != null)
-        {
-            humanPoseHandler.Dispose();
-        }
+        // Create a new human pose handler and dispose the old one
+        humanPoseHandler?.Dispose();
         humanPoseHandler = new HumanPoseHandler(animator.avatar, avatarTransform);
+        // Store original human pose
         humanPoseHandler.GetHumanPose(ref initialHumanPose);
     }
 
@@ -168,21 +145,13 @@ public class DesktopVRIKCalibrator
 
         // Set the animator for the IK system
         ikSystem.animator = animator;
-        if (ikSystem.animator != null)
-        {
-            animatorManager.SetAnimator(ikSystem.animator, ikSystem.animator.runtimeAnimatorController);
-        }
+        animatorManager.SetAnimator(ikSystem.animator, ikSystem.animator.runtimeAnimatorController);
 
         // Set the avatar height float
-        float avatarHeight = ikSystem.vrPlaySpace.transform.InverseTransformPoint(avatarTransform.position).y;
-        _avatarRootHeightTraverse.SetValue(avatarHeight);
+        _avatarRootHeightTraverse.SetValue(ikSystem.vrPlaySpace.transform.InverseTransformPoint(avatarTransform.position).y);
 
         // Create a new human pose handler and dispose the old one
-        if (ikHumanPoseHandler != null)
-        {
-            ikHumanPoseHandler.Dispose();
-            _poseHandlerTraverse.SetValue(null);
-        }
+        ikHumanPoseHandler?.Dispose();
         ikHumanPoseHandler = new HumanPoseHandler(ikSystem.animator.avatar, avatarTransform);
         _poseHandlerTraverse.SetValue(ikHumanPoseHandler);
 
@@ -206,156 +175,48 @@ public class DesktopVRIKCalibrator
 
     private void PrepareAvatarVRIK()
     {
-        //add and configure VRIK
+        // Add and configure VRIK
         vrik = avatar.gameObject.AddComponentIfMissing<VRIK>();
         vrik.AutoDetectReferences();
-        ConfigureVRIKReferences();
-        _vrikTraverse.SetValue(vrik);
 
-        //in testing, not really needed
-        //only required if Setting_FindUnmappedToes
-        //and non-human mapped toes are found
-        vrik.fixTransforms = fixTransformsRequired;
+        VRIKUtils.ConfigureVRIKReferences(vrik, Setting_UseVRIKToes, Setting_FindUnmappedToes, out bool foundUnmappedToes);
 
-        //default solver settings
+        // Fix animator issue or non-human mapped toes
+        vrik.fixTransforms = fixTransformsRequired || foundUnmappedToes;
+
+        // Default solver settings
         vrik.solver.locomotion.weight = 0f;
         vrik.solver.locomotion.angleThreshold = 30f;
-        vrik.solver.locomotion.maxLegStretch = 0.75f;
+        vrik.solver.locomotion.maxLegStretch = 1f;
         vrik.solver.spine.minHeadHeight = 0f;
         vrik.solver.IKPositionWeight = 1f;
-        //disable to not bleed into anims
         vrik.solver.spine.chestClampWeight = 0f;
         vrik.solver.spine.maintainPelvisPosition = 0f;
-        //for body leaning
-        vrik.solver.spine.neckStiffness = 0.0001f; //cannot be 0
+
+        // Body leaning settings
+        vrik.solver.spine.neckStiffness = 0.0001f;
         vrik.solver.spine.bodyPosStiffness = 1f;
         vrik.solver.spine.bodyRotStiffness = 0.2f;
-        //disable so avatar doesnt try and walk away
+
+        // Disable locomotion
         vrik.solver.locomotion.velocityFactor = 0f;
         vrik.solver.locomotion.maxVelocity = 0f;
-        //fixes nameplate spazzing on remote & magicacloth
         vrik.solver.locomotion.rootSpeed = 1000f;
-        //disable so PAM & BID dont make body shake
+
+        // Disable chest rotation by hands
         vrik.solver.spine.rotateChestByHands = 0f;
-        //enable to prioritize LookAtIK
+
+        // Prioritize LookAtIK
         vrik.solver.spine.headClampWeight = 0.2f;
-        //disable to not go on tippytoes
+
+        // Disable going on tippytoes
         vrik.solver.spine.positionWeight = 0f;
         vrik.solver.spine.rotationWeight = 1f;
 
-        //vrik.solver.spine.maintainPelvisPosition = 1f;
-        //vrik.solver.locomotion.weight = 0f;
-        //vrik.solver.spine.positionWeight = 0f;
-        //vrik.solver.spine.pelvisPositionWeight = 0f;
-        //vrik.solver.leftArm.positionWeight = 0f;
-        //vrik.solver.leftArm.rotationWeight = 0f;
-        //vrik.solver.rightArm.positionWeight = 0f;
-        //vrik.solver.rightArm.rotationWeight = 0f;
-        //vrik.solver.leftLeg.positionWeight = 0f;
-        //vrik.solver.leftLeg.rotationWeight = 0f;
-        //vrik.solver.rightLeg.positionWeight = 0f;
-        //vrik.solver.rightLeg.rotationWeight = 0f;
-        //vrik.solver.IKPositionWeight = 0f;
-
-        //THESE ARE CONFIGURABLE IN GAME IK SETTINGS
-        //vrik.solver.leftLeg.target = null;
-        //vrik.solver.leftLeg.bendGoal = null;
-        //vrik.solver.leftLeg.positionWeight = 0f;
-        //vrik.solver.leftLeg.bendGoalWeight = 0f;
-        //vrik.solver.rightLeg.target = null;
-        //vrik.solver.rightLeg.bendGoal = null;
-        //vrik.solver.rightLeg.positionWeight = 0f;
-        //vrik.solver.rightLeg.bendGoalWeight = 0f;
-        //vrik.solver.spine.pelvisTarget = null;
-        //vrik.solver.spine.chestGoal = null;
-        //vrik.solver.spine.positionWeight = 0f;
-        //vrik.solver.spine.rotationWeight = 0f;
-        //vrik.solver.spine.pelvisPositionWeight = 0f;
-        //vrik.solver.spine.pelvisRotationWeight = 0f;
-        //vrik.solver.spine.chestGoalWeight = 0f;
+        // Tell IKSystem about new VRIK
+        _vrikTraverse.SetValue(vrik);
     }
 
-    private void CalculateKneeBendNormals()
-    {
-        // Get assumed left knee normal
-        Vector3[] leftVectors = new Vector3[]
-         {
-                vrik.references.leftThigh?.position ?? Vector3.zero,
-                vrik.references.leftCalf?.position ?? Vector3.zero,
-                vrik.references.leftFoot?.position ?? Vector3.zero,
-         };
-        leftKneeNormal = Quaternion.Inverse(vrik.references.root.rotation) * GetNormalFromArray(leftVectors);
-
-        // Get assumed right knee normal
-        Vector3[] rightVectors = new Vector3[]
-         {
-                vrik.references.rightThigh?.position ?? Vector3.zero,
-                vrik.references.rightCalf?.position ?? Vector3.zero,
-                vrik.references.rightFoot?.position ?? Vector3.zero,
-         };
-        rightKneeNormal = Quaternion.Inverse(vrik.references.root.rotation) * GetNormalFromArray(rightVectors);
-    }
-    
-    private void ApplyKneeBendNormals()
-    {
-        if (!Setting_ExperimentalKneeBend)
-        {
-            //enable so knees on fucked models work better
-            vrik.solver.leftLeg.useAnimatedBendNormal = true;
-            vrik.solver.rightLeg.useAnimatedBendNormal = true;
-            return;
-        }
-
-        vrik.solver.leftLeg.bendToTargetWeight = 0f;
-        vrik.solver.rightLeg.bendToTargetWeight = 0f;
-
-        Traverse leftLeg_bendNormalRelToPelvisTraverse = Traverse.Create(vrik.solver.leftLeg).Field("bendNormalRelToPelvis");
-        Traverse rightLeg_bendNormalRelToPelvisTraverse = Traverse.Create(vrik.solver.rightLeg).Field("bendNormalRelToPelvis");
-
-        // Calculate knee normal without root rotation but with pelvis rotation
-        Quaternion pelvisLocalRotationInverse = Quaternion.Inverse(vrik.references.pelvis.localRotation);
-        Vector3 leftLegBendNormalRelToPelvis = pelvisLocalRotationInverse * leftKneeNormal;
-        Vector3 rightLegBendNormalRelToPelvis = pelvisLocalRotationInverse * rightKneeNormal;
-        //Quaternion rootRotation = vrik.references.root.rotation;
-        //Quaternion pelvisRotationRelativeToRoot = Quaternion.Inverse(rootRotation) * vrik.references.pelvis.rotation;
-        //Quaternion pelvisRotationInverse = Quaternion.Inverse(pelvisRotationRelativeToRoot);
-        leftLeg_bendNormalRelToPelvisTraverse.SetValue(leftLegBendNormalRelToPelvis);
-        rightLeg_bendNormalRelToPelvisTraverse.SetValue(rightLegBendNormalRelToPelvis);
-    }
-
-    private Vector3 GetNormalFromArray(Vector3[] positions)
-    {
-        Vector3 vector = Vector3.zero;
-        Vector3 vector2 = Vector3.zero;
-        for (int i = 0; i < positions.Length; i++)
-        {
-            vector2 += positions[i];
-        }
-        vector2 /= (float)positions.Length;
-        for (int j = 0; j < positions.Length - 1; j++)
-        {
-            vector += Vector3.Cross(positions[j] - vector2, positions[j + 1] - vector2).normalized;
-        }
-        return Vector3.Normalize(vector);
-    }
-
-    private void CalculateInitialIKScaling()
-    {
-        // Get distance between feets and thighs
-        float footDistance = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.rightFoot.position);
-        initialFootDistance = footDistance * 0.5f;
-        initialStepThreshold = footDistance * 0.8f;
-        initialStepHeight = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.leftCalf.position) * 0.2f;
-    }
-
-    private void ApplyInitialIKScaling()
-    {
-        // Set initial values
-        vrik.solver.locomotion.footDistance = initialFootDistance;
-        vrik.solver.locomotion.stepThreshold = initialStepThreshold;
-        DesktopVRIK.ScaleStepHeight(vrik.solver.locomotion.stepHeight, initialStepHeight);
-    }
-    
     private void SetupDesktopHeadIKTarget()
     {
         // Lazy HeadIKTarget calibration
@@ -403,95 +264,6 @@ public class DesktopVRIKCalibrator
         }
         ikSystem.humanPose.bodyRotation = Quaternion.identity;
         humanPoseHandler.SetHumanPose(ref ikSystem.humanPose);
-    }
-
-    private void ForceInitiateVRIKSolver()
-    {
-        //force immediate calibration before animator decides to fuck us
-        vrik.solver.SetToReferences(vrik.references);
-        vrik.solver.Initiate(vrik.transform);
-    }
-
-    private void ConfigureVRIKReferences()
-    {
-        //might not work over netik
-        FixChestAndSpineReferences();
-
-        if (!Setting_UseVRIKToes)
-        {
-            vrik.references.leftToes = null;
-            vrik.references.rightToes = null;
-        }
-        else if (Setting_FindUnmappedToes)
-        {
-            //doesnt work with netik, but its toes...
-            FindAndSetUnmappedToes();
-        }
-
-        //bullshit fix to not cause death
-        FixFingerBonesError();
-    }
-
-    private void FixChestAndSpineReferences()
-    {
-        Transform leftShoulderBone = vrik.references.leftShoulder;
-        Transform rightShoulderBone = vrik.references.rightShoulder;
-        Transform assumedChest = leftShoulderBone?.parent;
-
-        if (assumedChest != null && rightShoulderBone.parent == assumedChest &&
-            vrik.references.chest != assumedChest)
-        {
-            vrik.references.chest = assumedChest;
-            vrik.references.spine = assumedChest.parent;
-        }
-    }
-
-    private void FindAndSetUnmappedToes()
-    {
-        Transform leftToes = vrik.references.leftToes;
-        Transform rightToes = vrik.references.rightToes;
-
-        if (leftToes == null && rightToes == null)
-        {
-            leftToes = FindUnmappedToe(vrik.references.leftFoot);
-            rightToes = FindUnmappedToe(vrik.references.rightFoot);
-
-            if (leftToes != null && rightToes != null)
-            {
-                vrik.references.leftToes = leftToes;
-                vrik.references.rightToes = rightToes;
-                fixTransformsRequired = true;
-            }
-        }
-    }
-
-    private Transform FindUnmappedToe(Transform foot)
-    {
-        foreach (Transform bone in foot)
-        {
-            if (bone.name.ToLowerInvariant().Contains("toe") ||
-                bone.name.ToLowerInvariant().EndsWith("_end"))
-            {
-                return bone;
-            }
-        }
-
-        return null;
-    }
-
-    private void FixFingerBonesError()
-    {
-        FixFingerBones(vrik.references.leftHand, vrik.solver.leftArm);
-        FixFingerBones(vrik.references.rightHand, vrik.solver.rightArm);
-    }
-
-    private void FixFingerBones(Transform hand, IKSolverVR.Arm armSolver)
-    {
-        if (hand.childCount == 0)
-        {
-            armSolver.wristToPalmAxis = Vector3.up;
-            armSolver.palmToThumbAxis = hand == vrik.references.leftHand ? -Vector3.forward : Vector3.forward;
-        }
     }
 
     private static readonly float[] IKPoseMuscles = new float[]

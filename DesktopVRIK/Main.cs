@@ -6,41 +6,38 @@ namespace NAK.Melons.DesktopVRIK;
 public class DesktopVRIKMod : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-    internal const string SettingsCategory = "DesktopVRIK";
-    internal static MelonPreferences_Category m_categoryDesktopVRIK;
-    internal static MelonPreferences_Entry<bool>
-        m_entryEnabled,
-        m_entryEnforceViewPosition,
-        m_entryResetIKOnLand,
-        m_entryPlantFeet,
-        m_entryUseVRIKToes,
-        m_entryFindUnmappedToes,
-        m_entryExperimentalKneeBend;
-    internal static MelonPreferences_Entry<float>
-        m_entryBodyLeanWeight,
-        m_entryBodyHeadingLimit,
-        m_entryPelvisHeadingWeight,
-        m_entryChestHeadingWeight;
+    public const string SettingsCategory = "DesktopVRIK";
+    public static readonly MelonPreferences_Category CategoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
+
+    public static readonly MelonPreferences_Entry<bool> EntryEnabled =
+        CategoryDesktopVRIK.CreateEntry("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryPlantFeet =
+        CategoryDesktopVRIK.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movement.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryUseVRIKToes =
+        CategoryDesktopVRIK.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryFindUnmappedToes =
+        CategoryDesktopVRIK.CreateEntry("Find Unmapped Toes", false, description: "Determines if DesktopVRIK should look for unmapped toe bones if the humanoid rig does not have any.");
+
+    public static readonly MelonPreferences_Entry<float> EntryBodyLeanWeight =
+        CategoryDesktopVRIK.CreateEntry("Body Lean Weight", 0.5f, description: "Adds rotational influence to the body solver when looking up/down. Set to 0 to disable.");
+
+    public static readonly MelonPreferences_Entry<float> EntryBodyHeadingLimit =
+        CategoryDesktopVRIK.CreateEntry("Body Heading Limit", 20f, description: "Specifies the maximum angle the lower body can have relative to the head when rotating. Set to 0 to disable.");
+
+    public static readonly MelonPreferences_Entry<float> EntryPelvisHeadingWeight =
+        CategoryDesktopVRIK.CreateEntry("Pelvis Heading Weight", 0.25f, description: "Determines how much the pelvis will face the Body Heading Limit. Set to 0 to align with head.");
+
+    public static readonly MelonPreferences_Entry<float> EntryChestHeadingWeight =
+        CategoryDesktopVRIK.CreateEntry("Chest Heading Weight", 0.75f, description: "Determines how much the chest will face the Body Heading Limit. Set to 0 to align with head.");
+
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
-        m_categoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
-        m_entryEnabled = m_categoryDesktopVRIK.CreateEntry<bool>("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
-        //m_entryEnforceViewPosition = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce View Position", false, description: "Corrects view position to use VRIK offsets.");
-        m_entryPlantFeet = m_categoryDesktopVRIK.CreateEntry<bool>("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled. This prevents the little hover when you stop moving.");
-        m_entryUseVRIKToes = m_categoryDesktopVRIK.CreateEntry<bool>("Use VRIK Toes", false, description: "Should VRIK use your humanoid toes for IK solving? This can cause your feet to idle behind you.");
-        m_entryFindUnmappedToes = m_categoryDesktopVRIK.CreateEntry<bool>("Find Unmapped Toes", false, description: "Should DesktopVRIK look for unmapped toe bones if humanoid rig does not have any?");
-        m_entryExperimentalKneeBend = m_categoryDesktopVRIK.CreateEntry<bool>("Experimental Knee Bend", true, description: "Experimental method to calculate knee bend normal. This may break avatars.");
 
-        m_entryBodyLeanWeight = m_categoryDesktopVRIK.CreateEntry<float>("Body Lean Weight", 0.5f, description: "Emulates old VRChat-like body leaning when looking up/down. Set to 0 to disable.");
-        m_entryBodyHeadingLimit = m_categoryDesktopVRIK.CreateEntry<float>("Body Heading Limit", 20f, description: "Emulates VRChat-like body and head offset when rotating left/right. Set to 0 to disable.");
-        m_entryPelvisHeadingWeight = m_categoryDesktopVRIK.CreateEntry<float>("Pelvis Heading Weight", 0.25f, description: "How much the pelvis will face the heading limit. Set to 0 to align with head.");
-        m_entryChestHeadingWeight = m_categoryDesktopVRIK.CreateEntry<float>("Chest Heading Weight", 0.75f, description: "How much the chest will face the heading limit. Set to 0 to align with head.");
-
-        foreach (var setting in m_categoryDesktopVRIK.Entries)
-        {
-            setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-        }
+        CategoryDesktopVRIK.Entries.ForEach(e => e.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings));
 
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
@@ -52,18 +49,17 @@ public class DesktopVRIKMod : MelonMod
     {
         if (!DesktopVRIK.Instance) return;
         // DesktopVRIK Settings
-        DesktopVRIK.Instance.Setting_Enabled = m_entryEnabled.Value;
-        DesktopVRIK.Instance.Setting_PlantFeet = m_entryPlantFeet.Value;
+        DesktopVRIK.Instance.Setting_Enabled = EntryEnabled.Value;
+        DesktopVRIK.Instance.Setting_PlantFeet = EntryPlantFeet.Value;
 
-        DesktopVRIK.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(m_entryBodyLeanWeight.Value);
-        DesktopVRIK.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(m_entryBodyHeadingLimit.Value, 0f, 90f);
-        DesktopVRIK.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(m_entryPelvisHeadingWeight.Value));
-        DesktopVRIK.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(m_entryChestHeadingWeight.Value));
+        DesktopVRIK.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(EntryBodyLeanWeight.Value);
+        DesktopVRIK.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(EntryBodyHeadingLimit.Value, 0f, 90f);
+        DesktopVRIK.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(EntryPelvisHeadingWeight.Value));
+        DesktopVRIK.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(EntryChestHeadingWeight.Value));
 
         // Calibration Settings
-        DesktopVRIK.Instance.Calibrator.Setting_UseVRIKToes = m_entryUseVRIKToes.Value;
-        DesktopVRIK.Instance.Calibrator.Setting_FindUnmappedToes = m_entryFindUnmappedToes.Value;
-        DesktopVRIK.Instance.Calibrator.Setting_ExperimentalKneeBend = m_entryExperimentalKneeBend.Value;
+        DesktopVRIK.Instance.Calibrator.Setting_UseVRIKToes = EntryUseVRIKToes.Value;
+        DesktopVRIK.Instance.Calibrator.Setting_FindUnmappedToes = EntryFindUnmappedToes.Value;
     }
     private void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
 
@@ -72,7 +68,7 @@ public class DesktopVRIKMod : MelonMod
         //BTKUILib Misc Tab
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
         {
-            MelonLogger.Msg("Initializing BTKUILib support.");
+            Logger.Msg("Initializing BTKUILib support.");
             BTKUIAddon.Init();
         }
     }

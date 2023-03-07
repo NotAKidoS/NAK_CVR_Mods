@@ -44,7 +44,7 @@ class PlayerSetupPatches
     [HarmonyPatch(typeof(PlayerSetup), "SetupIKScaling")]
     private static bool Prefix_PlayerSetup_SetupIKScaling(float height, ref Vector3 ___scaleDifference)
     {
-        return !(bool)DesktopVRIK.Instance?.OnSetupIKScaling(height, 1f + ___scaleDifference.y);
+        return !(bool)DesktopVRIK.Instance?.OnSetupIKScaling(1f + ___scaleDifference.y);
     }
 }
 

@@ -26,6 +26,6 @@ using System.Reflection;
 namespace NAK.Melons.DesktopVRIK.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.0.0";
+    public const string Version = "4.0.1";
     public const string Author = "NotAKidoS";
 }

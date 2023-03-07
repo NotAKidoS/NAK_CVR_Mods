@@ -14,31 +14,30 @@ public static class BTKUIAddon
         Page miscPage = QuickMenuAPI.MiscTabPage;
         Category miscCategory = miscPage.AddCategory(DesktopVRIKMod.SettingsCategory);
 
-        AddMelonToggle(ref miscCategory, DesktopVRIKMod.m_entryEnabled);
+        AddMelonToggle(ref miscCategory, DesktopVRIKMod.EntryEnabled);
 
         //Add my own page to not clog up Misc Menu
 
         Page desktopVRIKPage = miscCategory.AddPage("DesktopVRIK Settings", "", "Configure the settings for DesktopVRIK.", "DesktopVRIK");
         desktopVRIKPage.MenuTitle = "DesktopVRIK Settings";
-        desktopVRIKPage.MenuSubtitle = "Simplified settings for VRIK on Desktop.";
 
-        Category desktopVRIKCategory = desktopVRIKPage.AddCategory("DesktopVRIK");
+        Category desktopVRIKCategory = desktopVRIKPage.AddCategory(DesktopVRIKMod.SettingsCategory);
 
         // General Settings
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.m_entryEnabled);
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.m_entryPlantFeet);
+        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryEnabled);
+        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryPlantFeet);
 
         // Calibration Settings
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.m_entryUseVRIKToes);
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.m_entryFindUnmappedToes);
+        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryUseVRIKToes);
+        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryFindUnmappedToes);
 
         // Body Leaning Weight
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.m_entryBodyLeanWeight, 0, 1f, 1);
+        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.EntryBodyLeanWeight, 0, 1f, 1);
 
         // Max Root Heading Limit & Weights
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.m_entryBodyHeadingLimit, 0, 90f, 0);
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.m_entryPelvisHeadingWeight, 0, 1f, 1);
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.m_entryChestHeadingWeight, 0, 1f, 1);
+        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.EntryBodyHeadingLimit, 0, 90f, 0);
+        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.EntryPelvisHeadingWeight, 0, 1f, 1);
+        AddMelonSlider(ref desktopVRIKPage, DesktopVRIKMod.EntryChestHeadingWeight, 0, 1f, 1);
     }
     private static void AddMelonToggle(ref Category category, MelonLoader.MelonPreferences_Entry<bool> entry)
     {
