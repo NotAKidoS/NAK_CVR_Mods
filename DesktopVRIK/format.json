@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.0.1",
+  "modversion": "4.0.2",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -18,8 +18,8 @@
     "BTKUILib",
     "AvatarMotionTweaker"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v4.0.1/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v4.0.2/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "- Implemented fixes for terrible armatures that had broken knee bending, initial hip rotation, and initial step calculations.\n- Added pelvis & chest weight sliders for heading angle limit option.\n- Implemented bandaid fixes for disabled animator and avatars without fingers.\n- Added options to use or remove toes from VRIK and find unmapped non-humanoid toe bones.\n- Contact me if you find an avatar that is still broken.",
+  "changelog": "- Implemented fixes for terrible armatures that had broken knee bending, initial hip rotation, and initial step calculations.\n- Added pelvis & chest weight sliders for heading angle limit option.\n- Implemented bandaid fixes for disabled animator and avatars without fingers.\n- Added options to use or remove toes from VRIK and find unmapped non-humanoid toe bones.\n- Implemented VRIK platform motion while on a Movement Parent.\n- Contact me if you find an avatar that is still broken.",
   "embedcolor": "9b59b6"
 }
