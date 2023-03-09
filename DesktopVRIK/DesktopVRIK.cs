@@ -105,7 +105,7 @@ public class DesktopVRIK : MonoBehaviour
 
         BodySystem.TrackingEnabled = !isEmotePlaying;
 
-        _vrik.solver?.Reset();
+        _ikSolver?.Reset();
         ResetDesktopVRIK();
     }
 
