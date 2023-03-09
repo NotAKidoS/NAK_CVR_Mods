@@ -46,6 +46,13 @@ class PlayerSetupPatches
     {
         return !(bool)DesktopVRIK.Instance?.OnSetupIKScaling(1f + ___scaleDifference.y);
     }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(PlayerSetup), "ResetIk")]
+    static bool Prefix_PlayerSetup_ResetIk()
+    {
+        return !(bool)DesktopVRIK.Instance?.OnPlayerSetupResetIk();
+    }
 }
 
 class IKSystemPatches

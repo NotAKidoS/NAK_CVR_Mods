@@ -1,13 +1,13 @@
 ﻿using RootMotion.FinalIK;
-using UnityEngine;
 using System.Reflection;
+using UnityEngine;
 
 namespace NAK.Melons.DesktopVRIK;
 
 public static class VRIKUtils
 {
     static readonly FieldInfo vrik_bendNormalRelToPelvis = typeof(IKSolverVR.Leg).GetField("bendNormalRelToPelvis", BindingFlags.NonPublic | BindingFlags.Instance);
-    
+
     public static void ConfigureVRIKReferences(VRIK vrik, bool useVRIKToes, bool findUnmappedToes, out bool foundUnmappedToes)
     {
         foundUnmappedToes = false;
