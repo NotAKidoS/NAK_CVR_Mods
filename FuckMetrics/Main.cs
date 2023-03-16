@@ -1,11 +1,11 @@
-﻿using MelonLoader;
+﻿using ABI_RC.Core.Player;
+using MelonLoader;
+using System.Collections;
 
 namespace NAK.Melons.FuckMetrics;
 
 public class FuckMetricsMod : MelonMod
 {
-    public static MelonLogger.Instance Logger;
-
     public const string SettingsCategory = "FuckMetrics";
     public static readonly MelonPreferences_Category CategoryFuckMetrics = MelonPreferences.CreateCategory(SettingsCategory);
 
@@ -17,29 +17,40 @@ public class FuckMetricsMod : MelonMod
 
     public enum SettingState
     {
-        Enabled,
+        Always,
         MenuOnly,
         Disabled
     }
 
     public override void OnInitializeMelon()
     {
-        Logger = LoggerInstance;
         EntryDisableMetrics.OnEntryValueChangedUntyped.Subscribe(OnDisableMetrics);
         EntryDisableCoreUpdates.OnEntryValueChangedUntyped.Subscribe(OnDisableCoreUpdates);
-        ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.CVR_MenuManagerPatches));
         ApplyPatches(typeof(HarmonyPatches.ViewManagerPatches));
+        MelonCoroutines.Start(WaitForLocalPlayer());
+    }
+
+    IEnumerator WaitForLocalPlayer()
+    {
+        yield return PlayerSetup.Instance == null;
+        UpdateSettings();
     }
 
     private void OnDisableMetrics(object arg1, object arg2)
     {
-        FuckMetrics.ToggleMetrics(EntryDisableMetrics.Value == SettingState.Enabled);
+        FuckMetrics.ToggleMetrics(EntryDisableMetrics.Value == SettingState.Always);
     }
 
     private void OnDisableCoreUpdates(object arg1, object arg2)
     {
-        FuckMetrics.ToggleCoreUpdates(EntryDisableMetrics.Value == SettingState.Enabled);
+        FuckMetrics.ToggleCoreUpdates(EntryDisableCoreUpdates.Value == SettingState.Always);
+    }
+
+    private void UpdateSettings()
+    {
+        FuckMetrics.ToggleMetrics(EntryDisableMetrics.Value == SettingState.Always);
+        FuckMetrics.ToggleCoreUpdates(EntryDisableCoreUpdates.Value == SettingState.Always);
     }
 
     private void ApplyPatches(Type type)
@@ -50,8 +61,8 @@ public class FuckMetricsMod : MelonMod
         }
         catch (Exception e)
         {
-            Logger.Msg($"Failed while patching {type.Name}!");
-            Logger.Error(e);
+            LoggerInstance.Msg($"Failed while patching {type.Name}!");
+            LoggerInstance.Error(e);
         }
     }
 }
