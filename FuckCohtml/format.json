@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "FuckCohtml",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "This mod disables the CohtmlView components on the menus and forces them to render at an interval while closed, helping alleviate hitching and performance issues.\n\nHelps with FPS drop while unmuted in online instances.",
+  "searchtags": [
+    "cohtml",
+    "menus",
+    "quick",
+    "fps",
+    "performance"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/FuckCohtml/releases/download/v1.0.0/FuckCohtml.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/FuckCohtml/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#8ed6fb"
+}
