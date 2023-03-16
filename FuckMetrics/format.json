@@ -1,7 +1,7 @@
 {
   "_id": 135,
   "name": "FuckMetrics",
-  "modversion": "1.0.1",
+  "modversion": "1.0.2",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/FuckMetrics/releases/download/v1.0.1/FuckMetrics.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/FuckMetrics/releases/download/v1.0.2/FuckMetrics.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/FuckMetrics/",
-  "changelog": "- Initial Release\n- Renamed to FuckMetrics\n- Add Update Rate settings",
+  "changelog": "- Initial Release.\n- Renamed to FuckMetrics.\n- Add Update Rate settings.\n- Add back CohtmlView disabling as option.",
   "embedcolor": "#8ed6fb"
 }

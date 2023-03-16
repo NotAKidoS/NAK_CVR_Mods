@@ -11,7 +11,7 @@ public class FuckMetricsMod : MelonMod
     public static readonly MelonPreferences_Category CategoryFuckMetrics = MelonPreferences.CreateCategory(SettingsCategory);
 
     public static readonly MelonPreferences_Entry<bool> EntryDisableCohtmlViewOnIdle =
-        CategoryFuckMetrics.CreateEntry("Disable CohtmlView On Idle", false, description: "Disables CohtmlView on the menus when idle. This can give a huge performance boost.");
+        CategoryFuckMetrics.CreateEntry("Disable CohtmlView On Idle", false, description: "Disables CohtmlView on the menus when idle. Takes up to 6 seconds after menu exit. This can give a huge performance boost.");
 
     public static readonly MelonPreferences_Entry<SettingState> EntryDisableMetrics =
         CategoryFuckMetrics.CreateEntry("Menu Metrics", SettingState.MenuOnly, description: "Disables menu metrics (FPS & Ping). Updates once on menu open if disabled.");
