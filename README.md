@@ -4,6 +4,8 @@ This mod is designed specifically for ChilloutVR and its implementation of Cohtm
 
 This mod disables the CohtmlView components on the menus and forces them to render intermittently when closed. This helps to alleviate any hitching and performance issues that may arise, particularly with FPS drops while unmuted in online instances.
 
+## Examples
+
 The following clips demonstrate the difference in performance with and without the FuckCohtml mod. While not a scientifically rigorous comparison, it is clear that there is a significant performance hit when unmuted, causing Dynamic Bones to jitter, in the clip without the mod:
 
 https://user-images.githubusercontent.com/37721153/225494880-7e06195c-6f0d-4a21-aaa8-5f9f4ba5e9dd.mp4
@@ -11,6 +13,12 @@ https://user-images.githubusercontent.com/37721153/225494880-7e06195c-6f0d-4a21-
 However, with the FuckCohtml mod enabled, the performance hit when unmuted is almost negligible, as shown in the clip below:
 
 https://user-images.githubusercontent.com/37721153/225495141-7abcb17b-60c7-487d-9de8-ef9818cbd6eb.mp4
+
+While this mod is not directly fixing the performance hit while unmuted, it is likely freeing enough resources that unmuting does not cause a noticable performance hit while in online instances. This comes at the cost of Cohtml being a bit more fragile, as it is more likely to randomly error while disabled.
+
+## Relevant Feedback Posts:
+
+https://feedback.abinteractive.net/p/fps-drop-while-unmuted
 
 ---
 
