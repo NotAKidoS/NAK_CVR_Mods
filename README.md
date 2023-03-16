@@ -1,4 +1,4 @@
-# FuckCohtml
+# FuckMetrics
 
 This mod disables realtime metrics and core menu updates (fps, ping, gamerule icons, ect). This helps to alleviate any hitching and performance issues that may arise, particularly with FPS drops while unmuted in online instances. This also helps prevent VRIK from constantly stepping in place while in VR.
 
