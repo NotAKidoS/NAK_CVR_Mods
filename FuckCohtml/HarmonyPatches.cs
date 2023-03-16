@@ -2,7 +2,7 @@
 using ABI_RC.Core.Player;
 using HarmonyLib;
 
-namespace NAK.Melons.FuckCohtml.HarmonyPatches;
+namespace NAK.Melons.FuckMetrics.HarmonyPatches;
 
 class PlayerSetupPatches
 {
@@ -10,8 +10,8 @@ class PlayerSetupPatches
     [HarmonyPatch(typeof(PlayerSetup), "Start")]
     private static void Postfix_PlayerSetup_Start()
     {
-        FuckCohtml.ToggleMetrics(FuckCohtmlMod.EntryDisableMetrics.Value);
-        FuckCohtml.ToggleCoreUpdates(FuckCohtmlMod.EntryDisableCoreUpdates.Value);
+        FuckMetrics.ToggleMetrics(FuckMetricsMod.EntryDisableMetrics.Value);
+        FuckMetrics.ToggleCoreUpdates(FuckMetricsMod.EntryDisableCoreUpdates.Value);
     }
 }
 
@@ -21,7 +21,7 @@ class CVR_MenuManagerPatches
     [HarmonyPatch(typeof(CVR_MenuManager), "ToggleQuickMenu", new Type[] { typeof(bool) })]
     private static void Postfix_CVR_MenuManager_ToggleQuickMenu(bool show)
     {
-        if (!FuckCohtmlMod.EntryDisableCoreUpdates.Value) return;
+        if (!FuckMetricsMod.EntryDisableCoreUpdates.Value) return;
         if (show)
         {
             CVR_MenuManager.Instance.SendCoreUpdate();
@@ -36,7 +36,7 @@ class ViewManagerPatches
     [HarmonyPatch(typeof(ViewManager), "UiStateToggle", new Type[] { typeof(bool) })]
     private static void Postfix_ViewManager_UiStateToggle(bool show)
     {
-        if (!FuckCohtmlMod.EntryDisableMetrics.Value) return;
+        if (!FuckMetricsMod.EntryDisableMetrics.Value) return;
         if (show)
         {
             CVR_MenuManager.Instance.SendCoreUpdate();

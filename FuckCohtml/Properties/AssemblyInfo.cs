@@ -1,21 +1,21 @@
 ﻿using MelonLoader;
-using NAK.Melons.FuckCohtml.Properties;
+using NAK.Melons.FuckMetrics.Properties;
 using System.Reflection;
 
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.FuckCohtml))]
+[assembly: AssemblyTitle(nameof(NAK.Melons.FuckMetrics))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.FuckCohtml))]
+[assembly: AssemblyProduct(nameof(NAK.Melons.FuckMetrics))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.FuckCohtml.FuckCohtmlMod),
-    nameof(NAK.Melons.FuckCohtml),
+    typeof(NAK.Melons.FuckMetrics.FuckMetricsMod),
+    nameof(NAK.Melons.FuckMetrics),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/FuckCohtml"
+    downloadLink: "https://github.com/NotAKidOnSteam/FuckMetrics"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -23,7 +23,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.FuckCohtml.Properties;
+namespace NAK.Melons.FuckMetrics.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.1";

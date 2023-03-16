@@ -1,9 +1,9 @@
 ﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.IO;
 
-namespace NAK.Melons.FuckCohtml
+namespace NAK.Melons.FuckMetrics
 {
-    public static class FuckCohtml
+    public static class FuckMetrics
     {
         public static void ToggleMetrics(bool disable)
         {
