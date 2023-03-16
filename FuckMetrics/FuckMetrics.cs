@@ -10,7 +10,7 @@ namespace NAK.Melons.FuckMetrics
             var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == "UpdateMetrics").Job;
             if (enable && job == null)
             {
-                SchedulerSystem.AddJob(new SchedulerSystem.Job(ViewManager.Instance.UpdateMetrics), 0f, 0.5f, -1);
+                SchedulerSystem.AddJob(new SchedulerSystem.Job(ViewManager.Instance.UpdateMetrics), 0f, FuckMetricsMod.EntryMetricsUpdateRate.Value, -1);
             }
             else if (!enable && job != null)
             {
@@ -23,7 +23,7 @@ namespace NAK.Melons.FuckMetrics
             var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == "SendCoreUpdate").Job;
             if (enable && job == null)
             {
-                SchedulerSystem.AddJob(new SchedulerSystem.Job(CVR_MenuManager.Instance.SendCoreUpdate), 0f, 0.1f, -1);
+                SchedulerSystem.AddJob(new SchedulerSystem.Job(CVR_MenuManager.Instance.SendCoreUpdate), 0f, FuckMetricsMod.EntryCoreUpdateRate.Value, -1);
             }
             else if (!enable && job != null)
             {
