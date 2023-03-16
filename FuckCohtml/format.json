@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "This mod disables the CohtmlView components on the menus and forces them to render at an interval while closed, helping alleviate hitching and performance issues.\n\nHelps with FPS drop while unmuted in online instances.",
+  "description": "This mod disables the CohtmlView components on the menus and forces them to render intermittently when closed. This helps to alleviate any hitching and performance issues that may arise, particularly with FPS drops while unmuted in online instances.\n\nPlease view the Github README for more info.",
   "searchtags": [
     "cohtml",
     "menus",
