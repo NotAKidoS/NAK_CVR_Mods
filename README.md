@@ -1,8 +1,6 @@
-# FuckCohtml
+# FuckMetrics
 
-This mod is designed specifically for ChilloutVR and its implementation of Cohtml. It is named to maintain consistency with my previous mod, FuckToes, and is not intended to be derogatory towards Cohtml or comment on its quality as a product.
-
-This mod disables the CohtmlView components on the menus and forces them to render intermittently when closed. This helps to alleviate any hitching and performance issues that may arise, particularly with FPS drops while unmuted in online instances. This also helps prevent VRIK from constantly stepping in place while in VR.
+This mod disables realtime metrics and core menu updates (fps, ping, gamerule icons, ect). This helps to alleviate any hitching and performance issues that may arise, particularly with FPS drops while unmuted in online instances. This also helps prevent VRIK from constantly stepping in place while in VR.
 
 ## Examples
 
