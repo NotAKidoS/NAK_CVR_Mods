@@ -4,9 +4,10 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
 # ManagedLibs & NStrip.exe
-ManagedLibs/*.dll
-ManagedLibs/*.db
-NStrip
+*/ManagedLibs/*.dll
+*/ManagedLibs/*.db
+*/NStrip.exe
+*/*.bat
 
 # User-specific files
 *.rsuser
