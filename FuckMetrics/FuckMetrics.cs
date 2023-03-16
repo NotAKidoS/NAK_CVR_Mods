@@ -1,5 +1,8 @@
 ﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.IO;
+using cohtml;
+using HarmonyLib;
+using UnityEngine;
 
 namespace NAK.Melons.FuckMetrics
 {
@@ -28,6 +31,27 @@ namespace NAK.Melons.FuckMetrics
             else if (!enable && job != null)
             {
                 SchedulerSystem.RemoveJob(job);
+            }
+        }
+
+        public static void CohtmlAdvanceView(CohtmlView cohtmlView, Traverse menuOpenTraverse)
+        {
+            if (!FuckMetricsMod.EntryDisableCohtmlViewOnIdle.Value) return;
+
+            // Don't execute if menu is open
+            if (cohtmlView == null || menuOpenTraverse.GetValue<bool>()) return;
+
+            // Disable cohtmlView (opening should enable)
+            cohtmlView.enabled = false;
+
+            // Death
+            try
+            {
+                if (cohtmlView.m_UISystem != null) cohtmlView.View.Advance(cohtmlView.m_UISystem.Id, (double)Time.unscaledTime * 1000.0);
+            }
+            catch (Exception e)
+            {
+                FuckMetricsMod.Logger.Error($"An exception was thrown while calling CohtmlView.Advance(). Error message: {e.Message}");
             }
         }
     }

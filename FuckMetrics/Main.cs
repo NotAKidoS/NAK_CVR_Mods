@@ -6,8 +6,12 @@ namespace NAK.Melons.FuckMetrics;
 
 public class FuckMetricsMod : MelonMod
 {
+    public static MelonLogger.Instance Logger;
     public const string SettingsCategory = "FuckMetrics";
     public static readonly MelonPreferences_Category CategoryFuckMetrics = MelonPreferences.CreateCategory(SettingsCategory);
+
+    public static readonly MelonPreferences_Entry<bool> EntryDisableCohtmlViewOnIdle =
+        CategoryFuckMetrics.CreateEntry("Disable CohtmlView On Idle", false, description: "Disables CohtmlView on the menus when idle. This can give a huge performance boost.");
 
     public static readonly MelonPreferences_Entry<SettingState> EntryDisableMetrics =
         CategoryFuckMetrics.CreateEntry("Menu Metrics", SettingState.MenuOnly, description: "Disables menu metrics (FPS & Ping). Updates once on menu open if disabled.");
@@ -20,7 +24,6 @@ public class FuckMetricsMod : MelonMod
 
     public static readonly MelonPreferences_Entry<float> EntryCoreUpdateRate =
         CategoryFuckMetrics.CreateEntry("Core Update Rate", 2f, description: "Sets the update rate for the menu core updates. Default is 0.1f. Recommended to be 2f or higher.");
-
     public enum SettingState
     {
         Always,
@@ -30,10 +33,14 @@ public class FuckMetricsMod : MelonMod
 
     public override void OnInitializeMelon()
     {
+        Logger = LoggerInstance;
         EntryDisableMetrics.OnEntryValueChangedUntyped.Subscribe(OnDisableMetrics);
         EntryDisableCoreUpdates.OnEntryValueChangedUntyped.Subscribe(OnDisableCoreUpdates);
+        EntryMetricsUpdateRate.OnEntryValueChangedUntyped.Subscribe(OnChangeMetricsUpdateRate);
+        EntryCoreUpdateRate.OnEntryValueChangedUntyped.Subscribe(OnChangeCoreUpdateRate);
         ApplyPatches(typeof(HarmonyPatches.CVR_MenuManagerPatches));
         ApplyPatches(typeof(HarmonyPatches.ViewManagerPatches));
+        ApplyPatches(typeof(HarmonyPatches.CohtmlViewPatches));
         MelonCoroutines.Start(WaitForLocalPlayer());
     }
 
@@ -60,6 +67,24 @@ public class FuckMetricsMod : MelonMod
         FuckMetrics.ToggleCoreUpdates(EntryDisableCoreUpdates.Value == SettingState.Always);
     }
 
+    private void OnChangeMetricsUpdateRate(object arg1, object arg2)
+    {
+        if (EntryDisableMetrics.Value != SettingState.Disabled)
+        {
+            FuckMetrics.ToggleMetrics(false);
+            FuckMetrics.ToggleMetrics(true);
+        }
+    }
+
+    private void OnChangeCoreUpdateRate(object arg1, object arg2)
+    {
+        if (EntryDisableCoreUpdates.Value != SettingState.Disabled)
+        {
+            FuckMetrics.ToggleCoreUpdates(false);
+            FuckMetrics.ToggleCoreUpdates(true);
+        }
+    }
+
     private void ApplyPatches(Type type)
     {
         try
@@ -68,8 +93,8 @@ public class FuckMetricsMod : MelonMod
         }
         catch (Exception e)
         {
-            LoggerInstance.Msg($"Failed while patching {type.Name}!");
-            LoggerInstance.Error(e);
+            Logger.Msg($"Failed while patching {type.Name}!");
+            Logger.Error(e);
         }
     }
 }
