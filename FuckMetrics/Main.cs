@@ -33,7 +33,7 @@ public class FuckMetricsMod : MelonMod
 
     IEnumerator WaitForLocalPlayer()
     {
-        yield return PlayerSetup.Instance == null;
+        yield return PlayerSetup.Instance != null;
         UpdateSettings();
     }
 
