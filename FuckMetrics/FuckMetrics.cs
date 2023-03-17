@@ -8,6 +8,13 @@ namespace NAK.Melons.FuckMetrics
 {
     public static class FuckMetrics
     {
+        public enum SettingState
+        {
+            Always,
+            MenuOnly,
+            Disabled
+        }
+
         public static void ToggleMetrics(bool enable)
         {
             var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == "UpdateMetrics").Job;
@@ -31,6 +38,36 @@ namespace NAK.Melons.FuckMetrics
             else if (!enable && job != null)
             {
                 SchedulerSystem.RemoveJob(job);
+            }
+        }
+
+        public static void ApplyMetricsSettings(bool show)
+        {
+            var disableMetrics = FuckMetricsMod.EntryDisableMetrics.Value;
+            if (disableMetrics == FuckMetrics.SettingState.Always) return;
+
+            if (disableMetrics == FuckMetrics.SettingState.MenuOnly)
+            {
+                FuckMetrics.ToggleMetrics(show);
+            }
+            else if (disableMetrics == FuckMetrics.SettingState.Disabled && show)
+            {
+                ViewManager.Instance.UpdateMetrics();
+            }
+        }
+
+        public static void ApplyCoreUpdatesSettings(bool show)
+        {
+            var disableCoreUpdates = FuckMetricsMod.EntryDisableCoreUpdates.Value;
+            if (disableCoreUpdates == FuckMetrics.SettingState.Always) return;
+
+            if (disableCoreUpdates == FuckMetrics.SettingState.MenuOnly)
+            {
+                FuckMetrics.ToggleCoreUpdates(show);
+            }
+            else if (disableCoreUpdates == FuckMetrics.SettingState.Disabled && show)
+            {
+                CVR_MenuManager.Instance.SendCoreUpdate();
             }
         }
 
