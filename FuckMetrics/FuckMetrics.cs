@@ -75,9 +75,6 @@ public static class FuckMetrics
     {
         if (!FuckMetricsMod.EntryDisableCohtmlViewOnIdle.Value) return;
 
-        FuckMetricsMod.Logger.Msg(cohtmlView != null && !menuOpenTraverse.GetValue<bool>());
-        FuckMetricsMod.Logger.Msg(menuOpenTraverse.GetValue<bool>());
-
         if (cohtmlView != null && !menuOpenTraverse.GetValue<bool>())
         {
             cohtmlView.enabled = false;
