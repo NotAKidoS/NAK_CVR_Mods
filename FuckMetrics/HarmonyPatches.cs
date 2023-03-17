@@ -87,4 +87,17 @@ public static class CohtmlViewPatches
         _gameMenuOpenTraverse = Traverse.Create(__instance).Field("_gameMenuOpen");
         SchedulerSystem.AddJob(new SchedulerSystem.Job(() => FuckMetrics.CohtmlAdvanceView(_gameMenuView, _gameMenuOpenTraverse)), 12f, 6f, -1);
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(ViewManager), "OnMicrophoneStatusSwitched")]
+    private static void Postfix_ViewManager_OnMicrophoneStatusSwitched()
+    {
+        if (_quickMenuOpenTraverse.GetValue<bool>())
+        {
+            if (FuckMetricsMod.EntryDisableMetrics.Value != FuckMetricsMod.SettingState.Always)
+            {
+                CVR_MenuManager.Instance.SendCoreUpdate();
+            }
+        }
+    }
 }
