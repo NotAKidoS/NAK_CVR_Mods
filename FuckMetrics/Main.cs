@@ -44,23 +44,25 @@ public class FuckMetricsMod : MelonMod
     {
         while (PlayerSetup.Instance == null)
             yield return null;
-        UpdateSettings();
+        InitializeSettings();
     }
 
-    private void UpdateSettings()
+    private void InitializeSettings()
     {
+        FuckMetrics.ToggleMetrics(false);
+        FuckMetrics.ToggleCoreUpdates(false);
         FuckMetrics.ToggleMetrics(EntryDisableMetrics.Value == FuckMetrics.SettingState.Always);
         FuckMetrics.ToggleCoreUpdates(EntryDisableCoreUpdates.Value == FuckMetrics.SettingState.Always);
     }
 
     private void OnDisableMetrics(object arg1, object arg2)
     {
-        FuckMetrics.ToggleMetrics(EntryDisableMetrics.Value == FuckMetrics.SettingState.Always);
+        FuckMetrics.ToggleMetrics(EntryDisableMetrics.Value != FuckMetrics.SettingState.Disabled);
     }
 
     private void OnDisableCoreUpdates(object arg1, object arg2)
     {
-        FuckMetrics.ToggleCoreUpdates(EntryDisableCoreUpdates.Value == FuckMetrics.SettingState.Always);
+        FuckMetrics.ToggleCoreUpdates(EntryDisableCoreUpdates.Value != FuckMetrics.SettingState.Disabled);
     }
 
     private void OnChangeMetricsUpdateRate(object arg1, object arg2)
