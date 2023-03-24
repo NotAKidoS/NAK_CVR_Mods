@@ -5,34 +5,30 @@ namespace NAK.Melons.BadAnimatorFix;
 
 public class BadAnimatorFix : MonoBehaviour
 {
-    private float stateLimit = 20f;
+    private float stateLimit = 50f;
     private Animator animator;
     private Playable playable;
 
-    private void Start()
+    void Start()
     {
         animator = GetComponent<Animator>();
         playable = animator.playableGraph.GetRootPlayable(0);
+        BadAnimatorFixManager.Add(this);
     }
 
-    private void Update()
+    void OnDestroy()
     {
-        if (!BadAnimatorFixMod.EntryEnabled.Value) return;
-        if (playable.IsValid() && GetTime() > BadAnimatorFixMod.EntryPlayableTimeLimit.Value)
-        {
-            RewindAnimator();
-            BadAnimatorFixMod.Logger.Msg($"Rewound animator and playable {animator}.");
-        }
+        BadAnimatorFixManager.Remove(this);
     }
 
-    private double GetTime()
+    public double GetTime()
     {
         return PlayableExtensions.IsValid<Playable>(playable) ? PlayableExtensions.GetTime<Playable>(playable) : -1;
     }
 
-    private void RewindAnimator()
+    public void AttemptRewindAnimator()
     {
-        PlayableExtensions.SetTime<Playable>(playable, 0);
+        bool rewound = false;
         for (int i = 0; i < animator.layerCount; i++)
         {
             AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
@@ -42,31 +38,14 @@ public class BadAnimatorFix : MonoBehaviour
             // Skip if anim doesn't loop, or hasn't looped enough
             if (stateInfo.normalizedTime <= stateLimit) continue;
             // Rewind state, with 10f as buffer, to account for reasonable use of ExitTime
+            rewound = true;
             float offset = 10f + (stateInfo.normalizedTime % 1f);
             animator.Play(stateInfo.fullPathHash, i, offset);
         }
-    }
-
-    private float GetNormalizedTime()
-    {
-        float time = 0f;
-        for (int i = 0; i < animator.layerCount; i++)
+        if (rewound)
         {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
-            time += stateInfo.normalizedTime;
+            PlayableExtensions.SetTime<Playable>(playable, 0);
+            BadAnimatorFixMod.Logger.Msg($"Rewound animator and playable {animator}.");
         }
-        return time;
-    }
-
-    private float GetMaxNormalizedTime()
-    {
-        float time = 0f;
-        for (int i = 0; i < animator.layerCount; i++)
-        {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
-            if (time < stateInfo.normalizedTime)
-                time = stateInfo.normalizedTime;
-        }
-        return time;
     }
 }

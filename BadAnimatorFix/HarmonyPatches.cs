@@ -2,6 +2,7 @@
 using ABI_RC.Core.InteractionSystem;
 using HarmonyLib;
 using UnityEngine;
+using ABI_RC.Core.IO;
 
 namespace NAK.Melons.BadAnimatorFix.HarmonyPatches;
 
@@ -51,7 +52,7 @@ internal class AnimatorPatches
 
     private static void AddBadAnimatorFixComponentIfAnimatorExists(GameObject gameObject)
     {
-        if (!BadAnimatorFixMod.EntryEnabled.Value) return;
+        //if (!BadAnimatorFixMod.EntryEnabled.Value) return;
         Animator[] animators = gameObject.GetComponentsInChildren<Animator>();
         foreach (Animator animator in animators.Where(a => a.gameObject.GetComponent<BadAnimatorFix>() == null))
         {
@@ -60,4 +61,3 @@ internal class AnimatorPatches
         }
     }
 }
-

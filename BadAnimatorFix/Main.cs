@@ -1,4 +1,6 @@
 ﻿using MelonLoader;
+using System.Collections;
+using ABI_RC.Core.Player;
 
 namespace NAK.Melons.BadAnimatorFix;
 
@@ -29,7 +31,21 @@ public class BadAnimatorFixMod : MelonMod
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
+        EntryEnabled.OnEntryValueChangedUntyped.Subscribe(OnEnabled);
         ApplyPatches(typeof(HarmonyPatches.AnimatorPatches));
+        MelonCoroutines.Start(WaitForLocalPlayer());
+    }
+
+    private IEnumerator WaitForLocalPlayer()
+    {
+        while (PlayerSetup.Instance == null)
+            yield return null;
+        BadAnimatorFixManager.ToggleJob(EntryEnabled.Value);
+    }
+
+    private void OnEnabled(object arg1, object arg2)
+    {
+        BadAnimatorFixManager.ToggleJob(EntryEnabled.Value);
     }
 
     private void ApplyPatches(Type type)
