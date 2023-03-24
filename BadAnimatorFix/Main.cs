@@ -1,6 +1,4 @@
 ﻿using MelonLoader;
-using System.Collections;
-using ABI_RC.Core.Player;
 
 namespace NAK.Melons.BadAnimatorFix;
 
@@ -17,30 +15,28 @@ public class BadAnimatorFixMod : MelonMod
         CategoryBadAnimatorFix.CreateEntry("Add to CVRAvatar", true, description: "Should BadAnimatorFix run for CVRAvatar? Requires avatar reload.");
 
     public static readonly MelonPreferences_Entry<bool> EntryCVRSpawnable =
-        CategoryBadAnimatorFix.CreateEntry("Add to CVRSpawnable", false, description: "Should BadAnimatorFix run for CVRSpawnable? Requires spawnable reload.");
+        CategoryBadAnimatorFix.CreateEntry("Add to CVRSpawnable", true, description: "Should BadAnimatorFix run for CVRSpawnable? Requires spawnable reload.");
 
     public static readonly MelonPreferences_Entry<bool> EntryCVRWorld =
-        CategoryBadAnimatorFix.CreateEntry("Add to CVRWorld", false, description: "Should BadAnimatorFix run for CVRWorld? Requires world reload.");
+        CategoryBadAnimatorFix.CreateEntry("Add to CVRWorld", true, description: "Should BadAnimatorFix run for CVRWorld? Requires world reload.");
 
     public static readonly MelonPreferences_Entry<bool> EntryMenus =
-        CategoryBadAnimatorFix.CreateEntry("Add to Menus", false, description: "Should BadAnimatorFix run for QM & MM? Requires game restart.");
+        CategoryBadAnimatorFix.CreateEntry("Add to Menus", true, description: "Should BadAnimatorFix run for QM & MM? Requires game restart.");
 
-    public static readonly MelonPreferences_Entry<float> EntryPlayableTimeLimit =
-        CategoryBadAnimatorFix.CreateEntry("Playable Time Limit", 600f, description: "How long in seconds can a Playable play for before rewinding its states.");
+    public static readonly MelonPreferences_Entry<bool> EntryLogging =
+        CategoryBadAnimatorFix.CreateEntry("Logging", false, description: "Toggle to log each rewind if successful. Only needed for debugging.");
 
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
         EntryEnabled.OnEntryValueChangedUntyped.Subscribe(OnEnabled);
         ApplyPatches(typeof(HarmonyPatches.AnimatorPatches));
-        MelonCoroutines.Start(WaitForLocalPlayer());
     }
 
-    private IEnumerator WaitForLocalPlayer()
+    public override void OnSceneWasInitialized(int buildIndex, string sceneName)
     {
-        while (PlayerSetup.Instance == null)
-            yield return null;
-        BadAnimatorFixManager.ToggleJob(EntryEnabled.Value);
+        if (!EntryCVRWorld.Value) return;
+        BadAnimatorFixManager.OnSceneInitialized(sceneName);
     }
 
     private void OnEnabled(object arg1, object arg2)

@@ -2,11 +2,10 @@
 using ABI_RC.Core.InteractionSystem;
 using HarmonyLib;
 using UnityEngine;
-using ABI_RC.Core.IO;
 
 namespace NAK.Melons.BadAnimatorFix.HarmonyPatches;
 
-internal class AnimatorPatches
+internal static class AnimatorPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CVRAvatar), "Start")]
@@ -24,24 +23,16 @@ internal class AnimatorPatches
         AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
     }
 
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVRWorld), "Start")]
-    private static void Post_CVRWorld_Start(CVRWorld __instance)
-    {
-        if (!BadAnimatorFixMod.EntryCVRWorld.Value) return;
-        AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
-    }
-
-    //Set QM stuff
+    // Set QM stuff
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CVR_MenuManager), "Start")]
-    private static void Postfix_CVR_MenuManager_Start(ref CVR_MenuManager __instance, ref GameObject ____leftVrAnchor)
+    private static void Postfix_CVR_MenuManager_Start(ref CVR_MenuManager __instance)
     {
         if (!BadAnimatorFixMod.EntryMenus.Value) return;
         AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
     }
 
-    //Set MM stuff
+    // Set MM stuff
     [HarmonyPostfix]
     [HarmonyPatch(typeof(ViewManager), "Start")]
     private static void Postfix_ViewManager_Start(ref ViewManager __instance)
@@ -52,10 +43,10 @@ internal class AnimatorPatches
 
     private static void AddBadAnimatorFixComponentIfAnimatorExists(GameObject gameObject)
     {
-        //if (!BadAnimatorFixMod.EntryEnabled.Value) return;
-        Animator[] animators = gameObject.GetComponentsInChildren<Animator>();
-        foreach (Animator animator in animators.Where(a => a.gameObject.GetComponent<BadAnimatorFix>() == null))
+        Animator[] animators = gameObject.GetComponentsInChildren<Animator>(true);
+        foreach (Animator animator in animators)
         {
+            if (animator.gameObject.GetComponent<BadAnimatorFix>() != null) continue;
             if (animator.runtimeAnimatorController != null)
                 animator.gameObject.AddComponent<BadAnimatorFix>();
         }

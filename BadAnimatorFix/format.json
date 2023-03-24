@@ -1,23 +1,23 @@
 {
   "_id": -1,
-  "name": "TrackedControllerFix",
+  "name": "BadAnimatorFix",
   "modversion": "1.0.0",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Allows your controllers to track while the SteamVR overlay is open. This also fixes Quest/Touch controllers feeling slow during fast movements.",
+  "description": "This mod occasionally rewinds animation states that have loop enabled.\n\nUnity seems to have a weird quirk where animations with loop cause performance issues after running for a long long time.\nYou'll only start to notice this after a few hours to a few days of idling.\n\nDisable loop on your 2-frame toggle clips! They cycle insanely fast and heavily contribute to this issue.",
   "searchtags": [
-    "vr",
-    "quest",
-    "controller",
-    "tracking"
+    "bad",
+    "fix",
+    "animator",
+    "loop"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/TrackedControllerFix/releases/download/v1.0.0/TrackedControllerFix.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/TrackedControllerFix/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/BadAnimatorFix/releases/download/v1.0.0/BadAnimatorFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/BadAnimatorFix/",
   "changelog": "Initial Release",
-  "embedcolor": "3498db"
+  "embedcolor": "7F3F99"
 }

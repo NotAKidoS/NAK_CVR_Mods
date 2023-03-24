@@ -2,50 +2,49 @@
 using UnityEngine.Playables;
 
 namespace NAK.Melons.BadAnimatorFix;
-
 public class BadAnimatorFix : MonoBehaviour
 {
-    private float stateLimit = 50f;
-    private Animator animator;
-    private Playable playable;
+    private const float StateLimit = 20f;
 
-    void Start()
+    private Animator animator;
+
+    private void Start()
     {
         animator = GetComponent<Animator>();
-        playable = animator.playableGraph.GetRootPlayable(0);
-        BadAnimatorFixManager.Add(this);
     }
 
-    void OnDestroy()
-    {
-        BadAnimatorFixManager.Remove(this);
-    }
-
-    public double GetTime()
-    {
-        return PlayableExtensions.IsValid<Playable>(playable) ? PlayableExtensions.GetTime<Playable>(playable) : -1;
-    }
+    private void OnEnable() => BadAnimatorFixManager.Add(this);
+    private void OnDisable() => BadAnimatorFixManager.Remove(this);
 
     public void AttemptRewindAnimator()
     {
+        if (animator == null) return;
+
         bool rewound = false;
-        for (int i = 0; i < animator.layerCount; i++)
+        for (int layerIndex = 0; layerIndex < animator.layerCount; layerIndex++)
         {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(i);
-            AnimatorTransitionInfo transitionInfo = animator.GetAnimatorTransitionInfo(i);
-            // Skip if mid-transition
-            if (transitionInfo.fullPathHash != 0) continue;
-            // Skip if anim doesn't loop, or hasn't looped enough
-            if (stateInfo.normalizedTime <= stateLimit) continue;
-            // Rewind state, with 10f as buffer, to account for reasonable use of ExitTime
-            rewound = true;
-            float offset = 10f + (stateInfo.normalizedTime % 1f);
-            animator.Play(stateInfo.fullPathHash, i, offset);
+            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
+            AnimatorTransitionInfo transitionInfo = animator.GetAnimatorTransitionInfo(layerIndex);
+
+            bool shouldSkipState = !stateInfo.loop || transitionInfo.fullPathHash != 0;
+            if (shouldSkipState) continue;
+
+            bool shouldRewindState = stateInfo.normalizedTime >= StateLimit;
+            if (shouldRewindState)
+            {
+                float rewindOffset = (stateInfo.normalizedTime % 1f) + 10f;
+                animator.Play(stateInfo.fullPathHash, layerIndex, rewindOffset);
+                rewound = true;
+            }
         }
+
         if (rewound)
         {
-            PlayableExtensions.SetTime<Playable>(playable, 0);
-            BadAnimatorFixMod.Logger.Msg($"Rewound animator and playable {animator}.");
+            var rootPlayable = animator.playableGraph.GetRootPlayable(0);
+            PlayableExtensions.SetTime<Playable>(rootPlayable, 0);
+
+            if (BadAnimatorFixMod.EntryLogging.Value)
+                BadAnimatorFixMod.Logger.Msg($"Rewound animator and playable {animator}.");
         }
     }
 }
