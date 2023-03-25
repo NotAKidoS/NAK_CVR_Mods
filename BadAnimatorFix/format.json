@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "This mod occasionally rewinds animation states that have loop enabled.\n\nUnity seems to have a weird quirk where animations with loop cause performance issues after running for a long long time.\nYou'll only start to notice this after a few hours to a few days of idling.\n\nDisable loop on your 2-frame toggle clips! They cycle insanely fast and heavily contribute to this issue.",
+  "description": "This mod occasionally rewinds animation states that have loop enabled.\n\nUnity seems to have a weird quirk where *sometimes* animations with loop cause performance issues after running for a long time.\nYou'll only start to notice this after a few hours to a few days of idling.\n\nIf you don't happen to be AFK for long periods of time, you probably don't need this mod. This issue seems to be primarily caused by one-two frame animation clips meant for toggles with loop needlessly enabled.",
   "searchtags": [
     "bad",
     "fix",
