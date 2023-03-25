@@ -19,39 +19,37 @@ public class BadAnimatorFix : MonoBehaviour
 
     public void AttemptRewindAnimator()
     {
-        if (animator == null) return;
-
         bool rewound = false;
-        for (int layerIndex = 0; layerIndex < animator.layerCount; layerIndex++)
+
+        if (animator != null && animator.isActiveAndEnabled)
         {
-            AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
-            AnimatorTransitionInfo transitionInfo = animator.GetAnimatorTransitionInfo(layerIndex);
-
-            bool shouldSkipState = !stateInfo.loop || transitionInfo.fullPathHash != 0;
-            if (shouldSkipState) continue;
-
-            bool shouldRewindState = stateInfo.normalizedTime >= StateLimit;
-            if (shouldRewindState)
+            for (int layerIndex = 0; layerIndex < animator.layerCount; layerIndex++)
             {
-                float rewindOffset = (stateInfo.normalizedTime % 1f) + 10f;
-                animator.Play(stateInfo.fullPathHash, layerIndex, rewindOffset);
-                rewound = true;
+                AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(layerIndex);
+                AnimatorTransitionInfo transitionInfo = animator.GetAnimatorTransitionInfo(layerIndex);
+
+                // Skip if state doesn't loop or if mid-transition
+                if (!stateInfo.loop || transitionInfo.fullPathHash != 0) continue;
+
+                // Skip if state hasn't looped enough
+                if (stateInfo.normalizedTime > StateLimit)
+                {
+                    float rewindOffset = (stateInfo.normalizedTime % 1f) + 10f;
+                    animator.Play(stateInfo.fullPathHash, layerIndex, rewindOffset);
+                    rewound = true;
+                }
+            }
+
+            if (rewound)
+            {
+                PlayableExtensions.SetTime<Playable>(animator.playableGraph.GetRootPlayable(0), 0);
             }
         }
 
-        if (rewound)
+        if (BadAnimatorFixMod.EntryLogging.Value)
         {
-            var rootPlayable = animator.playableGraph.GetRootPlayable(0);
-            PlayableExtensions.SetTime<Playable>(rootPlayable, 0);
-
-            if (BadAnimatorFixMod.EntryLogging.Value)
-            {
-                BadAnimatorFixMod.Logger.Msg($"Rewound animator and playable {animator}.");
-            }
-        }
-        else if (BadAnimatorFixMod.EntryLogging.Value)
-        {
-            BadAnimatorFixMod.Logger.Msg($"Animator did not meet criteria to rewind {animator}.");
+            string message = rewound ? $"Rewound animator and playable {animator}." : $"Animator did not meet criteria to rewind {animator}.";
+            BadAnimatorFixMod.Logger.Msg(message);
         }
     }
 }

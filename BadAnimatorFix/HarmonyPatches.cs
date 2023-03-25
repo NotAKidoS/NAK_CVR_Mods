@@ -1,8 +1,8 @@
 ﻿using ABI.CCK.Components;
 using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Core.Player;
 using HarmonyLib;
 using UnityEngine;
-using ABI_RC.Core.Player;
 
 namespace NAK.Melons.BadAnimatorFix.HarmonyPatches;
 
@@ -54,9 +54,10 @@ internal static class AnimatorPatches
         Animator[] animators = gameObject.GetComponentsInChildren<Animator>(true);
         foreach (Animator animator in animators)
         {
-            if (animator.gameObject.GetComponent<BadAnimatorFix>() != null) continue;
-            if (animator.runtimeAnimatorController != null)
+            if (!animator.TryGetComponent<BadAnimatorFix>(out _))
+            {
                 animator.gameObject.AddComponent<BadAnimatorFix>();
+            }
         }
     }
 }
