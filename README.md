@@ -8,6 +8,8 @@ You'll only start to notice this after a few hours to a few days of idling.
 
 Disable loop on your 2-frame toggle clips! They cycle insanely fast and heavily contribute to this issue.
 
+This mod also indirectly fixes your locomotion animations or other animations locking up after being AFK/Idle for days at a time.
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
