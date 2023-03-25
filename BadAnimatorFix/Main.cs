@@ -24,7 +24,7 @@ public class BadAnimatorFixMod : MelonMod
         CategoryBadAnimatorFix.CreateEntry("Add to Menus", true, description: "Should BadAnimatorFix run for QM & MM? Requires game restart.");
 
     public static readonly MelonPreferences_Entry<bool> EntryLogging =
-        CategoryBadAnimatorFix.CreateEntry("Logging", false, description: "Toggle to log each rewind if successful. Only needed for debugging.");
+        CategoryBadAnimatorFix.CreateEntry("Debugging", false, description: "Toggle to log each rewind if successful. Only needed for debugging.");
 
     public override void OnInitializeMelon()
     {

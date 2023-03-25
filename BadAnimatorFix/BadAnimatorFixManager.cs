@@ -22,6 +22,11 @@ public static class BadAnimatorFixManager
             badAnimatorFixes.Remove(bad);
     }
 
+    public static void OnPlayerLoaded()
+    {
+        ToggleJob(BadAnimatorFixMod.EntryEnabled.Value);
+    }
+
     public static void OnSceneInitialized(string sceneName)
     {
         // Get all the animators in the loaded world

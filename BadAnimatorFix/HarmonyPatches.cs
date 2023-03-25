@@ -2,11 +2,19 @@
 using ABI_RC.Core.InteractionSystem;
 using HarmonyLib;
 using UnityEngine;
+using ABI_RC.Core.Player;
 
 namespace NAK.Melons.BadAnimatorFix.HarmonyPatches;
 
 internal static class AnimatorPatches
 {
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerSetup), "Start")]
+    private static void Post_PlayerSetup_Start()
+    {
+        BadAnimatorFixManager.OnPlayerLoaded();
+    }
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CVRAvatar), "Start")]
     private static void Post_CVRAvatar_Start(CVRAvatar __instance)

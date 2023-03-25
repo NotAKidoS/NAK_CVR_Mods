@@ -2,6 +2,7 @@
 using UnityEngine.Playables;
 
 namespace NAK.Melons.BadAnimatorFix;
+
 public class BadAnimatorFix : MonoBehaviour
 {
     private const float StateLimit = 20f;
@@ -44,7 +45,13 @@ public class BadAnimatorFix : MonoBehaviour
             PlayableExtensions.SetTime<Playable>(rootPlayable, 0);
 
             if (BadAnimatorFixMod.EntryLogging.Value)
+            {
                 BadAnimatorFixMod.Logger.Msg($"Rewound animator and playable {animator}.");
+            }
+        }
+        else if (BadAnimatorFixMod.EntryLogging.Value)
+        {
+            BadAnimatorFixMod.Logger.Msg($"Animator did not meet criteria to rewind {animator}.");
         }
     }
 }
