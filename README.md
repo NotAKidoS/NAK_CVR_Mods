@@ -1,5 +1,5 @@
 # BadAnimatorFix
- A bad fix for a neiche issue. Is it really even a fix?
+ A bad fix for a niche issue. Is it really even a fix?
 
 This mod occasionally rewinds animation states that have loop enabled.
 
