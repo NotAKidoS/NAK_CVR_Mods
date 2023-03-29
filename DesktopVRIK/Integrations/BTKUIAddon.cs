@@ -24,7 +24,7 @@ public static class BTKUIAddon
         Category desktopVRIKCategory = desktopVRIKPage.AddCategory(DesktopVRIKMod.SettingsCategory);
 
         // General Settings
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryEnabled);
+        //AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryEnabled);
         AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryPlantFeet);
         AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryResetFootstepsOnIdle);
 
