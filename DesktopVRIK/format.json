@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.1.0",
+  "modversion": "4.1.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -17,7 +17,7 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v4.1.0/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v4.1.1/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
   "changelog": "- No longer requires AvatarMotionTweaker.\n- No longer piggybacks on IKSystem/PlayerSetup.\n\n DesktopVRIK will now handle VRIK Locomotion weight instead of relying on CVR & AMT to handle it. This means LeapMotionExtension & CVRLimbGrabber will now work properly while in crouch/prone.",
   "embedcolor": "9b59b6"
