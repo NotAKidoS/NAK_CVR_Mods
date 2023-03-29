@@ -154,6 +154,12 @@ public static class VRIKUtils
         initialStepHeight = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.leftCalf.position) * 0.2f;
     }
 
+    public static void CalculateInitialFootsteps(VRIK vrik, out Vector3 initialFootstepLeft, out Vector3 initialFootstepRight)
+    {
+        initialFootstepLeft = vrik.references.root.InverseTransformPoint(vrik.references.leftFoot.position);
+        initialFootstepRight = vrik.references.root.InverseTransformPoint(vrik.references.rightFoot.position);
+    }
+
     public static void SetupHeadIKTarget(VRIK vrik)
     {
         // Lazy HeadIKTarget calibration

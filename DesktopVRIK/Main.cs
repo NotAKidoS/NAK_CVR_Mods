@@ -18,6 +18,9 @@ public class DesktopVRIKMod : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryUseVRIKToes =
         CategoryDesktopVRIK.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
 
+    public static readonly MelonPreferences_Entry<bool> EntryResetFootstepsOnIdle =
+        CategoryDesktopVRIK.CreateEntry("Reset Footsteps on Idle", false, description: "Forces Locomotion Footsteps to reset to their initial position on return to idle. This is a bit aggressive.");
+
     public static readonly MelonPreferences_Entry<bool> EntryFindUnmappedToes =
         CategoryDesktopVRIK.CreateEntry("Find Unmapped Toes", false, description: "Determines if DesktopVRIK should look for unmapped toe bones if the humanoid rig does not have any.");
 
@@ -55,6 +58,7 @@ public class DesktopVRIKMod : MelonMod
         // DesktopVRIK Settings
         DesktopVRIKSystem.Instance.Setting_Enabled = EntryEnabled.Value;
         DesktopVRIKSystem.Instance.Setting_PlantFeet = EntryPlantFeet.Value;
+        DesktopVRIKSystem.Instance.Setting_ResetFootsteps = EntryResetFootstepsOnIdle.Value;
 
         DesktopVRIKSystem.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(EntryBodyLeanWeight.Value);
         DesktopVRIKSystem.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(EntryBodyHeadingLimit.Value, 0f, 90f);

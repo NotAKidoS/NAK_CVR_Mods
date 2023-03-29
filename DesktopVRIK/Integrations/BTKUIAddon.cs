@@ -26,6 +26,7 @@ public static class BTKUIAddon
         // General Settings
         AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryEnabled);
         AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryPlantFeet);
+        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryResetFootstepsOnIdle);
 
         // Calibration Settings
         AddMelonToggle(ref desktopVRIKCategory, DesktopVRIKMod.EntryUseVRIKToes);

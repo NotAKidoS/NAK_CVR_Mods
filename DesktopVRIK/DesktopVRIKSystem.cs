@@ -124,6 +124,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
     // DesktopVRIK Settings
     public bool Setting_Enabled = true;
     public bool Setting_PlantFeet = true;
+    public bool Setting_ResetFootsteps;
     public float Setting_BodyLeanWeight;
     public float Setting_BodyHeadingLimit;
     public float Setting_PelvisHeadingWeight;
@@ -161,6 +162,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
     // VRIK Calibration Info
     Vector3 _leftKneeNormal;
     Vector3 _rightKneeNormal;
+    Vector3 _initialFootStepLeft;
+    Vector3 _initialFootStepRight;
     float _initialFootDistance;
     float _initialStepThreshold;
     float _initialStepHeight;
@@ -212,8 +215,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
         bool isFlying = movementSystem.flying;
 
         // Why do it myself if VRIK already does the maths
-        Vector3 headLocalPos = avatarIKSolver.spine.headPosition - avatarIKSolver.spine.rootPosition;
-        float upright = 1f + (headLocalPos.y - avatarIKSolver.spine.headHeight);
+        Vector3 headLocalPos = avatarTransform.TransformPoint(avatarIKSolver.spine.headPosition);
+        float upright = 1f + (avatarIKSolver.spine.headHeight - headLocalPos.y);
 
         if (isMoving || isCrouching || isProne || isFlying || !isGrounded)
         {
@@ -310,7 +313,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         if (avatarVRIK == null) return;
 
         if (isEmotePlaying == _isEmotePlaying) return;
-        
+
         _isEmotePlaying = isEmotePlaying;
 
         if (avatarLookAtIK != null)
@@ -359,6 +362,12 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
         if (_isEmotePlaying) return;
 
+        // Constantly reset footsteps until fully idle
+        if (_locomotionWeightLerp < 0.99f)
+        {
+            ResetFootsteps();
+        }
+
         // Set plant feet
         avatarIKSolver.plantFeet = Setting_PlantFeet;
 
@@ -399,6 +408,19 @@ internal class DesktopVRIKSystem : MonoBehaviour
     void ResetDesktopVRIK()
     {
         _simulatedRootAngle = transform.eulerAngles.y;
+    }
+
+    void ResetFootsteps()
+    {
+        if (!Setting_ResetFootsteps) return;
+        IKSolverVR.Footstep footstepLeft = avatarIKSolver.locomotion.footsteps[0];
+        IKSolverVR.Footstep footstepRight = avatarIKSolver.locomotion.footsteps[1];
+        Vector3 globalLeft = movementSystem.transform.TransformPoint(_initialFootStepLeft);
+        Vector3 globalRight = movementSystem.transform.TransformPoint(_initialFootStepRight);
+        footstepLeft.Reset(avatarTransform.rotation, globalLeft, footstepLeft.stepToRot);
+        footstepRight.Reset(avatarTransform.rotation, globalRight, footstepRight.stepToRot);
+        //footstepRight.StepTo(globalRight, avatarTransform.rotation, 100f);
+        //footstepLeft.StepTo(globalLeft, avatarTransform.rotation, 100f);
     }
 
     void CalibrateDesktopVRIK()
@@ -513,6 +535,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
         // Calculate initial IK scaling values with IKPose
         VRIKUtils.CalculateInitialIKScaling(avatarVRIK, out _initialFootDistance, out _initialStepThreshold, out _initialStepHeight);
+
+        // Calculate initial Footstep positions
+        VRIKUtils.CalculateInitialFootsteps(avatarVRIK, out _initialFootStepLeft, out _initialFootStepRight);
 
         // Setup HeadIKTarget
         VRIKUtils.SetupHeadIKTarget(avatarVRIK);
