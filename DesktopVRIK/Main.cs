@@ -13,7 +13,7 @@ public class DesktopVRIKMod : MelonMod
         CategoryDesktopVRIK.CreateEntry("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
 
     public static readonly MelonPreferences_Entry<bool> EntryPlantFeet =
-        CategoryDesktopVRIK.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movement.");
+        CategoryDesktopVRIK.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movementSystem.");
 
     public static readonly MelonPreferences_Entry<bool> EntryUseVRIKToes =
         CategoryDesktopVRIK.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
@@ -33,6 +33,11 @@ public class DesktopVRIKMod : MelonMod
     public static readonly MelonPreferences_Entry<float> EntryChestHeadingWeight =
         CategoryDesktopVRIK.CreateEntry("Chest Heading Weight", 0.75f, description: "Determines how much the chest will face the Body Heading Limit. Set to 0 to align with head.");
 
+    public static readonly MelonPreferences_Entry<bool> EntryIntegrationAMT =
+        CategoryDesktopVRIK.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
+
+    public static bool integration_AMT = false;
+
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
@@ -40,40 +45,47 @@ public class DesktopVRIKMod : MelonMod
         CategoryDesktopVRIK.Entries.ForEach(e => e.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings));
 
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
-        ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
 
-        InitializeIntegrations();
-    }
-
-    internal static void UpdateAllSettings()
-    {
-        if (!DesktopVRIK.Instance) return;
-        // DesktopVRIK Settings
-        DesktopVRIK.Instance.Setting_Enabled = EntryEnabled.Value;
-        DesktopVRIK.Instance.Setting_PlantFeet = EntryPlantFeet.Value;
-
-        DesktopVRIK.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(EntryBodyLeanWeight.Value);
-        DesktopVRIK.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(EntryBodyHeadingLimit.Value, 0f, 90f);
-        DesktopVRIK.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(EntryPelvisHeadingWeight.Value));
-        DesktopVRIK.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(EntryChestHeadingWeight.Value));
-
-        // Calibration Settings
-        DesktopVRIK.Instance.Calibrator.Setting_UseVRIKToes = EntryUseVRIKToes.Value;
-        DesktopVRIK.Instance.Calibrator.Setting_FindUnmappedToes = EntryFindUnmappedToes.Value;
-    }
-    private void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
-
-    private static void InitializeIntegrations()
-    {
         //BTKUILib Misc Tab
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
         {
             Logger.Msg("Initializing BTKUILib support.");
             BTKUIAddon.Init();
         }
+        //AvatarMotionTweaker Handling
+        if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "AvatarMotionTweaker"))
+        {
+            Logger.Msg("AvatarMotionTweaker was found. Relying on it to handle VRIK locomotion.");
+            integration_AMT = true;
+        }
+        else
+        {
+            Logger.Msg("AvatarMotionTweaker was not found. Using built-in VRIK locomotion handling.");
+        }
     }
 
-    private void ApplyPatches(Type type)
+    internal static void UpdateAllSettings()
+    {
+        if (!DesktopVRIKSystem.Instance) return;
+        // DesktopVRIK Settings
+        DesktopVRIKSystem.Instance.Setting_Enabled = EntryEnabled.Value;
+        DesktopVRIKSystem.Instance.Setting_PlantFeet = EntryPlantFeet.Value;
+
+        DesktopVRIKSystem.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(EntryBodyLeanWeight.Value);
+        DesktopVRIKSystem.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(EntryBodyHeadingLimit.Value, 0f, 90f);
+        DesktopVRIKSystem.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(EntryPelvisHeadingWeight.Value));
+        DesktopVRIKSystem.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(EntryChestHeadingWeight.Value));
+
+        // Calibration Settings
+        DesktopVRIKSystem.Instance.Setting_UseVRIKToes = EntryUseVRIKToes.Value;
+        DesktopVRIKSystem.Instance.Setting_FindUnmappedToes = EntryFindUnmappedToes.Value;
+
+        // Integration Settings
+        DesktopVRIKSystem.Instance.Setting_IntegrationAMT = EntryIntegrationAMT.Value;
+    }
+    void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
+
+    void ApplyPatches(Type type)
     {
         try
         {

@@ -1,5 +1,4 @@
 ﻿using ABI_RC.Core.Player;
-using ABI_RC.Systems.IK;
 using HarmonyLib;
 using UnityEngine;
 
@@ -24,12 +23,19 @@ namespace NAK.Melons.DesktopVRIK.HarmonyPatches;
 class PlayerSetupPatches
 {
     [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerSetup), "Start")]
+    static void Postfix_PlayerSetup_Start(ref PlayerSetup __instance)
+    {
+        __instance.gameObject.AddComponent<DesktopVRIKSystem>();
+    }
+
+    [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), "SetupAvatarDesktop")]
     static void Postfix_PlayerSetup_SetupAvatarDesktop(ref Animator ____animator)
     {
         if (____animator != null && ____animator.avatar != null && ____animator.avatar.isHuman)
         {
-            DesktopVRIK.Instance?.OnSetupAvatarDesktop();
+            DesktopVRIKSystem.Instance?.OnSetupAvatarDesktop();
         }
     }
 
@@ -37,30 +43,20 @@ class PlayerSetupPatches
     [HarmonyPatch(typeof(PlayerSetup), "Update")]
     static void Postfix_PlayerSetup_Update(ref bool ____emotePlaying)
     {
-        DesktopVRIK.Instance?.OnPlayerSetupUpdate(____emotePlaying);
+        DesktopVRIKSystem.Instance?.OnPlayerSetupUpdate(____emotePlaying);
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerSetup), "SetupIKScaling")]
     private static bool Prefix_PlayerSetup_SetupIKScaling(float height, ref Vector3 ___scaleDifference)
     {
-        return !(bool)DesktopVRIK.Instance?.OnSetupIKScaling(1f + ___scaleDifference.y);
+        return !(bool)DesktopVRIKSystem.Instance?.OnSetupIKScaling(1f + ___scaleDifference.y);
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerSetup), "ResetIk")]
     static bool Prefix_PlayerSetup_ResetIk()
     {
-        return !(bool)DesktopVRIK.Instance?.OnPlayerSetupResetIk();
-    }
-}
-
-class IKSystemPatches
-{
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(IKSystem), "Start")]
-    private static void Postfix_IKSystem_Start(ref IKSystem __instance)
-    {
-        __instance.gameObject.AddComponent<DesktopVRIK>();
+        return !(bool)DesktopVRIKSystem.Instance?.OnPlayerSetupResetIk();
     }
 }

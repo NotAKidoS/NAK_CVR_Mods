@@ -1,13 +1,10 @@
 ﻿using RootMotion.FinalIK;
-using System.Reflection;
 using UnityEngine;
 
 namespace NAK.Melons.DesktopVRIK;
 
 public static class VRIKUtils
 {
-    static readonly FieldInfo vrik_bendNormalRelToPelvis = typeof(IKSolverVR.Leg).GetField("bendNormalRelToPelvis", BindingFlags.NonPublic | BindingFlags.Instance);
-
     public static void ConfigureVRIKReferences(VRIK vrik, bool useVRIKToes, bool findUnmappedToes, out bool foundUnmappedToes)
     {
         foundUnmappedToes = false;
@@ -119,16 +116,13 @@ public static class VRIKUtils
     public static void ApplyKneeBendNormals(VRIK vrik, Vector3 leftKneeNormal, Vector3 rightKneeNormal)
     {
         // 0 uses bendNormalRelToPelvis, 1 is bendNormalRelToTarget
-        // modifying pelvis normal weight is better math
+        // modifying pelvis normal weight is easier math
         vrik.solver.leftLeg.bendToTargetWeight = 0f;
         vrik.solver.rightLeg.bendToTargetWeight = 0f;
 
         var pelvis_localRotationInverse = Quaternion.Inverse(vrik.references.pelvis.localRotation);
-        var leftLeg_bendNormalRelToPelvis = pelvis_localRotationInverse * leftKneeNormal;
-        var rightLeg_bendNormalRelToPelvis = pelvis_localRotationInverse * rightKneeNormal;
-
-        vrik_bendNormalRelToPelvis.SetValue(vrik.solver.leftLeg, leftLeg_bendNormalRelToPelvis);
-        vrik_bendNormalRelToPelvis.SetValue(vrik.solver.rightLeg, rightLeg_bendNormalRelToPelvis);
+        vrik.solver.leftLeg.bendNormalRelToPelvis = pelvis_localRotationInverse * leftKneeNormal;
+        vrik.solver.rightLeg.bendNormalRelToPelvis = pelvis_localRotationInverse * rightKneeNormal;
     }
 
     private static Vector3 GetNormalFromArray(Vector3[] positions)
@@ -158,6 +152,18 @@ public static class VRIKUtils
         initialFootDistance = footDistance * 0.5f;
         initialStepThreshold = footDistance * scaleModifier;
         initialStepHeight = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.leftCalf.position) * 0.2f;
+    }
+
+    public static void SetupHeadIKTarget(VRIK vrik)
+    {
+        // Lazy HeadIKTarget calibration
+        if (vrik.solver.spine.headTarget == null)
+        {
+            vrik.solver.spine.headTarget = new GameObject("Head IK Target").transform;
+        }
+        vrik.solver.spine.headTarget.parent = vrik.references.head;
+        vrik.solver.spine.headTarget.localPosition = Vector3.zero;
+        vrik.solver.spine.headTarget.localRotation = Quaternion.identity;
     }
 
     public static void ApplyScaleToVRIK(VRIK vrik, float footDistance, float stepThreshold, float stepHeight, float modifier)
