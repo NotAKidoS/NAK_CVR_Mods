@@ -112,18 +112,6 @@ internal class DesktopVRIKSystem : MonoBehaviour
             0.8138595f,
             0.8110138f
      };
-    
-    enum AvatarPose
-    {
-        Default = 0,
-        Initial = 1,
-        IKPose = 2,
-        TPose = 3
-    }
-
-    // ChilloutVR Player Components
-    private PlayerSetup playerSetup;
-    private MovementSystem movementSystem;
 
     // DesktopVRIK Settings
     public bool Setting_Enabled = true;
@@ -148,31 +136,43 @@ internal class DesktopVRIKSystem : MonoBehaviour
     public VRIK avatarVRIK = null;
     public IKSolverVR avatarIKSolver = null;
 
+    // ChilloutVR Player Components
+    PlayerSetup playerSetup;
+    MovementSystem movementSystem;
+
     // Calibration Objects
-    public HumanPose HumanPose;
-    public HumanPose InitialHumanPose;
-    public HumanPoseHandler HumanPoseHandler;
+    HumanPose _humanPose;
+    HumanPose _initialHumanPose;
+    HumanPoseHandler _humanPoseHandler;
 
     // Animator Info
-    public int locomotionLayer = -1;
-    public int customIKPoseLayer = -1;
-    public bool requireFixTransforms = false;
+    int _locomotionLayer = -1;
+    int _customIKPoseLayer = -1;
+    bool _requireFixTransforms = false;
 
     // VRIK Calibration Info
-    public Vector3 leftKneeNormal;
-    public Vector3 rightKneeNormal;
-    public float initialFootDistance;
-    public float initialStepThreshold;
-    public float initialStepHeight;
+    Vector3 _leftKneeNormal;
+    Vector3 _rightKneeNormal;
+    float _initialFootDistance;
+    float _initialStepThreshold;
+    float _initialStepHeight;
 
     // Player Info
-    private Transform _cameraTransform;
-    private bool _isEmotePlaying;
-    private float _simulatedRootAngle;
+    Transform _cameraTransform;
+    bool _isEmotePlaying;
+    float _simulatedRootAngle;
 
     // Last Movement Parent Info
-    private Vector3 _previousPosition;
-    private Quaternion _previousRotation;
+    Vector3 _previousPosition;
+    Quaternion _previousRotation;
+
+    enum AvatarPose
+    {
+        Default = 0,
+        Initial = 1,
+        IKPose = 2,
+        TPose = 3
+    }
 
     DesktopVRIKSystem()
     {
@@ -309,9 +309,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
         VRIKUtils.ApplyScaleToVRIK
         (
             avatarVRIK,
-            initialFootDistance,
-            initialStepThreshold,
-            initialStepHeight,
+            _initialFootDistance,
+            _initialStepThreshold,
+            _initialStepHeight,
             scaleDifference
         );
 
@@ -444,19 +444,19 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarLookAtIK = playerSetup.lookIK;
 
         // Get animator layer inticies
-        locomotionLayer = avatarAnimator.GetLayerIndex("IKPose");
-        customIKPoseLayer = avatarAnimator.GetLayerIndex("Locomotion/Emotes");
+        _locomotionLayer = avatarAnimator.GetLayerIndex("IKPose");
+        _customIKPoseLayer = avatarAnimator.GetLayerIndex("Locomotion/Emotes");
 
-        // Dispose and create new HumanPoseHandler
-        HumanPoseHandler?.Dispose();
-        HumanPoseHandler = new HumanPoseHandler(avatarAnimator.avatar, avatarTransform);
+        // Dispose and create new _humanPoseHandler
+        _humanPoseHandler?.Dispose();
+        _humanPoseHandler = new HumanPoseHandler(avatarAnimator.avatar, avatarTransform);
 
         // Get initial human poses
-        HumanPoseHandler.GetHumanPose(ref HumanPose);
-        HumanPoseHandler.GetHumanPose(ref InitialHumanPose);
+        _humanPoseHandler.GetHumanPose(ref _humanPose);
+        _humanPoseHandler.GetHumanPose(ref _initialHumanPose);
 
         // Dumb fix for rare upload issue
-        requireFixTransforms = !avatarAnimator.enabled;
+        _requireFixTransforms = !avatarAnimator.enabled;
 
         // Find available HumanoidBodyBones
         BoneExists.Clear();
@@ -479,7 +479,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         VRIKUtils.ConfigureVRIKReferences(avatarVRIK, Setting_UseVRIKToes, Setting_FindUnmappedToes, out bool foundUnmappedToes);
 
         // Fix animator issue or non-human mapped toes
-        avatarVRIK.fixTransforms = requireFixTransforms || foundUnmappedToes;
+        avatarVRIK.fixTransforms = _requireFixTransforms || foundUnmappedToes;
 
         // Default solver settings
         avatarIKSolver.locomotion.weight = 0f;
@@ -533,12 +533,12 @@ internal class DesktopVRIKSystem : MonoBehaviour
         SetAvatarPose(AvatarPose.Default);
 
         // Calculate bend normals with motorcycle pose
-        VRIKUtils.CalculateKneeBendNormals(avatarVRIK, out leftKneeNormal, out rightKneeNormal);
+        VRIKUtils.CalculateKneeBendNormals(avatarVRIK, out _leftKneeNormal, out _rightKneeNormal);
 
         SetAvatarPose(AvatarPose.IKPose);
 
         // Calculate initial IK scaling values with IKPose
-        VRIKUtils.CalculateInitialIKScaling(avatarVRIK, out initialFootDistance, out initialStepThreshold, out initialStepHeight);
+        VRIKUtils.CalculateInitialIKScaling(avatarVRIK, out _initialFootDistance, out _initialStepThreshold, out _initialStepHeight);
 
         // Setup HeadIKTarget
         VRIKUtils.SetupHeadIKTarget(avatarVRIK);
@@ -554,12 +554,12 @@ internal class DesktopVRIKSystem : MonoBehaviour
         VRIKUtils.ApplyScaleToVRIK
         (
             avatarVRIK,
-            initialFootDistance,
-            initialStepThreshold,
-            initialStepHeight,
+            _initialFootDistance,
+            _initialStepThreshold,
+            _initialStepHeight,
             1f
         );
-        VRIKUtils.ApplyKneeBendNormals(avatarVRIK, leftKneeNormal, rightKneeNormal);
+        VRIKUtils.ApplyKneeBendNormals(avatarVRIK, _leftKneeNormal, _rightKneeNormal);
         avatarVRIK.onPreSolverUpdate.AddListener(new UnityAction(DesktopVRIKSystem.Instance.OnPreSolverUpdate));
     }
 
@@ -576,7 +576,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
                 SetMusclesToValue(0f);
                 break;
             case AvatarPose.Initial:
-                HumanPoseHandler.SetHumanPose(ref InitialHumanPose);
+                _humanPoseHandler.SetHumanPose(ref _initialHumanPose);
                 break;
             case AvatarPose.IKPose:
                 if (HasCustomIKPose())
@@ -596,40 +596,40 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
     bool HasCustomIKPose()
     {
-        return locomotionLayer != -1 && customIKPoseLayer != -1;
+        return _locomotionLayer != -1 && _customIKPoseLayer != -1;
     }
 
     void SetCustomLayersWeights(float customIKPoseLayerWeight, float locomotionLayerWeight)
     {
-        avatarAnimator.SetLayerWeight(customIKPoseLayer, customIKPoseLayerWeight);
-        avatarAnimator.SetLayerWeight(locomotionLayer, locomotionLayerWeight);
+        avatarAnimator.SetLayerWeight(_customIKPoseLayer, customIKPoseLayerWeight);
+        avatarAnimator.SetLayerWeight(_locomotionLayer, locomotionLayerWeight);
         avatarAnimator.Update(0f);
     }
 
     void SetMusclesToValue(float value)
     {
-        HumanPoseHandler.GetHumanPose(ref HumanPose);
+        _humanPoseHandler.GetHumanPose(ref _humanPose);
 
-        for (int i = 0; i < HumanPose.muscles.Length; i++)
+        for (int i = 0; i < _humanPose.muscles.Length; i++)
         {
-            ApplyMuscleValue((MuscleIndex)i, value, ref HumanPose.muscles);
+            ApplyMuscleValue((MuscleIndex)i, value, ref _humanPose.muscles);
         }
 
-        HumanPose.bodyRotation = Quaternion.identity;
-        HumanPoseHandler.SetHumanPose(ref HumanPose);
+        _humanPose.bodyRotation = Quaternion.identity;
+        _humanPoseHandler.SetHumanPose(ref _humanPose);
     }
 
     void SetMusclesToPose(float[] muscles)
     {
-        HumanPoseHandler.GetHumanPose(ref HumanPose);
+        _humanPoseHandler.GetHumanPose(ref _humanPose);
 
-        for (int i = 0; i < HumanPose.muscles.Length; i++)
+        for (int i = 0; i < _humanPose.muscles.Length; i++)
         {
-            ApplyMuscleValue((MuscleIndex)i, muscles[i], ref HumanPose.muscles);
+            ApplyMuscleValue((MuscleIndex)i, muscles[i], ref _humanPose.muscles);
         }
 
-        HumanPose.bodyRotation = Quaternion.identity;
-        HumanPoseHandler.SetHumanPose(ref HumanPose);
+        _humanPose.bodyRotation = Quaternion.identity;
+        _humanPoseHandler.SetHumanPose(ref _humanPose);
     }
 
     void ApplyMuscleValue(MuscleIndex index, float value, ref float[] muscles)
