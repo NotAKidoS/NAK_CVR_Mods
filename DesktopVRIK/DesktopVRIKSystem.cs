@@ -113,6 +113,14 @@ internal class DesktopVRIKSystem : MonoBehaviour
             0.8110138f
      };
 
+    enum AvatarPose
+    {
+        Default = 0,
+        Initial = 1,
+        IKPose = 2,
+        TPose = 3
+    }
+
     // DesktopVRIK Settings
     public bool Setting_Enabled = true;
     public bool Setting_PlantFeet = true;
@@ -165,14 +173,6 @@ internal class DesktopVRIKSystem : MonoBehaviour
     // Last Movement Parent Info
     Vector3 _previousPosition;
     Quaternion _previousRotation;
-
-    enum AvatarPose
-    {
-        Default = 0,
-        Initial = 1,
-        IKPose = 2,
-        TPose = 3
-    }
 
     DesktopVRIKSystem()
     {
