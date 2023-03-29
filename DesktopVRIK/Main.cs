@@ -13,7 +13,7 @@ public class DesktopVRIKMod : MelonMod
         CategoryDesktopVRIK.CreateEntry("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
 
     public static readonly MelonPreferences_Entry<bool> EntryPlantFeet =
-        CategoryDesktopVRIK.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movementSystem.");
+        CategoryDesktopVRIK.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movement.");
 
     public static readonly MelonPreferences_Entry<bool> EntryUseVRIKToes =
         CategoryDesktopVRIK.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");

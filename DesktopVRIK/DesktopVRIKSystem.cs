@@ -112,6 +112,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
             0.8138595f,
             0.8110138f
      };
+    
     enum AvatarPose
     {
         Default = 0,
