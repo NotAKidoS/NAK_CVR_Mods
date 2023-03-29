@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Adds VRIK to Desktop avatars. No longer will you be a liveless sliding statue~!\nAdds the small feet stepping when looking around on Desktop.",
+  "description": "Adds VRIK to Desktop avatars. No longer will you be a liveless sliding statue~!\nAdds the small feet stepping when looking around on Desktop.\n\nOptional BTKUILib and AvatarMotionTweaker integrations.",
   "searchtags": [
     "desktop",
     "vrik",
@@ -15,11 +15,10 @@
     "fish"
   ],
   "requirements": [
-    "BTKUILib",
-    "AvatarMotionTweaker"
+    "BTKUILib"
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/DesktopVRIK/releases/download/v4.1.0/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/DesktopVRIK/",
-  "changelog": "- No longer requires AvatarMotionTweaker.\n- No longer piggybacks on IKSystem.\n- DesktopVRIK will now handle VRIK Locomotion weight instead of relying on the game to handle it. This means LeapMotionExtension will now work properly while crouched/prone.",
+  "changelog": "- No longer requires AvatarMotionTweaker.\n- No longer piggybacks on IKSystem/PlayerSetup.\n\n DesktopVRIK will now handle VRIK Locomotion weight instead of relying on CVR & AMT to handle it. This means LeapMotionExtension & CVRLimbGrabber will now work properly while in crouch/prone.",
   "embedcolor": "9b59b6"
 }
