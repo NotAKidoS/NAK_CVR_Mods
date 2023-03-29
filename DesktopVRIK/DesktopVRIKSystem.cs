@@ -166,9 +166,12 @@ internal class DesktopVRIKSystem : MonoBehaviour
     float _initialStepHeight;
 
     // Player Info
-    Transform _cameraTransform;
-    bool _isEmotePlaying;
-    float _simulatedRootAngle;
+    Transform _cameraTransform = null;
+    bool _isEmotePlaying = false;
+    float _simulatedRootAngle = 0f;
+    float _locomotionWeight = 1f;
+    float _locomotionWeightLerp = 1f;
+    float _locomotionLerpSpeed = 10f;
 
     // Last Movement Parent Info
     Vector3 _previousPosition;
@@ -196,37 +199,13 @@ internal class DesktopVRIKSystem : MonoBehaviour
         if (avatarVRIK == null) return;
 
         HandleLocomotionTracking();
+        LerpLocomotionWeight();
         ApplyBodySystemWeights();
     }
 
     void HandleLocomotionTracking()
     {
         bool isMoving = movementSystem.movementVector.magnitude > 0f;
-
-        // AvatarMotionTweaker handles VRIK a bit better than DesktopVRIK
-        if (Setting_IntegrationAMT && DesktopVRIKMod.integration_AMT)
-        {
-            if (isMoving)
-            {
-                if (BodySystem.TrackingLocomotionEnabled)
-                {
-                    BodySystem.TrackingLocomotionEnabled = false;
-                    avatarIKSolver.Reset();
-                    ResetDesktopVRIK();
-                }
-            }
-            else
-            {
-                if (!BodySystem.TrackingLocomotionEnabled)
-                {
-                    BodySystem.TrackingLocomotionEnabled = true;
-                    avatarIKSolver.Reset();
-                    ResetDesktopVRIK();
-                }
-            }
-            return;
-        }
-
         bool isGrounded = movementSystem._isGrounded;
         bool isCrouching = movementSystem.crouching;
         bool isProne = movementSystem.prone;
@@ -256,6 +235,12 @@ internal class DesktopVRIKSystem : MonoBehaviour
         }
     }
 
+    void LerpLocomotionWeight()
+    {
+        _locomotionWeight = BodySystem.TrackingEnabled && BodySystem.TrackingLocomotionEnabled ? 1.0f : 0.0f;
+        _locomotionWeightLerp = Mathf.Lerp(_locomotionWeightLerp, _locomotionWeight, Time.deltaTime * _locomotionLerpSpeed);
+    }
+
     void ApplyBodySystemWeights()
     {
         void SetArmWeight(IKSolverVR.Arm arm, bool isTracked)
@@ -274,7 +259,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         {
             avatarVRIK.enabled = true;
             avatarIKSolver.IKPositionWeight = BodySystem.TrackingPositionWeight;
-            avatarIKSolver.locomotion.weight = BodySystem.TrackingLocomotionEnabled ? 1f : 0f;
+            avatarIKSolver.locomotion.weight = _locomotionWeight;
 
             SetArmWeight(avatarIKSolver.leftArm, BodySystem.TrackingLeftArmEnabled && avatarIKSolver.leftArm.target != null);
             SetArmWeight(avatarIKSolver.rightArm, BodySystem.TrackingRightArmEnabled && avatarIKSolver.rightArm.target != null);
@@ -324,19 +309,15 @@ internal class DesktopVRIKSystem : MonoBehaviour
     {
         if (avatarVRIK == null) return;
 
-        bool changed = isEmotePlaying != _isEmotePlaying;
-        if (!changed) return;
-
+        if (isEmotePlaying == _isEmotePlaying) return;
+        
         _isEmotePlaying = isEmotePlaying;
-
-        avatarTransform.localPosition = Vector3.zero;
-        avatarTransform.localRotation = Quaternion.identity;
 
         if (avatarLookAtIK != null)
             avatarLookAtIK.enabled = !isEmotePlaying;
 
+        // Disable tracking completely while emoting
         BodySystem.TrackingEnabled = !isEmotePlaying;
-
         avatarIKSolver.Reset();
         ResetDesktopVRIK();
     }
@@ -372,18 +353,11 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
     public void OnPreSolverUpdate()
     {
-        if (_isEmotePlaying) return;
-
-        bool isGrounded = movementSystem._isGrounded;
-
-        // Calculate weight
-        float weight = avatarIKSolver.IKPositionWeight;
-        weight *= 1f - movementSystem.movementVector.magnitude;
-        weight *= isGrounded ? 1f : 0f;
-
         // Reset avatar offset
         avatarTransform.localPosition = Vector3.zero;
         avatarTransform.localRotation = Quaternion.identity;
+
+        if (_isEmotePlaying) return;
 
         // Set plant feet
         avatarIKSolver.plantFeet = Setting_PlantFeet;
@@ -391,7 +365,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         // Emulate old VRChat hip movementSystem
         if (Setting_BodyLeanWeight > 0)
         {
-            float weightedAngle = Setting_BodyLeanWeight * weight;
+            float weightedAngle = Setting_BodyLeanWeight * _locomotionWeightLerp;
             float angle = _cameraTransform.localEulerAngles.x;
             angle = angle > 180 ? angle - 360 : angle;
             Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, avatarTransform.right);
@@ -401,7 +375,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         // Make root heading follow within a set limit
         if (Setting_BodyHeadingLimit > 0)
         {
-            float weightedAngleLimit = Setting_BodyHeadingLimit * weight;
+            float weightedAngleLimit = Setting_BodyHeadingLimit * _locomotionWeightLerp;
             float deltaAngleRoot = Mathf.DeltaAngle(transform.eulerAngles.y, _simulatedRootAngle);
             float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
             if (absDeltaAngleRoot > weightedAngleLimit)

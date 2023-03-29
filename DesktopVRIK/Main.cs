@@ -33,11 +33,6 @@ public class DesktopVRIKMod : MelonMod
     public static readonly MelonPreferences_Entry<float> EntryChestHeadingWeight =
         CategoryDesktopVRIK.CreateEntry("Chest Heading Weight", 0.75f, description: "Determines how much the chest will face the Body Heading Limit. Set to 0 to align with head.");
 
-    public static readonly MelonPreferences_Entry<bool> EntryIntegrationAMT =
-        CategoryDesktopVRIK.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
-
-    public static bool integration_AMT = false;
-
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
@@ -51,16 +46,6 @@ public class DesktopVRIKMod : MelonMod
         {
             Logger.Msg("Initializing BTKUILib support.");
             BTKUIAddon.Init();
-        }
-        //AvatarMotionTweaker Handling
-        if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "AvatarMotionTweaker"))
-        {
-            Logger.Msg("AvatarMotionTweaker was found. Relying on it to handle VRIK locomotion.");
-            integration_AMT = true;
-        }
-        else
-        {
-            Logger.Msg("AvatarMotionTweaker was not found. Using built-in VRIK locomotion handling.");
         }
     }
 
@@ -79,9 +64,6 @@ public class DesktopVRIKMod : MelonMod
         // Calibration Settings
         DesktopVRIKSystem.Instance.Setting_UseVRIKToes = EntryUseVRIKToes.Value;
         DesktopVRIKSystem.Instance.Setting_FindUnmappedToes = EntryFindUnmappedToes.Value;
-
-        // Integration Settings
-        DesktopVRIKSystem.Instance.Setting_IntegrationAMT = EntryIntegrationAMT.Value;
     }
     void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
 
