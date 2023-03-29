@@ -571,12 +571,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
                 if (HasCustomIKPose())
                 {
                     SetCustomLayersWeights(0f, 1f);
-                    avatarAnimator.Update(0f);
+                    return;
                 }
-                else
-                {
-                    SetMusclesToValue(0f);
-                }
+                SetMusclesToValue(0f);
                 break;
             case AvatarPose.Initial:
                 HumanPoseHandler.SetHumanPose(ref InitialHumanPose);
@@ -585,12 +582,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
                 if (HasCustomIKPose())
                 {
                     SetCustomLayersWeights(1f, 0f);
-                    avatarAnimator.Update(0f);
+                    return;
                 }
-                else
-                {
-                    SetMusclesToPose(IKPoseMuscles);
-                }
+                SetMusclesToPose(IKPoseMuscles);
                 break;
             case AvatarPose.TPose:
                 SetMusclesToPose(BodySystem.TPoseMuscles);
@@ -609,6 +603,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
     {
         avatarAnimator.SetLayerWeight(customIKPoseLayer, customIKPoseLayerWeight);
         avatarAnimator.SetLayerWeight(locomotionLayer, locomotionLayerWeight);
+        avatarAnimator.Update(0f);
     }
 
     void SetMusclesToValue(float value)
