@@ -151,34 +151,34 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
     // Calibration Objects
     HumanPose _humanPose;
-    HumanPose _initialHumanPose;
+    HumanPose _humanPoseInitial;
     HumanPoseHandler _humanPoseHandler;
 
     // Animator Info
-    int _locomotionLayer = -1;
-    int _customIKPoseLayer = -1;
-    bool _requireFixTransforms = false;
+    int _animLocomotionLayer = -1;
+    int _animIKPoseLayer = -1;
 
     // VRIK Calibration Info
-    Vector3 _leftKneeNormal;
-    Vector3 _rightKneeNormal;
-    Vector3 _initialFootStepLeft;
-    Vector3 _initialFootStepRight;
-    float _initialFootDistance;
-    float _initialStepThreshold;
-    float _initialStepHeight;
+    Vector3 _vrikKneeNormalLeft;
+    Vector3 _vrikKneeNormalRight;
+    Vector3 _vrikInitialFootStepLeft;
+    Vector3 _vrikInitialFootStepRight;
+    float _vrikInitialFootDistance;
+    float _vrikInitialStepThreshold;
+    float _vrikInitialStepHeight;
+    bool _vrikFixTransformsRequired;
 
     // Player Info
     Transform _cameraTransform = null;
-    bool _isEmotePlaying = false;
-    float _simulatedRootAngle = 0f;
+    bool _ikEmotePlaying = false;
+    float _ikSimulatedRootAngle = 0f;
     float _locomotionWeight = 1f;
     float _locomotionWeightLerp = 1f;
     float _locomotionLerpSpeed = 10f;
 
     // Last Movement Parent Info
-    Vector3 _previousPosition;
-    Quaternion _previousRotation;
+    Vector3 _movementPosition;
+    Quaternion _movementRotation;
 
     DesktopVRIKSystem()
     {
@@ -214,27 +214,13 @@ internal class DesktopVRIKSystem : MonoBehaviour
         bool isProne = movementSystem.prone;
         bool isFlying = movementSystem.flying;
 
-        // Why do it myself if VRIK already does the maths
-        Vector3 headLocalPos = avatarTransform.TransformPoint(avatarIKSolver.spine.headPosition);
-        float upright = 1f + (avatarIKSolver.spine.headHeight - headLocalPos.y);
+        bool shouldTrackLocomotion = !(isMoving || isCrouching || isProne || isFlying || !isGrounded);
 
-        if (isMoving || isCrouching || isProne || isFlying || !isGrounded)
+        if (shouldTrackLocomotion != BodySystem.TrackingLocomotionEnabled)
         {
-            if (BodySystem.TrackingLocomotionEnabled)
-            {
-                BodySystem.TrackingLocomotionEnabled = false;
-                avatarIKSolver.Reset();
-                ResetDesktopVRIK();
-            }
-        }
-        else
-        {
-            if (!BodySystem.TrackingLocomotionEnabled && upright > 0.8f)
-            {
-                BodySystem.TrackingLocomotionEnabled = true;
-                avatarIKSolver.Reset();
-                ResetDesktopVRIK();
-            }
+            BodySystem.TrackingLocomotionEnabled = shouldTrackLocomotion;
+            avatarIKSolver.Reset();
+            ResetDesktopVRIK();
         }
     }
 
@@ -297,9 +283,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
         VRIKUtils.ApplyScaleToVRIK
         (
             avatarVRIK,
-            _initialFootDistance,
-            _initialStepThreshold,
-            _initialStepHeight,
+            _vrikInitialFootDistance,
+            _vrikInitialStepThreshold,
+            _vrikInitialStepHeight,
             scaleDifference
         );
 
@@ -312,9 +298,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
     {
         if (avatarVRIK == null) return;
 
-        if (isEmotePlaying == _isEmotePlaying) return;
+        if (isEmotePlaying == _ikEmotePlaying) return;
 
-        _isEmotePlaying = isEmotePlaying;
+        _ikEmotePlaying = isEmotePlaying;
 
         if (avatarLookAtIK != null)
             avatarLookAtIK.enabled = !isEmotePlaying;
@@ -329,26 +315,27 @@ internal class DesktopVRIKSystem : MonoBehaviour
     {
         if (avatarVRIK == null) return false;
 
+        // Check if PlayerSetup.ResetIk() was called for movement parent
         CVRMovementParent currentParent = movementSystem._currentParent;
-        if (currentParent == null) return false;
+        if (currentParent == null || currentParent._referencePoint == null) return false;
 
-        Transform referencePoint = currentParent._referencePoint;
-        if (referencePoint == null) return false;
+        // Get current position
+        var currentPosition = currentParent._referencePoint.position;
+        var currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
 
-        var currentPosition = referencePoint.position;
-        var currentRotation = currentParent.transform.rotation;
+        // Convert to delta position (how much changed since last frame)
+        var deltaPosition = currentPosition - _movementPosition;
+        var deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
 
-        // Keep only the Y-axis rotation
-        currentRotation = Quaternion.Euler(0f, currentRotation.eulerAngles.y, 0f);
-
-        var deltaPosition = currentPosition - _previousPosition;
-        var deltaRotation = Quaternion.Inverse(_previousRotation) * currentRotation;
-
+        // desktop pivots from playerlocal transform
         var platformPivot = transform.position;
+
+        // Add platform motion to IK solver
         avatarIKSolver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
 
-        _previousPosition = currentPosition;
-        _previousRotation = currentRotation;
+        // Store for next frame
+        _movementPosition = currentPosition;
+        _movementRotation = currentRotation;
 
         ResetDesktopVRIK();
         return true;
@@ -360,67 +347,85 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarTransform.localPosition = Vector3.zero;
         avatarTransform.localRotation = Quaternion.identity;
 
-        if (_isEmotePlaying) return;
-
-        // Constantly reset footsteps until fully idle
-        if (_locomotionWeightLerp < 0.99f)
-        {
-            ResetFootsteps();
-        }
+        // Don't run during emotes
+        if (_ikEmotePlaying) return;
 
         // Set plant feet
         avatarIKSolver.plantFeet = Setting_PlantFeet;
 
-        // Emulate old VRChat hip movementSystem
-        if (Setting_BodyLeanWeight > 0)
+        // Apply custom VRIK solving effects
+        if (_locomotionWeightLerp > 0)
         {
-            float weightedAngle = Setting_BodyLeanWeight * _locomotionWeightLerp;
-            float angle = _cameraTransform.localEulerAngles.x;
-            angle = angle > 180 ? angle - 360 : angle;
-            Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, avatarTransform.right);
-            avatarIKSolver.spine.headRotationOffset *= rotation;
+            IKBodyLeaningOffset();
+            IKBodyHeadingOffset();
         }
 
+        // Reset footsteps while transitioning
+        if (_locomotionWeightLerp < 0.99f)
+        {
+            IKResetFootsteps();
+        }
+    }
+
+    void IKBodyLeaningOffset()
+    {
+        // Emulate old VRChat hip movement
+        if (Setting_BodyLeanWeight <= 0) return;
+
+        float weightedAngle = Setting_BodyLeanWeight * _locomotionWeightLerp;
+        float angle = _cameraTransform.localEulerAngles.x;
+        angle = angle > 180 ? angle - 360 : angle;
+        Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, avatarTransform.right);
+        avatarIKSolver.spine.headRotationOffset *= rotation;
+    }
+
+    void IKBodyHeadingOffset()
+    {
         // Make root heading follow within a set limit
-        if (Setting_BodyHeadingLimit > 0)
+        if (Setting_BodyHeadingLimit <= 0) return;
+
+        float weightedAngleLimit = Setting_BodyHeadingLimit * _locomotionWeightLerp;
+        float deltaAngleRoot = Mathf.DeltaAngle(transform.eulerAngles.y, _ikSimulatedRootAngle);
+        float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
+
+        if (absDeltaAngleRoot > weightedAngleLimit)
         {
-            float weightedAngleLimit = Setting_BodyHeadingLimit * _locomotionWeightLerp;
-            float deltaAngleRoot = Mathf.DeltaAngle(transform.eulerAngles.y, _simulatedRootAngle);
-            float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
-            if (absDeltaAngleRoot > weightedAngleLimit)
-            {
-                deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
-                _simulatedRootAngle = Mathf.MoveTowardsAngle(_simulatedRootAngle, transform.eulerAngles.y, absDeltaAngleRoot - weightedAngleLimit);
-            }
-            avatarIKSolver.spine.rootHeadingOffset = deltaAngleRoot;
-            if (Setting_PelvisHeadingWeight > 0)
-            {
-                avatarIKSolver.spine.pelvisRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * Setting_PelvisHeadingWeight, 0f);
-                avatarIKSolver.spine.chestRotationOffset *= Quaternion.Euler(0f, -deltaAngleRoot * Setting_PelvisHeadingWeight, 0f);
-            }
-            if (Setting_ChestHeadingWeight > 0)
-            {
-                avatarIKSolver.spine.chestRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * Setting_ChestHeadingWeight, 0f);
-            }
+            deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
+            _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, transform.eulerAngles.y, absDeltaAngleRoot - weightedAngleLimit);
+        }
+
+        avatarIKSolver.spine.rootHeadingOffset = deltaAngleRoot;
+
+        if (Setting_PelvisHeadingWeight > 0)
+        {
+            avatarIKSolver.spine.pelvisRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * Setting_PelvisHeadingWeight, 0f);
+            avatarIKSolver.spine.chestRotationOffset *= Quaternion.Euler(0f, -deltaAngleRoot * Setting_PelvisHeadingWeight, 0f);
+        }
+
+        if (Setting_ChestHeadingWeight > 0)
+        {
+            avatarIKSolver.spine.chestRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * Setting_ChestHeadingWeight, 0f);
         }
     }
 
-    void ResetDesktopVRIK()
+    void IKResetFootsteps()
     {
-        _simulatedRootAngle = transform.eulerAngles.y;
-    }
-
-    void ResetFootsteps()
-    {
+        // Attempt to skip footstep transition
         if (!Setting_ResetFootsteps) return;
+
         IKSolverVR.Footstep footstepLeft = avatarIKSolver.locomotion.footsteps[0];
         IKSolverVR.Footstep footstepRight = avatarIKSolver.locomotion.footsteps[1];
-        Vector3 globalLeft = movementSystem.transform.TransformPoint(_initialFootStepLeft);
-        Vector3 globalRight = movementSystem.transform.TransformPoint(_initialFootStepRight);
+        Vector3 globalLeft = movementSystem.transform.TransformPoint(_vrikInitialFootStepLeft);
+        Vector3 globalRight = movementSystem.transform.TransformPoint(_vrikInitialFootStepRight);
         footstepLeft.Reset(avatarTransform.rotation, globalLeft, footstepLeft.stepToRot);
         footstepRight.Reset(avatarTransform.rotation, globalRight, footstepRight.stepToRot);
         //footstepRight.StepTo(globalRight, avatarTransform.rotation, 100f);
         //footstepLeft.StepTo(globalLeft, avatarTransform.rotation, 100f);
+    }
+
+    void ResetDesktopVRIK()
+    {
+        _ikSimulatedRootAngle = transform.eulerAngles.y;
     }
 
     void CalibrateDesktopVRIK()
@@ -440,8 +445,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarLookAtIK = playerSetup.lookIK;
 
         // Get animator layer inticies
-        _locomotionLayer = avatarAnimator.GetLayerIndex("IKPose");
-        _customIKPoseLayer = avatarAnimator.GetLayerIndex("Locomotion/Emotes");
+        _animIKPoseLayer = avatarAnimator.GetLayerIndex("IKPose");
+        _animLocomotionLayer = avatarAnimator.GetLayerIndex("Locomotion/Emotes");
 
         // Dispose and create new _humanPoseHandler
         _humanPoseHandler?.Dispose();
@@ -449,10 +454,10 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
         // Get initial human poses
         _humanPoseHandler.GetHumanPose(ref _humanPose);
-        _humanPoseHandler.GetHumanPose(ref _initialHumanPose);
+        _humanPoseHandler.GetHumanPose(ref _humanPoseInitial);
 
         // Dumb fix for rare upload issue
-        _requireFixTransforms = !avatarAnimator.enabled;
+        _vrikFixTransformsRequired = !avatarAnimator.enabled;
 
         // Find available HumanoidBodyBones
         BoneExists.Clear();
@@ -475,7 +480,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         VRIKUtils.ConfigureVRIKReferences(avatarVRIK, Setting_UseVRIKToes, Setting_FindUnmappedToes, out bool foundUnmappedToes);
 
         // Fix animator issue or non-human mapped toes
-        avatarVRIK.fixTransforms = _requireFixTransforms || foundUnmappedToes;
+        avatarVRIK.fixTransforms = _vrikFixTransformsRequired || foundUnmappedToes;
 
         // Default solver settings
         avatarIKSolver.locomotion.weight = 0f;
@@ -529,15 +534,15 @@ internal class DesktopVRIKSystem : MonoBehaviour
         SetAvatarPose(AvatarPose.Default);
 
         // Calculate bend normals with motorcycle pose
-        VRIKUtils.CalculateKneeBendNormals(avatarVRIK, out _leftKneeNormal, out _rightKneeNormal);
+        VRIKUtils.CalculateKneeBendNormals(avatarVRIK, out _vrikKneeNormalLeft, out _vrikKneeNormalRight);
 
         SetAvatarPose(AvatarPose.IKPose);
 
         // Calculate initial IK scaling values with IKPose
-        VRIKUtils.CalculateInitialIKScaling(avatarVRIK, out _initialFootDistance, out _initialStepThreshold, out _initialStepHeight);
+        VRIKUtils.CalculateInitialIKScaling(avatarVRIK, out _vrikInitialFootDistance, out _vrikInitialStepThreshold, out _vrikInitialStepHeight);
 
         // Calculate initial Footstep positions
-        VRIKUtils.CalculateInitialFootsteps(avatarVRIK, out _initialFootStepLeft, out _initialFootStepRight);
+        VRIKUtils.CalculateInitialFootsteps(avatarVRIK, out _vrikInitialFootStepLeft, out _vrikInitialFootStepRight);
 
         // Setup HeadIKTarget
         VRIKUtils.SetupHeadIKTarget(avatarVRIK);
@@ -553,12 +558,12 @@ internal class DesktopVRIKSystem : MonoBehaviour
         VRIKUtils.ApplyScaleToVRIK
         (
             avatarVRIK,
-            _initialFootDistance,
-            _initialStepThreshold,
-            _initialStepHeight,
+            _vrikInitialFootDistance,
+            _vrikInitialStepThreshold,
+            _vrikInitialStepHeight,
             1f
         );
-        VRIKUtils.ApplyKneeBendNormals(avatarVRIK, _leftKneeNormal, _rightKneeNormal);
+        VRIKUtils.ApplyKneeBendNormals(avatarVRIK, _vrikKneeNormalLeft, _vrikKneeNormalRight);
         avatarVRIK.onPreSolverUpdate.AddListener(new UnityAction(DesktopVRIKSystem.Instance.OnPreSolverUpdate));
     }
 
@@ -575,7 +580,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
                 SetMusclesToValue(0f);
                 break;
             case AvatarPose.Initial:
-                _humanPoseHandler.SetHumanPose(ref _initialHumanPose);
+                _humanPoseHandler.SetHumanPose(ref _humanPoseInitial);
                 break;
             case AvatarPose.IKPose:
                 if (HasCustomIKPose())
@@ -595,13 +600,13 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
     bool HasCustomIKPose()
     {
-        return _locomotionLayer != -1 && _customIKPoseLayer != -1;
+        return _animLocomotionLayer != -1 && _animIKPoseLayer != -1;
     }
 
     void SetCustomLayersWeights(float customIKPoseLayerWeight, float locomotionLayerWeight)
     {
-        avatarAnimator.SetLayerWeight(_customIKPoseLayer, customIKPoseLayerWeight);
-        avatarAnimator.SetLayerWeight(_locomotionLayer, locomotionLayerWeight);
+        avatarAnimator.SetLayerWeight(_animIKPoseLayer, customIKPoseLayerWeight);
+        avatarAnimator.SetLayerWeight(_animLocomotionLayer, locomotionLayerWeight);
         avatarAnimator.Update(0f);
     }
 
