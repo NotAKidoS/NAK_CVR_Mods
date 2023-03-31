@@ -154,10 +154,33 @@ public static class VRIKUtils
         initialStepHeight = Vector3.Distance(vrik.references.leftFoot.position, vrik.references.leftCalf.position) * 0.2f;
     }
 
-    public static void CalculateInitialFootsteps(VRIK vrik, out Vector3 initialFootstepLeft, out Vector3 initialFootstepRight)
+    public static void CalculateInitialFootsteps(VRIK vrik, out Vector3 initialFootPosLeft, out Vector3 initialFootPosRight, out Quaternion initialFootRotLeft, out Quaternion initialFootRotRight)
     {
-        initialFootstepLeft = vrik.references.root.InverseTransformPoint(vrik.references.leftFoot.position);
-        initialFootstepRight = vrik.references.root.InverseTransformPoint(vrik.references.rightFoot.position);
+        Transform root = vrik.references.root;
+        Transform leftFoot = vrik.references.leftFoot;
+        Transform rightFoot = vrik.references.rightFoot;
+
+        // Calculate the world rotation of the root bone at the current frame
+        Quaternion rootWorldRot = root.rotation;
+
+        // Calculate the world rotation of the left and right feet relative to the root bone
+        initialFootPosLeft = root.InverseTransformPoint(leftFoot.position);
+        initialFootPosRight = root.InverseTransformPoint(rightFoot.position);
+        initialFootRotLeft = Quaternion.Inverse(rootWorldRot) * leftFoot.rotation;
+        initialFootRotRight = Quaternion.Inverse(rootWorldRot) * rightFoot.rotation;
+    }
+
+    public static void SetFootsteps(VRIK vrik, Vector3 footPosLeft, Vector3 footPosRight, Quaternion footRotLeft, Quaternion footRotRight)
+    {
+        var locomotionSolver = vrik.solver.locomotion;
+
+        var footsteps = locomotionSolver.footsteps;
+        var footstepLeft = footsteps[0];
+        var footstepRight = footsteps[1];
+
+        var rootWorldRot = vrik.references.root.rotation;
+        footstepLeft.Reset(rootWorldRot, vrik.transform.TransformPoint(footPosLeft), rootWorldRot * footRotLeft);
+        footstepRight.Reset(rootWorldRot, vrik.transform.TransformPoint(footPosRight), rootWorldRot * footRotRight);
     }
 
     public static void SetupHeadIKTarget(VRIK vrik)

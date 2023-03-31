@@ -15,11 +15,11 @@ public class DesktopVRIKMod : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryPlantFeet =
         CategoryDesktopVRIK.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movement.");
 
+    public static readonly MelonPreferences_Entry<bool> EntryResetFootstepsOnIdle =
+        CategoryDesktopVRIK.CreateEntry("Reset Footsteps on Idle", true, description: "Determins if the Locomotion Footsteps will be reset to their calibration position when entering idle.");
+
     public static readonly MelonPreferences_Entry<bool> EntryUseVRIKToes =
         CategoryDesktopVRIK.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
-
-    public static readonly MelonPreferences_Entry<bool> EntryResetFootstepsOnIdle =
-        CategoryDesktopVRIK.CreateEntry("Reset Footsteps on Idle", false, description: "Forces Locomotion Footsteps to reset to their initial position on return to idle. This is a bit aggressive.");
 
     public static readonly MelonPreferences_Entry<bool> EntryFindUnmappedToes =
         CategoryDesktopVRIK.CreateEntry("Find Unmapped Toes", false, description: "Determines if DesktopVRIK should look for unmapped toe bones if the humanoid rig does not have any.");
@@ -36,6 +36,14 @@ public class DesktopVRIKMod : MelonMod
     public static readonly MelonPreferences_Entry<float> EntryChestHeadingWeight =
         CategoryDesktopVRIK.CreateEntry("Chest Heading Weight", 0.75f, description: "Determines how much the chest will face the Body Heading Limit. Set to 0 to align with head.");
 
+    public static readonly MelonPreferences_Entry<float> EntryIKLerpSpeed =
+        CategoryDesktopVRIK.CreateEntry("IK Lerp Speed", 10f, description: "Determines fast the IK & Locomotion weights blend after entering idle. Set to 0 to disable.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryIntegrationAMT =
+        CategoryDesktopVRIK.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
+
+    public static bool integration_AMT = false;
+
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
@@ -49,6 +57,16 @@ public class DesktopVRIKMod : MelonMod
         {
             Logger.Msg("Initializing BTKUILib support.");
             BTKUIAddon.Init();
+        }
+        //AvatarMotionTweaker Handling
+        if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "AvatarMotionTweaker"))
+        {
+            Logger.Msg("AvatarMotionTweaker was found. Relying on it to handle VRIK locomotion.");
+            integration_AMT = true;
+        }
+        else
+        {
+            Logger.Msg("AvatarMotionTweaker was not found. Using built-in VRIK locomotion handling.");
         }
     }
 
@@ -64,10 +82,18 @@ public class DesktopVRIKMod : MelonMod
         DesktopVRIKSystem.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(EntryBodyHeadingLimit.Value, 0f, 90f);
         DesktopVRIKSystem.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(EntryPelvisHeadingWeight.Value));
         DesktopVRIKSystem.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(EntryChestHeadingWeight.Value));
+        DesktopVRIKSystem.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(EntryChestHeadingWeight.Value));
+        DesktopVRIKSystem.Instance.Setting_IKLerpSpeed = Mathf.Clamp(EntryIKLerpSpeed.Value, 0f, 20f);
 
         // Calibration Settings
         DesktopVRIKSystem.Instance.Setting_UseVRIKToes = EntryUseVRIKToes.Value;
         DesktopVRIKSystem.Instance.Setting_FindUnmappedToes = EntryFindUnmappedToes.Value;
+
+        // Fine-tuning Settings
+        DesktopVRIKSystem.Instance.Setting_ResetFootsteps = EntryResetFootstepsOnIdle.Value;
+
+        // Integration Settings
+        DesktopVRIKSystem.Instance.Setting_IntegrationAMT = EntryIntegrationAMT.Value && integration_AMT;
     }
     void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
 
