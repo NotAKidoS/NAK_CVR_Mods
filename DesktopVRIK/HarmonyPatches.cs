@@ -13,6 +13,7 @@ using UnityEngine;
         Chito- left foot is far back without proper tpose & foot ik distance, was uploaded in falling anim state.
         Atlas (portal2)- Wide stance, proper feet distance needed to be calculated.
         Freddy (gmod)- Doesn't have any fingers, wristToPalmAxis & palmToThumbAxis needed to be set manually.
+        Small Cheese- Emotes are angled wrong due to maxRootAngle..???
 
 	Most other avatars play just fine.
 

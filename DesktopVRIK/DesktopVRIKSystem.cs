@@ -329,7 +329,6 @@ internal class DesktopVRIKSystem : MonoBehaviour
         if (avatarVRIK == null) return;
 
         if (isEmotePlaying == _ikEmotePlaying) return;
-
         _ikEmotePlaying = isEmotePlaying;
 
         if (avatarLookAtIK != null)
@@ -535,6 +534,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarIKSolver.spine.positionWeight = 0f;
         avatarIKSolver.spine.rotationWeight = 1f;
 
+        // Set so emotes play properly
+        avatarIKSolver.spine.maxRootAngle = 180f;
+
         // We disable these ourselves now, as we no longer use BodySystem
         avatarIKSolver.spine.maintainPelvisPosition = 1f;
         avatarIKSolver.spine.positionWeight = 0f;
@@ -596,14 +598,14 @@ internal class DesktopVRIKSystem : MonoBehaviour
         switch (pose)
         {
             case AvatarPose.Default:
+                SetMusclesToValue(0f);
+                break;
+            case AvatarPose.Initial:
                 if (HasCustomIKPose())
                 {
                     SetCustomLayersWeights(0f, 1f);
                     return;
                 }
-                SetMusclesToValue(0f);
-                break;
-            case AvatarPose.Initial:
                 _humanPoseHandler.SetHumanPose(ref _humanPoseInitial);
                 break;
             case AvatarPose.IKPose:
