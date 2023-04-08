@@ -6,6 +6,12 @@ https://feedback.abinteractive.net/p/ik-knee-tracking
 
 https://feedback.abinteractive.net/p/2022r170-ex3-knee-ik-weirdness-when-using-knee-trackers
 
+https://feedback.abinteractive.net/p/disabling-all-tracked-points-makes-game-assume-fbt
+
+https://feedback.abinteractive.net/p/about-ik-behaviour
+
+https://feedback.abinteractive.net/p/vrik-addplatformmotion-for-movement-parents
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
