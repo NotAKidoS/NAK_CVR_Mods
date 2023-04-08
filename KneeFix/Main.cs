@@ -6,8 +6,9 @@ public class KneeFixMod : MelonMod
 {
     public override void OnInitializeMelon()
     {
-        ApplyPatches(typeof(HarmonyPatches.BodySystemPatches));
         ApplyPatches(typeof(HarmonyPatches.VRIKPatches));
+        ApplyPatches(typeof(HarmonyPatches.BodySystemPatches));
+        ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
     }
 
     void ApplyPatches(Type type)
