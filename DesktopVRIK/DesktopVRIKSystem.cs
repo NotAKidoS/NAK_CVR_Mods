@@ -125,6 +125,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
     public bool Setting_Enabled = true;
     public bool Setting_PlantFeet;
     public bool Setting_ResetFootsteps;
+    public bool Setting_ProneThrusting;
     public float Setting_BodyLeanWeight;
     public float Setting_BodyHeadingLimit;
     public float Setting_PelvisHeadingWeight;
@@ -177,6 +178,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
     float _ikWeightLerp = 1f;
     float _ikSimulatedRootAngle = 0f;
     float _locomotionWeight = 1f;
+    float _scaleDifference = 1f;
 
     // Last Movement Parent Info
     Vector3 _movementPosition;
@@ -198,7 +200,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
         DesktopVRIKMod.UpdateAllSettings();
     }
-
+    
     void Update()
     {
         if (avatarVRIK == null) return;
@@ -241,9 +243,10 @@ internal class DesktopVRIKSystem : MonoBehaviour
         // Get Upright value
         Vector3 delta = avatarIKSolver.spine.headPosition - avatarTransform.position;
         Vector3 deltaRotated = Quaternion.Euler(0, avatarTransform.rotation.eulerAngles.y, 0) * delta;
-        float upright = Mathf.InverseLerp(0f, avatarIKSolver.spine.headHeight, deltaRotated.y);
+        float upright = Mathf.InverseLerp(0f, avatarIKSolver.spine.headHeight * _scaleDifference, deltaRotated.y);
         return upright > 0.85f;
     }
+
 
     void UpdateLocomotionWeight()
     {
@@ -319,6 +322,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
             scaleDifference
         );
 
+        _scaleDifference = scaleDifference;
+
         avatarIKSolver.Reset();
         ResetDesktopVRIK();
         return true;
@@ -383,31 +388,29 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarIKSolver.plantFeet = Setting_PlantFeet;
 
         // Apply custom VRIK solving effects
-        if (_ikWeightLerp > 0)
-        {
-            IKBodyLeaningOffset();
-            IKBodyHeadingOffset();
-        }
+        IKBodyLeaningOffset(_ikWeightLerp);
+        IKBodyHeadingOffset(_ikWeightLerp);
     }
 
-    void IKBodyLeaningOffset()
+    void IKBodyLeaningOffset(float weight)
     {
         // Emulate old VRChat hip movement
         if (Setting_BodyLeanWeight <= 0) return;
 
-        float weightedAngle = Setting_BodyLeanWeight * _ikWeightLerp;
+        if (Setting_ProneThrusting) weight = 1f;
+        float weightedAngle = Setting_BodyLeanWeight * weight;
         float angle = _cameraTransform.localEulerAngles.x;
         angle = angle > 180 ? angle - 360 : angle;
         Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, avatarTransform.right);
         avatarIKSolver.spine.headRotationOffset *= rotation;
     }
 
-    void IKBodyHeadingOffset()
+    void IKBodyHeadingOffset(float weight)
     {
         // Make root heading follow within a set limit
         if (Setting_BodyHeadingLimit <= 0) return;
 
-        float weightedAngleLimit = Setting_BodyHeadingLimit * _ikWeightLerp;
+        float weightedAngleLimit = Setting_BodyHeadingLimit * weight;
         float deltaAngleRoot = Mathf.DeltaAngle(transform.eulerAngles.y, _ikSimulatedRootAngle);
         float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
 
@@ -581,6 +584,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
     void ConfigureVRIK()
     {
+        // Reset scale diffrence
+        _scaleDifference = 1f;
         VRIKUtils.ApplyScaleToVRIK
         (
             avatarVRIK,

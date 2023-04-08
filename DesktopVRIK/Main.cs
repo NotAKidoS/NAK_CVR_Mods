@@ -39,6 +39,9 @@ public class DesktopVRIKMod : MelonMod
     public static readonly MelonPreferences_Entry<float> EntryIKLerpSpeed =
         CategoryDesktopVRIK.CreateEntry("IK Lerp Speed", 10f, description: "Determines fast the IK & Locomotion weights blend after entering idle. Set to 0 to disable.");
 
+    public static readonly MelonPreferences_Entry<bool> EntryProneThrusting =
+        CategoryDesktopVRIK.CreateEntry("Prone Thrusting", false, description: "Allows Body Lean Weight to take affect while crouched or prone.");
+
     public static readonly MelonPreferences_Entry<bool> EntryIntegrationAMT =
         CategoryDesktopVRIK.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
 
