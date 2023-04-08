@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Small fixes to knee tracking while in FBT, which lead to fixing running animations while in FBT, emotes playing in wrong direction in FBT, being forced to calibrate if all IK Tracking Settings are disabled, and for those not in FBT, VRIK locomotion footsteps on movement parents.",
+  "description": "A few small fixes to IK.\n\nFixed knee tracking, running animations while in FBT, emotes playing in wrong direction in FBT, being forced to calibrate if all IK Tracking Settings are disabled, and for those not in FBT, VRIK locomotion footsteps on movement parents.",
   "searchtags": [
     "knee",
     "ik",
