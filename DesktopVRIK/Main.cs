@@ -97,6 +97,9 @@ public class DesktopVRIKMod : MelonMod
 
         // Integration Settings
         DesktopVRIKSystem.Instance.Setting_IntegrationAMT = EntryIntegrationAMT.Value && integration_AMT;
+        
+        // Funny Settings
+        DesktopVRIKSystem.Instance.Setting_ProneThrusting = EntryProneThrusting.Value;
     }
     void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
 
