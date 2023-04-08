@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "KneeFix",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Small fix to knee tracking while in FBT.\n\nThis also partially fixes running animations in FBT & emote direction.",
+  "searchtags": [
+    "knee",
+    "ik",
+    "tracking",
+    "fix"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/KneeFix/releases/download/v1.0.0/KneeFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/KneeFix/",
+  "changelog": "Initial Release",
+  "embedcolor": "7F3F99"
+}

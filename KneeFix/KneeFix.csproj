@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+        <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="0Harmony">
+            <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\0Harmony.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\Assembly-CSharp.dll</HintPath>
+        </Reference>
+        <Reference Include="Assembly-CSharp-firstpass">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\Assembly-CSharp-firstpass.dll</HintPath>
+        </Reference>
+        <Reference Include="Aura2_Core">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\Aura2_Core.dll</HintPath>
+        </Reference>
+        <Reference Include="BTKUILib">
+          <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\ChilloutVR\Mods\BTKUILib.dll</HintPath>
+        </Reference>
+        <Reference Include="cohtml.Net">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\cohtml.Net.dll</HintPath>
+        </Reference>
+        <Reference Include="Cohtml.Runtime">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\Cohtml.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="MelonLoader">
+            <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\MelonLoader.dll</HintPath>
+        </Reference>
+        <Reference Include="SteamVR">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\SteamVR.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.Postprocessing.Runtime">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\Unity.Postprocessing.Runtime.dll</HintPath>
+        </Reference>
+        <Reference Include="Unity.TextMeshPro">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\Unity.TextMeshPro.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.AnimationModule">
+          <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\UnityEngine.AnimationModule.dll</HintPath>
+        </Reference>
+        <Reference Include="UnityEngine.CoreModule">
+            <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\UnityEngine.CoreModule.dll</HintPath>
+        </Reference>
+      <Reference Include="UnityEngine.InputLegacyModule">
+        <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\UnityEngine.InputLegacyModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.PhysicsModule">
+        <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\UnityEngine.PhysicsModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.VRModule">
+        <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\UnityEngine.VRModule.dll</HintPath>
+      </Reference>
+      <Reference Include="UnityEngine.XRModule">
+        <HintPath>C:\Users\krist\Documents\GitHub\_ChilloutVR Modding\_ManagedLibs\UnityEngine.XRModule.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+    <Target Name="Deploy" AfterTargets="Build">
+        <Copy SourceFiles="$(TargetPath)" DestinationFolder="C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\Mods\" />
+        <Message Text="Copied $(TargetPath) to C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR\Mods\" Importance="high" />
+    </Target>
+
+</Project>
