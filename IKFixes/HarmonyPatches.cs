@@ -35,7 +35,7 @@ internal static class BodySystemPatches
                 trackingPoint.offsetTransform.localRotation = Quaternion.identity;
                 trackingPoint.offsetTransform.parent = trackingPoint.referenceTransform;
 
-                Vector3 b = IKSystem.vrik.references.root.forward * 0.5f;
+                Vector3 b = IKSystem.vrik.references.root.forward * 0.1f;
                 trackingPoint.offsetTransform.position += b;
             }
         }
