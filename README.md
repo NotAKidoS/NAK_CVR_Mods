@@ -1,10 +1,16 @@
-# KneeFix
- simple fix to knee tracking
+# IKFixes
+Small fixes to knee tracking while in FBT, which lead to fixing running animations while in FBT, emotes playing in wrong direction in FBT, being forced to calibrate if all IK Tracking Settings are disabled, and for those not in FBT, VRIK locomotion footsteps on movement parents.
 
 ## Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/ik-knee-tracking
 
 https://feedback.abinteractive.net/p/2022r170-ex3-knee-ik-weirdness-when-using-knee-trackers
+
+https://feedback.abinteractive.net/p/disabling-all-tracked-points-makes-game-assume-fbt
+
+https://feedback.abinteractive.net/p/about-ik-behaviour
+
+https://feedback.abinteractive.net/p/vrik-addplatformmotion-for-movement-parents
 
 ---
 
