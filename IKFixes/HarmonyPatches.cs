@@ -45,45 +45,47 @@ internal static class BodySystemPatches
     [HarmonyPatch(typeof(BodySystem), "Update")]
     private static bool Prefix_BodySystem_Update(ref BodySystem __instance)
     {
-        if (IKSystem.vrik == null) return false;
-        IKSolverVR solver = IKSystem.vrik.solver;
-
-        // Allow avatar to rotate seperatly from Player (Desktop&VR)
-        // FBT needs avatar root to follow head
-        solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 180f;
-
-        if (BodySystem.TrackingEnabled)
+        if (IKSystem.vrik != null)
         {
-            IKSystem.vrik.enabled = true;
-            solver.IKPositionWeight = BodySystem.TrackingPositionWeight;
-            solver.locomotion.weight = BodySystem.TrackingLocomotionEnabled ? 1f : 0f;
+            IKSolverVR solver = IKSystem.vrik.solver;
 
-            // fixes arm weights not being set if leftArm & rightArm targets are null
-            // game handles TrackingLegs in PlayerSetup, but not for knee goals
-            SetArmWeight(solver.leftArm, BodySystem.TrackingLeftArmEnabled && solver.leftArm.target != null ? 1f : 0f);
-            SetArmWeight(solver.rightArm, BodySystem.TrackingRightArmEnabled && solver.rightArm.target != null ? 1f : 0f);
-            SetLegWeight(solver.leftLeg, BodySystem.TrackingLeftLegEnabled && solver.leftLeg.target != null ? 1f : 0f);
-            SetLegWeight(solver.rightLeg, BodySystem.TrackingRightLegEnabled && solver.leftLeg.target != null ? 1f : 0f);
-            SetPelvisWeight(solver.spine, solver.spine.pelvisTarget != null ? 1f : 0f);
+            // Allow avatar to rotate seperatly from Player (Desktop&VR)
+            // FBT needs avatar root to follow head
+            solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 180f;
 
-            // makes running animation look better
-            if (BodySystem.isCalibratedAsFullBody)
+            if (BodySystem.TrackingEnabled)
             {
-                bool isRunning = BodySystem.PlayRunningAnimationInFullBody && MovementSystem.Instance.movementVector.magnitude > 0f;
-                SetPelvisWeight(solver.spine, isRunning ? 0f : 1f);
-            }
-        }
-        else
-        {
-            IKSystem.vrik.enabled = false;
-            solver.IKPositionWeight = 0f;
-            solver.locomotion.weight = 0f;
+                IKSystem.vrik.enabled = true;
+                solver.IKPositionWeight = BodySystem.TrackingPositionWeight;
+                solver.locomotion.weight = BodySystem.TrackingLocomotionEnabled ? 1f : 0f;
 
-            SetArmWeight(solver.leftArm, 0f);
-            SetArmWeight(solver.rightArm, 0f);
-            SetLegWeight(solver.leftLeg, 0f);
-            SetLegWeight(solver.rightLeg, 0f);
-            SetPelvisWeight(solver.spine, 0f);
+                // fixes arm weights not being set if leftArm & rightArm targets are null
+                // game handles TrackingLegs in PlayerSetup, but not for knee goals
+                SetArmWeight(solver.leftArm, BodySystem.TrackingLeftArmEnabled && solver.leftArm.target != null ? 1f : 0f);
+                SetArmWeight(solver.rightArm, BodySystem.TrackingRightArmEnabled && solver.rightArm.target != null ? 1f : 0f);
+                SetLegWeight(solver.leftLeg, BodySystem.TrackingLeftLegEnabled && solver.leftLeg.target != null ? 1f : 0f);
+                SetLegWeight(solver.rightLeg, BodySystem.TrackingRightLegEnabled && solver.leftLeg.target != null ? 1f : 0f);
+                SetPelvisWeight(solver.spine, solver.spine.pelvisTarget != null ? 1f : 0f);
+
+                // makes running animation look better
+                if (BodySystem.isCalibratedAsFullBody)
+                {
+                    bool isRunning = BodySystem.PlayRunningAnimationInFullBody && MovementSystem.Instance.movementVector.magnitude > 0f;
+                    SetPelvisWeight(solver.spine, isRunning ? 0f : 1f);
+                }
+            }
+            else
+            {
+                IKSystem.vrik.enabled = false;
+                solver.IKPositionWeight = 0f;
+                solver.locomotion.weight = 0f;
+
+                SetArmWeight(solver.leftArm, 0f);
+                SetArmWeight(solver.rightArm, 0f);
+                SetLegWeight(solver.leftLeg, 0f);
+                SetLegWeight(solver.rightLeg, 0f);
+                SetPelvisWeight(solver.spine, 0f);
+            }
         }
 
         int num = 0;
