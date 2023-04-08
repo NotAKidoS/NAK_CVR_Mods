@@ -1,20 +1,20 @@
 ﻿using MelonLoader;
-using NAK.Melons.KneeFix.Properties;
+using NAK.Melons.IKFixes.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.KneeFix))]
+[assembly: AssemblyTitle(nameof(NAK.Melons.IKFixes))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.KneeFix))]
+[assembly: AssemblyProduct(nameof(NAK.Melons.IKFixes))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.KneeFix.KneeFixMod),
-    nameof(NAK.Melons.KneeFix),
+    typeof(NAK.Melons.IKFixes.IKFixesMod),
+    nameof(NAK.Melons.IKFixes),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/KneeFix"
+    downloadLink: "https://github.com/NotAKidOnSteam/IKFixes"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.KneeFix.Properties;
+namespace NAK.Melons.IKFixes.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.0";

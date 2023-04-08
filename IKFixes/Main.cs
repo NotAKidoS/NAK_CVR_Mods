@@ -1,8 +1,8 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.KneeFix;
+namespace NAK.Melons.IKFixes;
 
-public class KneeFixMod : MelonMod
+public class IKFixesMod : MelonMod
 {
     public override void OnInitializeMelon()
     {

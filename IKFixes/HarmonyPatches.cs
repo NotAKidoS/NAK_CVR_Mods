@@ -7,7 +7,7 @@ using HarmonyLib;
 using RootMotion.FinalIK;
 using UnityEngine;
 
-namespace NAK.Melons.KneeFix.HarmonyPatches;
+namespace NAK.Melons.IKFixes.HarmonyPatches;
 
 internal static class BodySystemPatches
 {
