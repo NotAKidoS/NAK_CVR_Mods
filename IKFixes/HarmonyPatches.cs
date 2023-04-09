@@ -35,6 +35,8 @@ internal static class BodySystemPatches
                 trackingPoint.offsetTransform.localRotation = Quaternion.identity;
                 trackingPoint.offsetTransform.parent = trackingPoint.referenceTransform;
 
+                // small amount forward, as pivot is different for users who place
+                // tracker on upper/lower leg. 0.5f was too much for users using upper leg.
                 Vector3 b = IKSystem.vrik.references.root.forward * 0.1f;
                 trackingPoint.offsetTransform.position += b;
             }
