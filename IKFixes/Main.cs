@@ -4,7 +4,6 @@ namespace NAK.Melons.IKFixes;
 
 public class IKFixesMod : MelonMod
 {
-    internal static MelonLogger.Instance Logger;
     public const string SettingsCategory = "IKFixes";
     public static readonly MelonPreferences_Category CategoryIKFixes = MelonPreferences.CreateCategory(SettingsCategory);
 
