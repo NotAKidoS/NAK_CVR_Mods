@@ -53,7 +53,8 @@ internal static class BodySystemPatches
 
             // Allow avatar to rotate seperatly from Player (Desktop&VR)
             // FBT needs avatar root to follow head
-            solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 180f;
+            // VR default is 25 degrees
+            solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 25f;
 
             if (BodySystem.TrackingEnabled)
             {
@@ -73,7 +74,7 @@ internal static class BodySystemPatches
                 if (BodySystem.isCalibratedAsFullBody)
                 {
                     bool isRunning = BodySystem.PlayRunningAnimationInFullBody && MovementSystem.Instance.movementVector.magnitude > 0f;
-                    SetPelvisWeight(solver.spine, isRunning ? 0f : 1f);
+                    if (isRunning) SetPelvisWeight(solver.spine, 0f);
                 }
             }
             else
@@ -131,16 +132,8 @@ internal static class BodySystemPatches
         void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
         {
             // looks better when hips are disabled while running
-            if (spine.pelvisTarget != null)
-            {
-                spine.pelvisPositionWeight = weight;
-                spine.pelvisRotationWeight = weight;
-            }
-            else
-            {
-                spine.pelvisPositionWeight = 0f;
-                spine.pelvisRotationWeight = 0f;
-            }
+            spine.pelvisPositionWeight = weight;
+            spine.pelvisRotationWeight = weight;
         }
 
         return false;
