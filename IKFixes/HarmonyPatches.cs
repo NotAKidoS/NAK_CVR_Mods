@@ -11,6 +11,8 @@ namespace NAK.Melons.IKFixes.HarmonyPatches;
 
 internal static class BodySystemPatches
 {
+    static float _ikSimulatedRootAngle = 0f;
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(BodySystem), "SetupOffsets")]
     private static void Postfix_BodySystem_SetupOffsets(List<TrackingPoint> trackingPoints)
@@ -51,11 +53,6 @@ internal static class BodySystemPatches
         {
             IKSolverVR solver = IKSystem.vrik.solver;
 
-            // Allow avatar to rotate seperatly from Player (Desktop&VR)
-            // FBT needs avatar root to follow head
-            // VR default is 25 degrees
-            solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 25f;
-
             if (BodySystem.TrackingEnabled)
             {
                 IKSystem.vrik.enabled = true;
@@ -88,6 +85,31 @@ internal static class BodySystemPatches
                 SetLegWeight(solver.leftLeg, 0f);
                 SetLegWeight(solver.rightLeg, 0f);
                 SetPelvisWeight(solver.spine, 0f);
+            }
+
+            if (IKFixesMod.EntryUseFakeRootAngle.Value)
+            {
+                // Emulate maxRootAngle because CVR doesn't have the player controller set up ideally for VRIK.
+                // This is a small small fix, but makes it so the feet dont point in the direction of the head
+                // when turning. It also means turning with joystick & turning IRL make feet behave the same and follow behind.
+                float weightedAngleLimit = IKFixesMod.EntryFakeRootAngleLimit.Value * solver.locomotion.weight;
+                float pivotAngle = MovementSystem.Instance.rotationPivot.eulerAngles.y;
+                float deltaAngleRoot = Mathf.DeltaAngle(pivotAngle, _ikSimulatedRootAngle);
+                float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
+                if (absDeltaAngleRoot > weightedAngleLimit)
+                {
+                    deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
+                    _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, pivotAngle, absDeltaAngleRoot - weightedAngleLimit);
+                }
+                solver.spine.maxRootAngle = 0f;
+                solver.spine.rootHeadingOffset = deltaAngleRoot;
+            }
+            else
+            {
+                // Allow avatar to rotate seperatly from Player (Desktop&VR)
+                // FBT needs avatar root to follow head
+                // VR default is 25 degrees
+                solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 25f;
             }
         }
 
