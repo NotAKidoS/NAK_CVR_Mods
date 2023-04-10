@@ -1,7 +1,7 @@
 {
   "_id": 142,
   "name": "IKFixes",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,7 +16,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/IKFixes/releases/download/v1.0.0/IKFixes.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/IKFixes/releases/download/v1.0.1/IKFixes.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/IKFixes/",
   "changelog": "Initial Release",
   "embedcolor": "f46e49"
