@@ -87,7 +87,7 @@ internal static class BodySystemPatches
                 SetPelvisWeight(solver.spine, 0f);
             }
 
-            if (IKFixesMod.EntryUseFakeRootAngle.Value)
+            if (IKFixesMod.EntryUseFakeRootAngle.Value && !BodySystem.isCalibratedAsFullBody)
             {
                 // Emulate maxRootAngle because CVR doesn't have the player controller set up ideally for VRIK.
                 // This is a small small fix, but makes it so the feet dont point in the direction of the head
@@ -108,7 +108,7 @@ internal static class BodySystemPatches
             {
                 // Allow avatar to rotate seperatly from Player (Desktop&VR)
                 // FBT needs avatar root to follow head
-                // VR default is 25 degrees
+                // VR default is 25 degrees, but maybe during emotes needs 180 degrees..?
                 solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 25f;
             }
         }
