@@ -1,7 +1,7 @@
 {
-  "_id": -1,
+  "_id": 123,
   "name": "PortableCameraAdditions",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -18,8 +18,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/releases/download/v1.0.0/PortableCameraAdditions.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/releases/download/v1.0.1/PortableCameraAdditions.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/",
-  "changelog": "Initial Release",
+  "changelog": "Imagine not actually setting stuff on world load.",
   "embedcolor": "9b59b6"
 }

@@ -11,8 +11,8 @@ public class AdditionalSettings
     public bool orthographicMode;
 
     //Should I move these to MelonPrefs?
-    public bool CopyWorldNearClip;
-    public bool CopyWorldFarClip;
+    public bool CopyWorldNearClip = true;
+    public bool CopyWorldFarClip = true;
 
     private PortableCameraSetting setting_NearClip;
     private PortableCameraSetting setting_FarClip;
@@ -125,9 +125,13 @@ public class AdditionalSettings
         if (referenceCamera != null)
         {
             if (CopyWorldNearClip)
+            {
                 setting_NearClip.Set(referenceCamera.nearClipPlane);
+            }
             if (CopyWorldFarClip)
+            {
                 setting_FarClip.Set(referenceCamera.farClipPlane);
+            }
         }
     }
 
