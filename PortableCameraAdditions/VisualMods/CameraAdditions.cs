@@ -3,9 +3,9 @@ using UnityEngine;
 
 namespace NAK.Melons.PortableCameraAdditions.VisualMods;
 
-public class AdditionalSettings
+public class CameraAdditions
 {
-    public static AdditionalSettings Instance;
+    public static CameraAdditions Instance;
 
     public Camera referenceCamera;
     public bool orthographicMode;
@@ -25,7 +25,7 @@ public class AdditionalSettings
     {
         Instance = this;
 
-        __instance.@interface.AddAndGetHeader(null, typeof(AdditionalSettings), "Additional Settings");
+        __instance.@interface.AddAndGetHeader(null, typeof(CameraAdditions), "Additional Settings");
 
         //Basic Settings
 
@@ -33,7 +33,7 @@ public class AdditionalSettings
         setting_CopyWorldNearClip.BoolChanged = new Action<bool>(value => UpdateCameraSettingBool("CopyNearClip", value));
         setting_CopyWorldNearClip.SettingName = "CopyNearClip";
         setting_CopyWorldNearClip.DisplayName = "Copy World Near Clip";
-        setting_CopyWorldNearClip.OriginType = typeof(AdditionalSettings);
+        setting_CopyWorldNearClip.OriginType = typeof(CameraAdditions);
         setting_CopyWorldNearClip.DefaultValue = true;
         setting_CopyWorldNearClip.Load();
 
@@ -41,7 +41,7 @@ public class AdditionalSettings
         setting_CopyWorldFarClip.BoolChanged = new Action<bool>(value => UpdateCameraSettingBool("CopyFarClip", value));
         setting_CopyWorldFarClip.SettingName = "CopyFarClip";
         setting_CopyWorldFarClip.DisplayName = "Copy World Far Clip";
-        setting_CopyWorldFarClip.OriginType = typeof(AdditionalSettings);
+        setting_CopyWorldFarClip.OriginType = typeof(CameraAdditions);
         setting_CopyWorldFarClip.DefaultValue = true;
         setting_CopyWorldFarClip.Load();
 
@@ -52,7 +52,7 @@ public class AdditionalSettings
         setting_Orthographic.SettingName = "Orthographic";
         setting_Orthographic.DisplayName = "Orthographic";
         setting_Orthographic.isExpertSetting = true;
-        setting_Orthographic.OriginType = typeof(AdditionalSettings);
+        setting_Orthographic.OriginType = typeof(CameraAdditions);
         setting_Orthographic.DefaultValue = false;
         setting_Orthographic.Load();
 
@@ -63,7 +63,7 @@ public class AdditionalSettings
         setting_NearClip.SettingName = "NearClip";
         setting_NearClip.DisplayName = "Near Clip Plane";
         setting_NearClip.isExpertSetting = true;
-        setting_NearClip.OriginType = typeof(AdditionalSettings);
+        setting_NearClip.OriginType = typeof(CameraAdditions);
         setting_NearClip.DefaultValue = 0.01f;
         setting_NearClip.MinValue = 0.001f;
         setting_NearClip.MaxValue = 5000f;
@@ -74,7 +74,7 @@ public class AdditionalSettings
         setting_FarClip.SettingName = "FarClip";
         setting_FarClip.DisplayName = "Far Clip Plane";
         setting_FarClip.isExpertSetting = true;
-        setting_FarClip.OriginType = typeof(AdditionalSettings);
+        setting_FarClip.OriginType = typeof(CameraAdditions);
         setting_FarClip.DefaultValue = 1000f;
         setting_FarClip.MinValue = 0.002f;
         setting_FarClip.MaxValue = 5000f;
@@ -87,7 +87,7 @@ public class AdditionalSettings
         setting_OrthographicSize.SettingName = "OrthographicSize";
         setting_OrthographicSize.DisplayName = "Orthographic Size";
         setting_OrthographicSize.isExpertSetting = true;
-        setting_OrthographicSize.OriginType = typeof(AdditionalSettings);
+        setting_OrthographicSize.OriginType = typeof(CameraAdditions);
         setting_OrthographicSize.DefaultValue = 5f;
         setting_OrthographicSize.MinValue = 0.01f;
         setting_OrthographicSize.MaxValue = 150f;
@@ -98,7 +98,7 @@ public class AdditionalSettings
         setting_OrthographicNearClip.SettingName = "OrthographicNearClip";
         setting_OrthographicNearClip.DisplayName = "Orthographic Near";
         setting_OrthographicNearClip.isExpertSetting = true;
-        setting_OrthographicNearClip.OriginType = typeof(AdditionalSettings);
+        setting_OrthographicNearClip.OriginType = typeof(CameraAdditions);
         setting_OrthographicNearClip.DefaultValue = 0.001f;
         setting_OrthographicNearClip.MinValue = -5000f;
         setting_OrthographicNearClip.MaxValue = 5000f;
@@ -109,7 +109,7 @@ public class AdditionalSettings
         setting_OrthographicFarClip.SettingName = "OrthographicFarClip";
         setting_OrthographicFarClip.DisplayName = "Orthographic Far";
         setting_OrthographicFarClip.isExpertSetting = true;
-        setting_OrthographicFarClip.OriginType = typeof(AdditionalSettings);
+        setting_OrthographicFarClip.OriginType = typeof(CameraAdditions);
         setting_OrthographicFarClip.DefaultValue = 1000f;
         setting_OrthographicFarClip.MinValue = -5000f;
         setting_OrthographicFarClip.MaxValue = 5000f;

@@ -1,12 +1,12 @@
 {
   "_id": 123,
   "name": "PortableCameraAdditions",
-  "modversion": "1.0.1",
+  "modversion": "1.0.2",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Adds a few basic settings to the Portable Camera.\n\nExpert settings for Near Clip & Far Clip.\nExpert settings for Orthographic & Orthographic Size.\nBy default, Near Clip & Far Clip are copied on world load.",
+  "description": "Adds a few basic settings to the Portable Camera.\n\nExpert settings for Near Clip & Far Clip.\nExpert settings for Orthographic & Orthographic Size.\nBy default, Near Clip & Far Clip are copied on world load.\nF11 to fullscreen on Desktop.",
   "searchtags": [
     "camera",
     "settings",
@@ -18,8 +18,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/releases/download/v1.0.1/PortableCameraAdditions.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/releases/download/v1.0.2/PortableCameraAdditions.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/PortableCameraAdditions/",
-  "changelog": "Imagine not actually setting stuff on world load.",
+  "changelog": "Added F11 bind to fullscreen Portable Camera on Desktop.",
   "embedcolor": "9b59b6"
 }
