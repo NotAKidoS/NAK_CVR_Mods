@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Press Z to undo latest spawned prop. Includes SFX for prop spawn, undo, and warning, which can be disabled in settings.",
+  "description": "Press Z to undo latest spawned prop. Includes optional SFX for prop spawn, undo, and warning, which can be disabled in settings.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\PropUndo\\audio'.",
   "searchtags": [
     "prop",
     "undo",
