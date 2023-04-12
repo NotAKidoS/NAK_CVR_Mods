@@ -143,7 +143,12 @@ public class PropUndoButton : MelonMod
 
         // Add the spawned prop to the history of deleted props
         if (deletedProps.Count >= redoHistoryLimit) deletedProps.RemoveAt(0); // Remove the oldest item
-        DeletedProp deletedProp = new DeletedProp(propData.ObjectId, propData.Spawnable.transform.position, propData.Spawnable.transform.rotation);
+
+        // offset spawn height so game can account for it later
+        Vector3 position = propData.Spawnable.transform.position;
+        position.y -= propData.Spawnable.spawnHeight;
+
+        DeletedProp deletedProp = new DeletedProp(propData.ObjectId, position, propData.Spawnable.transform.rotation);
         deletedProps.Add(deletedProp);
 
         PlayAudioModule(sfx_undo);
