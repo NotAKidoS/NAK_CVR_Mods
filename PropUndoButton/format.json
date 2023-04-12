@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "PropUndoButton",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Press Z to undo latest spawned prop. Includes SFX for prop spawn, undo, and warning, which can be disabled in settings.",
+  "searchtags": [
+    "prop",
+    "undo",
+    "bind",
+    "button"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/PropUndoButton/releases/download/v1.0.0/PropUndoButton.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/PropUndoButton/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#00FFFF"
+}
