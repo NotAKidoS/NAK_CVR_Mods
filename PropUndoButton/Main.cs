@@ -32,9 +32,9 @@ public class PropUndoButton : MelonMod
     public const string sfx_redo = "PropUndo_sfx_redo";
     public const string sfx_warn = "PropUndo_sfx_warn";
 
-    public const int redoHistoryLimit = 5; // amount that can be in history at once
-    public const int redoTimeoutLimit = 60; // seconds
-
+    public const int redoHistoryLimit = 20; // amount that can be in history at once
+    public const int redoTimeoutLimit = 120; // seconds
+    
     public override void OnInitializeMelon()
     {
         HarmonyInstance.Patch( // delete all props in reverse order for redo
@@ -144,11 +144,7 @@ public class PropUndoButton : MelonMod
         // Add the spawned prop to the history of deleted props
         if (deletedProps.Count >= redoHistoryLimit) deletedProps.RemoveAt(0); // Remove the oldest item
 
-        // offset spawn height so game can account for it later
-        Vector3 position = propData.Spawnable.transform.position;
-        position.y -= propData.Spawnable.spawnHeight;
-
-        DeletedProp deletedProp = new DeletedProp(propData.ObjectId, position, propData.Spawnable.transform.rotation);
+        DeletedProp deletedProp = new DeletedProp(propData);
         deletedProps.Add(deletedProp);
 
         PlayAudioModule(sfx_undo);
@@ -298,12 +294,17 @@ public class PropUndoButton : MelonMod
         public Quaternion rotation;
         public float timeDeleted;
 
-        public DeletedProp(string propGuid, Vector3 position, Quaternion rotation)
+        public DeletedProp(CVRSyncHelper.PropData propData)
         {
-            this.propGuid = propGuid;
+            // Offset spawn height so game can account for it later
+            Transform spawnable = propData.Spawnable.transform;
+            Vector3 position = spawnable.position;
+            position.y -= propData.Spawnable.spawnHeight;
+
+            propGuid = propData.ObjectId;
             this.position = position;
-            this.rotation = rotation;
-            this.timeDeleted = Time.time;
+            rotation = spawnable.rotation;
+            timeDeleted = Time.time;
         }
     }
 }
