@@ -32,8 +32,15 @@ public class PropUndoButton : MelonMod
     public const string sfx_redo = "PropUndo_sfx_redo";
     public const string sfx_warn = "PropUndo_sfx_warn";
 
+    public const int redoHistoryLimit = 5; // amount that can be in history at once
+    public const int redoTimeoutLimit = 60; // seconds
+
     public override void OnInitializeMelon()
     {
+        HarmonyInstance.Patch( // delete all props in reverse order for redo
+            typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeleteMyProps)),
+            prefix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteMyProps), BindingFlags.NonPublic | BindingFlags.Static))
+        );
         HarmonyInstance.Patch( // prop spawn sfx
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.SpawnProp)),
             postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnSpawnProp), BindingFlags.NonPublic | BindingFlags.Static))
@@ -109,7 +116,9 @@ public class PropUndoButton : MelonMod
     {
         if (!EntryEnabled.Value) return;
 
-        if (!MetaPort.Instance.worldAllowProps || !MetaPort.Instance.settings.GetSettingsBool("ContentFilterPropsEnabled", false))
+        if (!MetaPort.Instance.worldAllowProps
+            || !MetaPort.Instance.settings.GetSettingsBool("ContentFilterPropsEnabled", false)
+            || NetworkManager.Instance.GameNetwork.ConnectionState != ConnectionState.Connected)
         {
             PlayAudioModule(sfx_warn);
             return;
@@ -133,7 +142,7 @@ public class PropUndoButton : MelonMod
         if (propData == null) return;
 
         // Add the spawned prop to the history of deleted props
-        if (deletedProps.Count >= 5) deletedProps.RemoveAt(0); // Remove the oldest item
+        if (deletedProps.Count >= redoHistoryLimit) deletedProps.RemoveAt(0); // Remove the oldest item
         DeletedProp deletedProp = new DeletedProp(propData.ObjectId, propData.Spawnable.transform.position, propData.Spawnable.transform.rotation);
         deletedProps.Add(deletedProp);
 
@@ -143,6 +152,27 @@ public class PropUndoButton : MelonMod
     private static void OnWorldLoad()
     {
         deletedProps.Clear();
+    }
+
+    // delete in reverse order for undo to work as expected
+    private static bool OnDeleteMyProps()
+    {
+        List<CVRSyncHelper.PropData> propsList = GetAllProps();
+
+        for (int i = propsList.Count - 1; i >= 0; i--)
+        {
+            CVRSyncHelper.PropData propData = propsList[i];
+
+            if (propData.Spawnable == null)
+            {
+                propData.Recycle();
+                continue;
+            }
+
+            propData.Spawnable.Delete();
+        }
+
+        return false;
     }
 
     private static void UndoProp()
@@ -176,7 +206,7 @@ public class PropUndoButton : MelonMod
         }
 
         DeletedProp deletedProp = deletedProps[index];
-        if (Time.time - deletedProp.timeDeleted <= 60) // only allow redo of prop spawned in last minute
+        if (Time.time - deletedProp.timeDeleted <= redoTimeoutLimit) // only allow redo of prop spawned in last minute
         {
             if (AttemptRedoProp(deletedProp.propGuid, deletedProp.position, deletedProp.rotation))
             {
