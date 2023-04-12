@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.AudioEffects;
+﻿using ABI.CCK.Components;
+using ABI_RC.Core.AudioEffects;
 using ABI_RC.Core.Networking;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
@@ -37,13 +38,17 @@ public class PropUndoButton : MelonMod
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.SpawnProp)),
             postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnSpawnProp), BindingFlags.NonPublic | BindingFlags.Static))
         );
-        HarmonyInstance.Patch( // prop delete sfx
+        HarmonyInstance.Patch( // prop delete sfx, log for possible redo
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeletePropByInstanceId)),
             postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeletePropByInstanceId), BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // desktop input patch so we don't run in menus/gui
             typeof(InputModuleMouseKeyboard).GetMethod(nameof(InputModuleMouseKeyboard.UpdateInput)),
             postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnUpdateInput), BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        HarmonyInstance.Patch( // clear redo list on world change
+            typeof(CVRWorld).GetMethod(nameof(CVRWorld.ConfigureWorld)),
+            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnWorldLoad), BindingFlags.NonPublic | BindingFlags.Static))
         );
         SetupDefaultAudioClips();
     }
@@ -133,6 +138,11 @@ public class PropUndoButton : MelonMod
         deletedProps.Add(deletedProp);
 
         PlayAudioModule(sfx_undo);
+    }
+
+    private static void OnWorldLoad()
+    {
+        deletedProps.Clear();
     }
 
     private static void UndoProp()
