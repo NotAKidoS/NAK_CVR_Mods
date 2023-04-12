@@ -5,7 +5,7 @@ using MelonLoader;
 using System.Reflection;
 using UnityEngine;
 
-namespace NAK.Melons.UndoPropButton;
+namespace NAK.Melons.PropUndoButton;
 
 // https://pixabay.com/sound-effects/selection-sounds-73225/
 
