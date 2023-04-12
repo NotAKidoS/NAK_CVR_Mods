@@ -1,6 +1,9 @@
 ﻿using ABI_RC.Core.AudioEffects;
+using ABI_RC.Core.Networking;
 using ABI_RC.Core.Savior;
+using ABI_RC.Core.UI;
 using ABI_RC.Core.Util;
+using DarkRift;
 using MelonLoader;
 using System.Reflection;
 using UnityEngine;
@@ -11,6 +14,8 @@ namespace NAK.Melons.PropUndoButton;
 
 public class PropUndoButton : MelonMod
 {
+    public static List<DeletedProp> deletedProps = new List<DeletedProp>();
+
     private static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(PropUndoButton));
 
@@ -23,19 +28,22 @@ public class PropUndoButton : MelonMod
     // audio clip names, InterfaceAudio adds "PropUndo_" prefix
     public const string sfx_spawn = "PropUndo_sfx_spawn";
     public const string sfx_undo = "PropUndo_sfx_undo";
+    public const string sfx_redo = "PropUndo_sfx_redo";
     public const string sfx_warn = "PropUndo_sfx_warn";
 
     public override void OnInitializeMelon()
     {
         HarmonyInstance.Patch( // prop spawn sfx
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.SpawnProp)),
-            null,
-            new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnSpawnProp), BindingFlags.NonPublic | BindingFlags.Static))
+            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnSpawnProp), BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        HarmonyInstance.Patch( // prop delete sfx
+            typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeletePropByInstanceId)),
+            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeletePropByInstanceId), BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // desktop input patch so we don't run in menus/gui
             typeof(InputModuleMouseKeyboard).GetMethod(nameof(InputModuleMouseKeyboard.UpdateInput)),
-            null,
-            new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnUpdateInput), BindingFlags.NonPublic | BindingFlags.Static))
+            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnUpdateInput), BindingFlags.NonPublic | BindingFlags.Static))
         );
         SetupDefaultAudioClips();
     }
@@ -51,7 +59,7 @@ public class PropUndoButton : MelonMod
         }
 
         // copy embedded resources to this folder if they do not exist
-        string[] clipNames = { "sfx_spawn.wav", "sfx_undo.wav", "sfx_warn.wav" };
+        string[] clipNames = { "sfx_spawn.wav", "sfx_undo.wav", "sfx_redo.wav", "sfx_warn.wav" };
         foreach (string clipName in clipNames)
         {
             string clipPath = Path.Combine(path, clipName);
@@ -79,9 +87,16 @@ public class PropUndoButton : MelonMod
 
     private static void OnUpdateInput()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKey(KeyCode.LeftControl))
         {
-            DeleteLatestSpawnable();
+            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z))
+            {
+                RedoProp();
+            }
+            else if (Input.GetKeyDown(KeyCode.Z))
+            {
+                UndoProp();
+            }
         }
     }
 
@@ -95,7 +110,8 @@ public class PropUndoButton : MelonMod
             return;
         }
 
-        if (GetAllProps().Count >= 20)
+        // might need to touch
+        if (IsAtPropLimit())
         {
             PlayAudioModule(sfx_warn);
             return;
@@ -104,12 +120,26 @@ public class PropUndoButton : MelonMod
         PlayAudioModule(sfx_spawn);
     }
 
-    private static void DeleteLatestSpawnable()
+    private static void OnDeletePropByInstanceId(string instanceId)
+    {
+        if (string.IsNullOrEmpty(instanceId)) return;
+
+        CVRSyncHelper.PropData propData = GetPropByInstanceId(instanceId);
+        if (propData == null) return;
+
+        // Add the spawned prop to the history of deleted props
+        if (deletedProps.Count >= 5) deletedProps.RemoveAt(0); // Remove the oldest item
+        DeletedProp deletedProp = new DeletedProp(propData.ObjectId, propData.Spawnable.transform.position, propData.Spawnable.transform.rotation);
+        deletedProps.Add(deletedProp);
+
+        PlayAudioModule(sfx_undo);
+    }
+
+    private static void UndoProp()
     {
         if (!EntryEnabled.Value) return;
 
         var propData = GetLatestProp();
-
         if (propData == null)
         {
             PlayAudioModule(sfx_warn);
@@ -124,13 +154,84 @@ public class PropUndoButton : MelonMod
         }
 
         propData.Spawnable.Delete();
-        PlayAudioModule(sfx_undo);
     }
 
-    private static void PlayAudioModule(string module)
+    public static void RedoProp()
+    {
+        int index = deletedProps.Count - 1;
+        if (index < 0 || index >= deletedProps.Count || IsAtPropLimit())
+        {
+            PlayAudioModule(sfx_warn);
+            return;
+        }
+
+        DeletedProp deletedProp = deletedProps[index];
+        if (Time.time - deletedProp.timeDeleted <= 60) // only allow redo of prop spawned in last minute
+        {
+            if (AttemptRedoProp(deletedProp.propGuid, deletedProp.position, deletedProp.rotation))
+            {
+                deletedProps.RemoveAt(index);
+                PlayAudioModule(sfx_redo);
+                return;
+            }
+        }
+
+        PlayAudioModule(sfx_warn);
+    }
+
+    // original spawn prop method does not let you specify rotation
+    public static bool AttemptRedoProp(string propGuid, Vector3 position, Quaternion quaternion)
+    {
+        if (MetaPort.Instance.worldAllowProps
+            && MetaPort.Instance.settings.GetSettingsBool("ContentFilterPropsEnabled", false)
+            && NetworkManager.Instance.GameNetwork.ConnectionState == ConnectionState.Connected)
+        {
+            using (DarkRiftWriter darkRiftWriter = DarkRiftWriter.Create())
+            {
+                darkRiftWriter.Write(propGuid);
+                darkRiftWriter.Write(position.x);
+                darkRiftWriter.Write(position.y);
+                darkRiftWriter.Write(position.z);
+                darkRiftWriter.Write(0f);
+                darkRiftWriter.Write(quaternion.eulerAngles.y);
+                darkRiftWriter.Write(0f);
+                darkRiftWriter.Write(1f);
+                darkRiftWriter.Write(1f);
+                darkRiftWriter.Write(1f);
+                darkRiftWriter.Write(0f);
+                using (Message message = Message.Create(10050, darkRiftWriter))
+                {
+                    NetworkManager.Instance.GameNetwork.SendMessage(message, SendMode.Reliable);
+                }
+                return true;
+            }
+        }
+        else
+        {
+            if (!MetaPort.Instance.worldAllowProps)
+            {
+                CohtmlHud.Instance.ViewDropText("Props are not allowed in this world", "");
+            }
+            return false;
+        }
+    }
+
+    public static void PlayAudioModule(string module)
     {
         if (!EntryUseSFX.Value) return;
         InterfaceAudio.PlayModule(module);
+    }
+
+    public static bool IsAtPropLimit()
+    {
+        // might need rework
+        return GetAllProps().Count >= 20;
+    }
+
+    private static CVRSyncHelper.PropData GetPropByInstanceId(string instanceId)
+    {
+        // find prop by instance id and if it is ours
+        return CVRSyncHelper.Props.Find((CVRSyncHelper.PropData match) => (match.InstanceId == instanceId && match.SpawnedBy == MetaPort.Instance.ownerId));
     }
 
     private static CVRSyncHelper.PropData GetLatestProp()
@@ -143,5 +244,21 @@ public class PropUndoButton : MelonMod
     {
         // im not storing the count because there is good chance itll desync from server
         return CVRSyncHelper.Props.FindAll((CVRSyncHelper.PropData match) => match.SpawnedBy == MetaPort.Instance.ownerId);
+    }
+
+    public class DeletedProp
+    {
+        public string propGuid;
+        public Vector3 position;
+        public Quaternion rotation;
+        public float timeDeleted;
+
+        public DeletedProp(string propGuid, Vector3 position, Quaternion rotation)
+        {
+            this.propGuid = propGuid;
+            this.position = position;
+            this.rotation = rotation;
+            this.timeDeleted = Time.time;
+        }
     }
 }
