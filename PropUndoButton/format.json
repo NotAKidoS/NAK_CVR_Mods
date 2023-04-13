@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "CTRL+Z to undo latest spawned prop. CTRL+SHIFT+Z to redo deleted prop.\nIncludes optional SFX for prop spawn, undo, redo, warn, and deny, which can be enabled in settings.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\PropUndo\\audio'.",
+  "description": "**CTRL+Z** to undo latest spawned prop. **CTRL+SHIFT+Z** to redo deleted prop.\nIncludes optional SFX for prop spawn, undo, redo, warn, and deny, which can be disabled in settings.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\PropUndo\\audio'.",
   "searchtags": [
     "prop",
     "undo",
