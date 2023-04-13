@@ -37,9 +37,13 @@ public class PropUndoButton : MelonMod
 
     public override void OnInitializeMelon()
     {
-        HarmonyInstance.Patch( // delete all props in reverse order for redo
+        HarmonyInstance.Patch( // delete my props in reverse order for redo
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeleteMyProps)),
             prefix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteMyProps), BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        HarmonyInstance.Patch( // delete all props in reverse order for redo
+            typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeleteAllProps)),
+            prefix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteAllProps), BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // prop spawn sfx
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.SpawnProp)),
@@ -169,6 +173,27 @@ public class PropUndoButton : MelonMod
             SafeDeleteProp(propData);
         }
 
+        return false;
+    }
+
+    // delete in reverse order for undo to work as expected
+    private static bool OnDeleteAllProps()
+    {
+        if (!EntryEnabled.Value) return true;
+
+        CVRSyncHelper.PropData[] propsList = CVRSyncHelper.Props.ToArray();
+        if (propsList.Length == 0)
+        {
+            PlayAudioModule(sfx_warn);
+            return false;
+        }
+
+        for (int i = propsList.Length - 1; i >= 0; i--)
+        {
+            CVRSyncHelper.PropData propData = propsList[i];
+            SafeDeleteProp(propData);
+        }
+        
         return false;
     }
 
