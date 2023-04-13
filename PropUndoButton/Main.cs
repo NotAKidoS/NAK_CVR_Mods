@@ -30,6 +30,7 @@ public class PropUndoButton : MelonMod
     public const string sfx_undo = "PropUndo_sfx_undo";
     public const string sfx_redo = "PropUndo_sfx_redo";
     public const string sfx_warn = "PropUndo_sfx_warn";
+    public const string sfx_deny = "PropUndo_sfx_deny";
 
     public const int redoHistoryLimit = 20; // amount that can be in history at once
     public const int redoTimeoutLimit = 120; // seconds
@@ -71,7 +72,7 @@ public class PropUndoButton : MelonMod
         }
 
         // copy embedded resources to this folder if they do not exist
-        string[] clipNames = { "sfx_spawn.wav", "sfx_undo.wav", "sfx_redo.wav", "sfx_warn.wav" };
+        string[] clipNames = { "sfx_spawn.wav", "sfx_undo.wav", "sfx_redo.wav", "sfx_warn.wav", "sfx_deny.wav" };
         foreach (string clipName in clipNames)
         {
             string clipPath = Path.Combine(path, clipName);
@@ -155,6 +156,12 @@ public class PropUndoButton : MelonMod
         if (!EntryEnabled.Value) return true;
 
         List<CVRSyncHelper.PropData> propsList = GetAllPropsByOwnerId();
+
+        if (propsList.Count == 0)
+        {
+            PlayAudioModule(sfx_warn);
+            return false;
+        }
 
         for (int i = propsList.Count - 1; i >= 0; i--)
         {
@@ -246,6 +253,10 @@ public class PropUndoButton : MelonMod
         else if (propData.Spawnable != null)
         {
             propData.Spawnable.Delete();
+        }
+        else
+        {
+            PlayAudioModule(sfx_deny);
         }
 
         //if an undo attempt is made right after spawning a prop, the 

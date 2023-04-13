@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="SFX\sfx_deny.wav" />
       <None Remove="SFX\sfx_redo.wav" />
       <None Remove="SFX\sfx_spawn.wav" />
       <None Remove="SFX\sfx_undo.wav" />
@@ -17,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Include="SFX\sfx_deny.wav" />
       <EmbeddedResource Include="SFX\sfx_redo.wav" />
       <EmbeddedResource Include="SFX\sfx_spawn.wav" />
       <EmbeddedResource Include="SFX\sfx_undo.wav" />
