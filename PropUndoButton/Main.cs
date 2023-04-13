@@ -159,14 +159,7 @@ public class PropUndoButton : MelonMod
         for (int i = propsList.Count - 1; i >= 0; i--)
         {
             CVRSyncHelper.PropData propData = propsList[i];
-
-            if (propData.Spawnable == null)
-            {
-                propData.Recycle();
-                continue;
-            }
-
-            propData.Spawnable.Delete();
+            SafeDeleteProp(propData);
         }
 
         return false;
@@ -181,13 +174,7 @@ public class PropUndoButton : MelonMod
             return;
         }
 
-        if (propData.Spawnable == null)
-        {
-            propData.Recycle();
-            return;
-        }
-
-        propData.Spawnable.Delete();
+        SafeDeleteProp(propData);
     }
 
     public static void RedoProp()
@@ -246,6 +233,31 @@ public class PropUndoButton : MelonMod
         {
             InterfaceAudio.PlayModule(module);
         }
+    }
+
+    private static void SafeDeleteProp(CVRSyncHelper.PropData propData)
+    {
+        //fixes getting props stuck in limbo state if spawn & delete fast
+        if (propData.Spawnable == null && propData.Wrapper != null)
+        {
+            UnityEngine.Object.DestroyImmediate(propData.Wrapper);
+            propData.Recycle();
+        }
+        else if (propData.Spawnable != null)
+        {
+            propData.Spawnable.Delete();
+        }
+
+        //if an undo attempt is made right after spawning a prop, the 
+        //spawnable & wrapper will both be null, so the delete request
+        //will be ignored- same with Delete All button in Menu now
+
+        //so the bug causing props to get stuck is due to the propData
+        //being wiped before the prop spawnable & wrapper were created
+
+        //i am unsure if i should attempt an undo of second in line prop,
+        //just in case some issue happens and causes the mod to lock up here.
+        //It should be fine though, as reloading world should clear propData...?
     }
 
     private static bool IsPropSpawnAllowed()
