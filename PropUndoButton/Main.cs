@@ -23,7 +23,7 @@ public class PropUndoButton : MelonMod
         Category.CreateEntry("Enabled", true, description: "Toggle Undo Prop Button.");
 
     public static readonly MelonPreferences_Entry<bool> EntryUseSFX =
-        Category.CreateEntry("Use SFX", false, description: "Toggle audio queues for prop spawn, undo, redo, or warning.");
+        Category.CreateEntry("Use SFX", true, description: "Toggle audio queues for prop spawn, undo, redo, and warning.");
 
     // audio clip names, InterfaceAudio adds "PropUndo_" prefix
     public const string sfx_spawn = "PropUndo_sfx_spawn";
@@ -123,7 +123,7 @@ public class PropUndoButton : MelonMod
 
         if (!IsPropSpawnAllowed() || IsAtPropLimit())
         {
-            PlayAudioModule(sfx_warn);
+            PlayAudioModule(sfx_deny);
             return;
         }
 
@@ -187,9 +187,15 @@ public class PropUndoButton : MelonMod
     public static void RedoProp()
     {
         int index = deletedProps.Count - 1;
-        if (index < 0 || index >= deletedProps.Count || IsAtPropLimit())
+        if (index < 0)
         {
             PlayAudioModule(sfx_warn);
+            return;
+        }
+
+        if (!IsPropSpawnAllowed() || IsAtPropLimit())
+        {
+            PlayAudioModule(sfx_deny);
             return;
         }
 
@@ -197,22 +203,16 @@ public class PropUndoButton : MelonMod
         DeletedProp deletedProp = deletedProps[index];
         if (Time.time - deletedProp.timeDeleted <= redoTimeoutLimit)
         {
-            if (AttemptRedoProp(deletedProp.propGuid, deletedProp.position, deletedProp.rotation))
-            {
-                deletedProps.RemoveAt(index);
-                PlayAudioModule(sfx_redo);
-                return;
-            }
+            SendRedoProp(deletedProp.propGuid, deletedProp.position, deletedProp.rotation);
+            PlayAudioModule(sfx_redo);
         }
 
-        PlayAudioModule(sfx_warn);
+        deletedProps.RemoveAt(index);
     }
 
     // original spawn prop method does not let you specify rotation
-    public static bool AttemptRedoProp(string propGuid, Vector3 position, Vector3 rotation)
+    public static void SendRedoProp(string propGuid, Vector3 position, Vector3 rotation)
     {
-        if (!IsPropSpawnAllowed()) return false;
-
         using (DarkRiftWriter darkRiftWriter = DarkRiftWriter.Create())
         {
             darkRiftWriter.Write(propGuid);
@@ -231,7 +231,6 @@ public class PropUndoButton : MelonMod
                 NetworkManager.Instance.GameNetwork.SendMessage(message, SendMode.Reliable);
             }
         }
-        return true;
     }
 
     public static void PlayAudioModule(string module)
