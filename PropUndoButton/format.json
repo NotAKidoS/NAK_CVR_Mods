@@ -1,12 +1,12 @@
 {
-  "_id": -1,
+  "_id": 147,
   "name": "PropUndoButton",
   "modversion": "1.0.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Press Z to undo latest spawned prop. Includes optional SFX for prop spawn, undo, and warning, which can be disabled in settings.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\PropUndo\\audio'.",
+  "description": "CTRL+Z to undo latest spawned prop. CTRL+SHIFT+Z to redo deleted prop.\nIncludes optional SFX for prop spawn, undo, redo, warn, and deny, which can be enabled in settings.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\PropUndo\\audio'.",
   "searchtags": [
     "prop",
     "undo",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/PropUndoButton/releases/download/v1.0.1/PropUndoButton.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/PropUndoButton/",
-  "changelog": "- Initial Release\n- Added redo button.",
+  "changelog": "- Initial Release\n- Added redo button.\n- Disabled SFX by default.\n- Lowered SFX volume to match existing UI sounds.",
   "embedcolor": "#00FFFF"
 }
