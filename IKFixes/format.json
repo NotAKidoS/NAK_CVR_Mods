@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "A few small fixes to IK.\n\nFBT - Fixes knee tracking & running animations.\nHalfbody - Fixes footsteps on MovementParent & uses root angle offset to prevent feet from only pointing in head direction.",
+  "description": "A few small fixes to IK. Major ones are listed below:\n\n**FBT** - Fixes knee tracking & running animations.\n\n**Halfbody** - Fixes footsteps while on a MovementParent & uses root angle offset to prevent feet from only pointing in head direction.",
   "searchtags": [
     "knee",
     "ik",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/IKFixes/releases/download/v1.0.2/IKFixes.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/IKFixes/",
-  "changelog": "- Initial Release\n- Added FakeRootAngle fix for Halfbody. Feet will no longer only point in the direction of head while looking around/turning.",
+  "changelog": "- Initial Release\n- Added FakeRootAngle fix for Halfbody. Feet will no longer only point in the direction of head while looking around/turning. This can be disabled in mod settings.",
   "embedcolor": "f46e49"
 }
