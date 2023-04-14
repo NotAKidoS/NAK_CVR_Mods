@@ -1,7 +1,15 @@
 # IKFixes
 A few small fixes to IK.
 
-Fixed knee tracking, running animations while in FBT, emotes playing in wrong direction in FBT, being forced to calibrate if all IK Tracking Settings are disabled, and for those not in FBT, VRIK locomotion footsteps on movement parents.
+**FBT Fixes** - 
+* Knee tracking.
+* Running animations..
+* Emotes playing in wrong direction.
+* Forced to calibrate if all IK Tracking Settings are disabled.
+
+**Halfbody Fixes** - 
+* Locomotion footsteps while on Movement Parents.
+* Root Angle Offset while looking around. Fixes feet only pointing in direction of head.
 
 ## Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/ik-knee-tracking
@@ -13,6 +21,8 @@ https://feedback.abinteractive.net/p/disabling-all-tracked-points-makes-game-ass
 https://feedback.abinteractive.net/p/about-ik-behaviour
 
 https://feedback.abinteractive.net/p/vrik-addplatformmotion-for-movement-parents
+
+https://feedback.abinteractive.net/p/halfbodyik-feet-will-only-point-in-direction-of-head
 
 ---
 
