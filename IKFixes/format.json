@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "A few small fixes to IK.\n\nFixed knee tracking, running animations while in FBT, emotes playing in wrong direction in FBT, being forced to calibrate if all IK Tracking Settings are disabled, and for those not in FBT, VRIK locomotion footsteps on movement parents.",
+  "description": "A few small fixes to IK.\n\nFBT - Fixes knee tracking & running animations.\nHalfbody - Fixes footsteps on MovementParent & uses root angle offset to prevent feet from only pointing in head direction.",
   "searchtags": [
     "knee",
     "ik",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/IKFixes/releases/download/v1.0.2/IKFixes.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/IKFixes/",
-  "changelog": "Initial Release",
+  "changelog": "- Initial Release\n- Added FakeRootAngle fix for Halfbody. Feet will no longer only point in the direction of head while looking around/turning.",
   "embedcolor": "f46e49"
 }
