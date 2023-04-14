@@ -191,9 +191,9 @@ public class PropUndoButton : MelonMod
         for (int i = propsList.Length - 1; i >= 0; i--)
         {
             CVRSyncHelper.PropData propData = propsList[i];
-            SafeDeleteProp(propData);
+            DeleteProp(propData);
         }
-        
+
         return false;
     }
 
@@ -229,10 +229,15 @@ public class PropUndoButton : MelonMod
         if (Time.time - deletedProp.timeDeleted <= redoTimeoutLimit)
         {
             SendRedoProp(deletedProp.propGuid, deletedProp.position, deletedProp.rotation);
+            deletedProps.RemoveAt(index);
             PlayAudioModule(sfx_redo);
         }
-
-        deletedProps.RemoveAt(index);
+        else
+        {
+            // if latest prop is too old, same with rest
+            deletedProps.Clear();
+            PlayAudioModule(sfx_warn);
+        }
     }
 
     // original spawn prop method does not let you specify rotation
@@ -263,6 +268,20 @@ public class PropUndoButton : MelonMod
         if (EntryUseSFX.Value)
         {
             InterfaceAudio.PlayModule(module);
+        }
+    }
+
+    private static void DeleteProp(CVRSyncHelper.PropData propData)
+    {
+        if (propData.Spawnable != null)
+        {
+            propData.Spawnable.Delete();
+        }
+        else
+        {
+            if (propData.Wrapper != null)
+                UnityEngine.Object.DestroyImmediate(propData.Wrapper);
+            propData.Recycle();
         }
     }
 
