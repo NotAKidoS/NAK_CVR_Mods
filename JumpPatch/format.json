@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "JumpPatch",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Prevents you from jumping until you've been grounded for a frame.\nThis ensures Grounded parameter fires when hitting the ground while holding jump.",
+  "searchtags": [
+    "toes",
+    "vrik",
+    "ik",
+    "feet"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/JumpPatch/releases/download/v1.0.0/JumpPatch.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/JumpPatch/",
+  "changelog": "- Initial Release\n- I like my jump animations.",
+  "embedcolor": "#e56597"
+}
