@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "ClearHudNotifications",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Clears queued hud notifications when joining a new online instance. Can also press F4 to manually clear notifications.",
+  "searchtags": [
+    "hud",
+    "queue",
+    "notifications",
+    "clear"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/ClearHudNotifications/releases/download/v1.0.0/ClearHudNotifications.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/ClearHudNotifications/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#6495ED"
+}
