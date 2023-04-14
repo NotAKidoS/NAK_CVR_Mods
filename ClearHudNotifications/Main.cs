@@ -2,9 +2,9 @@
 using MelonLoader;
 using UnityEngine;
 
-namespace NAK.Melons.ClearHudNoficiations;
+namespace NAK.Melons.ClearHudNotifications;
 
-public class ClearHudNoficiations : MelonMod
+public class ClearHudNotifications : MelonMod
 {
     public override void OnInitializeMelon()
     {
@@ -15,11 +15,11 @@ public class ClearHudNoficiations : MelonMod
     {
         if (Input.GetKeyDown(KeyCode.F4))
         {
-            ClearHudNotifications();
+            ClearNotifications();
         }
     }
 
-    public static void ClearHudNotifications()
+    public static void ClearNotifications()
     {
         // sending an immediate notification clears buffer
         CohtmlHud.Instance?.ViewDropTextImmediate("(Local) Client", "Notifications Cleared!", "Cleared Hud Notifications!");

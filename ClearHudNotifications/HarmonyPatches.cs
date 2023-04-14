@@ -3,7 +3,7 @@ using ABI_RC.Core.UI;
 using cohtml;
 using HarmonyLib;
 
-namespace NAK.Melons.ClearHudNoficiations.HarmonyPatches;
+namespace NAK.Melons.ClearHudNotifications.HarmonyPatches;
 
 internal static class CohtmlHudPatches
 {
@@ -15,7 +15,7 @@ internal static class CohtmlHudPatches
 
         if (small == "A user has joined your Instance." && !MetaPort.Instance.settings.GetSettingsBool("HUDCustomizationPlayerJoins", false))
         {
-            ClearHudNoficiations.ClearHudNotifications();
+            ClearHudNotifications.ClearNotifications();
             return false;
         }
 
