@@ -1,6 +1,8 @@
 # PropUndoButton
 
-Press Z to undo latest spawned prop. Includes optional SFX for prop spawn, undo, and warning, which can be disabled in settings.
+**CTRL+Z** to undo latest spawned prop. **CTRL+SHIFT+Z** to redo deleted prop. 
+
+Includes optional SFX for prop spawn, undo, redo, warn, and deny, which can be disabled in settings.
 
 You can replace the sfx in `"ChilloutVR\ChilloutVR_Data\StreamingAssets\Cohtml\UIResources\GameUI\mods\PropUndo\audio"`.
 
