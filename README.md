@@ -125,6 +125,15 @@ Prevents VRIK from autodetecting toes in HalfbodyIK.
 Optionally can be applied in FBT, but toes in FBT are nice so you are a monster if so.
 
 ![fuckthetoes](https://user-images.githubusercontent.com/37721153/216518012-ae3b1dde-17ea-419a-a875-48d57e13f3dd.png)
+# GestureLock
+ Simple GestureLock for CVR.
+
+Uses ChilloutVR's "Controller Toggle Gestures" binding in SteamVR to lock GestureLeft & GestureRight input. 
+
+Does nothing on Knuckles controllers as the bind is used for finger tracking.
+
+![VirtualDesktop Android-20220907-172923](https://user-images.githubusercontent.com/37721153/188999382-7663a863-49be-4b9b-8839-8b6e8c32783b.jpg)
+
 
 ---
 

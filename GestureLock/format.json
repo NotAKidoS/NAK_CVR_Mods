@@ -1,0 +1,23 @@
+{
+  "_id": 93,
+  "name": "GestureLock",
+  "modversion": "2.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Locks GestureLeft & GestureRight on SteamVR binding.\nDoes nothing on Knuckles controllers.\n\nMake sure to bind Controller Toggle Gestures in SteamVR.",
+  "searchtags": [
+    "gesture",
+    "lock",
+    "GestureLeft",
+    "GestureRight"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/GestureLock/releases/download/v2.0.0/GestureLock.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/GestureLock/",
+  "changelog": "- Simplification & refactor.",
+  "embedcolor": "804221"
+}
