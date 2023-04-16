@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "BadAnimatorFix",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "This mod occasionally rewinds animation states that have loop enabled.\n\nUnity seems to have a weird quirk where *sometimes* animations with loop cause performance issues after running for a long time.\nYou'll only start to notice this after a few hours to a few days of idling.\n\nIf you don't happen to be AFK for long periods of time, you probably don't need this mod. This issue seems to be primarily caused by one-two frame animation clips meant for toggles with loop needlessly enabled.",
+  "searchtags": [
+    "bad",
+    "fix",
+    "animator",
+    "loop"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/BadAnimatorFix/releases/download/v1.0.0/BadAnimatorFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/BadAnimatorFix/",
+  "changelog": "Initial Release",
+  "embedcolor": "7F3F99"
+}
