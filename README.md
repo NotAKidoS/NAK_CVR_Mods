@@ -159,6 +159,16 @@ https://feedback.abinteractive.net/p/about-ik-behaviour
 https://feedback.abinteractive.net/p/vrik-addplatformmotion-for-movement-parents
 
 https://feedback.abinteractive.net/p/halfbodyik-feet-will-only-point-in-direction-of-head
+# JumpPatch
+
+Prevents you from jumping until you've been grounded for a frame.
+
+This ensures Grounded parameter fires when hitting the ground while holding jump.
+
+https://user-images.githubusercontent.com/37721153/231921029-f5bf5236-3dbb-4720-8eb0-fafce4e59cf8.mp4
+
+## Relevant Feedback Posts:
+https://feedback.abinteractive.net/p/grounded-parameter-does-not-fire-immediatly-after-landing
 
 ---
 
