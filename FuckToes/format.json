@@ -1,0 +1,23 @@
+{
+  "_id": 129,
+  "name": "FuckToes",
+  "modversion": "1.0.1",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Prevents VRIK from using toe bones in VR & optionaly FBT.\n\nVRIK calculates weird center of mass when toes are mapped, so it is sometimes desired to unmap toes to prevent an avatars feet from resting far back.\n\nPlease see the README for relevant imagery detailing the problem.",
+  "searchtags": [
+    "toes",
+    "vrik",
+    "ik",
+    "feet"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/FuckToes/releases/download/v1.0.1/FuckToes.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/FuckToes/",
+  "changelog": "- Initial Release\n- No double patching. Bad. Stinky. Dont do it.",
+  "embedcolor": "#ffc700"
+}
