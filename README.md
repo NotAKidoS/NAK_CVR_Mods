@@ -134,6 +134,31 @@ Does nothing on Knuckles controllers as the bind is used for finger tracking.
 
 ![VirtualDesktop Android-20220907-172923](https://user-images.githubusercontent.com/37721153/188999382-7663a863-49be-4b9b-8839-8b6e8c32783b.jpg)
 
+# IKFixes
+A few small fixes to IK.
+
+**FBT Fixes** - 
+* Knee tracking.
+* Running animations..
+* Emotes playing in wrong direction.
+* Forced to calibrate if all IK Tracking Settings are disabled.
+
+**Halfbody Fixes** - 
+* Locomotion footsteps while on Movement Parents.
+* Root Angle Offset while looking around. Fixes feet only pointing in direction of head.
+
+## Relevant Feedback Posts:
+https://feedback.abinteractive.net/p/ik-knee-tracking
+
+https://feedback.abinteractive.net/p/2022r170-ex3-knee-ik-weirdness-when-using-knee-trackers
+
+https://feedback.abinteractive.net/p/disabling-all-tracked-points-makes-game-assume-fbt
+
+https://feedback.abinteractive.net/p/about-ik-behaviour
+
+https://feedback.abinteractive.net/p/vrik-addplatformmotion-for-movement-parents
+
+https://feedback.abinteractive.net/p/halfbodyik-feet-will-only-point-in-direction-of-head
 
 ---
 
