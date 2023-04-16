@@ -242,6 +242,20 @@ https://user-images.githubusercontent.com/37721153/188521473-9d180795-785a-4ba0-
 ![image](https://user-images.githubusercontent.com/37721153/213652852-63ef50da-f6b2-4d69-a28d-0414e3d51792.png)
 
 ---
+# PropUndoButton
+
+**CTRL+Z** to undo latest spawned prop. **CTRL+SHIFT+Z** to redo deleted prop. 
+
+Includes optional SFX for prop spawn, undo, redo, warn, and deny, which can be disabled in settings.
+
+You can replace the sfx in `"ChilloutVR\ChilloutVR_Data\StreamingAssets\Cohtml\UIResources\GameUI\mods\PropUndo\audio"`.
+
+https://user-images.githubusercontent.com/37721153/231351589-07f794f3-f542-4cb4-b034-5c1902f86758.mp4
+ 
+## Relevant Feedback Posts:
+https://feedback.abinteractive.net/p/z-for-undo-in-game
+
+--- 
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
 https://documentation.abinteractive.net/official/legal/tos/#7-modding-our-games
