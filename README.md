@@ -14,6 +14,17 @@ The avatar will stay in the default animator state until AAS data is received th
 
 You will no longer sync garbage AAS while switching avatar.
     
+# CVRGizmos
+ Adds in-game gizmos to CCK components.
+
+Current implementation may be a bit ugly, but at least it doesn't tank FPS.
+
+Uses modified version of Popcron.Gizmos:
+
+https://github.com/popcron/gizmos
+
+![ChilloutVR_vQAWKRkt73](https://user-images.githubusercontent.com/37721153/190173732-368dec7a-d56e-47a0-bc38-3c7f38caa0bc.png)
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
