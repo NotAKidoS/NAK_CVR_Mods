@@ -24,6 +24,11 @@ Uses modified version of Popcron.Gizmos:
 https://github.com/popcron/gizmos
 
 ![ChilloutVR_vQAWKRkt73](https://user-images.githubusercontent.com/37721153/190173732-368dec7a-d56e-47a0-bc38-3c7f38caa0bc.png)
+# ClearHudNotifications
+
+Simple mod to clear hud notifications when joining an online instance. Can also manually clear notifications by pressing F4.
+
+There is no native method to clear notifications, so I force an immediate notification to clear the buffer.
 
 ---
 
