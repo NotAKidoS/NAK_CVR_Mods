@@ -13,23 +13,8 @@ AAS will also not be updated unless the expected data matches what is received.
 The avatar will stay in the default animator state until AAS data is received that is deemed correct.
 
 You will no longer sync garbage AAS while switching avatar.
-    
-# CVRGizmos
- Adds in-game gizmos to CCK components.
 
-Current implementation may be a bit ugly, but at least it doesn't tank FPS.
-
-Uses modified version of Popcron.Gizmos:
-
-https://github.com/popcron/gizmos
-
-![ChilloutVR_vQAWKRkt73](https://user-images.githubusercontent.com/37721153/190173732-368dec7a-d56e-47a0-bc38-3c7f38caa0bc.png)
-# ClearHudNotifications
-
-Simple mod to clear hud notifications when joining an online instance. Can also manually clear notifications by pressing F4.
-
-There is no native method to clear notifications, so I force an immediate notification to clear the buffer.
-
+---
 # Blackout
 
     Functionality heavily inspired by VRSleeper on Booth: https://booth.pm/ja/items/2151940
@@ -64,7 +49,27 @@ There is no native method to clear notifications, so I force an immediate notifi
 * Awake Threshold - Degrees of movement to return full vision.
 * Enter Drowsy Time - How many minutes without movement until enter drowsy mode.
 * Enter Sleep Time - How many seconds without movement until enter sleep mode.
-    
+
+---
+# ClearHudNotifications
+
+Simple mod to clear hud notifications when joining an online instance. Can also manually clear notifications by pressing F4.
+
+There is no native method to clear notifications, so I force an immediate notification to clear the buffer.
+
+---
+# CVRGizmos
+ Adds in-game gizmos to CCK components.
+
+Current implementation may be a bit ugly, but at least it doesn't tank FPS.
+
+Uses modified version of Popcron.Gizmos:
+
+https://github.com/popcron/gizmos
+
+![ChilloutVR_vQAWKRkt73](https://user-images.githubusercontent.com/37721153/190173732-368dec7a-d56e-47a0-bc38-3c7f38caa0bc.png)
+
+---
 # DesktopVRIK
 Adds VRIK to Desktop ChilloutVR avatars. No longer will you be a liveless sliding statue~!
 
@@ -85,6 +90,27 @@ https://user-images.githubusercontent.com/37721153/221870123-fbe4f5e8-8d6e-4a43-
 https://feedback.abinteractive.net/p/desktop-feet-ik-for-avatars
 
 https://feedback.abinteractive.net/p/pivot-desktop-camera-with-head
+
+---
+# DesktopVRSwitch
+Allows you to switch between Desktop and VR with a keybind.
+
+Press Control + F6 to switch. SteamVR will automatically start if it isn't already running.
+
+---
+
+Almost all base game features & systems that differ when in VR are now updated after switch. There are still very likely small quirks that need ironing out still, but everything major is now fixed and accounted for. 
+
+This mod will likely cause issues with other mods that are not built for or expect VRMode changes during runtime.
+
+## There are two versions of this mod!
+**DesktopVRSwitch** is built for the Stable branch of ChilloutVR. (OpenVR)
+
+**DesktopXRSwitch** is built for the Experimental branch of ChilloutVR (OpenXR)
+
+Once the Experimental branch of ChilloutVR hits Stable, the mod name will be changing from VR -> XR.
+
+---
 # FuckMetrics
 
 This mod limits UpdateMetrics & SendCoreUpdate while the menus are closed. This helps to alleviate hitching and performance issues, particularly with FPS drops while unmuted in online instances and VRIK tapping in place.
@@ -255,7 +281,7 @@ https://user-images.githubusercontent.com/37721153/231351589-07f794f3-f542-4cb4-
 ## Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/z-for-undo-in-game
 
---- 
+---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
 https://documentation.abinteractive.net/official/legal/tos/#7-modding-our-games
