@@ -1,0 +1,23 @@
+{
+  "_id": 91,
+  "name": "PickupPushPull",
+  "modversion": "3.0.2",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Allows you to push & pull pickups with Mouse, Gamepad, & VR.\nCan also optionally rotate props via keybind.\n\nIndex users will need to manually bind the missing SteamVR binds.",
+  "searchtags": [
+    "pull",
+    "push",
+    "pickup",
+    "prop"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/PickupPushPull/releases/download/v3.0.2/PickupPushPull.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/PickupPushPull/",
+  "changelog": "- Fixed issue where ControlEnableGamepad setting was improperly checked on startup.",
+  "embedcolor": "804221"
+}

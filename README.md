@@ -220,6 +220,22 @@ https://user-images.githubusercontent.com/37721153/189479474-41e93dff-a695-42f2-
 Disables the CVRPathCameraController by default while keeping the flight binding. 
 
 Using UIExpansionKit or similar you can toggle both while in game.
+# PickupPushPull
+Allows you to push & pull props with Gamepad and VR.
+
+Simply maps Gamepad & VR joystick input to objectPushPull.
+
+Hold left bumper on Gamepad to use objectPushPull.
+
+You can also rotate props while holding down the selected bind in VR, or right bumper on Gamepad.
+
+Desktop can use the zoom bind while holding props without pickup origin to rotate with mouse.
+
+As you can tell, i have no fucking clue how to use GitHub.
+
+
+https://user-images.githubusercontent.com/37721153/188521473-9d180795-785a-4ba0-b97f-1e9163d1ba14.mp4
+
 
 ---
 
