@@ -1,0 +1,23 @@
+{
+  "_id": 95,
+  "name": "MenuScalePatch",
+  "modversion": "4.2.6",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Corrects MM and QM position when avatar is being scaled.\n\nOptional setting to enable Independent Head Turn while in menus.\nOptional setting to force menus to always follow player.",
+  "searchtags": [
+    "menu",
+    "scale",
+    "avatarscale",
+    "slider"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/MenuScalePatch/releases/download/v4.2.6/MenuScalePatch.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/MenuScalePatch/",
+  "changelog": "- Fixed hitching & potential crash when opening menu after a long time of it being closed. Don't disable CohtmlView, only enable it.\n- Let game update menu position while its closed.\n- Tweaked independent head turn handling to ensure menu is correctly positioned on recenter if PlayerAnchorMenus is disabled.\n- Undo change to which transform to parent menu anchors.",
+  "embedcolor": "363020"
+}
