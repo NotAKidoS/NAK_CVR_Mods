@@ -236,6 +236,10 @@ As you can tell, i have no fucking clue how to use GitHub.
 
 https://user-images.githubusercontent.com/37721153/188521473-9d180795-785a-4ba0-b97f-1e9163d1ba14.mp4
 
+# PortableCameraAdditions
+ added few more settings to camera
+
+![image](https://user-images.githubusercontent.com/37721153/213652852-63ef50da-f6b2-4d69-a28d-0414e3d51792.png)
 
 ---
 
