@@ -200,7 +200,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
         DesktopVRIKMod.UpdateAllSettings();
     }
-    
+
     void Update()
     {
         if (avatarVRIK == null) return;
@@ -283,6 +283,9 @@ internal class DesktopVRIKSystem : MonoBehaviour
             avatarIKSolver.IKPositionWeight = BodySystem.TrackingPositionWeight;
             avatarIKSolver.locomotion.weight = _locomotionWeight;
 
+            bool useAnimatedBendNormal = _locomotionWeight <= 0f;
+            avatarIKSolver.leftLeg.useAnimatedBendNormal = useAnimatedBendNormal;
+            avatarIKSolver.rightLeg.useAnimatedBendNormal = useAnimatedBendNormal;
             SetArmWeight(avatarIKSolver.leftArm, BodySystem.TrackingLeftArmEnabled && avatarIKSolver.leftArm.target != null);
             SetArmWeight(avatarIKSolver.rightArm, BodySystem.TrackingRightArmEnabled && avatarIKSolver.rightArm.target != null);
             SetLegWeight(avatarIKSolver.leftLeg, BodySystem.TrackingLeftLegEnabled && avatarIKSolver.leftLeg.target != null);
@@ -294,6 +297,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
             avatarIKSolver.IKPositionWeight = 0f;
             avatarIKSolver.locomotion.weight = 0f;
 
+            avatarIKSolver.leftLeg.useAnimatedBendNormal = false;
+            avatarIKSolver.rightLeg.useAnimatedBendNormal = false;
             SetArmWeight(avatarIKSolver.leftArm, false);
             SetArmWeight(avatarIKSolver.rightArm, false);
             SetLegWeight(avatarIKSolver.leftLeg, false);

@@ -15,6 +15,10 @@ using UnityEngine;
         Freddy (gmod)- Doesn't have any fingers, wristToPalmAxis & palmToThumbAxis needed to be set manually.
         Small Cheese- Emotes are angled wrong due to maxRootAngle..???
 
+    Custom knee bend normal is needed for avatars that scale incredibly small. Using animated knee bend will cause
+    knees to bend in completely wrong directions. We turn it off though when in crouch/prone, as it can bleed
+    into animations.
+
 	Most other avatars play just fine.
 
 **/
