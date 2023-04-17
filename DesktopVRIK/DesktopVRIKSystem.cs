@@ -283,7 +283,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
             avatarIKSolver.IKPositionWeight = BodySystem.TrackingPositionWeight;
             avatarIKSolver.locomotion.weight = _locomotionWeight;
 
-            bool useAnimatedBendNormal = _locomotionWeight <= 0f;
+            bool useAnimatedBendNormal = _locomotionWeight <= 0.5f;
             avatarIKSolver.leftLeg.useAnimatedBendNormal = useAnimatedBendNormal;
             avatarIKSolver.rightLeg.useAnimatedBendNormal = useAnimatedBendNormal;
             SetArmWeight(avatarIKSolver.leftArm, BodySystem.TrackingLeftArmEnabled && avatarIKSolver.leftArm.target != null);
