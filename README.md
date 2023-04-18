@@ -9,7 +9,7 @@ This should also mean more consistancy between my mods... maybe.
 
 | Project | CVRMG Category | CVRMG Status |
 |---|---|---|
-| [**DesktopVRIK**](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/main/desktopvrik) | Utilities & Tweaks | Approved |
+| [**DesktopVRIK**](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/main/DesktopVRIK) | Utilities & Tweaks | Approved |
 
 ## AASBufferFix
  
