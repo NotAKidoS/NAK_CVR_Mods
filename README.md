@@ -1,4 +1,11 @@
-# AASBufferFix
+# the note
+I've finally made a central repo for my ChilloutVR mods. As I continue to update and improve them, I'll be migrating releases to this repo and including them in each release, following the same approach used by SDraw and Kafejao.
+
+To ensure a smooth transition, I'll be archiving the standalone repositories once the approved version of the mod in CVRMG points towards this repo in its mod info. This way, you'll be able to easily access all the latest updates and improvements from one central location.
+
+This should also mean more consistancy between my mods... maybe.
+
+## AASBufferFix
  
 Fixes two issues with the Avatar Advanced Settings buffers when loading remote avatars:
 
@@ -15,7 +22,7 @@ The avatar will stay in the default animator state until AAS data is received th
 You will no longer sync garbage AAS while switching avatar.
 
 ---
-# BadAnimatorFix
+## BadAnimatorFix
  A bad fix for a niche issue. Is it really even a fix?
 
 This mod occasionally rewinds animation states that have loop enabled.
@@ -27,7 +34,7 @@ Disable loop on your 2-frame toggle clips! They cycle insanely fast and heavily 
 
 This mod also indirectly fixes your locomotion animations or other animations locking up after being AFK/Idle for days at a time.
 
-## Note
+### Note
 
 I haven't figured out exactly what's causing the performance drops over time, but I think it might be due to animation clips that have loop enabled for no reason. Unity's loop setting for animation clips is inconsistent, so clips created from the Project tab don't have loop, while those created from the Animation tab do. Depending on how creators make these clips for their avatars, they might unintentionally be more prone to this issue.
 
@@ -36,7 +43,7 @@ Poking around existing communities and searching around, this issue or a similar
 Unity is weird. It is hard to debug this issue as it is avatar dependent and sometimes just does not occur without actually idling for hours to days. I can speed up the game or use EvaluateController() to attempt to force the issue sooner, but even so, it sometimes just does not occur.
 
 ---
-# Blackout
+## Blackout
 
     Functionality heavily inspired by VRSleeper on Booth: https://booth.pm/ja/items/2151940
 
@@ -72,14 +79,14 @@ Unity is weird. It is hard to debug this issue as it is avatar dependent and som
 * Enter Sleep Time - How many seconds without movement until enter sleep mode.
 
 ---
-# ClearHudNotifications
+## ClearHudNotifications
 
 Simple mod to clear hud notifications when joining an online instance. Can also manually clear notifications by pressing F4.
 
 There is no native method to clear notifications, so I force an immediate notification to clear the buffer.
 
 ---
-# CVRGizmos
+## CVRGizmos
  Adds in-game gizmos to CCK components.
 
 Current implementation may be a bit ugly, but at least it doesn't tank FPS.
@@ -91,7 +98,7 @@ https://github.com/popcron/gizmos
 ![ChilloutVR_vQAWKRkt73](https://user-images.githubusercontent.com/37721153/190173732-368dec7a-d56e-47a0-bc38-3c7f38caa0bc.png)
 
 ---
-# DesktopVRIK
+## DesktopVRIK
 Adds VRIK to Desktop ChilloutVR avatars. No longer will you be a liveless sliding statue~!
 
 (adds the small feet stepping when looking around on Desktop)
@@ -113,7 +120,7 @@ https://feedback.abinteractive.net/p/desktop-feet-ik-for-avatars
 https://feedback.abinteractive.net/p/pivot-desktop-camera-with-head
 
 ---
-# DesktopVRSwitch
+## DesktopVRSwitch
 Allows you to switch between Desktop and VR with a keybind.
 
 Press Control + F6 to switch. SteamVR will automatically start if it isn't already running.
@@ -132,11 +139,11 @@ This mod will likely cause issues with other mods that are not built for or expe
 Once the Experimental branch of ChilloutVR hits Stable, the mod name will be changing from VR -> XR.
 
 ---
-# FuckMetrics
+## FuckMetrics
 
 This mod limits UpdateMetrics & SendCoreUpdate while the menus are closed. This helps to alleviate hitching and performance issues, particularly with FPS drops while unmuted in online instances and VRIK tapping in place.
 
-## Settings
+### Settings
 
 * Disable CohtmlView On Idle 
   - Disables CohtmlView on the menus when idle. Takes up to 6 seconds after menu exit. This can give a huge performance boost, but is disabled by default as Cohtml can be unpredictable.
@@ -151,7 +158,7 @@ This mod limits UpdateMetrics & SendCoreUpdate while the menus are closed. This 
 
 In general, keeping Menu Metrics & Menu Core Updates to Menu Only with a high Update Rate (in seconds), should be enough for smooth gameplay. Only turn on Disable CohtmlView On Idle if you really wanna squeeze performance, as Cohtml can sometimes freak out when disabled.
 
-## Examples
+### Examples
 
 The following clips demonstrate the difference in performance with and without the FuckMetrics mod. While not a scientifically rigorous comparison, it is clear that there is a significant performance hit when unmuted, causing Dynamic Bones to jitter, in the clip without the mod:
 
@@ -163,7 +170,7 @@ https://user-images.githubusercontent.com/37721153/225495141-7abcb17b-60c7-487d-
 
 While this mod is not directly fixing the performance hit while unmuted, it is likely freeing enough resources that unmuting does not cause a noticable performance hit while in online instances. This comes at the cost of Cohtml being a bit more fragile, as it is more likely to randomly error while disabled.
 
-## Relevant Feedback Posts:
+### Relevant Feedback Posts:
 
 https://feedback.abinteractive.net/p/fps-drop-while-unmuted
 # FuckToes
@@ -172,7 +179,7 @@ Prevents VRIK from autodetecting toes in HalfbodyIK.
 Optionally can be applied in FBT, but toes in FBT are nice so you are a monster if so.
 
 ![fuckthetoes](https://user-images.githubusercontent.com/37721153/216518012-ae3b1dde-17ea-419a-a875-48d57e13f3dd.png)
-# GestureLock
+## GestureLock
  Simple GestureLock for CVR.
 
 Uses ChilloutVR's "Controller Toggle Gestures" binding in SteamVR to lock GestureLeft & GestureRight input. 
@@ -181,7 +188,7 @@ Does nothing on Knuckles controllers as the bind is used for finger tracking.
 
 ![VirtualDesktop Android-20220907-172923](https://user-images.githubusercontent.com/37721153/188999382-7663a863-49be-4b9b-8839-8b6e8c32783b.jpg)
 
-# IKFixes
+## IKFixes
 A few small fixes to IK.
 
 **FBT Fixes** - 
@@ -206,7 +213,7 @@ https://feedback.abinteractive.net/p/about-ik-behaviour
 https://feedback.abinteractive.net/p/vrik-addplatformmotion-for-movement-parents
 
 https://feedback.abinteractive.net/p/halfbodyik-feet-will-only-point-in-direction-of-head
-# JumpPatch
+## JumpPatch
 
 Prevents you from jumping until you've been grounded for a frame.
 
@@ -214,13 +221,13 @@ This ensures Grounded parameter fires when hitting the ground while holding jump
 
 https://user-images.githubusercontent.com/37721153/231921029-f5bf5236-3dbb-4720-8eb0-fafce4e59cf8.mp4
 
-## Relevant Feedback Posts:
+### Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/grounded-parameter-does-not-fire-immediatly-after-landing
-# MenuScalePatch
+## MenuScalePatch
 
 Originally forced menu position to update while scaling. Now changes ChilloutVR menu behavior to feel less clunky.
 
-## Features:
+### Features:
 * Menu position properly updates at end of update cycle.
   * This makes sure menu is always correctly positioned while moving and scaling.
   * This also allows for menus to be used while moving. (this is iffy though)
@@ -235,7 +242,7 @@ Originally forced menu position to update while scaling. Now changes ChilloutVR 
   * Menu will now follow you while moving in world space, but not while moving in play space.
 
 https://user-images.githubusercontent.com/37721153/189479474-41e93dff-a695-42f2-9d20-6a895a723039.mp4
-# PathCamDisabler
+## PathCamDisabler
  
 > In the midst of a party, with friends all around
 > The player chatted and laughed, a joyous sound
@@ -267,7 +274,7 @@ https://user-images.githubusercontent.com/37721153/189479474-41e93dff-a695-42f2-
 Disables the CVRPathCameraController by default while keeping the flight binding. 
 
 Using UIExpansionKit or similar you can toggle both while in game.
-# PickupPushPull
+## PickupPushPull
 Allows you to push & pull props with Gamepad and VR.
 
 Simply maps Gamepad & VR joystick input to objectPushPull.
@@ -283,13 +290,13 @@ As you can tell, i have no fucking clue how to use GitHub.
 
 https://user-images.githubusercontent.com/37721153/188521473-9d180795-785a-4ba0-b97f-1e9163d1ba14.mp4
 
-# PortableCameraAdditions
+## PortableCameraAdditions
  added few more settings to camera
 
 ![image](https://user-images.githubusercontent.com/37721153/213652852-63ef50da-f6b2-4d69-a28d-0414e3d51792.png)
 
 ---
-# PropUndoButton
+## PropUndoButton
 
 **CTRL+Z** to undo latest spawned prop. **CTRL+SHIFT+Z** to redo deleted prop. 
 
