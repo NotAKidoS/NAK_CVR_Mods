@@ -208,6 +208,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         HandleLocomotionTracking();
         UpdateLocomotionWeight();
         ApplyBodySystemWeights();
+        ResetAvatarLocalPosition();
     }
 
     void HandleLocomotionTracking()
@@ -306,6 +307,13 @@ internal class DesktopVRIKSystem : MonoBehaviour
         }
     }
 
+    void ResetAvatarLocalPosition()
+    {
+        // Reset avatar offset
+        avatarTransform.localPosition = Vector3.zero;
+        avatarTransform.localRotation = Quaternion.identity;
+    }
+
     public void OnSetupAvatarDesktop()
     {
         if (!Setting_Enabled) return;
@@ -382,13 +390,6 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
     public void OnPreSolverUpdate()
     {
-        // Reset avatar offset
-        avatarTransform.localPosition = Vector3.zero;
-        avatarTransform.localRotation = Quaternion.identity;
-
-        // Don't run during emotes
-        if (_ikEmotePlaying) return;
-
         // Set plant feet
         avatarIKSolver.plantFeet = Setting_PlantFeet;
 
