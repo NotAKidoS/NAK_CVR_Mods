@@ -5,6 +5,12 @@ To ensure a smooth transition, I'll be archiving the standalone repositories onc
 
 This should also mean more consistancy between my mods... maybe.
 
+## ChilloutVR Mods
+
+| Project | CVRMG Category | CVRMG Status |
+|---|---|---|
+| [**DesktopVRIK**](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/main/desktopvrik) | Utilities & Tweaks | Approved |
+
 ## AASBufferFix
  
 Fixes two issues with the Avatar Advanced Settings buffers when loading remote avatars:
@@ -96,28 +102,6 @@ Uses modified version of Popcron.Gizmos:
 https://github.com/popcron/gizmos
 
 ![ChilloutVR_vQAWKRkt73](https://user-images.githubusercontent.com/37721153/190173732-368dec7a-d56e-47a0-bc38-3c7f38caa0bc.png)
-
----
-## DesktopVRIK
-Adds VRIK to Desktop ChilloutVR avatars. No longer will you be a liveless sliding statue~!
-
-(adds the small feet stepping when looking around on Desktop)
-
-https://user-images.githubusercontent.com/37721153/221870123-fbe4f5e8-8d6e-4a43-aa5e-f2188e6491a9.mp4
-
-## Configuration:
-* Configurable body lean weight. Set to 0 to disable.
-
-* Configurable max root heading angle with chest/pelvis weight settings. Set to 0 to disable.
-
-* Options to disable VRIK from using mapped toes &/or find unmapped (non-human) toe bones.
-
-* Autofixes for avatars without fingers & incorrect chest/spine bone mapping (might not play well with netik).
-
-## Relevant Feedback Posts:
-https://feedback.abinteractive.net/p/desktop-feet-ik-for-avatars
-
-https://feedback.abinteractive.net/p/pivot-desktop-camera-with-head
 
 ---
 ## DesktopVRSwitch
