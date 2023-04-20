@@ -87,12 +87,12 @@ internal static class BodySystemPatches
                 SetPelvisWeight(solver.spine, 0f);
             }
 
-            if (IKFixesMod.EntryUseFakeRootAngle.Value && !BodySystem.isCalibratedAsFullBody)
+            if (IKFixes.EntryUseFakeRootAngle.Value && !BodySystem.isCalibratedAsFullBody)
             {
                 // Emulate maxRootAngle because CVR doesn't have the player controller set up ideally for VRIK.
                 // This is a small small fix, but makes it so the feet dont point in the direction of the head
                 // when turning. It also means turning with joystick & turning IRL make feet behave the same and follow behind.
-                float weightedAngleLimit = IKFixesMod.EntryFakeRootAngleLimit.Value * solver.locomotion.weight;
+                float weightedAngleLimit = IKFixes.EntryFakeRootAngleLimit.Value * solver.locomotion.weight;
                 float pivotAngle = MovementSystem.Instance.rotationPivot.eulerAngles.y;
                 float deltaAngleRoot = Mathf.DeltaAngle(pivotAngle, _ikSimulatedRootAngle);
                 float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
@@ -111,6 +111,11 @@ internal static class BodySystemPatches
                 // VR default is 25 degrees, but maybe during emotes needs 180 degrees..?
                 solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 25f;
             }
+
+            // custom IK settings
+            solver.spine.neckStiffness = IKFixes.EntryNeckStiffness.Value;
+            solver.spine.bodyRotStiffness = IKFixes.EntryBodyRotStiffness.Value;
+            solver.spine.rotateChestByHands = IKFixes.EntryRotateChestByHands.Value;
         }
 
         int num = 0;

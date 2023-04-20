@@ -2,16 +2,25 @@
 
 namespace NAK.Melons.IKFixes;
 
-public class IKFixesMod : MelonMod
+public class IKFixes : MelonMod
 {
-    public const string SettingsCategory = "IKFixes";
-    public static readonly MelonPreferences_Category CategoryIKFixes = MelonPreferences.CreateCategory(SettingsCategory);
+    public const string SettingsCategory = nameof(IKFixes);
+    public static readonly MelonPreferences_Category Category = MelonPreferences.CreateCategory(SettingsCategory);
 
     public static readonly MelonPreferences_Entry<bool> EntryUseFakeRootAngle =
-        CategoryIKFixes.CreateEntry("Use Fake Root Angle", true, description: "Emulates maxRootAngle. This fixes feet pointing in direction of head when looking around.");
+        Category.CreateEntry("Use Fake Root Angle", true, description: "Emulates maxRootAngle. This fixes feet pointing in direction of head when looking around.");
 
     public static readonly MelonPreferences_Entry<float> EntryFakeRootAngleLimit =
-        CategoryIKFixes.CreateEntry("Fake Root Angle Limit", 25f, description: "Specifies the maximum angle the lower body can have relative to the head when rotating.");
+        Category.CreateEntry("Fake Root Angle Limit", 25f, description: "Specifies the maximum angle the lower body can have relative to the head when rotating.");
+
+    public static readonly MelonPreferences_Entry<float> EntryNeckStiffness =
+        Category.CreateEntry("Neck Stiffness", 0.2f, description: "Neck stiffness.");
+
+    public static readonly MelonPreferences_Entry<float> EntryBodyRotStiffness =
+        Category.CreateEntry("Body Rot Stiffness", 0.1f, description: "Body rotation stiffness.");
+
+    public static readonly MelonPreferences_Entry<float> EntryRotateChestByHands =
+        Category.CreateEntry("Rot Chest By Hands", 1f, description: "Rotate chest by hands.");
 
     public override void OnInitializeMelon()
     {
