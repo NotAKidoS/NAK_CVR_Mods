@@ -14,8 +14,8 @@ namespace NAK.ThirdPerson;
 internal static class CameraLogic
 {
     private static float _dist;
-    private static GameObject _ourCam;
-    private static GameObject _desktopCam;
+    private static Camera _ourCam;
+    private static Camera _desktopCam;
     private static CameraFovClone _cameraFovClone;
 
     internal static CameraLocation CurrentLocation = CameraLocation.Default;
@@ -35,7 +35,8 @@ internal static class CameraLogic
         set
         {
             _state = value;
-            _ourCam.SetActive(_state);
+            _desktopCam.enabled = !_state;
+            _ourCam.gameObject.SetActive(_state);
         }
     }
 
@@ -47,13 +48,12 @@ internal static class CameraLogic
     {
         yield return new WaitUntil(() => PlayerSetup.Instance);
 
-        _ourCam = new GameObject("ThirdPersonCameraObj") { };
-        _ourCam.AddComponent<Camera>();
+        _ourCam = new GameObject("ThirdPersonCameraObj", typeof(Camera)).GetComponent<Camera>();
 
-        _cameraFovClone = _ourCam.AddComponent<CameraFovClone>();
+        _cameraFovClone = _ourCam.gameObject.AddComponent<CameraFovClone>();
 
-        _desktopCam = PlayerSetup.Instance.desktopCamera;
-        _cameraFovClone.targetCamera = _desktopCam.GetComponent<Camera>();
+        _desktopCam = PlayerSetup.Instance.desktopCamera.GetComponent<Camera>();
+        _cameraFovClone.targetCamera = _desktopCam;
 
         _ourCam.transform.SetParent(_desktopCam.transform);
 
@@ -67,24 +67,24 @@ internal static class CameraLogic
     internal static void CopyFromPlayerCam()
     {
         Camera ourCamComponent = _ourCam.GetComponent<Camera>();
-        Camera playerCamComponent = _desktopCam.GetComponent<Camera>();
+        Camera playerCamComponent = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
         if (ourCamComponent == null || playerCamComponent == null) return;
         ThirdPerson.Logger.Msg("Copying active camera settings & components.");
 
-        //steal basic settings
+        // Copy basic settings
         ourCamComponent.farClipPlane = playerCamComponent.farClipPlane;
         ourCamComponent.nearClipPlane = playerCamComponent.nearClipPlane;
         ourCamComponent.cullingMask = playerCamComponent.cullingMask;
         ourCamComponent.depthTextureMode = playerCamComponent.depthTextureMode;
 
-        //steal post processing if added
+        // Copy post processing if added
         PostProcessLayer ppLayerPlayerCam = playerCamComponent.GetComponent<PostProcessLayer>();
         PostProcessLayer ppLayerThirdPerson = ourCamComponent.AddComponentIfMissing<PostProcessLayer>();
         if (ppLayerPlayerCam != null && ppLayerThirdPerson != null)
         {
             ppLayerThirdPerson.enabled = ppLayerPlayerCam.enabled;
             ppLayerThirdPerson.volumeLayer = ppLayerPlayerCam.volumeLayer;
-            //need to copy these via reflection, otherwise post processing will error
+            // Copy these via reflection, otherwise post processing will error
             if (!_setupPostProcessing)
             {
                 _setupPostProcessing = true;
@@ -95,7 +95,7 @@ internal static class CameraLogic
             }
         }
 
-        //what even is this aura camera stuff
+        // Copy Aura camera settings
         AuraCamera auraPlayerCam = playerCamComponent.GetComponent<AuraCamera>();
         AuraCamera auraThirdPerson = ourCamComponent.AddComponentIfMissing<AuraCamera>();
         if (auraPlayerCam != null && auraThirdPerson != null)
@@ -108,7 +108,7 @@ internal static class CameraLogic
             auraThirdPerson.enabled = false;
         }
 
-        //flare layer thing? the sun :_:_:_:_:_:
+        // Copy Flare layer settings
         FlareLayer flarePlayerCam = playerCamComponent.GetComponent<FlareLayer>();
         FlareLayer flareThirdPerson = ourCamComponent.AddComponentIfMissing<FlareLayer>();
         if (flarePlayerCam != null && flareThirdPerson != null)
@@ -120,7 +120,7 @@ internal static class CameraLogic
             flareThirdPerson.enabled = false;
         }
 
-        //and now what the fuck is fog scattering
+        // Copy Azure Fog Scattering settings
         AzureFogScattering azureFogPlayerCam = playerCamComponent.GetComponent<AzureFogScattering>();
         AzureFogScattering azureFogThirdPerson = ourCamComponent.AddComponentIfMissing<AzureFogScattering>();
         if (azureFogPlayerCam != null && azureFogThirdPerson != null)
@@ -132,7 +132,7 @@ internal static class CameraLogic
             Object.Destroy(ourCamComponent.GetComponent<AzureFogScattering>());
         }
 
-        //why is there so many thingsssssssss
+        // Copy Beautify settings
         Beautify beautifyPlayerCam = playerCamComponent.GetComponent<Beautify>();
         Beautify beautifyThirdPerson = ourCamComponent.AddComponentIfMissing<Beautify>();
         if (beautifyPlayerCam != null && beautifyThirdPerson != null)
