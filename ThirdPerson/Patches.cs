@@ -1,12 +1,9 @@
 ﻿using ABI.CCK.Components;
-using ABI_RC.Core.InteractionSystem;
-using ABI_RC.Core.Player;
 using MelonLoader;
-using System.Linq;
 using System.Reflection;
-using static ThirdPerson.CameraLogic;
+using static NAK.ThirdPerson.CameraLogic;
 
-namespace ThirdPerson;
+namespace NAK.ThirdPerson;
 
 internal static class Patches
 {

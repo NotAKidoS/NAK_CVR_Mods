@@ -1,7 +1,7 @@
 ﻿using RootMotion.FinalIK;
 using UnityEngine;
 
-namespace NAK.Melons.DesktopVRIK;
+namespace NAK.DesktopVRIK;
 
 public static class VRIKUtils
 {

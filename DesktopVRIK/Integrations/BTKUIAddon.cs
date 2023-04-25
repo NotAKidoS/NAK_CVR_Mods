@@ -2,7 +2,7 @@
 using BTKUILib.UIObjects;
 using System.Runtime.CompilerServices;
 
-namespace NAK.Melons.DesktopVRIK;
+namespace NAK.DesktopVRIK;
 
 public static class BTKUIAddon
 {

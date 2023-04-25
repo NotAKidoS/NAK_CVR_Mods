@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.AzureSky;
 using UnityEngine.Rendering.PostProcessing;
 
-namespace ThirdPerson;
+namespace NAK.ThirdPerson;
 
 internal static class CameraLogic
 {

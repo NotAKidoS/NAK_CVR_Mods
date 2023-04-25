@@ -2,15 +2,15 @@
 using System;
 using System.Reflection;
 using UnityEngine;
-using static ThirdPerson.CameraLogic;
-using BuildInfo = ThirdPerson.BuildInfo;
+using static NAK.ThirdPerson.CameraLogic;
+using BuildInfo = NAK.ThirdPerson.BuildInfo;
 
 [assembly: AssemblyCopyright("Created by " + BuildInfo.Author)]
-[assembly: MelonInfo(typeof(ThirdPerson.ThirdPerson), BuildInfo.Name, BuildInfo.Version, BuildInfo.Author)]
+[assembly: MelonInfo(typeof(NAK.ThirdPerson.ThirdPerson), BuildInfo.Name, BuildInfo.Version, BuildInfo.Author)]
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonColor(ConsoleColor.DarkMagenta)]
 
-namespace ThirdPerson;
+namespace NAK.ThirdPerson;
 
 public static class BuildInfo
 {

@@ -24,7 +24,7 @@ using ABI.CCK.Components;
 
 **/
 
-namespace NAK.Melons.DesktopVRIK.HarmonyPatches;
+namespace NAK.DesktopVRIK.HarmonyPatches;
 
 class PlayerSetupPatches
 {

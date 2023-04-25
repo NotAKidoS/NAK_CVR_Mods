@@ -8,7 +8,7 @@ using RootMotion.FinalIK;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NAK.Melons.DesktopVRIK;
+namespace NAK.DesktopVRIK;
 
 internal class DesktopVRIKSystem : MonoBehaviour
 {

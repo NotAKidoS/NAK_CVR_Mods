@@ -1,17 +1,17 @@
 ﻿using MelonLoader;
-using NAK.Melons.DesktopVRIK.Properties;
+using NAK.DesktopVRIK.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.DesktopVRIK))]
+[assembly: AssemblyTitle(nameof(NAK.DesktopVRIK))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.DesktopVRIK))]
+[assembly: AssemblyProduct(nameof(NAK.DesktopVRIK))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.DesktopVRIK.DesktopVRIKMod),
-    nameof(NAK.Melons.DesktopVRIK),
+    typeof(NAK.DesktopVRIK.DesktopVRIKMod),
+    nameof(NAK.DesktopVRIK),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/DesktopVRIK"
@@ -23,7 +23,7 @@ using System.Reflection;
 [assembly: MelonOptionalDependencies("BTKUILib")]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.DesktopVRIK.Properties;
+namespace NAK.DesktopVRIK.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "4.1.8";

@@ -1,7 +1,7 @@
 ﻿using MelonLoader;
 using UnityEngine;
 
-namespace NAK.Melons.DesktopVRIK;
+namespace NAK.DesktopVRIK;
 
 public class DesktopVRIKMod : MelonMod
 {
