@@ -1,17 +1,17 @@
 ﻿using MelonLoader;
-using NAK.Melons.IKFixes.Properties;
+using NAK.IKFixes.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.IKFixes))]
+[assembly: AssemblyTitle(nameof(NAK.IKFixes))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.IKFixes))]
+[assembly: AssemblyProduct(nameof(NAK.IKFixes))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.IKFixes.IKFixes),
-    nameof(NAK.Melons.IKFixes),
+    typeof(NAK.IKFixes.IKFixes),
+    nameof(NAK.IKFixes),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/IKFixes"
@@ -22,9 +22,9 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.IKFixes.Properties;
+namespace NAK.IKFixes.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.2";
+    public const string Version = "1.0.3";
     public const string Author = "NotAKidoS";
 }

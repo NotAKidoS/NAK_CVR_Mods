@@ -1,12 +1,15 @@
-﻿using ABI_RC.Core;
+﻿using ABI.CCK.Components;
+using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using HarmonyLib;
-using NAK.Melons.MenuScalePatch.Helpers;
+using NAK.MenuScalePatch.Helpers;
+using System.Reflection;
+using System.Reflection.Emit;
 using UnityEngine;
 
-namespace NAK.Melons.MenuScalePatch.HarmonyPatches;
+namespace NAK.MenuScalePatch.HarmonyPatches;
 
 /**
     ViewManager.SetScale runs once a second when it should only run when aspect ratio changes- CVR bug
@@ -21,17 +24,10 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(PlayerSetup), "Start")]
     private static void Postfix_PlayerSetup_Start()
     {
-        try
-        {
-            MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
-            MenuScalePatch.UpdateAllSettings();
-            QuickMenuHelper.Instance.CreateWorldAnchors();
-            MainMenuHelper.Instance.CreateWorldAnchors();
-        }
-        catch (System.Exception e)
-        {
-            MenuScalePatch.Logger.Error(e);
-        }
+        MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
+        MenuScalePatch.UpdateSettings();
+        QuickMenuHelper.Instance.CreateWorldAnchors();
+        MainMenuHelper.Instance.CreateWorldAnchors();
     }
 
     [HarmonyPrefix]
@@ -83,15 +79,8 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(CVR_MenuManager), "Start")]
     private static void Postfix_CVR_MenuManager_Start(ref CVR_MenuManager __instance, ref GameObject ____leftVrAnchor)
     {
-        try
-        {
-            QuickMenuHelper helper = __instance.quickMenu.gameObject.AddComponent<QuickMenuHelper>();
-            helper.handAnchor = ____leftVrAnchor.transform;
-        }
-        catch (System.Exception e)
-        {
-            MenuScalePatch.Logger.Error(e);
-        }
+        QuickMenuHelper helper = __instance.quickMenu.gameObject.AddComponent<QuickMenuHelper>();
+        helper.handAnchor = ____leftVrAnchor.transform;
     }
 
     //Set MM stuff
@@ -99,14 +88,7 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(ViewManager), "Start")]
     private static void Postfix_ViewManager_Start(ref ViewManager __instance)
     {
-        try
-        {
-            __instance.gameObject.AddComponent<MainMenuHelper>();
-        }
-        catch (System.Exception e)
-        {
-            MenuScalePatch.Logger.Error(e);
-        }
+        __instance.gameObject.AddComponent<MainMenuHelper>();
     }
 
     //hook quickmenu open/close
@@ -178,13 +160,28 @@ internal class HarmonyPatches
     [HarmonyPatch(typeof(CVRTools), "ConfigureHudAffinity")]
     private static void Postfix_CVRTools_ConfigureHudAffinity()
     {
-        try
-        {
-            MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
-        }
-        catch (System.Exception e)
-        {
-            MenuScalePatch.Logger.Error(e);
-        }
+        MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
+    }
+
+    // prevents CVRWorld from closing menus when world transitioning, cause cool
+    [HarmonyTranspiler]
+    [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.Start), MethodType.Enumerator)]
+    private static IEnumerable<CodeInstruction> Transpiler_CVRWorld_Start(IEnumerable<CodeInstruction> instructions, ILGenerator il)
+    {
+        var patchedInstructions = new CodeMatcher(instructions).MatchForward(false,
+            new CodeMatch(OpCodes.Ldsfld),
+            new CodeMatch(OpCodes.Ldc_I4_0),
+            new CodeMatch(i => i.opcode == OpCodes.Callvirt && i.operand is MethodInfo { Name: "ForceUiStatus" }))
+            .RemoveInstructions(3)
+            .InstructionEnumeration();
+
+        patchedInstructions = new CodeMatcher(patchedInstructions).MatchForward(false,
+            new CodeMatch(OpCodes.Ldsfld),
+            new CodeMatch(OpCodes.Ldc_I4_0),
+            new CodeMatch(i => i.opcode == OpCodes.Callvirt && i.operand is MethodInfo { Name: "ToggleQuickMenu" }))
+            .RemoveInstructions(3)
+            .InstructionEnumeration();
+
+        return patchedInstructions;
     }
 }

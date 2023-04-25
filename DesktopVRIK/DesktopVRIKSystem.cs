@@ -183,6 +183,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
     // Last Movement Parent Info
     Vector3 _movementPosition;
     Quaternion _movementRotation;
+    CVRMovementParent _currentParent;
 
     DesktopVRIKSystem()
     {
@@ -377,14 +378,19 @@ internal class DesktopVRIKSystem : MonoBehaviour
         // desktop pivots from playerlocal transform
         var platformPivot = transform.position;
 
-        // Add platform motion to IK solver
-        avatarIKSolver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
+        // Prevent targeting other parent position
+        if (_currentParent == currentParent)
+        {
+            // Add platform motion to IK solver
+            avatarIKSolver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
+            ResetDesktopVRIK();
+        }
 
         // Store for next frame
+        _currentParent = currentParent;
         _movementPosition = currentPosition;
         _movementRotation = currentRotation;
 
-        ResetDesktopVRIK();
         return true;
     }
 

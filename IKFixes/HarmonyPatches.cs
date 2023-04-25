@@ -7,7 +7,7 @@ using HarmonyLib;
 using RootMotion.FinalIK;
 using UnityEngine;
 
-namespace NAK.Melons.IKFixes.HarmonyPatches;
+namespace NAK.IKFixes.HarmonyPatches;
 
 internal static class BodySystemPatches
 {
@@ -213,6 +213,7 @@ internal static class VRIKPatches
 internal static class PlayerSetupPatches
 {
     // Last Movement Parent Info
+    static CVRMovementParent lastMovementParent;
     static Vector3 lastMovementPosition;
     static Quaternion lastMovementRotation;
 
@@ -234,10 +235,15 @@ internal static class PlayerSetupPatches
             Vector3 deltaPosition = currentPosition - lastMovementPosition;
             Quaternion deltaRotation = Quaternion.Inverse(lastMovementRotation) * currentRotation;
 
-            // Add platform motion to IK solver
-            IKSystem.vrik.solver.AddPlatformMotion(deltaPosition, deltaRotation, currentPosition);
+            // Prevent targeting other parent position
+            if (lastMovementParent == currentParent || lastMovementParent == null)
+            {
+                // Add platform motion to IK solver
+                IKSystem.vrik.solver.AddPlatformMotion(deltaPosition, deltaRotation, currentPosition);
+            }
 
             // Store for next frame
+            lastMovementParent = currentParent;
             lastMovementPosition = currentPosition;
             lastMovementRotation = currentRotation;
             return false;

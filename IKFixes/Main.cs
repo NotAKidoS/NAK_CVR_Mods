@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.IKFixes;
+namespace NAK.IKFixes;
 
 public class IKFixes : MelonMod
 {

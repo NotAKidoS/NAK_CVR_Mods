@@ -1,5 +1,6 @@
 ﻿using ABI.CCK.Components;
 using UnityEngine;
+using ABI_RC.Core.Player;
 
 namespace NAK.CCK.CustomComponents;
 
@@ -16,6 +17,7 @@ public class NAKPointerTracker : MonoBehaviour
     public string parameterName;
 
     // Internal stuff
+    bool isLocal;
     float initialAngle;
     CVRPointer trackedPointer;
 
@@ -46,6 +48,7 @@ public class NAKPointerTracker : MonoBehaviour
         Vector3 direction = (transform.TransformPoint(offset) - referenceTransform.position);
         Vector3 projectedDirection = Vector3.ProjectOnPlane(direction, referenceTransform.up);
         initialAngle = Vector3.SignedAngle(referenceTransform.forward, projectedDirection, referenceTransform.up);
+        isLocal = gameObject.layer == 8;
     }
 
     void OnDrawGizmosSelected()
@@ -88,8 +91,13 @@ public class NAKPointerTracker : MonoBehaviour
     {
         if (animator != null)
         {
-            float angle = GetAngleFromPosition(trackedPointer.transform.position, initialAngle);
-            animator.SetFloat(parameterName + "_Angle", angle / 360);
+            float angle = GetAngleFromPosition(trackedPointer.transform.position, initialAngle) / 360;
+            if (!isLocal)
+            {
+                animator.SetFloat(parameterName + "_Angle", angle);
+                return;
+            }
+            PlayerSetup.Instance.changeAnimatorParam(parameterName + "_Angle", angle);
         }
     }
 

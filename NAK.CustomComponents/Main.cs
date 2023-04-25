@@ -9,7 +9,7 @@ public class CustomComponents : MelonMod
     public override void OnInitializeMelon()
     {
         // Add our CCK component to the prop whitelist
-        var propWhitelist = SharedFilter._spawnableWhitelist;
+        var propWhitelist = SharedFilter._avatarWhitelist;
         propWhitelist.Add(typeof(NAKPointerTracker));
     }
 }

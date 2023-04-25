@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.1.7",
+  "modversion": "4.1.8",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r1/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r2/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/",
-  "changelog": "- Enable useAnimatedBendNormal when Locomotion tracking is disabled. This fixes some sitting animations that bend at unnatural angles.\n- Fix avatar root offset not being reset when entering/playing emotes.",
+  "changelog": "- Fixed feet targeting previous movement parent position for a frame.",
   "embedcolor": "9b59b6"
 }

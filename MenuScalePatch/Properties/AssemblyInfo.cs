@@ -1,30 +1,30 @@
 ﻿using MelonLoader;
-using NAK.Melons.MenuScalePatch.Properties;
+using NAK.MenuScalePatch.Properties;
 using System.Reflection;
 
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.MenuScalePatch))]
+[assembly: AssemblyTitle(nameof(NAK.MenuScalePatch))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.MenuScalePatch))]
+[assembly: AssemblyProduct(nameof(NAK.MenuScalePatch))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.MenuScalePatch.MenuScalePatch),
-    nameof(NAK.Melons.MenuScalePatch),
+    typeof(NAK.MenuScalePatch.MenuScalePatch),
+    nameof(NAK.MenuScalePatch),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/MenuScalePatch"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 
-namespace NAK.Melons.MenuScalePatch.Properties;
+namespace NAK.MenuScalePatch.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.2.6";
+    public const string Version = "4.2.7";
     public const string Author = "NotAKidoS";
 }

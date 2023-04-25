@@ -2,7 +2,7 @@
 using ABI_RC.Core.Savior;
 using UnityEngine;
 
-namespace NAK.Melons.MenuScalePatch.Helpers;
+namespace NAK.MenuScalePatch.Helpers;
 
 /**
 

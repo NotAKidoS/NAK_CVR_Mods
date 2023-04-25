@@ -1,7 +1,7 @@
 {
   "_id": 142,
   "name": "IKFixes",
-  "modversion": "1.0.2",
+  "modversion": "1.0.3",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/IKFixes/releases/download/v1.0.2/IKFixes.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/IKFixes/",
-  "changelog": "- Initial Release\n- Added FakeRootAngle fix for Halfbody. Feet will no longer only point in the direction of head while looking around/turning. This can be disabled in mod settings.",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r2/IKFixes.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/",
+  "changelog": "- Fixed feet targeting previous movement parent position for a frame.",
   "embedcolor": "f46e49"
 }
