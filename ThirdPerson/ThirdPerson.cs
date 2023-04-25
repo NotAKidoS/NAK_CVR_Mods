@@ -34,7 +34,8 @@ public class ThirdPerson : MelonMod
 
     public override void OnUpdate()
     {
-        if (State)
+        // Prevents scrolling while in Menus or UnityExplorer
+        if (State && Cursor.lockState == CursorLockMode.Locked)
         {
             if (Input.GetAxis("Mouse ScrollWheel") > 0f) IncrementDist();
             else if (Input.GetAxis("Mouse ScrollWheel") < 0f) DecrementDist();

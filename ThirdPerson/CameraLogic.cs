@@ -153,7 +153,7 @@ internal static class CameraLogic
         switch (location)
         {
             case CameraLocation.FrontView:
-                _ourCam.transform.localPosition = new Vector3(0, 0.015f, 0.55f + _dist);
+                _ourCam.transform.localPosition = new Vector3(0, 0.015f, 0.55f - _dist);
                 _ourCam.transform.localRotation = new Quaternion(0, 180, 0, 0);
                 CurrentLocation = CameraLocation.FrontView;
                 break;
