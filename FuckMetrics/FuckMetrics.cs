@@ -81,7 +81,7 @@ public static class FuckMetrics
 
             try
             {
-                cohtmlView.View.Advance(cohtmlView.m_UISystem?.Id ?? 0, (double)Time.unscaledTime * 1000.0);
+                cohtmlView.View.Advance(cohtmlView.CohtmlUISystem?.Id ?? 0, (double)Time.unscaledTime * 1000.0);
             }
             catch (Exception e)
             {
