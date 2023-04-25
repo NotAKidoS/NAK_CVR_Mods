@@ -14,9 +14,9 @@
       "third person"
     ],
     "requirements": [],
-    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/tag/r2/ThirdPerson.dll",
+    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r2/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/",
-    "changelog": "- Made thirdperson camera parent to Desktop camera instead of active camera.\n- Copy postprocessing settings from player camera on world start.\n  - This fixed HUD rendering twice in thirdperson due to game update.\n- Added CameraFovClone component to copy zoom from desktop camera.\n- Removed logic that disabled thirdperson when opening a menu, as Game UI renders on top anyways.",
+    "changelog": "- Made thirdperson Desktop only.\n- Copy postprocessing settings on world start.\n- Added CameraFovClone component to copy zoom from desktop camera.\n- Removed logic that disabled thirdperson when opening a menu, as Game UI renders on top anyways.",
     "embedcolor": "F61961"
   }
 ]
