@@ -1,10 +1,6 @@
 ## My ChilloutVR Mods
 
-| Project | CVRMG Category | CVRMG Status |
-|---|---|---|
-| [**DesktopVRIK**](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/main/DesktopVRIK) | Utilities & Tweaks | Update Awaiting Approval |
-
-## the note
+### the note
 I've finally made a central repo for my ChilloutVR mods. As I continue to update and improve them, I'll be migrating releases to this repo and including them in each release, following the same approach used by SDraw and Kafejao.
 
 To ensure a smooth transition, I'll be archiving the standalone repositories once the approved version of the mod in CVRMG points towards this repo in its mod info. This way, you'll be able to easily access all the latest updates and improvements from one central location.
