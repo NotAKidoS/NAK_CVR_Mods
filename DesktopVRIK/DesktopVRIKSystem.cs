@@ -167,6 +167,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
     Vector3 _vrikInitialFootPosRight;
     Quaternion _vrikInitialFootRotLeft;
     Quaternion _vrikInitialFootRotRight;
+    float _vrikInitialHeadHeight;
     float _vrikInitialFootDistance;
     float _vrikInitialStepThreshold;
     float _vrikInitialStepHeight;
@@ -245,7 +246,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         // Get Upright value
         Vector3 delta = avatarIKSolver.spine.headPosition - avatarTransform.position;
         Vector3 deltaRotated = Quaternion.Euler(0, avatarTransform.rotation.eulerAngles.y, 0) * delta;
-        float upright = Mathf.InverseLerp(0f, avatarIKSolver.spine.headHeight * _scaleDifference, deltaRotated.y);
+        float upright = Mathf.InverseLerp(0f, _vrikInitialHeadHeight * _scaleDifference, deltaRotated.y);
         return upright > 0.85f;
     }
 
@@ -578,6 +579,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
         VRIKUtils.CalculateKneeBendNormals(avatarVRIK, out _vrikKneeNormalLeft, out _vrikKneeNormalRight);
 
         SetAvatarPose(AvatarPose.IKPose);
+
+        _vrikInitialHeadHeight = Mathf.Abs(avatarVRIK.references.head.position.y - avatarVRIK.references.rightFoot.position.y);
 
         // Calculate initial IK scaling values with IKPose
         VRIKUtils.CalculateInitialIKScaling(avatarVRIK, out _vrikInitialFootDistance, out _vrikInitialStepThreshold, out _vrikInitialStepHeight);
