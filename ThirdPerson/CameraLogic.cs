@@ -130,7 +130,7 @@ internal static class CameraLogic
         }
         else
         {
-            Object.Destroy(ourCamComponent.GetComponent<AzureFogScattering>());
+            UnityEngine.Object.Destroy(ourCamComponent.GetComponent<AzureFogScattering>());
         }
 
         // Copy Beautify settings
@@ -143,7 +143,7 @@ internal static class CameraLogic
         }
         else
         {
-            Object.Destroy(ourCamComponent.gameObject.GetComponent<Beautify>());
+            UnityEngine.Object.Destroy(ourCamComponent.gameObject.GetComponent<Beautify>());
         }
     }
 

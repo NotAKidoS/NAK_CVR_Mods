@@ -400,3 +400,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.idea/
+
+# Managed Libs
+ManagedLibs/*.dll
+ManagedLibs/*.db
