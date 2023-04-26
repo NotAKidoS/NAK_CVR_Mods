@@ -16,7 +16,7 @@
     "requirements": [],
     "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r2/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Made thirdperson Desktop only.\n- Copy postprocessing settings on world start.\n- Added CameraFovClone component to copy zoom from desktop camera.\n- Removed logic that disabled thirdperson when opening a menu, as Game UI renders on top anyways.\n- Prevent thirdperson zooming while in Menus or UnityExplorer.\n- Inverted thirdperson zoom direction when in Front View.",
+    "changelog": "- Made thirdperson Desktop only.\n- Copy postprocessing settings on world start.\n- Added CameraFovClone component to copy zoom from desktop camera.\n- Removed logic that disabled thirdperson when opening a menu, as Game UI renders on top.\n- Prevent distance adjust while in Menus or UnityExplorer.\n- Inverted distance adjust direction when in Front View.\n- Made distance adjustment use avatar height as modifier.",
     "embedcolor": "F61961"
   }
 ]
