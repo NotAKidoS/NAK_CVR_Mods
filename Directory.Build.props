@@ -43,10 +43,6 @@
             <HintPath>$(MsBuildThisFileDirectory)\_ManagedLibs\ChatBox.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="ml_prm">
-            <HintPath>$(MsBuildThisFileDirectory)\_ManagedLibs\ml_prm.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
     </ItemGroup>
 
     <!-- CVR base game dependencies -->

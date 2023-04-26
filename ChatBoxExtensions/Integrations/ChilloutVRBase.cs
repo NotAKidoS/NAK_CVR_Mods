@@ -9,14 +9,14 @@ internal class ChilloutVRBaseCommands : CommandBase
     public static void RegisterCommands()
     {
         Commands.RegisterCommand("respawn",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             LocalCommandIgnoreOthers(message, args =>
             {
                 RootLogic.Instance.Respawn();
             });
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, (args) =>
             {
@@ -25,14 +25,14 @@ internal class ChilloutVRBaseCommands : CommandBase
         });
 
         Commands.RegisterCommand("mute",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             LocalCommandIgnoreOthers(message, args =>
             {
                 Audio.SetMicrophoneActive(true);
             });
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, args =>
             {

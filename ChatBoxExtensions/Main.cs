@@ -23,6 +23,7 @@ public class ChatBoxExtensions : MelonMod
 
     void ApplyIntegrations()
     {
+        Integrations.Commands.InitializeCommandHandlers();
         Integrations.ChatBoxCommands.RegisterCommands();
         Integrations.ChilloutVRBaseCommands.RegisterCommands();
         ApplyPatches(typeof(HarmonyPatches.CVRInputManagerPatches));

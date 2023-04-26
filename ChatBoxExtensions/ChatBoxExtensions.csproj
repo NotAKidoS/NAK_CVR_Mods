@@ -1,2 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk"/>
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <!-- Didn't put in the Directory.Build.props because it spams funny warnings... -->
+    <ItemGroup>
+        <Reference Include="ml_prm">
+            <HintPath>$(MsBuildThisFileDirectory)\..\_ManagedLibs\ml_prm.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    
+</Project>

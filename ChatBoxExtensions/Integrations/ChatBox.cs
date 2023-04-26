@@ -10,22 +10,22 @@ internal class ChatBoxCommands : CommandBase
         DateTime pingTime = DateTime.MinValue; // store the time when "ping" command was sent
 
         Commands.RegisterCommand("ping",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             pingTime = DateTime.Now;
             awaitingPing = true;
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForSelf(message, args =>
             {
-                ChatBox.SendMessage("/pong " + GetPlayerUsername(sender), false);
+                API.SendMessage("/pong " + GetPlayerUsername(sender), false, true);
             });
         });
 
         Commands.RegisterCommand("pong",
         onCommandSent: null,
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForSelf(message, args =>
             {
@@ -33,10 +33,10 @@ internal class ChatBoxCommands : CommandBase
                 {
                     awaitingPing = false;
                     TimeSpan timeSincePing = DateTime.Now - pingTime; // calculate the time difference
-                    ChatBox.SendMessage($"Time since ping: {timeSincePing.TotalMilliseconds}ms", false);
+                    API.SendMessage($"Time since ping: {timeSincePing.TotalMilliseconds}ms", false, true);
                     return;
                 }
-                ChatBox.SendMessage($"You have to ping first, {GetPlayerUsername(sender)}!", false);
+                API.SendMessage($"You have to ping first, {GetPlayerUsername(sender)}!", false, true);
             });
         });
     }

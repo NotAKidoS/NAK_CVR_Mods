@@ -1,16 +1,11 @@
-﻿using ABI_RC.Core;
-using ABI_RC.Core.Base;
-using ABI_RC.Core.Savior;
-using Kafe.ChatBox;
-
-namespace NAK.Melons.ChatBoxExtensions.Integrations;
+﻿namespace NAK.Melons.ChatBoxExtensions.Integrations;
 
 internal class ChilloutVRInputCommands : CommandBase
 {
     public static void RegisterCommands()
     {
         Commands.RegisterCommand("emote",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             LocalCommandIgnoreOthers(message, args =>
             {
@@ -20,7 +15,7 @@ internal class ChilloutVRInputCommands : CommandBase
                 }
             });
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, args =>
             {
@@ -32,7 +27,7 @@ internal class ChilloutVRInputCommands : CommandBase
         });
 
         Commands.RegisterCommand("jump",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             LocalCommandIgnoreOthers(message, args =>
             {
@@ -44,7 +39,7 @@ internal class ChilloutVRInputCommands : CommandBase
                 ChatBoxExtensions.InputModule.jump = true;
             });
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, args =>
             {

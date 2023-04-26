@@ -1,5 +1,4 @@
-﻿using Kafe.ChatBox;
-using ml_prm;
+﻿using ml_prm;
 
 namespace NAK.Melons.ChatBoxExtensions.Integrations;
 
@@ -8,7 +7,7 @@ internal class PlayerRagdollModCommands : CommandBase
     public static void RegisterCommands()
     {
         Commands.RegisterCommand("unragdoll",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             LocalCommandIgnoreOthers(message, (args) =>
             {
@@ -18,7 +17,7 @@ internal class PlayerRagdollModCommands : CommandBase
                 }
             });
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, (args) =>
             {
@@ -30,7 +29,7 @@ internal class PlayerRagdollModCommands : CommandBase
         });
 
         Commands.RegisterCommand("ragdoll",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             LocalCommandIgnoreOthers(message, (args) =>
             {
@@ -47,7 +46,7 @@ internal class PlayerRagdollModCommands : CommandBase
                 }
             });
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, (args) =>
             {
@@ -66,7 +65,7 @@ internal class PlayerRagdollModCommands : CommandBase
         });
 
         Commands.RegisterCommand("kill",
-        onCommandSent: (message, sound) =>
+        onCommandSent: (message, sound, displayMsg) =>
         {
             LocalCommandIgnoreOthers(message, (args) =>
             {
@@ -76,7 +75,7 @@ internal class PlayerRagdollModCommands : CommandBase
                 }
             });
         },
-        onCommandReceived: (sender, message, sound) =>
+        onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, (args) =>
             {
