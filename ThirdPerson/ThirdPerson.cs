@@ -44,6 +44,7 @@ public class ThirdPerson : MelonMod
         if (!Input.GetKey(KeyCode.LeftControl)) return;
         if (Input.GetKeyDown(KeyCode.T)) State = !State;
         if (!State || !Input.GetKeyDown(KeyCode.Y)) return;
-        RelocateCam((CameraLocation)(((int)CurrentLocation + 1) % Enum.GetValues(typeof(CameraLocation)).Length), true);
+        int cycle = Input.GetKeyDown(KeyCode.LeftShift) ? -1 : 1;
+        RelocateCam((CameraLocation)(((int)CurrentLocation + cycle) % Enum.GetValues(typeof(CameraLocation)).Length), true);
     }
 }

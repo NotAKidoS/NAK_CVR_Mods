@@ -154,28 +154,28 @@ internal static class CameraLogic
         switch (location)
         {
             case CameraLocation.FrontView:
-                _ourCam.transform.localPosition = new Vector3(0, 0.015f, 0.55f - _dist) * _scale;
+                _ourCam.transform.localPosition = new Vector3(0, 0.015f, 1f - _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 180, 0, 0);
                 CurrentLocation = CameraLocation.FrontView;
                 break;
             case CameraLocation.RightSide:
-                _ourCam.transform.localPosition = new Vector3(0.3f, 0.015f, -0.55f + _dist) * _scale;
+                _ourCam.transform.localPosition = new Vector3(0.3f, 0.015f, -1.5f + _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.RightSide;
                 break;
             case CameraLocation.LeftSide:
-                _ourCam.transform.localPosition = new Vector3(-0.3f, 0.015f, -0.55f + _dist) * _scale;
+                _ourCam.transform.localPosition = new Vector3(-0.3f, 0.015f, -1.5f + _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.LeftSide;
                 break;
             case CameraLocation.Default:
             default:
-                _ourCam.transform.localPosition = new Vector3(0, 0.015f, -0.88f + _dist) * _scale;
+                _ourCam.transform.localPosition = new Vector3(0, 0.015f, -1.5f + _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.Default;
                 break;
         }
-    }
+    }   
 
     private static void ResetDist() => _dist = 0;
     internal static void IncrementDist() { _dist += 0.25f; RelocateCam(CurrentLocation); }
