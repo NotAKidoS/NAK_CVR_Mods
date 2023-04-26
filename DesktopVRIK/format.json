@@ -18,7 +18,7 @@
     "BTKUILib"
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r2/DesktopVRIK.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/",
-  "changelog": "- Fixed feet targeting previous movement parent position for a frame.",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK",
+  "changelog": "- Fixed feet targeting previous movement parent position for a frame.\n- Fixed issue with incorrect initialHeadHeight value causing avatar to always have footsteps disabled.",
   "embedcolor": "9b59b6"
 }
