@@ -14,6 +14,7 @@ namespace NAK.ThirdPerson;
 internal static class CameraLogic
 {
     private static float _dist;
+    private static float _scale = 1f;
     private static Camera _ourCam;
     private static Camera _desktopCam;
     private static CameraFovClone _cameraFovClone;
@@ -64,7 +65,7 @@ internal static class CameraLogic
         ThirdPerson.Logger.Msg("Finished setting up third person camera.");
     }
 
-    internal static void CopyFromPlayerCam()
+    internal static void CopyPlayerCamValues()
     {
         Camera ourCamComponent = _ourCam.GetComponent<Camera>();
         Camera playerCamComponent = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
@@ -153,23 +154,23 @@ internal static class CameraLogic
         switch (location)
         {
             case CameraLocation.FrontView:
-                _ourCam.transform.localPosition = new Vector3(0, 0.015f, 0.55f - _dist);
+                _ourCam.transform.localPosition = new Vector3(0, 0.015f, 0.55f - _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 180, 0, 0);
                 CurrentLocation = CameraLocation.FrontView;
                 break;
             case CameraLocation.RightSide:
-                _ourCam.transform.localPosition = new Vector3(0.3f, 0.015f, -0.55f + _dist);
+                _ourCam.transform.localPosition = new Vector3(0.3f, 0.015f, -0.55f + _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.RightSide;
                 break;
             case CameraLocation.LeftSide:
-                _ourCam.transform.localPosition = new Vector3(-0.3f, 0.015f, -0.55f + _dist);
+                _ourCam.transform.localPosition = new Vector3(-0.3f, 0.015f, -0.55f + _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.LeftSide;
                 break;
             case CameraLocation.Default:
             default:
-                _ourCam.transform.localPosition = new Vector3(0, 0.015f, -0.55f + _dist);
+                _ourCam.transform.localPosition = new Vector3(0, 0.015f, -0.88f + _dist) * _scale;
                 _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.Default;
                 break;
@@ -179,4 +180,5 @@ internal static class CameraLogic
     private static void ResetDist() => _dist = 0;
     internal static void IncrementDist() { _dist += 0.25f; RelocateCam(CurrentLocation); }
     internal static void DecrementDist() { _dist -= 0.25f; RelocateCam(CurrentLocation); }
+    internal static void AdjustScale(float height) { _scale = height; RelocateCam(CurrentLocation); }
 }
