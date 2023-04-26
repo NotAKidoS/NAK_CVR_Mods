@@ -26,11 +26,11 @@ public class PropUndoButton : MelonMod
     internal static List<DeletedProp> deletedProps = new List<DeletedProp>();
 
     // audio clip names, InterfaceAudio adds "PropUndo_" prefix
-    internal const string sfx_spawn = "PropUndo_sfx_spawn";
-    internal const string sfx_undo = "PropUndo_sfx_undo";
-    internal const string sfx_redo = "PropUndo_sfx_redo";
-    internal const string sfx_warn = "PropUndo_sfx_warn";
-    internal const string sfx_deny = "PropUndo_sfx_deny";
+    const string sfx_spawn = "PropUndo_sfx_spawn";
+    const string sfx_undo = "PropUndo_sfx_undo";
+    const string sfx_redo = "PropUndo_sfx_redo";
+    const string sfx_warn = "PropUndo_sfx_warn";
+    const string sfx_deny = "PropUndo_sfx_deny";
 
     const int redoHistoryLimit = 20; // amount that can be in history at once
     const int redoTimeoutLimit = 120; // seconds

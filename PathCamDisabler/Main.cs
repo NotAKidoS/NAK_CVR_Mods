@@ -11,10 +11,10 @@ public class PathCamDisabler : MelonMod
         MelonPreferences.CreateCategory(nameof(PathCamDisabler));
 
     public static readonly MelonPreferences_Entry<bool> EntryDisablePathCam = 
-        Category.CreateEntry("Disable Path Camera Controller.", true, "Disable Path Camera Controller.");
+        Category.CreateEntry("Disable Path Camera Controller.", true, description: "Disable Path Camera Controller.");
 
     public static readonly MelonPreferences_Entry<bool> EntryDisableFlightBind = 
-        Category.CreateEntry("Disable Flight Binding (if controller off).", false, "Disable flight bind if Path Camera Controller is also disabled.");
+        Category.CreateEntry("Disable Flight Binding (if controller off).", false, description: "Disable flight bind if Path Camera Controller is also disabled.");
 
     public override void OnInitializeMelon()
     {

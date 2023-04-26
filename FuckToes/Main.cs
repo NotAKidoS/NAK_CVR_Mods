@@ -8,10 +8,10 @@ public class FuckToes : MelonMod
         MelonPreferences.CreateCategory(nameof(FuckToes));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabledVR = 
-        Category.CreateEntry("Enabled", true, "Nuke VRIK toes when in Halfbody.");
+        Category.CreateEntry("Enabled", true, description: "Nuke VRIK toes when in Halfbody.");
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabledFBT = 
-        Category.CreateEntry("Enabled in FBT", false, "Nuke VRIK toes when in FBT.");
+        Category.CreateEntry("Enabled in FBT", false, description: "Nuke VRIK toes when in FBT.");
 
     public override void OnInitializeMelon()
     {

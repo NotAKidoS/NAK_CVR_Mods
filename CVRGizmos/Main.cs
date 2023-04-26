@@ -10,10 +10,10 @@ public class CVRGizmos : MelonMod
         MelonPreferences.CreateCategory(nameof(CVRGizmos));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
-        CategoryCVRGizmos.CreateEntry("Enabled", false, description: "Toggle CVR Gizmos entirely.", dont_save_default: true);
+        CategoryCVRGizmos.CreateEntry("Enabled", false, description: "Toggle CVR Gizmos entirely.");
 
     public static readonly MelonPreferences_Entry<bool> EntryLocalOnly =
-        CategoryCVRGizmos.CreateEntry("Local Only", false, description: "Toggle CVR Gizmos local-only mode.", dont_save_default: true);
+        CategoryCVRGizmos.CreateEntry("Local Only", false, description: "Toggle CVR Gizmos local-only mode.");
 
     public override void OnInitializeMelon()
     {

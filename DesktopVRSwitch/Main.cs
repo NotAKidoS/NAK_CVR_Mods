@@ -23,7 +23,7 @@ public class DesktopVRSwitch : MelonMod
         MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnterCalibrationOnSwitch = 
-        Category.CreateEntry("Enter Calibration on Switch", true, "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
+        Category.CreateEntry("Enter Calibration on Switch", true, description: "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
 
     public override void OnInitializeMelon()
     {

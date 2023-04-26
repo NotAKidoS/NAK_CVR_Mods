@@ -12,17 +12,17 @@ public class PickupPushPull : MelonMod
     
     //Global settings
     public static readonly MelonPreferences_Entry<float> EntryPushPullSpeed = 
-        Category.CreateEntry<float>("Push Pull Speed", 2f, "Up/down on right joystick for VR. Left button + Up/down on right joystick for Gamepad.");
+        Category.CreateEntry<float>("Push Pull Speed", 2f, description: "Up/down on right joystick for VR. Left button + Up/down on right joystick for Gamepad.");
 
     public static readonly MelonPreferences_Entry<float> EntryRotateSpeed = 
         Category.CreateEntry<float>("Rotate Speed", 6f);
 
     public static readonly MelonPreferences_Entry<bool> EntryEnableRotation = 
-        Category.CreateEntry<bool>("Enable Rotation", false, "Hold left trigger in VR or right button on Gamepad.");
+        Category.CreateEntry<bool>("Enable Rotation", false, description: "Hold left trigger in VR or right button on Gamepad.");
 
     //Desktop settings
     public static readonly MelonPreferences_Entry<bool> EntryDesktopUseZoomForRotate = 
-        Category.CreateEntry<bool>("Desktop Use Zoom For Rotate", true, "Use zoom bind for rotation while a prop is held.");
+        Category.CreateEntry<bool>("Desktop Use Zoom For Rotate", true, description: "Use zoom bind for rotation while a prop is held.");
 
     //VR settings
     public static readonly MelonPreferences_Entry<BindingOptionsVR.BindHand> EntryVRRotateHand = 
