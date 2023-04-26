@@ -175,7 +175,7 @@ internal static class CameraLogic
                 CurrentLocation = CameraLocation.Default;
                 break;
         }
-    }   
+    }
 
     private static void ResetDist() => _dist = 0;
     internal static void IncrementDist() { _dist += 0.25f; RelocateCam(CurrentLocation); }
