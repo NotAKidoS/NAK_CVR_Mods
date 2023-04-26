@@ -2,7 +2,6 @@
 using MelonLoader;
 using System.Reflection;
 
-
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
@@ -11,11 +10,11 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.FuckToes))]
 
 [assembly: MelonInfo(
-    typeof(NAK.FuckToes.FuckToesMod),
+    typeof(NAK.FuckToes.FuckToes),
     nameof(NAK.FuckToes),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/FuckToes"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

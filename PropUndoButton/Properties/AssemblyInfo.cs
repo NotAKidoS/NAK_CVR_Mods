@@ -1,5 +1,5 @@
-﻿using NAK.PropUndoButton.Properties;
-using MelonLoader;
+﻿using MelonLoader;
+using NAK.PropUndoButton.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.PropUndoButton),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/UndoPropButton"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/UndoPropButton"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

@@ -21,7 +21,7 @@ internal class ReferenceCameraPatch
 
     internal static void CopyToInactiveCam(Camera activeCam, Camera inactiveCam)
     {
-        DesktopVRSwitchMod.Logger.Msg("Copying active camera settings & components to inactive camera.");
+        DesktopVRSwitch.Logger.Msg("Copying active camera settings & components to inactive camera.");
 
         //steal basic settings
         inactiveCam.farClipPlane = activeCam.farClipPlane;

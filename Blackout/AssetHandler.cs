@@ -44,14 +44,14 @@ static class AssetsHandler
                         ms_loadedAssets.Add(l_assetName, l_assetBundle);
                     }
                     else
-                        MelonLoader.MelonLogger.Warning("Unable to load bundled '" + l_assetName + "' asset");
+                        Blackout.Logger.Warning("Unable to load bundled '" + l_assetName + "' asset");
                 }
                 else
-                    MelonLoader.MelonLogger.Warning("Unable to get bundled '" + l_assetName + "' asset stream");
+                    Blackout.Logger.Warning("Unable to get bundled '" + l_assetName + "' asset stream");
             }
             catch (System.Exception e)
             {
-                MelonLoader.MelonLogger.Warning("Unable to load bundled '" + l_assetName + "' asset, reason: " + e.Message);
+                Blackout.Logger.Warning("Unable to load bundled '" + l_assetName + "' asset, reason: " + e.Message);
             }
         }
     }

@@ -20,8 +20,8 @@ internal class TryCatchHell
         }
         catch (Exception ex)
         {
-            DesktopVRSwitchMod.Logger.Error(string.Format(errorMsg, msgArgs));
-            DesktopVRSwitchMod.Logger.Msg(ex.Message);
+            DesktopVRSwitch.Logger.Error(string.Format(errorMsg, msgArgs));
+            DesktopVRSwitch.Logger.Msg(ex.Message);
         }
     }
 
@@ -29,7 +29,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Closing ViewManager & CVR_MenuManager menus.");
+            DesktopVRSwitch.Logger.Msg("Closing ViewManager & CVR_MenuManager menus.");
             ViewManager.Instance.UiStateToggle(false);
             CVR_MenuManager.Instance.ToggleQuickMenu(false);
         },
@@ -40,7 +40,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg($"Setting CheckVR hasVrDeviceLoaded to {isVR}.");
+            DesktopVRSwitch.Logger.Msg($"Setting CheckVR hasVrDeviceLoaded to {isVR}.");
             CheckVR.Instance.hasVrDeviceLoaded = isVR;
         },
         "Setting CheckVR hasVrDeviceLoaded failed.");
@@ -50,7 +50,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg($"Setting MetaPort isUsingVr to {isVR}.");
+            DesktopVRSwitch.Logger.Msg($"Setting MetaPort isUsingVr to {isVR}.");
             MetaPort.Instance.isUsingVr = isVR;
         },
         "Setting MetaPort isUsingVr failed.");
@@ -60,7 +60,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Configuring new hud affinity for CohtmlHud.");
+            DesktopVRSwitch.Logger.Msg("Configuring new hud affinity for CohtmlHud.");
             CohtmlHud.Instance.gameObject.transform.parent = isVR ? PlayerSetup.Instance.vrCamera.transform : PlayerSetup.Instance.desktopCamera.transform;
             CVRTools.ConfigureHudAffinity();
             CohtmlHud.Instance.gameObject.transform.localScale = new Vector3(1.2f, 1f, 1.2f);
@@ -72,7 +72,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Switching HudOperations worldLoadingItem & worldLoadStatus.");
+            DesktopVRSwitch.Logger.Msg("Switching HudOperations worldLoadingItem & worldLoadStatus.");
             HudOperations.Instance.worldLoadingItem = isVR ? HudOperations.Instance.worldLoadingItemVr : HudOperations.Instance.worldLoadingItemDesktop;
             HudOperations.Instance.worldLoadStatus = isVR ? HudOperations.Instance.worldLoadStatusVr : HudOperations.Instance.worldLoadStatusDesktop;
         },
@@ -83,7 +83,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Forcing PortableCamera canvas mirroring off.");
+            DesktopVRSwitch.Logger.Msg("Forcing PortableCamera canvas mirroring off.");
             //tell the game we are in mirror mode so itll disable it (if enabled)
             PortableCamera.Instance.mode = MirroringMode.Mirror;
             PortableCamera.Instance.ChangeMirroring();
@@ -95,7 +95,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Switching active PlayerSetup camera rigs. Updating Desktop camera FOV.");
+            DesktopVRSwitch.Logger.Msg("Switching active PlayerSetup camera rigs. Updating Desktop camera FOV.");
             PlayerSetup.Instance.desktopCameraRig.SetActive(!isVR);
             PlayerSetup.Instance.vrCameraRig.SetActive(isVR);
             CVR_DesktopCameraController.UpdateFov();
@@ -110,7 +110,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg($"Setting CVRInputManager inputEnabled & CVR_InteractableManager enableInteractions to {!toggle}");
+            DesktopVRSwitch.Logger.Msg($"Setting CVRInputManager inputEnabled & CVR_InteractableManager enableInteractions to {!toggle}");
             CVRInputManager.Instance.inputEnabled = !toggle;
             CVR_InteractableManager.enableInteractions = !toggle;
         },
@@ -121,7 +121,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Resetting CVRInputManager inputs.");
+            DesktopVRSwitch.Logger.Msg("Resetting CVRInputManager inputs.");
             //just in case
             CVRInputManager.Instance.blockedByUi = false;
             //sometimes head can get stuck, so just in case
@@ -141,7 +141,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Attempting to reload current local avatar from GUID.");
+            DesktopVRSwitch.Logger.Msg("Attempting to reload current local avatar from GUID.");
             AssetManagement.Instance.LoadLocalAvatar(MetaPort.Instance.currentAvatarGuid);
         },
         "Failed to reload local avatar.");
@@ -153,13 +153,13 @@ internal class TryCatchHell
         {
             if (MetaPort.Instance.settings.GetSettingsBool("ImplementationRichPresenceDiscordEnabled", true))
             {
-                DesktopVRSwitchMod.Logger.Msg("Forcing Discord Rich Presence update.");
+                DesktopVRSwitch.Logger.Msg("Forcing Discord Rich Presence update.");
                 MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceDiscordEnabled", false);
                 MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceDiscordEnabled", true);
             }
             if (MetaPort.Instance.settings.GetSettingsBool("ImplementationRichPresenceSteamEnabled", true))
             {
-                DesktopVRSwitchMod.Logger.Msg("Forcing Steam Rich Presence update.");
+                DesktopVRSwitch.Logger.Msg("Forcing Steam Rich Presence update.");
                 MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceSteamEnabled", false);
                 MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceSteamEnabled", true);
             }
@@ -171,7 +171,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Updating CVRGestureRecognizer _camera to active camera.");
+            DesktopVRSwitch.Logger.Msg("Updating CVRGestureRecognizer _camera to active camera.");
             Traverse.Create(CVRGestureRecognizer.Instance).Field("_camera").SetValue(PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>());
         },
         "Failed to update CVRGestureRecognizer camera.");
@@ -181,7 +181,7 @@ internal class TryCatchHell
     {
         TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Updating CVR_Menu_Data core data.");
+            DesktopVRSwitch.Logger.Msg("Updating CVR_Menu_Data core data.");
             CVR_MenuManager.Instance.coreData.core.inVr = isVR;
         },
         "Failed to update CVR_Menu_Data core data.");

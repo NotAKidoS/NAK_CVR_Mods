@@ -3,11 +3,13 @@ using UnityEngine;
 
 namespace NAK.DesktopVRIK;
 
-public class DesktopVRIKMod : MelonMod
+public class DesktopVRIK : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-    public const string SettingsCategory = "DesktopVRIK";
-    public static readonly MelonPreferences_Category CategoryDesktopVRIK = MelonPreferences.CreateCategory(SettingsCategory);
+    internal const string SettingsCategory = nameof(DesktopVRIK);
+
+    public static readonly MelonPreferences_Category CategoryDesktopVRIK = 
+        MelonPreferences.CreateCategory(SettingsCategory);
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
         CategoryDesktopVRIK.CreateEntry("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
@@ -97,7 +99,7 @@ public class DesktopVRIKMod : MelonMod
 
         // Integration Settings
         DesktopVRIKSystem.Instance.Setting_IntegrationAMT = EntryIntegrationAMT.Value && integration_AMT;
-        
+
         // Funny Settings
         DesktopVRIKSystem.Instance.Setting_ProneThrusting = EntryProneThrusting.Value;
     }

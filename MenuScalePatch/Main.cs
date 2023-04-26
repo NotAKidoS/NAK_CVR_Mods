@@ -4,12 +4,13 @@ namespace NAK.MenuScalePatch;
 
 public class MenuScalePatch : MelonMod
 {
-    internal static MelonPreferences_Category Category = MelonPreferences.CreateCategory(nameof(MenuScalePatch));
+    public static MelonPreferences_Category Category = 
+        MelonPreferences.CreateCategory(nameof(MenuScalePatch));
 
-    internal static MelonPreferences_Entry<bool> EntryUseIndependentHeadTurn =
+    public static MelonPreferences_Entry<bool> EntryUseIndependentHeadTurn =
         Category.CreateEntry<bool>("Use Independent Head Turn", true, description: "Should you be able to use independent head turn in a menu while in Desktop?");
 
-    internal static MelonPreferences_Entry<bool> EntryPlayerAnchorMenus =
+    public static MelonPreferences_Entry<bool> EntryPlayerAnchorMenus =
         Category.CreateEntry<bool>("Player Anchor Menus", true, description: "Should the menus be anchored to & constantly follow the player?");
 
     public override void OnInitializeMelon()

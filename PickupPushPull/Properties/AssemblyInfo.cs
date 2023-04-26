@@ -1,7 +1,6 @@
-﻿using NAK.PickupPushPull.Properties;
-using MelonLoader;
+﻿using MelonLoader;
+using NAK.PickupPushPull.Properties;
 using System.Reflection;
-
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
@@ -15,7 +14,7 @@ using System.Reflection;
     nameof(NAK.PickupPushPull),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/PickupPushPull"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PickupPushPull"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

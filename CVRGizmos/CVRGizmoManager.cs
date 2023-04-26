@@ -1,6 +1,6 @@
 ﻿using CVRGizmos.GismoTypes;
-using Gizmos = Popcron.Gizmos;
 using UnityEngine;
+using Gizmos = Popcron.Gizmos;
 
 namespace CVRGizmos
 {

@@ -10,11 +10,11 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.GestureLock))]
 
 [assembly: MelonInfo(
-    typeof(NAK.GestureLock.GestureLockMod),
+    typeof(NAK.GestureLock.GestureLock),
     nameof(NAK.GestureLock),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/GestureLock"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/GestureLock"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

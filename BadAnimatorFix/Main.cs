@@ -2,11 +2,12 @@
 
 namespace NAK.BadAnimatorFix;
 
-public class BadAnimatorFixMod : MelonMod
+public class BadAnimatorFix : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-    public const string SettingsCategory = "BadAnimatorFix";
-    public static readonly MelonPreferences_Category CategoryBadAnimatorFix = MelonPreferences.CreateCategory(SettingsCategory);
+
+    public static readonly MelonPreferences_Category CategoryBadAnimatorFix = 
+        MelonPreferences.CreateCategory(nameof(BadAnimatorFix));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
         CategoryBadAnimatorFix.CreateEntry("Enabled", true, description: "Toggle BadAnimatorFix entirely. Requires avatar/spawnable/world reload.");

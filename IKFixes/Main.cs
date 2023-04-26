@@ -4,8 +4,8 @@ namespace NAK.IKFixes;
 
 public class IKFixes : MelonMod
 {
-    public const string SettingsCategory = nameof(IKFixes);
-    public static readonly MelonPreferences_Category Category = MelonPreferences.CreateCategory(SettingsCategory);
+    public static readonly MelonPreferences_Category Category =
+        MelonPreferences.CreateCategory(nameof(IKFixes));
 
     public static readonly MelonPreferences_Entry<bool> EntryUseFakeRootAngle =
         Category.CreateEntry("Use Fake Root Angle", true, description: "Emulates maxRootAngle. This fixes feet pointing in direction of head when looking around.");

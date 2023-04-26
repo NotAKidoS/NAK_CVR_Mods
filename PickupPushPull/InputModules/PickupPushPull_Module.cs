@@ -21,9 +21,9 @@ public class PickupPushPull_Module : CVRInputModule
     public Vector2 objectRotation = Vector2.zero;
 
     //Global settings
-    public float Setting_PushPullSpeed = 100f;
-    public float Setting_RotationSpeed = 200f;
-    public bool Setting_EnableRotation = false;
+    public float EntryPushPullSpeed = 100f;
+    public float EntryRotationSpeed = 200f;
+    public bool EntryEnableRotation = false;
 
     //Desktop settings
     public bool Desktop_UseZoomForRotate = true;
@@ -34,7 +34,6 @@ public class PickupPushPull_Module : CVRInputModule
     private SteamVR_Action_Boolean VR_RotateBind_Boolean;
 
     //Local stuff
-    private CVRInputManager _inputManager;
     private ControllerRay desktopControllerRay;
     private float deadzoneRightValue;
     private bool controlGamepadEnabled;
@@ -52,7 +51,7 @@ public class PickupPushPull_Module : CVRInputModule
         _inputManager = CVRInputManager.Instance;
         Instance = this;
         base.Start();
-        
+
         //Get desktop controller ray
         desktopControllerRay = PlayerSetup.Instance.desktopCamera.GetComponent<ControllerRay>();
 
@@ -140,10 +139,10 @@ public class PickupPushPull_Module : CVRInputModule
         if (!Desktop_UseZoomForRotate) return;
 
         //mouse rotation when zoomed
-        if (Setting_EnableRotation && _inputManager.zoom)
+        if (EntryEnableRotation && _inputManager.zoom)
         {
-            objectRotation.x += Setting_RotationSpeed * _inputManager.rawLookVector.x;
-            objectRotation.y += Setting_RotationSpeed * _inputManager.rawLookVector.y * -1;
+            objectRotation.x += EntryRotationSpeed * _inputManager.rawLookVector.x;
+            objectRotation.y += EntryRotationSpeed * _inputManager.rawLookVector.y * -1;
             _inputManager.lookVector = Vector2.zero;
             _inputManager.zoom = false;
             return;
@@ -161,15 +160,15 @@ public class PickupPushPull_Module : CVRInputModule
         if (button1 || button2)
         {
             //Rotation
-            if (Setting_EnableRotation && button2)
+            if (EntryEnableRotation && button2)
             {
-                objectRotation.x += Setting_RotationSpeed * _inputManager.rawLookVector.x;
-                objectRotation.y += Setting_RotationSpeed * _inputManager.rawLookVector.y * -1;
+                objectRotation.x += EntryRotationSpeed * _inputManager.rawLookVector.x;
+                objectRotation.y += EntryRotationSpeed * _inputManager.rawLookVector.y * -1;
                 _inputManager.lookVector = Vector2.zero;
                 return;
             }
 
-            _inputManager.objectPushPull += _inputManager.rawLookVector.y * Setting_PushPullSpeed * Time.deltaTime;
+            _inputManager.objectPushPull += _inputManager.rawLookVector.y * EntryPushPullSpeed * Time.deltaTime;
             _inputManager.lookVector = Vector2.zero;
         }
     }
@@ -183,19 +182,19 @@ public class PickupPushPull_Module : CVRInputModule
         bool canRotate = (leftObject != null && leftObject.gripType == CVRPickupObject.GripType.Free) ||
                        (rightObject != null && rightObject.gripType == CVRPickupObject.GripType.Free);
 
-        if (Setting_EnableRotation && canRotate && VR_RotateBind_Boolean.GetState((SteamVR_Input_Sources)VR_RotateHand))
+        if (EntryEnableRotation && canRotate && VR_RotateBind_Boolean.GetState((SteamVR_Input_Sources)VR_RotateHand))
         {
             Vector2 rawLookVector = new Vector2(CVRTools.AxisDeadZone(vrLookAction.GetAxis(SteamVR_Input_Sources.Any).x, deadzoneRightValue, true),
                                                 CVRTools.AxisDeadZone(vrLookAction.GetAxis(SteamVR_Input_Sources.Any).y, deadzoneRightValue, true));
 
-            objectRotation.x += Setting_RotationSpeed * rawLookVector.x;
-            objectRotation.y += Setting_RotationSpeed * rawLookVector.y * -1;
+            objectRotation.x += EntryRotationSpeed * rawLookVector.x;
+            objectRotation.y += EntryRotationSpeed * rawLookVector.y * -1;
 
             _inputManager.lookVector = Vector2.zero;
             return;
         }
 
-        CVRInputManager.Instance.objectPushPull += CVRInputManager.Instance.floatDirection * Setting_PushPullSpeed * Time.deltaTime;
+        CVRInputManager.Instance.objectPushPull += CVRInputManager.Instance.floatDirection * EntryPushPullSpeed * Time.deltaTime;
     }
 
 }

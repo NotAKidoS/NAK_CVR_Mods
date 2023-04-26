@@ -6,17 +6,17 @@ namespace NAK.BadAnimatorFix;
 
 public static class BadAnimatorFixManager
 {
-    private static List<BadAnimatorFix> badAnimatorFixes = new List<BadAnimatorFix>();
+    private static List<BadAnimatorFixer> badAnimatorFixes = new List<BadAnimatorFixer>();
     private static int currentIndex = 0;
     private static float checkInterval = 5f;
 
-    public static void Add(BadAnimatorFix bad)
+    public static void Add(BadAnimatorFixer bad)
     {
         if (!badAnimatorFixes.Contains(bad))
             badAnimatorFixes.Add(bad);
     }
 
-    public static void Remove(BadAnimatorFix bad)
+    public static void Remove(BadAnimatorFixer bad)
     {
         if (badAnimatorFixes.Contains(bad))
             badAnimatorFixes.Remove(bad);
@@ -24,7 +24,7 @@ public static class BadAnimatorFixManager
 
     public static void OnPlayerLoaded()
     {
-        ToggleJob(BadAnimatorFixMod.EntryEnabled.Value);
+        ToggleJob(BadAnimatorFix.EntryEnabled.Value);
     }
 
     public static void OnSceneInitialized(string sceneName)
@@ -36,9 +36,9 @@ public static class BadAnimatorFixManager
         foreach (var animator in allAnimators)
         {
             // Ignore objects that have our "fix", this shouldn't be needed but eh
-            if (!animator.TryGetComponent<BadAnimatorFix>(out _))
+            if (!animator.TryGetComponent<BadAnimatorFixer>(out _))
             {
-                animator.gameObject.AddComponent<BadAnimatorFix>();
+                animator.gameObject.AddComponent<BadAnimatorFixer>();
             }
         }
     }
@@ -48,7 +48,7 @@ public static class BadAnimatorFixManager
         if (badAnimatorFixes.Count == 0) return;
         currentIndex = (currentIndex + 1) % badAnimatorFixes.Count;
 
-        BadAnimatorFix currentAnimatorFix = badAnimatorFixes[currentIndex];
+        BadAnimatorFixer currentAnimatorFix = badAnimatorFixes[currentIndex];
         currentAnimatorFix.AttemptRewindAnimator();
     }
 

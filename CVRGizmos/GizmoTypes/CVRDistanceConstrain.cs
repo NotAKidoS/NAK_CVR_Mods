@@ -31,49 +31,49 @@ namespace CVRGizmos.GismoTypes
                     CacheGizmos();
                     break;
                 }
-				if (references[i].target == null)
-				{
-					break;
-				}
-				if (references[i].maxDistance < references[i].minDistance && references[i].maxDistance != 0f)
-				{
-					break;
-				}
-				Vector3 normalized = (references[i].transform.position - references[i].target.position).normalized;
+                if (references[i].target == null)
+                {
+                    break;
+                }
+                if (references[i].maxDistance < references[i].minDistance && references[i].maxDistance != 0f)
+                {
+                    break;
+                }
+                Vector3 normalized = (references[i].transform.position - references[i].target.position).normalized;
 
-				//BUG: Matrix addition isn't reset, other gizmo types Matrix will persist.
-				//This gizmo type could be a bit fucked, but I don't have the time to test.
-				Gizmos.Matrix = Matrix4x4.identity;
+                //BUG: Matrix addition isn't reset, other gizmo types Matrix will persist.
+                //This gizmo type could be a bit fucked, but I don't have the time to test.
+                Gizmos.Matrix = Matrix4x4.identity;
 
-				if (references[i].minDistance == 0f)
-				{
-					if (references[i].maxDistance == 0f)
-					{
-						Gizmos.Color = Color.green;
-						Gizmos.Line(references[i].target.position, normalized * 9999f);
-						break;
-					}
-					Gizmos.Color = Color.green;
-					Gizmos.Line(references[i].target.position, references[i].target.position + normalized * references[i].maxDistance);
-					break;
-				}
-				else
-				{
-					if (references[i].maxDistance == 0f)
-					{
-						Gizmos.Color = Color.red;
-						Gizmos.Line(references[i].target.position, references[i].target.position + normalized * references[i].minDistance);
-						Gizmos.Color = Color.green;
-						Gizmos.Line(references[i].target.position + normalized * references[i].minDistance, normalized * 9999f);
-						break;
-					}
-					Gizmos.Color = Color.red;
-					Gizmos.Line(references[i].target.position, references[i].target.position + normalized * references[i].minDistance);
-					Gizmos.Color = Color.green;
-					Gizmos.Line(references[i].target.position + normalized * references[i].minDistance, references[i].target.position + normalized * references[i].maxDistance);
-					break;
-				}
-			}
+                if (references[i].minDistance == 0f)
+                {
+                    if (references[i].maxDistance == 0f)
+                    {
+                        Gizmos.Color = Color.green;
+                        Gizmos.Line(references[i].target.position, normalized * 9999f);
+                        break;
+                    }
+                    Gizmos.Color = Color.green;
+                    Gizmos.Line(references[i].target.position, references[i].target.position + normalized * references[i].maxDistance);
+                    break;
+                }
+                else
+                {
+                    if (references[i].maxDistance == 0f)
+                    {
+                        Gizmos.Color = Color.red;
+                        Gizmos.Line(references[i].target.position, references[i].target.position + normalized * references[i].minDistance);
+                        Gizmos.Color = Color.green;
+                        Gizmos.Line(references[i].target.position + normalized * references[i].minDistance, normalized * 9999f);
+                        break;
+                    }
+                    Gizmos.Color = Color.red;
+                    Gizmos.Line(references[i].target.position, references[i].target.position + normalized * references[i].minDistance);
+                    Gizmos.Color = Color.green;
+                    Gizmos.Line(references[i].target.position + normalized * references[i].minDistance, references[i].target.position + normalized * references[i].maxDistance);
+                    break;
+                }
+            }
         }
     }
 }

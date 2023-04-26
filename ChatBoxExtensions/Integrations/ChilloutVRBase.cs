@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core;
 using ABI_RC.Core.Base;
-using Kafe.ChatBox;
 
 namespace NAK.ChatBoxExtensions.Integrations;
 

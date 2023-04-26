@@ -1,46 +1,44 @@
-﻿using ABI.CCK.Components;
-using ABI_RC.Core.Player;
+﻿using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
-using HarmonyLib;
 using MelonLoader;
-using UnityEngine;
-using Valve.VR;
 using NAK.PickupPushPull.InputModules;
 
 namespace NAK.PickupPushPull;
 
 public class PickupPushPull : MelonMod
 {
-    private static MelonPreferences_Category Category_PickupPushPull;
-    private static MelonPreferences_Entry<float> Setting_PushPullSpeed, Setting_RotateSpeed;
-    private static MelonPreferences_Entry<bool> Setting_EnableRotation, Setting_Desktop_UseZoomForRotate;
-    private static MelonPreferences_Entry<BindingOptionsVR.BindHand> Setting_VR_RotateHand;
-    private static MelonPreferences_Entry<BindingOptionsVR.BindingOptions> Setting_VR_RotateBind;
+    public static readonly MelonPreferences_Category Category = 
+        MelonPreferences.CreateCategory(nameof(PickupPushPull));
+    
+    //Global settings
+    public static readonly MelonPreferences_Entry<float> EntryPushPullSpeed = 
+        Category.CreateEntry<float>("Push Pull Speed", 2f, "Up/down on right joystick for VR. Left button + Up/down on right joystick for Gamepad.");
+
+    public static readonly MelonPreferences_Entry<float> EntryRotateSpeed = 
+        Category.CreateEntry<float>("Rotate Speed", 6f);
+
+    public static readonly MelonPreferences_Entry<bool> EntryEnableRotation = 
+        Category.CreateEntry<bool>("Enable Rotation", false, "Hold left trigger in VR or right button on Gamepad.");
+
+    //Desktop settings
+    public static readonly MelonPreferences_Entry<bool> EntryDesktopUseZoomForRotate = 
+        Category.CreateEntry<bool>("Desktop Use Zoom For Rotate", true, "Use zoom bind for rotation while a prop is held.");
+
+    //VR settings
+    public static readonly MelonPreferences_Entry<BindingOptionsVR.BindHand> EntryVRRotateHand = 
+        Category.CreateEntry<BindingOptionsVR.BindHand>("VR Hand", BindingOptionsVR.BindHand.LeftHand);
+
+    public static readonly MelonPreferences_Entry<BindingOptionsVR.BindingOptions> EntryVRRotateBind = 
+        Category.CreateEntry<BindingOptionsVR.BindingOptions>("VR Binding", BindingOptionsVR.BindingOptions.ButtonATouch);
 
     public override void OnInitializeMelon()
     {
-        Category_PickupPushPull = MelonPreferences.CreateCategory(nameof(PickupPushPull));
-
-        //Global settings
-        Setting_PushPullSpeed = Category_PickupPushPull.CreateEntry("Push Pull Speed", 2f, description: "Up/down on right joystick for VR. Left buSettingr + Up/down on right joystick for Gamepad.");
-        Setting_RotateSpeed = Category_PickupPushPull.CreateEntry<float>("Rotate Speed", 6f);
-        Setting_EnableRotation = Category_PickupPushPull.CreateEntry<bool>("Enable Rotation", false, description: "Hold left trigger in VR or right buSettingr on Gamepad.");
-
-        //Desktop settings
-        Setting_Desktop_UseZoomForRotate = Category_PickupPushPull.CreateEntry<bool>("Desktop Use Zoom For Rotate", true, description: "Use zoom bind for rotation while a prop is held.");
-
-        //VR settings
-        Setting_VR_RotateHand = Category_PickupPushPull.CreateEntry("VR Hand", BindingOptionsVR.BindHand.LeftHand);
-
-        //bruh
-        foreach (var setting in Category_PickupPushPull.Entries)
+        foreach (var entry in Category.Entries)
         {
-            setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
+            entry.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
         }
 
-        //special setting
-        Setting_VR_RotateBind = Category_PickupPushPull.CreateEntry("VR Binding", BindingOptionsVR.BindingOptions.ButtonATouch);
-        Setting_VR_RotateBind.OnEntryValueChangedUntyped.Subscribe(OnUpdateVRBinding);
+        EntryVRRotateBind.OnEntryValueChangedUntyped.Subscribe(OnUpdateVRBinding);
 
         MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
     }
@@ -69,19 +67,19 @@ public class PickupPushPull : MelonMod
         if (!PickupPushPull_Module.Instance) return;
 
         //Global settings
-        PickupPushPull_Module.Instance.Setting_PushPullSpeed = Setting_PushPullSpeed.Value * 50;
-        PickupPushPull_Module.Instance.Setting_RotationSpeed = Setting_RotateSpeed.Value * 50;
-        PickupPushPull_Module.Instance.Setting_EnableRotation = Setting_EnableRotation.Value;
+        PickupPushPull_Module.Instance.EntryPushPullSpeed = EntryPushPullSpeed.Value * 50;
+        PickupPushPull_Module.Instance.EntryRotationSpeed = EntryRotateSpeed.Value * 50;
+        PickupPushPull_Module.Instance.EntryEnableRotation = EntryEnableRotation.Value;
         //Desktop settings
-        PickupPushPull_Module.Instance.Desktop_UseZoomForRotate = Setting_Desktop_UseZoomForRotate.Value;
+        PickupPushPull_Module.Instance.Desktop_UseZoomForRotate = EntryDesktopUseZoomForRotate.Value;
         //VR settings
-        PickupPushPull_Module.Instance.VR_RotateHand = Setting_VR_RotateHand.Value;
+        PickupPushPull_Module.Instance.VR_RotateHand = EntryVRRotateHand.Value;
     }
-    
+
     private void UpdateVRBinding()
     {
         //VR special settings
-        PickupPushPull_Module.Instance.VR_RotateBind = Setting_VR_RotateBind.Value;
+        PickupPushPull_Module.Instance.VR_RotateBind = EntryVRRotateBind.Value;
         PickupPushPull_Module.Instance.UpdateVRBinding();
     }
 }

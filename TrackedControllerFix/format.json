@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/TrackedControllerFix/releases/download/v1.0.0/TrackedControllerFix.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/TrackedControllerFix/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/TrackedControllerFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/TrackedControllerFix/",
   "changelog": "Initial Release",
   "embedcolor": "3498db"
 }

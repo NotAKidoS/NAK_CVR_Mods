@@ -15,21 +15,19 @@
 
 namespace NAK.DesktopVRSwitch;
 
-public class DesktopVRSwitchMod : MelonMod
+public class DesktopVRSwitch : MelonMod
 {
-    internal const string SettingsCategory = "DesktopVRSwitch";
-    internal static MelonPreferences_Category mCategory;
     internal static MelonLogger.Instance Logger;
 
-    internal static MelonPreferences_Entry<bool>
-        mSetting_EnterCalibrationOnSwitch;
+    public static readonly MelonPreferences_Category Category = 
+        MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
+
+    public static readonly MelonPreferences_Entry<bool> EntryEnterCalibrationOnSwitch = 
+        Category.CreateEntry("Enter Calibration on Switch", true, "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
 
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
-        mCategory = MelonPreferences.CreateCategory(SettingsCategory);
-        mSetting_EnterCalibrationOnSwitch = mCategory.CreateEntry<bool>("Enter Calibration on Switch", true, description: "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
-
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.CVRPickupObjectPatches));
         ApplyPatches(typeof(HarmonyPatches.CVRWorldPatches));

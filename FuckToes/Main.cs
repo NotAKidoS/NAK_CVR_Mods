@@ -2,17 +2,19 @@
 
 namespace NAK.FuckToes;
 
-public class FuckToesMod : MelonMod
+public class FuckToes : MelonMod
 {
-    internal const string SettingsCategory = "FuckToes";
-    internal static MelonPreferences_Category m_categoryFuckToes;
-    internal static MelonPreferences_Entry<bool> m_entryEnabledVR, m_entryEnabledFBT;
+    public static readonly MelonPreferences_Category Category = 
+        MelonPreferences.CreateCategory(nameof(FuckToes));
+
+    public static readonly MelonPreferences_Entry<bool> EntryEnabledVR = 
+        Category.CreateEntry("Enabled", true, "Nuke VRIK toes when in Halfbody.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryEnabledFBT = 
+        Category.CreateEntry("Enabled in FBT", false, "Nuke VRIK toes when in FBT.");
+
     public override void OnInitializeMelon()
     {
-        m_categoryFuckToes = MelonPreferences.CreateCategory(SettingsCategory);
-        m_entryEnabledVR = m_categoryFuckToes.CreateEntry<bool>("Enabled", true, description: "Nuke VRIK toes when in Halfbody.");
-        m_entryEnabledFBT = m_categoryFuckToes.CreateEntry<bool>("Enabled in FBT", false, description: "Nuke VRIK toes when in FBT.");
-
         //Apply patches (i stole)
         ApplyPatches(typeof(HarmonyPatches.VRIKPatches));
     }

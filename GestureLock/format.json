@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/GestureLock/releases/download/v2.0.0/GestureLock.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/GestureLock/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/GestureLock.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/GestureLock/",
   "changelog": "- Simplification & refactor.",
   "embedcolor": "804221"
 }

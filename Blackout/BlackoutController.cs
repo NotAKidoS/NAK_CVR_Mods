@@ -30,7 +30,7 @@ namespace NAK.Blackout;
 public class BlackoutController : MonoBehaviour
 {
     public static BlackoutController Instance;
-    
+
     // The current state of the player's consciousness.
     public BlackoutState CurrentState = BlackoutState.Awake;
 
@@ -134,7 +134,7 @@ public class BlackoutController : MonoBehaviour
         blackoutAnimator = blackoutGO.GetComponent<Animator>();
         if (!blackoutAnimator)
         {
-            MelonLogger.Error("Blackout: Could not find blackout animator component!");
+            Blackout.Logger.Error("Blackout: Could not find blackout animator component!");
             return;
         }
 
@@ -229,7 +229,7 @@ public class BlackoutController : MonoBehaviour
     //broken, needs to run next frame
     private void SendHUDMessage(string message)
     {
-        MelonLogger.Msg(message);
+        Blackout.Logger.Msg(message);
         if (!CohtmlHud.Instance || !HudMessages) return;
 
         StringBuilder secondmessage = new StringBuilder();

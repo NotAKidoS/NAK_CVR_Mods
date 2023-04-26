@@ -10,11 +10,11 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.JumpPatch))]
 
 [assembly: MelonInfo(
-    typeof(NAK.JumpPatch.JumpPatchMod),
+    typeof(NAK.JumpPatch.JumpPatch),
     nameof(NAK.JumpPatch),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/JumpPatch"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/JumpPatch"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

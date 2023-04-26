@@ -1,28 +1,22 @@
 ﻿using ABI_RC.Core.Player;
 using MelonLoader;
-using UnityEngine;
 using System.Collections;
 
 namespace CVRGizmos;
 
 public class CVRGizmos : MelonMod
 {
+    public static readonly MelonPreferences_Category CategoryCVRGizmos = 
+        MelonPreferences.CreateCategory(nameof(CVRGizmos));
 
-    private static MelonPreferences_Category m_categoryCVRGizmos;
-    private static MelonPreferences_Entry<bool> m_entryCVRGizmosEnabled;
-    private static MelonPreferences_Entry<bool> m_entryCVRGizmosLocalOnly;
+    public static readonly MelonPreferences_Entry<bool> EntryEnabled =
+        CategoryCVRGizmos.CreateEntry("Enabled", false, description: "Toggle CVR Gizmos entirely.", dont_save_default: true);
 
-    public override void OnApplicationStart()
+    public static readonly MelonPreferences_Entry<bool> EntryLocalOnly =
+        CategoryCVRGizmos.CreateEntry("Local Only", false, description: "Toggle CVR Gizmos local-only mode.", dont_save_default: true);
+
+    public override void OnInitializeMelon()
     {
-        m_categoryCVRGizmos = MelonPreferences.CreateCategory(nameof(CVRGizmos));
-        m_entryCVRGizmosEnabled = m_categoryCVRGizmos.CreateEntry<bool>("Enabled", false);
-        m_entryCVRGizmosLocalOnly = m_categoryCVRGizmos.CreateEntry<bool>("Local Only", false);
-        m_entryCVRGizmosEnabled.Value = false;
-
-        m_categoryCVRGizmos.SaveToFile(false);
-        m_entryCVRGizmosEnabled.OnValueChangedUntyped += CVRGizmosEnabled;
-        m_entryCVRGizmosLocalOnly.OnValueChangedUntyped += CVRGizmosLocalOnly;
-
         MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
     }
 
@@ -37,13 +31,13 @@ public class CVRGizmos : MelonMod
     public void CVRGizmosEnabled()
     {
         if (!CVRGizmoManager.Instance) return;
-        CVRGizmoManager.Instance.EnableGizmos(m_entryCVRGizmosEnabled.Value);
+        CVRGizmoManager.Instance.EnableGizmos(EntryEnabled.Value);
     }
 
     public void CVRGizmosLocalOnly()
     {
         if (!CVRGizmoManager.Instance) return;
-        CVRGizmoManager.Instance.g_localOnly = m_entryCVRGizmosLocalOnly.Value;
+        CVRGizmoManager.Instance.g_localOnly = EntryLocalOnly.Value;
         CVRGizmoManager.Instance.RefreshGizmos();
     }
 }

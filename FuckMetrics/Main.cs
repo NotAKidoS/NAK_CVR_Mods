@@ -1,14 +1,20 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Core.IO;
+using ABI_RC.Core.Player;
+using cohtml;
+using HarmonyLib;
 using MelonLoader;
 using System.Collections;
+using UnityEngine;
 
 namespace NAK.FuckMetrics;
 
-public class FuckMetricsMod : MelonMod
+public class FuckMetrics : MelonMod
 {
-    public static MelonLogger.Instance Logger;
-    public const string SettingsCategory = "FuckMetrics";
-    public static readonly MelonPreferences_Category CategoryFuckMetrics = MelonPreferences.CreateCategory(SettingsCategory);
+    internal static MelonLogger.Instance Logger;
+
+    public static readonly MelonPreferences_Category CategoryFuckMetrics = 
+        MelonPreferences.CreateCategory(nameof(FuckMetrics));
 
     public static readonly MelonPreferences_Entry<bool> EntryDisableCohtmlViewOnIdle =
         CategoryFuckMetrics.CreateEntry("Disable CohtmlView On Idle", false, description: "Disables CohtmlView on the menus when idle. Takes up to 6 seconds after menu exit. This can give a huge performance boost.");
@@ -93,6 +99,88 @@ public class FuckMetricsMod : MelonMod
         {
             Logger.Msg($"Failed while patching {type.Name}!");
             Logger.Error(e);
+        }
+    }
+
+    public enum SettingState
+    {
+        Always,
+        MenuOnly,
+        Disabled
+    }
+
+    public static void ToggleMetrics(bool enable)
+    {
+        var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == "UpdateMetrics").Job;
+        if (enable && job == null)
+        {
+            SchedulerSystem.AddJob(new SchedulerSystem.Job(ViewManager.Instance.UpdateMetrics), 0f, FuckMetrics.EntryMetricsUpdateRate.Value, -1);
+        }
+        else if (!enable && job != null)
+        {
+            SchedulerSystem.RemoveJob(job);
+        }
+    }
+
+    public static void ToggleCoreUpdates(bool enable)
+    {
+        var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == "SendCoreUpdate").Job;
+        if (enable && job == null)
+        {
+            SchedulerSystem.AddJob(new SchedulerSystem.Job(CVR_MenuManager.Instance.SendCoreUpdate), 0f, FuckMetrics.EntryCoreUpdateRate.Value, -1);
+        }
+        else if (!enable && job != null)
+        {
+            SchedulerSystem.RemoveJob(job);
+        }
+    }
+
+    public static void ApplyMetricsSettings(bool show)
+    {
+        var disableMetrics = FuckMetrics.EntryDisableMetrics.Value;
+        if (disableMetrics == FuckMetrics.SettingState.Always) return;
+
+        if (disableMetrics == FuckMetrics.SettingState.MenuOnly)
+        {
+            FuckMetrics.ToggleMetrics(show);
+        }
+        else if (disableMetrics == FuckMetrics.SettingState.Disabled && show)
+        {
+            ViewManager.Instance.UpdateMetrics();
+        }
+    }
+
+    public static void ApplyCoreUpdatesSettings(bool show)
+    {
+        var disableCoreUpdates = FuckMetrics.EntryDisableCoreUpdates.Value;
+        if (disableCoreUpdates == FuckMetrics.SettingState.Always) return;
+
+        if (disableCoreUpdates == FuckMetrics.SettingState.MenuOnly)
+        {
+            FuckMetrics.ToggleCoreUpdates(show);
+        }
+        else if (disableCoreUpdates == FuckMetrics.SettingState.Disabled && show)
+        {
+            CVR_MenuManager.Instance.SendCoreUpdate();
+        }
+    }
+
+    public static void CohtmlAdvanceView(CohtmlView cohtmlView, Traverse menuOpenTraverse)
+    {
+        if (!FuckMetrics.EntryDisableCohtmlViewOnIdle.Value) return;
+
+        if (cohtmlView != null && !menuOpenTraverse.GetValue<bool>())
+        {
+            cohtmlView.enabled = false;
+
+            try
+            {
+                cohtmlView.View.Advance(cohtmlView.CohtmlUISystem?.Id ?? 0, (double)Time.unscaledTime * 1000.0);
+            }
+            catch (Exception e)
+            {
+                FuckMetrics.Logger.Error($"An exception was thrown while calling CohtmlView.Advance(). Error message: {e.Message}");
+            }
         }
     }
 }

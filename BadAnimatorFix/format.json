@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/BadAnimatorFix/releases/download/v1.0.0/BadAnimatorFix.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/BadAnimatorFix/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/BadAnimatorFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix/",
   "changelog": "Initial Release",
   "embedcolor": "7F3F99"
 }

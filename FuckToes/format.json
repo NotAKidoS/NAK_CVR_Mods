@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/FuckToes/releases/download/v1.0.1/FuckToes.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/FuckToes/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/FuckToes.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes/",
   "changelog": "- Initial Release\n- No double patching. Bad. Stinky. Dont do it.",
   "embedcolor": "#ffc700"
 }

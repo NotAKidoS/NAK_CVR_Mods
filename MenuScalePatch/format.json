@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r2/MenuScalePatch.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/MenuScalePatch.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch/",
   "changelog": "- Menus are no longer forced closed on world load.",
   "embedcolor": "363020"
 }

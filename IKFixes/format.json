@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r2/IKFixes.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/IKFixes.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes/",
   "changelog": "- Fixed feet targeting previous movement parent position for a frame.",
   "embedcolor": "f46e49"
 }

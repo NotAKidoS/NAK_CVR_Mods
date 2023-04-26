@@ -10,11 +10,11 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.TrackedControllerFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.TrackedControllerFix.TrackedControllerFixMod),
+    typeof(NAK.TrackedControllerFix.TrackedControllerFix),
     nameof(NAK.TrackedControllerFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/TrackedControllerFix"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/TrackedControllerFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

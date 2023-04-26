@@ -2,7 +2,7 @@
 
 namespace NAK.JumpPatch;
 
-public class JumpPatchMod : MelonMod
+public class JumpPatch : MelonMod
 {
     public override void OnInitializeMelon()
     {

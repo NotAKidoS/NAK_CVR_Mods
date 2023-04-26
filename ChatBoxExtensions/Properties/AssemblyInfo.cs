@@ -15,7 +15,7 @@ using System.Reflection;
     nameof(NAK.ChatBoxExtensions),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/ChatBoxExtensions"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ChatBoxExtensions"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

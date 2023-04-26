@@ -1,5 +1,5 @@
-﻿using NAK.Blackout.Properties;
-using MelonLoader;
+﻿using MelonLoader;
+using NAK.Blackout.Properties;
 using System.Reflection;
 
 
@@ -15,7 +15,7 @@ using System.Reflection;
     nameof(NAK.Blackout),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/Blackout"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Blackout"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

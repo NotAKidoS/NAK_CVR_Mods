@@ -19,7 +19,7 @@ internal static class AnimatorPatches
     [HarmonyPatch(typeof(CVRAvatar), "Start")]
     private static void Postfix_CVRAvatar_Start(CVRAvatar __instance)
     {
-        if (!BadAnimatorFixMod.EntryCVRAvatar.Value) return;
+        if (!BadAnimatorFix.EntryCVRAvatar.Value) return;
         AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
     }
 
@@ -27,7 +27,7 @@ internal static class AnimatorPatches
     [HarmonyPatch(typeof(CVRSpawnable), "Start")]
     private static void Postfix_CVRSpawnable_Start(CVRSpawnable __instance)
     {
-        if (!BadAnimatorFixMod.EntryCVRSpawnable.Value) return;
+        if (!BadAnimatorFix.EntryCVRSpawnable.Value) return;
         AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
     }
 
@@ -36,7 +36,7 @@ internal static class AnimatorPatches
     [HarmonyPatch(typeof(CVR_MenuManager), "Start")]
     private static void Postfix_CVR_MenuManager_Start(ref CVR_MenuManager __instance)
     {
-        if (!BadAnimatorFixMod.EntryMenus.Value) return;
+        if (!BadAnimatorFix.EntryMenus.Value) return;
         AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
     }
 
@@ -45,7 +45,7 @@ internal static class AnimatorPatches
     [HarmonyPatch(typeof(ViewManager), "Start")]
     private static void Postfix_ViewManager_Start(ref ViewManager __instance)
     {
-        if (!BadAnimatorFixMod.EntryMenus.Value) return;
+        if (!BadAnimatorFix.EntryMenus.Value) return;
         AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
     }
 
@@ -54,9 +54,9 @@ internal static class AnimatorPatches
         Animator[] animators = gameObject.GetComponentsInChildren<Animator>(true);
         foreach (Animator animator in animators)
         {
-            if (!animator.TryGetComponent<BadAnimatorFix>(out _))
+            if (!animator.TryGetComponent<BadAnimatorFixer>(out _))
             {
-                animator.gameObject.AddComponent<BadAnimatorFix>();
+                animator.gameObject.AddComponent<BadAnimatorFixer>();
             }
         }
     }

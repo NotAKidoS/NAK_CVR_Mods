@@ -10,11 +10,11 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.DesktopVRIK))]
 
 [assembly: MelonInfo(
-    typeof(NAK.DesktopVRIK.DesktopVRIKMod),
+    typeof(NAK.DesktopVRIK.DesktopVRIK),
     nameof(NAK.DesktopVRIK),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/DesktopVRIK"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

@@ -6,7 +6,7 @@ using Valve.VR;
 
 namespace NAK.DesktopVRSwitch;
 
-public class DesktopVRSwitch : MonoBehaviour
+public class DesktopVRSwitcher : MonoBehaviour
 {
     //Debug Settings
     public bool _reloadLocalAvatar = true;
@@ -52,7 +52,7 @@ public class DesktopVRSwitch : MonoBehaviour
         yield return null; //wait a frame before checking
         if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
         {
-            DesktopVRSwitchMod.Logger.Msg("Starting SteamVR...");
+            DesktopVRSwitch.Logger.Msg("Starting SteamVR...");
             XRSettings.enabled = true;
             //force steamvr to reinitialize input
             //this does SteamVR_Input.actionSets[0].Activate() for us (we deactivate in StopVR())
@@ -63,7 +63,7 @@ public class DesktopVRSwitch : MonoBehaviour
             PostVRModeSwitch(true);
             yield break;
         }
-        DesktopVRSwitchMod.Logger.Error("Initializing VR Failed. Is there no VR device connected?");
+        DesktopVRSwitch.Logger.Error("Initializing VR Failed. Is there no VR device connected?");
         FailedVRModeSwitch(true);
         yield break;
     }
@@ -84,7 +84,7 @@ public class DesktopVRSwitch : MonoBehaviour
             PostVRModeSwitch(false);
             yield break;
         }
-        DesktopVRSwitchMod.Logger.Error("Attempted to exit VR without a VR device loaded.");
+        DesktopVRSwitch.Logger.Error("Attempted to exit VR without a VR device loaded.");
         FailedVRModeSwitch(false);
         yield break;
     }

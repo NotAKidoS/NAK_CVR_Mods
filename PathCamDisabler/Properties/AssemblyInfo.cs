@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
-using System.Reflection;
 using NAK.PathCamDisabler.Properties;
+using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
@@ -10,11 +10,11 @@ using NAK.PathCamDisabler.Properties;
 [assembly: AssemblyProduct(nameof(NAK.PathCamDisabler))]
 
 [assembly: MelonInfo(
-    typeof(NAK.PathCamDisabler.PathCamDisablerMod),
+    typeof(NAK.PathCamDisabler.PathCamDisabler),
     nameof(NAK.PathCamDisabler),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/PathCamDisabler"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

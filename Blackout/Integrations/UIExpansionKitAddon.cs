@@ -15,7 +15,6 @@ public static class UIExpansionKitAddon
             also because it **used to work**... a game update broke it and uiexpansionkit hasnt updated since
 
             what pisses me off more, is that DesktopVRSwitch works, and that was originally copied from Blackout -_-
-            https://github.com/NotAKidOnSteam/DesktopVRSwitch/blob/main/DesktopVRSwitch/UIExpansionKitAddon.cs
         **/
         var settings = ExpansionKitApi.GetSettingsCategory(Blackout.SettingsCategory);
         settings.AddSimpleButton("Awake State", AwakeState);

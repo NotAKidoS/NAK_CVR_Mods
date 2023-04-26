@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/ChatBoxExtensions/releases/download/v1.0.1/ChatBoxExtensions.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/ChatBoxExtensions/",
-  "changelog": "- Initial Release\n- No double patching. Bad. Stinky. Dont do it.",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/ChatBoxExtensions.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ChatBoxExtensions/",
+  "changelog": "",
   "embedcolor": "#ffc700"
 }

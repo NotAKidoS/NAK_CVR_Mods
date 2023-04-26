@@ -14,7 +14,7 @@ public class VRModeSwitchTracker
     {
         TryCatchHell.TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Invoking VRModeSwitchTracker.OnPreVRModeSwitch.");
+            DesktopVRSwitch.Logger.Msg("Invoking VRModeSwitchTracker.OnPreVRModeSwitch.");
             Camera activeCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
             VRModeSwitchTracker.OnPreVRModeSwitch?.Invoke(isVR, activeCamera);
         },
@@ -25,7 +25,7 @@ public class VRModeSwitchTracker
     {
         TryCatchHell.TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Invoking VRModeSwitchTracker.OnPostVRModeSwitch.");
+            DesktopVRSwitch.Logger.Msg("Invoking VRModeSwitchTracker.OnPostVRModeSwitch.");
             Camera activeCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
             VRModeSwitchTracker.OnPostVRModeSwitch?.Invoke(isVR, activeCamera);
         },
@@ -36,7 +36,7 @@ public class VRModeSwitchTracker
     {
         TryCatchHell.TryCatchWrapper(() =>
         {
-            DesktopVRSwitchMod.Logger.Msg("Invoking VRModeSwitchTracker.OnFailVRModeSwitch.");
+            DesktopVRSwitch.Logger.Msg("Invoking VRModeSwitchTracker.OnFailVRModeSwitch.");
             Camera activeCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
             VRModeSwitchTracker.OnFailVRModeSwitch?.Invoke(isVR, activeCamera);
         },

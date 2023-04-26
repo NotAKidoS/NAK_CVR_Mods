@@ -10,11 +10,11 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.BadAnimatorFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.BadAnimatorFix.BadAnimatorFixMod),
+    typeof(NAK.BadAnimatorFix.BadAnimatorFixer),
     nameof(NAK.BadAnimatorFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/BadAnimatorFix"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

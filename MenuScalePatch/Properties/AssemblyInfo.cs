@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.MenuScalePatch),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

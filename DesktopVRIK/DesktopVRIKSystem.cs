@@ -200,7 +200,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
         _cameraTransform = playerSetup.desktopCamera.transform;
 
-        DesktopVRIKMod.UpdateAllSettings();
+        DesktopVRIK.UpdateAllSettings();
     }
 
     void Update()

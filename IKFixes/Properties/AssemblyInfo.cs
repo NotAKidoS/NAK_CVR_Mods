@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.IKFixes),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/IKFixes"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

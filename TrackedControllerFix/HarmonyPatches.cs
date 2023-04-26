@@ -11,9 +11,9 @@ internal class PlayerSetupPatches
     private static void Post_PlayerSetup_Start(ref PlayerSetup __instance)
     {
         // Add TrackedControllerFix
-        var vrLeftHandTracker = __instance.vrLeftHandTracker.AddComponent<TrackedControllerFix>();
+        var vrLeftHandTracker = __instance.vrLeftHandTracker.AddComponent<TrackedControllerFixer>();
         vrLeftHandTracker.inputSource = SteamVR_Input_Sources.LeftHand;
-        var vrRightHandTracker = __instance.vrRightHandTracker.AddComponent<TrackedControllerFix>();
+        var vrRightHandTracker = __instance.vrRightHandTracker.AddComponent<TrackedControllerFixer>();
         vrRightHandTracker.inputSource = SteamVR_Input_Sources.RightHand;
     }
 }

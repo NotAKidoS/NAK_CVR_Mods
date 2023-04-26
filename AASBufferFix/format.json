@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/AASBufferFix/releases/download/v1.0.5/AASBufferFix.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/AASBufferFix/",
-  "changelog": "- Don't send AAS while switching avatar.\n\nPlease read the changelog for [v1.0.5](https://github.com/NotAKidOnSteam/AASBufferFix/releases/tag/v1.0.5) for better understanding of why syncing nothing may be worse than syncing garbage AAS.",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/AASBufferFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix/",
+  "changelog": "",
   "embedcolor": "9b59b6"
 }

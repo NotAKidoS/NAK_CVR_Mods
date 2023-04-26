@@ -3,46 +3,46 @@ using ABI_RC.Core.Player;
 using MelonLoader;
 using UnityEngine;
 
-namespace NAK.PathCamDisabler
+namespace NAK.PathCamDisabler;
+
+public class PathCamDisabler : MelonMod
 {
-    public class PathCamDisablerMod : MelonMod
+    public static readonly MelonPreferences_Category Category = 
+        MelonPreferences.CreateCategory(nameof(PathCamDisabler));
+
+    public static readonly MelonPreferences_Entry<bool> EntryDisablePathCam = 
+        Category.CreateEntry("Disable Path Camera Controller.", true, "Disable Path Camera Controller.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryDisableFlightBind = 
+        Category.CreateEntry("Disable Flight Binding (if controller off).", false, "Disable flight bind if Path Camera Controller is also disabled.");
+
+    public override void OnInitializeMelon()
     {
-        internal const string SettingsCategory = "PathCamDisabler";
-        internal static MelonPreferences_Category m_categoryPathCamDisabler;
-        internal static MelonPreferences_Entry<bool> m_entryDisablePathCam, m_entryDisableFlightBind;
+        EntryDisablePathCam.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
 
-        public override void OnInitializeMelon()
+        MelonLoader.MelonCoroutines.Start(WaitForCVRPathCamController());
+    }
+
+    private System.Collections.IEnumerator WaitForCVRPathCamController()
+    {
+        while (CVRPathCamController.Instance == null)
+            yield return null;
+        UpdateSettings();
+    }
+
+    private void UpdateSettings()
+    {
+        CVRPathCamController.Instance.enabled = !EntryDisablePathCam.Value;
+    }
+    private void OnUpdateSettings(object arg1, object arg2) => UpdateSettings();
+
+    public override void OnUpdate()
+    {
+        if (EntryDisablePathCam.Value && !EntryDisableFlightBind.Value)
         {
-            m_categoryPathCamDisabler = MelonPreferences.CreateCategory(SettingsCategory);
-            m_entryDisablePathCam = m_categoryPathCamDisabler.CreateEntry<bool>("Disable Path Camera Controller.", true, description: "Disable Path Camera Controller.");
-            m_entryDisableFlightBind = m_categoryPathCamDisabler.CreateEntry<bool>("Disable Flight Binding (if controller off).", false, description: "Disable flight bind if Path Camera Controller is also disabled.");
-
-            m_entryDisablePathCam.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-
-            MelonLoader.MelonCoroutines.Start(WaitForCVRPathCamController());
-        }
-
-        private System.Collections.IEnumerator WaitForCVRPathCamController()
-        {
-            while (CVRPathCamController.Instance == null)
-                yield return null;
-            UpdateSettings();
-        }
-
-        private void UpdateSettings()
-        {
-            CVRPathCamController.Instance.enabled = !m_entryDisablePathCam.Value;
-        }
-        private void OnUpdateSettings(object arg1, object arg2) => UpdateSettings();
-
-        public override void OnUpdate()
-        {
-            if (m_entryDisablePathCam.Value && !m_entryDisableFlightBind.Value)
+            if (Input.GetKeyDown(KeyCode.Keypad5))
             {
-                if (Input.GetKeyDown(KeyCode.Keypad5))
-                {
-                    PlayerSetup.Instance._movementSystem.ToggleFlight();
-                }
+                PlayerSetup.Instance._movementSystem.ToggleFlight();
             }
         }
     }

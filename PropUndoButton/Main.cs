@@ -14,9 +14,7 @@ namespace NAK.PropUndoButton;
 
 public class PropUndoButton : MelonMod
 {
-    public static List<DeletedProp> deletedProps = new List<DeletedProp>();
-
-    private static readonly MelonPreferences_Category Category =
+    public static readonly MelonPreferences_Category Category = 
         MelonPreferences.CreateCategory(nameof(PropUndoButton));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
@@ -24,16 +22,18 @@ public class PropUndoButton : MelonMod
 
     public static readonly MelonPreferences_Entry<bool> EntryUseSFX =
         Category.CreateEntry("Use SFX", true, description: "Toggle audio queues for prop spawn, undo, redo, and warning.");
+    
+    internal static List<DeletedProp> deletedProps = new List<DeletedProp>();
 
     // audio clip names, InterfaceAudio adds "PropUndo_" prefix
-    public const string sfx_spawn = "PropUndo_sfx_spawn";
-    public const string sfx_undo = "PropUndo_sfx_undo";
-    public const string sfx_redo = "PropUndo_sfx_redo";
-    public const string sfx_warn = "PropUndo_sfx_warn";
-    public const string sfx_deny = "PropUndo_sfx_deny";
+    internal const string sfx_spawn = "PropUndo_sfx_spawn";
+    internal const string sfx_undo = "PropUndo_sfx_undo";
+    internal const string sfx_redo = "PropUndo_sfx_redo";
+    internal const string sfx_warn = "PropUndo_sfx_warn";
+    internal const string sfx_deny = "PropUndo_sfx_deny";
 
-    public const int redoHistoryLimit = 20; // amount that can be in history at once
-    public const int redoTimeoutLimit = 120; // seconds
+    const int redoHistoryLimit = 20; // amount that can be in history at once
+    const int redoTimeoutLimit = 120; // seconds
 
     public override void OnInitializeMelon()
     {

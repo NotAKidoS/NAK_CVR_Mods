@@ -15,9 +15,9 @@ class VRIKPatches
         //only run for PlayerLocal VRIK
         if (__instance.gameObject.layer != 8) return;
 
-        if (FuckToesMod.m_entryEnabledVR.Value && MetaPort.Instance.isUsingVr)
+        if (FuckToes.EntryEnabledVR.Value && MetaPort.Instance.isUsingVr)
         {
-            if (!FuckToesMod.m_entryEnabledFBT.Value && MetaPort.Instance.isUsingFullbody) return;
+            if (!FuckToes.EntryEnabledFBT.Value && MetaPort.Instance.isUsingFullbody) return;
             __instance.references.leftToes = null;
             __instance.references.rightToes = null;
         }

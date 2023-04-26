@@ -3,7 +3,7 @@ using Valve.VR;
 
 namespace NAK.TrackedControllerFix;
 
-public class TrackedControllerFix : MonoBehaviour
+public class TrackedControllerFixer : MonoBehaviour
 {
     public SteamVR_Input_Sources inputSource;
     public int deviceIndex;

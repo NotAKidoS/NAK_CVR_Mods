@@ -2,7 +2,7 @@
 
 namespace NAK.TrackedControllerFix;
 
-public class TrackedControllerFixMod : MelonMod
+public class TrackedControllerFix : MelonMod
 {
     public override void OnInitializeMelon()
     {

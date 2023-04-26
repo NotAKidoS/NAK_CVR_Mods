@@ -17,8 +17,8 @@
     "BTKUILib",
     "UIExpansionKit"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/Blackout/releases/download/v2.0.0/Blackout.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/Blackout/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/Blackout.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Blackout/",
   "changelog": "- Added BTKUILib support.\n- Added dimming strength velocity multiplier option.\n- Added option to not use Automatic Sleep State.\n- Dimming strengh now updates in realtime when configuring.",
   "embedcolor": "#161b22"
 }

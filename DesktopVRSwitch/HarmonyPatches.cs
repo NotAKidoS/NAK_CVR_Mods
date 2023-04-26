@@ -19,11 +19,11 @@ internal class PlayerSetupPatches
     {
         if (CheckVR.Instance != null)
         {
-            CheckVR.Instance.gameObject.AddComponent<DesktopVRSwitch>();
+            CheckVR.Instance.gameObject.AddComponent<DesktopVRSwitcher>();
             return;
         }
-        __instance.gameObject.AddComponent<DesktopVRSwitch>();
-        DesktopVRSwitchMod.Logger.Error("CheckVR not found. Reverting to fallback method. This should never happen!");
+        __instance.gameObject.AddComponent<DesktopVRSwitcher>();
+        DesktopVRSwitch.Logger.Error("CheckVR not found. Reverting to fallback method. This should never happen!");
     }
 }
 

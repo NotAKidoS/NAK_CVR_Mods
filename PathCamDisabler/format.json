@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PathCamDisabler/releases/download/v1.0.1/PathCamDisabler.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/PathCamDisabler/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/PathCamDisabler.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler/",
   "changelog": "- Organizational changes.\n- No longer using SaveToFile().",
   "embedcolor": "#9b59b6"
 }

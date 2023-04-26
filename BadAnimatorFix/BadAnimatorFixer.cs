@@ -3,7 +3,7 @@ using UnityEngine.Playables;
 
 namespace NAK.BadAnimatorFix;
 
-public class BadAnimatorFix : MonoBehaviour
+public class BadAnimatorFixer : MonoBehaviour
 {
     private const float StateLimit = 20f;
 
@@ -42,11 +42,11 @@ public class BadAnimatorFix : MonoBehaviour
                 PlayableExtensions.SetTime<Playable>(animator.playableGraph.GetRootPlayable(0), 0);
             }
         }
-        
-        if (BadAnimatorFixMod.EntryLogging.Value)
+
+        if (BadAnimatorFix.EntryLogging.Value)
         {
             string message = rewound ? $"Rewound animator and playable {animator}." : $"Animator did not meet criteria to rewind {animator}.";
-            BadAnimatorFixMod.Logger.Msg(message);
+            BadAnimatorFix.Logger.Msg(message);
         }
     }
 }

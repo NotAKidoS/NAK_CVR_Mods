@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/CVRGizmos/releases/download/r2/CVRGizmos.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/CVRGizmos/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/CVRGizmos.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos/",
   "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
   "embedcolor": "804221"
 }

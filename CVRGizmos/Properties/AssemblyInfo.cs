@@ -2,7 +2,6 @@
 using MelonLoader;
 using System.Reflection;
 
-
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
@@ -15,7 +14,7 @@ using System.Reflection;
     nameof(CVRGizmos),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/CVRGizmos"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

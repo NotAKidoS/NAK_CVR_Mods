@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/PropUndoButton/releases/download/v1.0.1/PropUndoButton.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/PropUndoButton/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/PropUndoButton.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndoButton/",
   "changelog": "- Initial Release\n- Added redo button.\n- Mitigated issue of props getting stuck locally if deleting them before they fully spawn.\n- Lowered SFX volume to match existing UI sounds.",
   "embedcolor": "#00FFFF"
 }
