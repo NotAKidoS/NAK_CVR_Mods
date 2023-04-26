@@ -16,7 +16,7 @@ public static class BuildInfo
 {
     public const string Name = "ThirdPerson";
     public const string Author = "Davi & NotAKidoS";
-    public const string Version = "1.0.1";
+    public const string Version = "1.0.2";
 }
 
 public class ThirdPerson : MelonMod
