@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using Valve.VR;
 
-namespace NAK.Melons.TrackedControllerFix;
+namespace NAK.TrackedControllerFix;
 
 public class TrackedControllerFix : MonoBehaviour
 {

@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Core.Util.Object_Behaviour;
 using UnityEngine;
 
-namespace NAK.Melons.DesktopVRSwitch.Patches;
+namespace NAK.DesktopVRSwitch.Patches;
 
 public class CameraFacingObjectTracker : MonoBehaviour
 {

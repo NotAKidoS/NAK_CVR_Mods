@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.AASBufferFix;
+namespace NAK.AASBufferFix;
 
 public class AASBufferFix : MelonMod
 {

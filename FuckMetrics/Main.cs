@@ -2,7 +2,7 @@
 using MelonLoader;
 using System.Collections;
 
-namespace NAK.Melons.FuckMetrics;
+namespace NAK.FuckMetrics;
 
 public class FuckMetricsMod : MelonMod
 {

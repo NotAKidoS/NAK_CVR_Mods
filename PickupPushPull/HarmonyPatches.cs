@@ -3,9 +3,9 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using HarmonyLib;
 using UnityEngine;
-using NAK.Melons.PickupPushPull.InputModules;
+using NAK.PickupPushPull.InputModules;
 
-namespace NAK.Melons.PickupPushPull.HarmonyPatches;
+namespace NAK.PickupPushPull.HarmonyPatches;
 
 [HarmonyPatch]
 internal class HarmonyPatches

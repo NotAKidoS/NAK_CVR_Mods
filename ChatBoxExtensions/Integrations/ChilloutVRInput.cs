@@ -1,4 +1,4 @@
-﻿namespace NAK.Melons.ChatBoxExtensions.Integrations;
+﻿namespace NAK.ChatBoxExtensions.Integrations;
 
 internal class ChilloutVRInputCommands : CommandBase
 {

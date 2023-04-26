@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Systems.Camera;
 using UnityEngine;
 
-namespace NAK.Melons.PortableCameraAdditions.VisualMods;
+namespace NAK.PortableCameraAdditions.VisualMods;
 
 public class CameraAdditions
 {

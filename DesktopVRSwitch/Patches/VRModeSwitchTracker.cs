@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace NAK.Melons.DesktopVRSwitch.Patches;
+namespace NAK.DesktopVRSwitch.Patches;
 
 public class VRModeSwitchTracker
 {

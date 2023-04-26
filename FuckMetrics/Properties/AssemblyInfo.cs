@@ -1,18 +1,18 @@
 ﻿using MelonLoader;
-using NAK.Melons.FuckMetrics.Properties;
+using NAK.FuckMetrics.Properties;
 using System.Reflection;
 
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.FuckMetrics))]
+[assembly: AssemblyTitle(nameof(NAK.FuckMetrics))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.FuckMetrics))]
+[assembly: AssemblyProduct(nameof(NAK.FuckMetrics))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.FuckMetrics.FuckMetricsMod),
-    nameof(NAK.Melons.FuckMetrics),
+    typeof(NAK.FuckMetrics.FuckMetricsMod),
+    nameof(NAK.FuckMetrics),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/FuckMetrics"
@@ -23,7 +23,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.FuckMetrics.Properties;
+namespace NAK.FuckMetrics.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.4";

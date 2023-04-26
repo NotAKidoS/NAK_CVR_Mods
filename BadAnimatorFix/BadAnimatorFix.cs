@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Playables;
 
-namespace NAK.Melons.BadAnimatorFix;
+namespace NAK.BadAnimatorFix;
 
 public class BadAnimatorFix : MonoBehaviour
 {

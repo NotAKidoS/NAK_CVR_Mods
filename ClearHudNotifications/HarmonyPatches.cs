@@ -3,7 +3,7 @@ using ABI_RC.Core.UI;
 using cohtml;
 using HarmonyLib;
 
-namespace NAK.Melons.ClearHudNotifications.HarmonyPatches;
+namespace NAK.ClearHudNotifications.HarmonyPatches;
 
 internal static class CohtmlHudPatches
 {

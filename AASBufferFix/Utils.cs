@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace NAK.Melons.AASBufferFix;
+namespace NAK.AASBufferFix;
 
 public class Utils
 {

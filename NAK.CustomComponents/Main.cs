@@ -2,7 +2,7 @@
 using MelonLoader;
 using NAK.CCK.CustomComponents;
 
-namespace NAK.Melons.CustomComponents;
+namespace NAK.CustomComponents;
 
 public class CustomComponents : MelonMod
 {

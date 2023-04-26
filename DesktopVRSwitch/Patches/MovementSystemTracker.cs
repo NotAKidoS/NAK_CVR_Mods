@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Systems.MovementSystem;
 using UnityEngine;
 
-namespace NAK.Melons.DesktopVRSwitch.Patches;
+namespace NAK.DesktopVRSwitch.Patches;
 
 public class MovementSystemTracker : MonoBehaviour
 {

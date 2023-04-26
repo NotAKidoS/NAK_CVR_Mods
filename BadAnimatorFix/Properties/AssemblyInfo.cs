@@ -1,17 +1,17 @@
 ﻿using MelonLoader;
-using NAK.Melons.BadAnimatorFix.Properties;
+using NAK.BadAnimatorFix.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.BadAnimatorFix))]
+[assembly: AssemblyTitle(nameof(NAK.BadAnimatorFix))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.BadAnimatorFix))]
+[assembly: AssemblyProduct(nameof(NAK.BadAnimatorFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.BadAnimatorFix.BadAnimatorFixMod),
-    nameof(NAK.Melons.BadAnimatorFix),
+    typeof(NAK.BadAnimatorFix.BadAnimatorFixMod),
+    nameof(NAK.BadAnimatorFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/BadAnimatorFix"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.BadAnimatorFix.Properties;
+namespace NAK.BadAnimatorFix.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.0";

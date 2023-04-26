@@ -1,17 +1,17 @@
 ﻿using MelonLoader;
-using NAK.Melons.CustomComponents.Properties;
+using NAK.CustomComponents.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.CustomComponents))]
+[assembly: AssemblyTitle(nameof(NAK.CustomComponents))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.CustomComponents))]
+[assembly: AssemblyProduct(nameof(NAK.CustomComponents))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.CustomComponents.CustomComponents),
-    nameof(NAK.Melons.CustomComponents),
+    typeof(NAK.CustomComponents.CustomComponents),
+    nameof(NAK.CustomComponents),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/UndoPropButton"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.CustomComponents.Properties;
+namespace NAK.CustomComponents.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.0";

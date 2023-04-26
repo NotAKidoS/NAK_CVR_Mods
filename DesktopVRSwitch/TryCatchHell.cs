@@ -8,7 +8,7 @@ using ABI_RC.Systems.Camera;
 using HarmonyLib;
 using UnityEngine;
 
-namespace NAK.Melons.DesktopVRSwitch;
+namespace NAK.DesktopVRSwitch;
 
 internal class TryCatchHell
 {

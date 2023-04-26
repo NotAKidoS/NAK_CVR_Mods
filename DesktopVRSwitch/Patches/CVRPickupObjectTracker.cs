@@ -3,7 +3,7 @@ using UnityEngine;
 
 //Thanks Ben! I was scared of transpiler so I reworked a bit...
 
-namespace NAK.Melons.DesktopVRSwitch.Patches;
+namespace NAK.DesktopVRSwitch.Patches;
 
 public class CVRPickupObjectTracker : MonoBehaviour
 {

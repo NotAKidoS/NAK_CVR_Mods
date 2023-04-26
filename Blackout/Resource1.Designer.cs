@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NAK.Melons.Blackout {
+namespace NAK.Blackout {
     using System;
     
     

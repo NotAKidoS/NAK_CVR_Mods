@@ -2,7 +2,7 @@
 using ABI_RC.Core.Player;
 using UnityEngine;
 
-namespace NAK.Melons.AASBufferFix;
+namespace NAK.AASBufferFix;
 
 public class AASBufferHelper : MonoBehaviour
 {

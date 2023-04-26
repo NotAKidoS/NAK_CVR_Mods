@@ -2,7 +2,7 @@
 using MelonLoader;
 using UnityEngine;
 
-namespace NAK.Melons.ClearHudNotifications;
+namespace NAK.ClearHudNotifications;
 
 public class ClearHudNotifications : MelonMod
 {

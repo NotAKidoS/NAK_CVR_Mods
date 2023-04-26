@@ -1,6 +1,6 @@
 ﻿using ml_prm;
 
-namespace NAK.Melons.ChatBoxExtensions.Integrations;
+namespace NAK.ChatBoxExtensions.Integrations;
 
 internal class PlayerRagdollModCommands : CommandBase
 {

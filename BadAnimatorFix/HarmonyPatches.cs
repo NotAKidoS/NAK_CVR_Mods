@@ -4,7 +4,7 @@ using ABI_RC.Core.Player;
 using HarmonyLib;
 using UnityEngine;
 
-namespace NAK.Melons.BadAnimatorFix.HarmonyPatches;
+namespace NAK.BadAnimatorFix.HarmonyPatches;
 
 internal static class AnimatorPatches
 {

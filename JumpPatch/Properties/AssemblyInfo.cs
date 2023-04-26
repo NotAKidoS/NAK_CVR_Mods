@@ -1,17 +1,17 @@
 ﻿using MelonLoader;
-using NAK.Melons.JumpPatch.Properties;
+using NAK.JumpPatch.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.JumpPatch))]
+[assembly: AssemblyTitle(nameof(NAK.JumpPatch))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.JumpPatch))]
+[assembly: AssemblyProduct(nameof(NAK.JumpPatch))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.JumpPatch.JumpPatchMod),
-    nameof(NAK.Melons.JumpPatch),
+    typeof(NAK.JumpPatch.JumpPatchMod),
+    nameof(NAK.JumpPatch),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/JumpPatch"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.JumpPatch.Properties;
+namespace NAK.JumpPatch.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.0";

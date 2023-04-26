@@ -7,7 +7,7 @@ using Valve.VR;
 
 //I legitimately threw this at ChatGPT to rewrite cause i couldn't be bothered.
 
-namespace NAK.Melons.GestureLock
+namespace NAK.GestureLock
 {
     public class GestureLockMod : MelonMod
     {

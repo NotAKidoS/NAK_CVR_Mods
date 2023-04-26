@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.JumpPatch;
+namespace NAK.JumpPatch;
 
 public class JumpPatchMod : MelonMod
 {

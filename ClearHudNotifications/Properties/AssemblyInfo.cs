@@ -1,4 +1,4 @@
-﻿using NAK.Melons.ClearHudNotifications.Properties;
+﻿using NAK.ClearHudNotifications.Properties;
 using MelonLoader;
 using System.Reflection;
 
@@ -6,13 +6,13 @@ using System.Reflection;
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.ClearHudNotifications))]
+[assembly: AssemblyTitle(nameof(NAK.ClearHudNotifications))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.ClearHudNotifications))]
+[assembly: AssemblyProduct(nameof(NAK.ClearHudNotifications))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.ClearHudNotifications.ClearHudNotifications),
-    nameof(NAK.Melons.ClearHudNotifications),
+    typeof(NAK.ClearHudNotifications.ClearHudNotifications),
+    nameof(NAK.ClearHudNotifications),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/UndoPropButton"
@@ -23,7 +23,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.ClearHudNotifications.Properties;
+namespace NAK.ClearHudNotifications.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.0";

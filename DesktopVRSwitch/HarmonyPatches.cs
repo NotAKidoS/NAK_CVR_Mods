@@ -6,10 +6,10 @@ using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.TrackingModules;
 using ABI_RC.Systems.MovementSystem;
 using HarmonyLib;
-using NAK.Melons.DesktopVRSwitch.Patches;
+using NAK.DesktopVRSwitch.Patches;
 using UnityEngine;
 
-namespace NAK.Melons.DesktopVRSwitch.HarmonyPatches;
+namespace NAK.DesktopVRSwitch.HarmonyPatches;
 
 internal class PlayerSetupPatches
 {

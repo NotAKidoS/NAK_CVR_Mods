@@ -2,7 +2,7 @@
 using HarmonyLib;
 using Valve.VR;
 
-namespace NAK.Melons.TrackedControllerFix.HarmonyPatches;
+namespace NAK.TrackedControllerFix.HarmonyPatches;
 
 internal class PlayerSetupPatches
 {

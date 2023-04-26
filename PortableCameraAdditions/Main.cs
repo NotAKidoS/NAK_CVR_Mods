@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.PortableCameraAdditions;
+namespace NAK.PortableCameraAdditions;
 
 public class PortableCameraAdditions : MelonMod
 {

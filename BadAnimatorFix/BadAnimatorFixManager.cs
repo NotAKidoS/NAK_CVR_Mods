@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace NAK.Melons.BadAnimatorFix;
+namespace NAK.BadAnimatorFix;
 
 public static class BadAnimatorFixManager
 {

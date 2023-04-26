@@ -2,7 +2,7 @@
 using ABI_RC.Core.Savior;
 using MelonLoader;
 
-namespace NAK.Melons.Blackout;
+namespace NAK.Blackout;
 
 public class Blackout : MelonMod
 {

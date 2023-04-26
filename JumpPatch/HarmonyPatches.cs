@@ -2,7 +2,7 @@
 using ABI_RC.Systems.MovementSystem;
 using HarmonyLib;
 
-namespace NAK.Melons.JumpPatch.HarmonyPatches;
+namespace NAK.JumpPatch.HarmonyPatches;
 
 class MovementSystemPatches
 {

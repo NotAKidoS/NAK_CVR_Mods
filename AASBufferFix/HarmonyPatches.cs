@@ -4,7 +4,7 @@ using ABI_RC.Core.Player;
 using HarmonyLib;
 using UnityEngine;
 
-namespace NAK.Melons.AASBufferFix.HarmonyPatches;
+namespace NAK.AASBufferFix.HarmonyPatches;
 
 [HarmonyPatch]
 internal class HarmonyPatches

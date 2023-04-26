@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using UIExpansionKit.API;
 
-namespace NAK.Melons.Blackout;
+namespace NAK.Blackout;
 public static class UIExpansionKitAddon
 {
     [MethodImpl(MethodImplOptions.NoInlining)]

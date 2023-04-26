@@ -1,17 +1,17 @@
 ﻿using MelonLoader;
-using NAK.Melons.TrackedControllerFix.Properties;
+using NAK.TrackedControllerFix.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.TrackedControllerFix))]
+[assembly: AssemblyTitle(nameof(NAK.TrackedControllerFix))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.TrackedControllerFix))]
+[assembly: AssemblyProduct(nameof(NAK.TrackedControllerFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.TrackedControllerFix.TrackedControllerFixMod),
-    nameof(NAK.Melons.TrackedControllerFix),
+    typeof(NAK.TrackedControllerFix.TrackedControllerFixMod),
+    nameof(NAK.TrackedControllerFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/TrackedControllerFix"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.TrackedControllerFix.Properties;
+namespace NAK.TrackedControllerFix.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.2";

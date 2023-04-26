@@ -1,17 +1,17 @@
-﻿using NAK.Melons.PropUndoButton.Properties;
+﻿using NAK.PropUndoButton.Properties;
 using MelonLoader;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.PropUndoButton))]
+[assembly: AssemblyTitle(nameof(NAK.PropUndoButton))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.PropUndoButton))]
+[assembly: AssemblyProduct(nameof(NAK.PropUndoButton))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.PropUndoButton.PropUndoButton),
-    nameof(NAK.Melons.PropUndoButton),
+    typeof(NAK.PropUndoButton.PropUndoButton),
+    nameof(NAK.PropUndoButton),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/UndoPropButton"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.Melons.PropUndoButton.Properties;
+namespace NAK.PropUndoButton.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.1";

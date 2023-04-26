@@ -1,18 +1,18 @@
 ﻿using MelonLoader;
-using NAK.Melons.AASBufferFix.Properties;
+using NAK.AASBufferFix.Properties;
 using System.Reflection;
 
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.AASBufferFix))]
+[assembly: AssemblyTitle(nameof(NAK.AASBufferFix))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.AASBufferFix))]
+[assembly: AssemblyProduct(nameof(NAK.AASBufferFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.AASBufferFix.AASBufferFix),
-    nameof(NAK.Melons.AASBufferFix),
+    typeof(NAK.AASBufferFix.AASBufferFix),
+    nameof(NAK.AASBufferFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/AASBufferFix"
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 
-namespace NAK.Melons.AASBufferFix.Properties;
+namespace NAK.AASBufferFix.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.5";

@@ -6,13 +6,13 @@ using System.Reflection;
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.Melons.FuckToes))]
+[assembly: AssemblyTitle(nameof(NAK.FuckToes))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.Melons.FuckToes))]
+[assembly: AssemblyProduct(nameof(NAK.FuckToes))]
 
 [assembly: MelonInfo(
-    typeof(NAK.Melons.FuckToes.FuckToesMod),
-    nameof(NAK.Melons.FuckToes),
+    typeof(NAK.FuckToes.FuckToesMod),
+    nameof(NAK.FuckToes),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/FuckToes"

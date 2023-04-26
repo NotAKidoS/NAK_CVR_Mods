@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.BadAnimatorFix;
+namespace NAK.BadAnimatorFix;
 
 public class BadAnimatorFixMod : MelonMod
 {

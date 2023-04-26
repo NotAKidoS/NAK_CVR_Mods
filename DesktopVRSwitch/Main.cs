@@ -13,7 +13,7 @@
     components that may or may not change between builds without breaking the rest of the mod.
 **/
 
-namespace NAK.Melons.DesktopVRSwitch;
+namespace NAK.DesktopVRSwitch;
 
 public class DesktopVRSwitchMod : MelonMod
 {

@@ -8,7 +8,7 @@ using MelonLoader;
 using System.Reflection;
 using UnityEngine;
 
-namespace NAK.Melons.PropUndoButton;
+namespace NAK.PropUndoButton;
 
 // https://pixabay.com/sound-effects/selection-sounds-73225/
 

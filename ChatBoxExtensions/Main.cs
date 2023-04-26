@@ -1,7 +1,7 @@
 ﻿using MelonLoader;
-using NAK.Melons.ChatBoxExtensions.InputModules;
+using NAK.ChatBoxExtensions.InputModules;
 
-namespace NAK.Melons.ChatBoxExtensions;
+namespace NAK.ChatBoxExtensions;
 
 public class ChatBoxExtensions : MelonMod
 {

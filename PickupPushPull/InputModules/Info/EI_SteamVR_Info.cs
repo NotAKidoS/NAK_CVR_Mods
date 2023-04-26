@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Core.Savior;
 using System.Reflection;
 
-namespace NAK.Melons.PickupPushPull.InputModules.Info;
+namespace NAK.PickupPushPull.InputModules.Info;
 
 // Stolen from my scrapped Enhanced Input mod
 internal class EI_SteamVR_Info

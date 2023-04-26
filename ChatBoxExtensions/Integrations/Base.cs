@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 
-namespace NAK.Melons.ChatBoxExtensions.Integrations;
+namespace NAK.ChatBoxExtensions.Integrations;
 
 public class CommandBase
 {

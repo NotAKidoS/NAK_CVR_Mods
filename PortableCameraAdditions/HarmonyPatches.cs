@@ -2,7 +2,7 @@
 using HarmonyLib;
 using UnityEngine;
 
-namespace NAK.Melons.PortableCameraAdditions.HarmonyPatches;
+namespace NAK.PortableCameraAdditions.HarmonyPatches;
 
 [HarmonyPatch]
 internal class PortableCameraPatches

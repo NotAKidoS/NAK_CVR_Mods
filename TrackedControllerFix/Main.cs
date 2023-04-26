@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.TrackedControllerFix;
+namespace NAK.TrackedControllerFix;
 
 public class TrackedControllerFixMod : MelonMod
 {

@@ -5,7 +5,7 @@ using MelonLoader;
 using System.Text;
 using UnityEngine;
 
-namespace NAK.Melons.Blackout;
+namespace NAK.Blackout;
 
 /*
 

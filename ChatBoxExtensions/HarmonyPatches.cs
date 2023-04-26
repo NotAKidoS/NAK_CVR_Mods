@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Core.Savior;
 using HarmonyLib;
 
-namespace NAK.Melons.ChatBoxExtensions.HarmonyPatches;
+namespace NAK.ChatBoxExtensions.HarmonyPatches;
 
 public class CVRInputManagerPatches
 {

@@ -3,13 +3,13 @@ using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
-using NAK.Melons.PickupPushPull.InputModules.Info;
+using NAK.PickupPushPull.InputModules.Info;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.Events;
 using Valve.VR;
 
-namespace NAK.Melons.PickupPushPull.InputModules;
+namespace NAK.PickupPushPull.InputModules;
 
 public class PickupPushPull_Module : CVRInputModule
 {

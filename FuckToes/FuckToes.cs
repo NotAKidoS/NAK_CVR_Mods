@@ -3,7 +3,7 @@ using HarmonyLib;
 using RootMotion.FinalIK;
 
 
-namespace NAK.Melons.FuckToes.HarmonyPatches;
+namespace NAK.FuckToes.HarmonyPatches;
 
 //yes im patching VRIK directly, cvr does not force calibration or mess with references, and leaves it to vrik to handle
 class VRIKPatches

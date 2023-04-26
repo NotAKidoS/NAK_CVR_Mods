@@ -8,7 +8,7 @@ using UnityEngine.AzureSky;
 using UnityEngine.Rendering.PostProcessing;
 using Object = UnityEngine.Object;
 
-namespace NAK.Melons.DesktopVRSwitch.Patches;
+namespace NAK.DesktopVRSwitch.Patches;
 
 internal class ReferenceCameraPatch
 {

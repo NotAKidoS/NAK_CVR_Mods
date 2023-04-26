@@ -1,10 +1,10 @@
-﻿using NAK.Melons.DesktopVRSwitch.Patches;
+﻿using NAK.DesktopVRSwitch.Patches;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
 
-namespace NAK.Melons.DesktopVRSwitch;
+namespace NAK.DesktopVRSwitch;
 
 public class DesktopVRSwitch : MonoBehaviour
 {

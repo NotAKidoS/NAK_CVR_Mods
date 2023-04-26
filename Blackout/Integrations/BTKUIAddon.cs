@@ -2,7 +2,7 @@
 using BTKUILib.UIObjects;
 using System.Runtime.CompilerServices;
 
-namespace NAK.Melons.Blackout;
+namespace NAK.Blackout;
 
 public static class BTKUIAddon
 {

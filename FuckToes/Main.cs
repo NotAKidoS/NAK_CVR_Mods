@@ -1,6 +1,6 @@
 ﻿using MelonLoader;
 
-namespace NAK.Melons.FuckToes;
+namespace NAK.FuckToes;
 
 public class FuckToesMod : MelonMod
 {

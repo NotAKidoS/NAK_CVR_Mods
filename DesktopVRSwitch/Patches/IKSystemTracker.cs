@@ -4,7 +4,7 @@ using HarmonyLib;
 using System.Reflection;
 using UnityEngine;
 
-namespace NAK.Melons.DesktopVRSwitch.Patches;
+namespace NAK.DesktopVRSwitch.Patches;
 
 public class IKSystemTracker : MonoBehaviour
 {

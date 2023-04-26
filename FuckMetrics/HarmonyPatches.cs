@@ -3,7 +3,7 @@ using ABI_RC.Core.IO;
 using cohtml;
 using HarmonyLib;
 
-namespace NAK.Melons.FuckMetrics.HarmonyPatches;
+namespace NAK.FuckMetrics.HarmonyPatches;
 
 public static class CVR_MenuManagerPatches
 {

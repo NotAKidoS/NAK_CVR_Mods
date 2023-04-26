@@ -4,7 +4,7 @@ using cohtml;
 using HarmonyLib;
 using UnityEngine;
 
-namespace NAK.Melons.FuckMetrics;
+namespace NAK.FuckMetrics;
 
 public static class FuckMetrics
 {
