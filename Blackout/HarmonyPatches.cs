@@ -9,7 +9,7 @@ internal class HarmonyPatches
 {
     //Support for changing VRMode during runtime.
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), "CalibrateAvatar")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.CalibrateAvatar))]
     private static void CheckVRModeOnSwitch()
     {
         if (Blackout.inVR != MetaPort.Instance.isUsingVr)

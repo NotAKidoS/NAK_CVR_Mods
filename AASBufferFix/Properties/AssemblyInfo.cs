@@ -2,7 +2,6 @@
 using NAK.AASBufferFix.Properties;
 using System.Reflection;
 
-
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
