@@ -1,6 +1,6 @@
 # CVR and Melon Loader Dependencies
-$0HarmonydllPath    = "\MelonLoader\0Harmony.dll"
-$melonLoaderdllPath = "\MelonLoader\MelonLoader.dll"
+$0HarmonydllPath    = "\MelonLoader\net35\0Harmony.dll"
+$melonLoaderdllPath = "\MelonLoader\net35\MelonLoader.dll"
 $cvrManagedDataPath = "\ChilloutVR_Data\Managed"
 
 $cvrPath = $env:CVRPATH
