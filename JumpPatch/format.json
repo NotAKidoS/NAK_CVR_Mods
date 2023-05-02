@@ -1,23 +1,23 @@
 {
-  "_id": -1,
+  "_id": 151,
   "name": "JumpPatch",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "Prevents you from jumping until you've been grounded for a frame.\nThis ensures Grounded parameter fires when hitting the ground while holding jump.",
   "searchtags": [
-    "toes",
-    "vrik",
-    "ik",
-    "feet"
+    "jump",
+    "animation",
+    "grounded",
+    "simple"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/JumpPatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r4/JumpPatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/JumpPatch/",
-  "changelog": "- Initial Release\n- I like my jump animations.",
+  "changelog": "- Return jump input after MovementSystem.Update. Fixes conflict with PRM jump-to-recover option.",
   "embedcolor": "#e56597"
 }
