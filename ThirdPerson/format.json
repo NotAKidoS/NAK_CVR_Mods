@@ -16,7 +16,7 @@
     "requirements": [],
     "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Disable desktop camera while in thirdperson for performance.\n- Add cycle backward modifier while holding Shift.",
+    "changelog": "- Disable desktop camera while in thirdperson for performance.\n- Add cycle backward modifier while holding Shift.\n- Fixed bug where loading into a world in thirdperson broke nameplates. (imagine using Camera.main)",
     "embedcolor": "F61961"
   }
 ]
