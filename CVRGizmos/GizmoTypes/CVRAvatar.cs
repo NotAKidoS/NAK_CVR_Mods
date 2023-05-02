@@ -2,48 +2,47 @@
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 
-namespace CVRGizmos.GismoTypes
+namespace NAK.CVRGizmos.GismoTypes;
+
+public class CVRGizmos_Avatar : CVRGizmoBase
 {
-    public class CVRGizmos_Avatar : CVRGizmoBase
+    public static CVRAvatar[] references;
+
+    public override void CacheGizmos()
     {
-        public static CVRAvatar[] references;
+        var found = Resources.FindObjectsOfTypeAll(typeof(CVRAvatar)) as CVRAvatar[];
 
-        public override void CacheGizmos()
+        if (CVRGizmoManager.Instance.g_localOnly)
         {
-            var found = Resources.FindObjectsOfTypeAll(typeof(CVRAvatar)) as CVRAvatar[];
-
-            if (CVRGizmoManager.Instance.g_localOnly)
-            {
-                references = Array.ConvertAll(GetLocalOnly(found), item => (CVRAvatar)item);
-            }
-            else
-            {
-                references = found;
-            }
+            references = Array.ConvertAll(GetLocalOnly(found), item => (CVRAvatar)item);
         }
-
-        public override void DrawGizmos()
+        else
         {
-            for (int i = 0; i < references.Count(); i++)
+            references = found;
+        }
+    }
+
+    public override void DrawGizmos()
+    {
+        for (int i = 0; i < references.Count(); i++)
+        {
+            if (references[i] == null)
             {
-                if (references[i] == null)
-                {
-                    CacheGizmos();
-                    break;
-                }
-                if (references[i].isActiveAndEnabled)
-                {
-                    //viewPosition & voicePosition seem to be rounded... not good, may be why viewpoint drift is bad on scale
-                    Gizmos.Color = Color.green;
-                    Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, references[i].transform.rotation, references[i].transform.localScale);
-                    Gizmos.Sphere(references[i].viewPosition, 0.01f);
-                    Gizmos.Line(references[i].viewPosition, references[i].viewPosition + Vector3.forward * 0.05f);
-                    Gizmos.Line(references[i].viewPosition, references[i].viewPosition + Vector3.right * 0.05f);
-                    Gizmos.Color = Color.red;
-                    Gizmos.Sphere(references[i].voicePosition, 0.01f);
-                    Gizmos.Line(references[i].voicePosition, references[i].voicePosition + Vector3.forward * 0.05f);
-                    Gizmos.Line(references[i].voicePosition, references[i].voicePosition + Vector3.right * 0.05f);
-                }
+                CacheGizmos();
+                break;
+            }
+            if (references[i].isActiveAndEnabled)
+            {
+                //viewPosition & voicePosition seem to be rounded... not good, may be why viewpoint drift is bad on scale
+                Gizmos.Color = Color.green;
+                Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, references[i].transform.rotation, references[i].transform.localScale);
+                Gizmos.Sphere(references[i].viewPosition, 0.01f);
+                Gizmos.Line(references[i].viewPosition, references[i].viewPosition + Vector3.forward * 0.05f);
+                Gizmos.Line(references[i].viewPosition, references[i].viewPosition + Vector3.right * 0.05f);
+                Gizmos.Color = Color.red;
+                Gizmos.Sphere(references[i].voicePosition, 0.01f);
+                Gizmos.Line(references[i].voicePosition, references[i].voicePosition + Vector3.forward * 0.05f);
+                Gizmos.Line(references[i].voicePosition, references[i].voicePosition + Vector3.right * 0.05f);
             }
         }
     }

@@ -1,17 +1,17 @@
-﻿using CVRGizmos.Properties;
+﻿using NAK.CVRGizmos.Properties;
 using MelonLoader;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(CVRGizmos))]
+[assembly: AssemblyTitle(nameof(NAK.CVRGizmos))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(CVRGizmos))]
+[assembly: AssemblyProduct(nameof(NAK.CVRGizmos))]
 
 [assembly: MelonInfo(
-    typeof(CVRGizmos.CVRGizmos),
-    nameof(CVRGizmos),
+    typeof(NAK.CVRGizmos.CVRGizmos),
+    nameof(NAK.CVRGizmos),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos"
@@ -21,9 +21,9 @@ using System.Reflection;
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 
-namespace CVRGizmos.Properties;
+namespace NAK.CVRGizmos.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }

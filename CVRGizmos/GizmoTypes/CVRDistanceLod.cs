@@ -2,60 +2,59 @@
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 
-namespace CVRGizmos.GismoTypes
+namespace NAK.CVRGizmos.GismoTypes;
+
+public class CVRGizmos_DistanceLod : CVRGizmoBase
 {
-    public class CVRGizmos_DistanceLod : CVRGizmoBase
+    public static CVRDistanceLod[] references;
+
+    private static Color[] _gizmoColors = new Color[]
     {
-        public static CVRDistanceLod[] references;
+        Color.green,
+        Color.yellow,
+        Color.red,
+        Color.white
+    };
 
-        private static Color[] _gizmoColors = new Color[]
+    public override void CacheGizmos()
+    {
+        var found = Resources.FindObjectsOfTypeAll(typeof(CVRDistanceLod)) as CVRDistanceLod[];
+
+        if (CVRGizmoManager.Instance.g_localOnly)
         {
-            Color.green,
-            Color.yellow,
-            Color.red,
-            Color.white
-        };
-
-        public override void CacheGizmos()
+            references = Array.ConvertAll(GetLocalOnly(found), item => (CVRDistanceLod)item);
+        }
+        else
         {
-            var found = Resources.FindObjectsOfTypeAll(typeof(CVRDistanceLod)) as CVRDistanceLod[];
+            references = found;
+        }
+    }
 
-            if (CVRGizmoManager.Instance.g_localOnly)
+    public override void DrawGizmos()
+    {
+        for (int i = 0; i < references.Count(); i++)
+        {
+            if (references[i] == null)
             {
-                references = Array.ConvertAll(GetLocalOnly(found), item => (CVRDistanceLod)item);
+                CacheGizmos();
+                break;
+            }
+            if (!references[i].distance3D)
+            {
+                Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, Quaternion.identity, new Vector3(1f, 0f, 1f));
             }
             else
             {
-                references = found;
+                Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, Quaternion.identity, Vector3.one);
             }
-        }
-
-        public override void DrawGizmos()
-        {
-            for (int i = 0; i < references.Count(); i++)
+            float num = 0;
+            foreach (CVRDistanceLodGroup cvrdistanceLodGroup in references[i].Groups)
             {
-                if (references[i] == null)
-                {
-                    CacheGizmos();
-                    break;
-                }
-                if (!references[i].distance3D)
-                {
-                    Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, Quaternion.identity, new Vector3(1f, 0f, 1f));
-                }
-                else
-                {
-                    Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, Quaternion.identity, Vector3.one);
-                }
-                float num = 0;
-                foreach (CVRDistanceLodGroup cvrdistanceLodGroup in references[i].Groups)
-                {
-                    //Gizmos.Color = _gizmoColors[Math.Min(num, 3)];
-                    num = Mathf.InverseLerp(0, references[i].Groups.Count, num);
-                    Gizmos.Color = new Color(2.0f * num, 2.0f * (1 - num), 0);
-                    Gizmos.Sphere(Vector3.zero, cvrdistanceLodGroup.MaxDistance);
-                    num++;
-                }
+                //Gizmos.Color = _gizmoColors[Math.Min(num, 3)];
+                num = Mathf.InverseLerp(0, references[i].Groups.Count, num);
+                Gizmos.Color = new Color(2.0f * num, 2.0f * (1 - num), 0);
+                Gizmos.Sphere(Vector3.zero, cvrdistanceLodGroup.MaxDistance);
+                num++;
             }
         }
     }

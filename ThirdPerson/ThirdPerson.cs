@@ -2,21 +2,8 @@
 using System.Reflection;
 using UnityEngine;
 using static NAK.ThirdPerson.CameraLogic;
-using BuildInfo = NAK.ThirdPerson.BuildInfo;
-
-[assembly: AssemblyCopyright("Created by " + BuildInfo.Author)]
-[assembly: MelonInfo(typeof(NAK.ThirdPerson.ThirdPerson), BuildInfo.Name, BuildInfo.Version, BuildInfo.Author)]
-[assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
-[assembly: MelonColor(ConsoleColor.DarkMagenta)]
 
 namespace NAK.ThirdPerson;
-
-public static class BuildInfo
-{
-    public const string Name = "ThirdPerson";
-    public const string Author = "Davi & NotAKidoS";
-    public const string Version = "1.0.2";
-}
 
 public class ThirdPerson : MelonMod
 {
@@ -26,9 +13,8 @@ public class ThirdPerson : MelonMod
     {
         Logger = LoggerInstance;
 
-        MelonCoroutines.Start(SetupCamera());
-
         Patches.Apply(HarmonyInstance);
+        MelonCoroutines.Start(SetupCamera());
     }
 
     public override void OnUpdate()

@@ -8,41 +8,40 @@ CVRAdvancedAvatarSettingsPointer shouldn't really be used at this point. Only in
 
 **/
 
-namespace CVRGizmos.GismoTypes
+namespace NAK.CVRGizmos.GismoTypes;
+
+public class CVRGizmos_AdvancedAvatarSettingsPointer : CVRGizmoBase
 {
-    public class CVRGizmos_AdvancedAvatarSettingsPointer : CVRGizmoBase
+    public static CVRAdvancedAvatarSettingsPointer[] references;
+
+    public override void CacheGizmos()
     {
-        public static CVRAdvancedAvatarSettingsPointer[] references;
+        var found = Resources.FindObjectsOfTypeAll(typeof(CVRAdvancedAvatarSettingsPointer)) as CVRAdvancedAvatarSettingsPointer[];
 
-        public override void CacheGizmos()
+        if (CVRGizmoManager.Instance.g_localOnly)
         {
-            var found = Resources.FindObjectsOfTypeAll(typeof(CVRAdvancedAvatarSettingsPointer)) as CVRAdvancedAvatarSettingsPointer[];
-
-            if (CVRGizmoManager.Instance.g_localOnly)
-            {
-                references = Array.ConvertAll(GetLocalOnly(found), item => (CVRAdvancedAvatarSettingsPointer)item);
-            }
-            else
-            {
-                references = found;
-            }
+            references = Array.ConvertAll(GetLocalOnly(found), item => (CVRAdvancedAvatarSettingsPointer)item);
         }
-
-        public override void DrawGizmos()
+        else
         {
-            for (int i = 0; i < references.Count(); i++)
+            references = found;
+        }
+    }
+
+    public override void DrawGizmos()
+    {
+        for (int i = 0; i < references.Count(); i++)
+        {
+            if (references[i] == null)
             {
-                if (references[i] == null)
-                {
-                    CacheGizmos();
-                    break;
-                }
-                if (references[i].isActiveAndEnabled)
-                {
-                    Gizmos.Color = Color.cyan;
-                    Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, references[i].transform.rotation, references[i].transform.lossyScale);
-                    Gizmos.Sphere(Vector3.zero, 0.015f);
-                }
+                CacheGizmos();
+                break;
+            }
+            if (references[i].isActiveAndEnabled)
+            {
+                Gizmos.Color = Color.cyan;
+                Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, references[i].transform.rotation, references[i].transform.lossyScale);
+                Gizmos.Sphere(Vector3.zero, 0.015f);
             }
         }
     }

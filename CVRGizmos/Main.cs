@@ -2,7 +2,7 @@
 using MelonLoader;
 using System.Collections;
 
-namespace CVRGizmos;
+namespace NAK.CVRGizmos;
 
 public class CVRGizmos : MelonMod
 {
@@ -17,6 +17,8 @@ public class CVRGizmos : MelonMod
 
     public override void OnInitializeMelon()
     {
+        EntryEnabled.OnEntryValueChangedUntyped.Subscribe(CVRGizmosEnabled);
+        EntryLocalOnly.OnEntryValueChangedUntyped.Subscribe(CVRGizmosLocalOnly);
         MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
     }
 
@@ -28,13 +30,13 @@ public class CVRGizmos : MelonMod
         PlayerSetup.Instance.gameObject.AddComponent<CVRGizmoManager>();
     }
 
-    public void CVRGizmosEnabled()
+    public void CVRGizmosEnabled(object arg1, object arg2)
     {
         if (!CVRGizmoManager.Instance) return;
         CVRGizmoManager.Instance.EnableGizmos(EntryEnabled.Value);
     }
 
-    public void CVRGizmosLocalOnly()
+    public void CVRGizmosLocalOnly(object arg1, object arg2)
     {
         if (!CVRGizmoManager.Instance) return;
         CVRGizmoManager.Instance.g_localOnly = EntryLocalOnly.Value;

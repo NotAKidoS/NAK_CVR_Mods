@@ -2,44 +2,43 @@
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 
-namespace CVRGizmos.GismoTypes
+namespace NAK.CVRGizmos.GismoTypes;
+
+public class CVRGizmos_HapticZone : CVRGizmoBase
 {
-    public class CVRGizmos_HapticZone : CVRGizmoBase
+    public static CVRHapticZone[] references;
+
+    public override void CacheGizmos()
     {
-        public static CVRHapticZone[] references;
+        var found = Resources.FindObjectsOfTypeAll(typeof(CVRHapticZone)) as CVRHapticZone[];
 
-        public override void CacheGizmos()
+        if (CVRGizmoManager.Instance.g_localOnly)
         {
-            var found = Resources.FindObjectsOfTypeAll(typeof(CVRHapticZone)) as CVRHapticZone[];
-
-            if (CVRGizmoManager.Instance.g_localOnly)
-            {
-                references = Array.ConvertAll(GetLocalOnly(found), item => (CVRHapticZone)item);
-            }
-            else
-            {
-                references = found;
-            }
+            references = Array.ConvertAll(GetLocalOnly(found), item => (CVRHapticZone)item);
         }
-
-        public override void DrawGizmos()
+        else
         {
-            for (int i = 0; i < references.Count(); i++)
+            references = found;
+        }
+    }
+
+    public override void DrawGizmos()
+    {
+        for (int i = 0; i < references.Count(); i++)
+        {
+            if (references[i] == null)
             {
-                if (references[i] == null)
-                {
-                    CacheGizmos();
-                    break;
-                }
-                Gizmos.Color = Color.yellow;
-                Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, references[i].transform.rotation, references[i].transform.lossyScale);
-                if (references[i].triggerForm == CVRHapticZone.TriggerForm.Box)
-                {
-                    Gizmos.Cube(references[i].center, Quaternion.identity, references[i].bounds);
-                    return;
-                }
-                Gizmos.Sphere(references[i].center, references[i].bounds.x);
+                CacheGizmos();
+                break;
             }
+            Gizmos.Color = Color.yellow;
+            Gizmos.Matrix = Matrix4x4.TRS(references[i].transform.position, references[i].transform.rotation, references[i].transform.lossyScale);
+            if (references[i].triggerForm == CVRHapticZone.TriggerForm.Box)
+            {
+                Gizmos.Cube(references[i].center, Quaternion.identity, references[i].bounds);
+                return;
+            }
+            Gizmos.Sphere(references[i].center, references[i].bounds.x);
         }
     }
 }

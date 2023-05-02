@@ -1,23 +1,23 @@
 {
-  "_id": 95,
+  "_id": 97,
   "name": "CVRGizmos",
-  "modversion": "1.1.0",
-  "gameversion": "2022r168",
-  "loaderversion": "0.5.4",
+  "modversion": "1.0.1",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is scaled.\nAdditional option to scale player collision.",
+  "description": "Adds runtime gizmos to common CCK components.",
   "searchtags": [
-    "menu",
-    "scale",
-    "avatarscale",
-    "slider"
+    "gizmo",
+    "components",
+    "cck",
+    "visual"
   ],
   "requirements": [
     "None"
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/CVRGizmos.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos/",
-  "changelog": "Added option to scale player collision. Fixed some VR specific issues.",
+  "changelog": "- Removed SaveToFile().",
   "embedcolor": "804221"
 }

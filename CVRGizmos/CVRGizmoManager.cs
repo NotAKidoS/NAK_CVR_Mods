@@ -1,8 +1,8 @@
-﻿using CVRGizmos.GismoTypes;
+﻿using NAK.CVRGizmos.GismoTypes;
 using UnityEngine;
 using Gizmos = Popcron.Gizmos;
 
-namespace CVRGizmos
+namespace NAK.CVRGizmos
 {
     public class CVRGizmoManager : MonoBehaviour
     {
@@ -25,6 +25,9 @@ namespace CVRGizmos
             typeof(CVRGizmos_Avatar),
             typeof(CVRGizmos_AvatarPickupMarker),
             typeof(CVRGizmos_DistanceConstrain),
+            typeof(CVRGizmos_BoxCollider),
+            typeof(CVRGizmos_SphereCollider),
+            typeof(CVRGizmos_CapsuleCollider),
         };
 
         void Start()
@@ -46,7 +49,7 @@ namespace CVRGizmos
             }
             RefreshGizmos();
         }
-
+        
         public void RefreshGizmos()
         {
             for (int i = 0; i < GizmoTypes.Count(); i++)
