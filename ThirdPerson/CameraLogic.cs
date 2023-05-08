@@ -17,6 +17,7 @@ internal static class CameraLogic
     private static float _scale = 1f;
     private static Camera _ourCam;
     private static Camera _desktopCam;
+    private static int _desktopCamMask;
     private static CameraFovClone _cameraFovClone;
 
     internal static CameraLocation CurrentLocation = CameraLocation.Default;
@@ -36,14 +37,14 @@ internal static class CameraLogic
         set
         {
             _state = value;
-            _desktopCam.enabled = !_state;
+            _desktopCam.cullingMask = _state ? 0 : _desktopCamMask;
             _ourCam.gameObject.SetActive(_state);
         }
     }
 
-    private static bool _setupPostProcessing;
-    private static readonly FieldInfo _ppResourcesFieldInfo = typeof(PostProcessLayer).GetField("m_Resources", BindingFlags.NonPublic | BindingFlags.Instance);
-    private static readonly FieldInfo _ppOldResourcesFieldInfo = typeof(PostProcessLayer).GetField("m_OldResources", BindingFlags.NonPublic | BindingFlags.Instance);
+    static bool _setupPostProcessing;
+    static readonly FieldInfo _ppResourcesFieldInfo = typeof(PostProcessLayer).GetField("m_Resources", BindingFlags.NonPublic | BindingFlags.Instance);
+    static readonly FieldInfo _ppOldResourcesFieldInfo = typeof(PostProcessLayer).GetField("m_OldResources", BindingFlags.NonPublic | BindingFlags.Instance);
 
     internal static IEnumerator SetupCamera()
     {
@@ -54,6 +55,7 @@ internal static class CameraLogic
         _cameraFovClone = _ourCam.gameObject.AddComponent<CameraFovClone>();
 
         _desktopCam = PlayerSetup.Instance.desktopCamera.GetComponent<Camera>();
+        _desktopCamMask = _desktopCam.cullingMask;
         _cameraFovClone.targetCamera = _desktopCam;
 
         _ourCam.transform.SetParent(_desktopCam.transform);
@@ -178,7 +180,6 @@ internal static class CameraLogic
     }
 
     private static void ResetDist() => _dist = 0;
-    internal static void IncrementDist() { _dist += 0.25f; RelocateCam(CurrentLocation); }
-    internal static void DecrementDist() { _dist -= 0.25f; RelocateCam(CurrentLocation); }
+    internal static void ScrollDist(float sign) { _dist += sign * 0.25f; RelocateCam(CurrentLocation); }
     internal static void AdjustScale(float height) { _scale = height; RelocateCam(CurrentLocation); }
 }

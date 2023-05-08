@@ -20,7 +20,7 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
-[assembly: MelonColor(ConsoleColor.DarkMagenta)]
+[assembly: MelonColor(255, 139, 0, 139)]
 
 namespace NAK.ThirdPerson.Properties;
 internal static class AssemblyInfoParams

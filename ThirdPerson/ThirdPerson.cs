@@ -1,5 +1,4 @@
 ﻿using MelonLoader;
-using System.Reflection;
 using UnityEngine;
 using static NAK.ThirdPerson.CameraLogic;
 
@@ -22,8 +21,8 @@ public class ThirdPerson : MelonMod
         // Prevents scrolling while in Menus or UnityExplorer
         if (State && Cursor.lockState == CursorLockMode.Locked)
         {
-            if (Input.GetAxis("Mouse ScrollWheel") > 0f) IncrementDist();
-            else if (Input.GetAxis("Mouse ScrollWheel") < 0f) DecrementDist();
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll != 0f) ScrollDist(Mathf.Sign(scroll));
         }
 
         if (!Input.GetKey(KeyCode.LeftControl)) return;
