@@ -1,21 +1,11 @@
-MIT License
+MIT License with Alpha Blend Interactive Exception:
 
 Copyright (c) 2023 NotAKidoS
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is granted at no cost to any individual who acquires a copy of this software and related documentation files (collectively referred to as the "Software") to utilize the Software without restrictions. This includes the rights to use, duplicate, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, as well as to authorize individuals to whom the Software is provided, under the following terms:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Both the copyright notice and permission notice must be incorporated into all copies or significant portions of the Software, with one exception:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Alpha Blend Interactive (ABI) possesses unrestricted rights to utilize the portion of the Software created by the licensor (the "Author") for any purpose, including but not limited to integration with ChilloutVR. This exception is exclusive to Alpha Blend Interactive and does not extend any additional rights to other parties. ABI is not obligated to provide notification, credit, or acknowledgement if they use the Author's code.
+
+THE SOFTWARE IS SUPPLIED "AS IS" AND WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A SPECIFIC PURPOSE, AND NONINFRINGEMENT. IN NO INSTANCE SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE HELD ACCOUNTABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITIES, WHETHER IN A CONTRACT, TORT, OR OTHER ACTION, ARISING FROM, IN RELATION TO, OR IN CONNECTION WITH THE SOFTWARE OR ITS USE OR OTHER DEALINGS IN THE SOFTWARE.
