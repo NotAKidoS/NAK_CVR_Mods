@@ -1,11 +1,42 @@
-## My ChilloutVR Mods
+## NotAKids ChilloutVR Mods
 
-### the note
-I've finally made a central repo for my ChilloutVR mods. As I continue to update and improve them, I'll be migrating releases to this repo and including them in each release, following the same approach used by SDraw and Kafejao.
+| Mod Name                                                                                                  | Approval State | Released in this repo |
+|------------------------------------------------------------------------------------------------------------|----------------|-----------------------|
+| [AASBufferFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix)                      | Approved       | No                    |
+| [BadAnimatorFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix)                  | Approved       | No                    |
+| [Blackout](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Blackout)                              | Approved       | No                    |
+| [CVRGizmos](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos)                            | Approved       | Yes                   |
+| [ClearHudNotifications](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ClearHudNotifications)    | Approved       | No                    |
+| [DesktopVRIK](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK)                        | Approved       | Yes                   |
+| [DesktopVRSwitch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch)                | Approved       | No                    |
+| [FuckMetrics](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMetrics)                        | Approved       | No                    |
+| [FuckToes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes)                              | Approved       | No                    |
+| [GestureLock](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/GestureLock)                        | Approved       | No                    |
+| [IKFixes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes)                                | Approved       | Yes                   |
+| [JumpPatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/JumpPatch)                            | Approved       | Yes                   |
+| [MenuScalePatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch)                  | Approved       | Yes                   |
+| [NAK.CustomComponents](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/NAK.CustomComponents)      | N/A            | No                    |
+| [Nevermind](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Nevermind)                            | N/A            | No                    |
+| [PathCamDisabler](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler)                | Approved       | No                    |
+| [PickupPushPull](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PickupPushPull)                  | Approved       | No                    |
+| [PortableCameraAdditions](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions)| Approved       | No                    |
+| [PropUndoButton](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndo)                        | Approved       | No                    |
 
-To ensure a smooth transition, I'll be archiving the standalone repositories once the approved version of the mod in CVRMG points towards this repo in its mod info. This way, you'll be able to easily access all the latest updates and improvements from one central location.
+### Note: This is a newly created central repository for my ChilloutVR mods. As I update and improve them, I will migrate releases to this repository and include them in each new release, following the approach used by SDraw and Kafejao.
 
-This should also mean more consistancy between my mods... maybe.
+To ensure a seamless transition, I will archive the standalone repositories once the approved version of the mod in CVRMG directs users to this repository in its mod info. This way, you can conveniently access all the latest updates and improvements from one central location.
+
+This should also promote greater consistency across my mods, though results may vary.
+
+# How To Install
+
+The majority of modifications found in this repository are reviewed and made available through the [ChilloutVR Modding Group](https://discord.gg/dndGPM3bxu). 
+
+To access the approved versions, you can either navigate to the `#mod-releases` channel in the ChilloutVR Modding Group Discord or utilize the [ChilloutVR Melon Assistant](https://github.com/knah/CVRMelonAssistant) to install them automatically.
+
+If preferred, you may also download the most recent version directly from the **Releases** section. However, please keep in mind that not all of my mod binaries are presently hosted on this repository and may only be found on their separate repositories. 
+
+It is important to exercise caution when using anything outside of the ChilloutVR Modding Group releases, as it may not have undergone review and could be harmful or non-functional.
 
 ---
 
