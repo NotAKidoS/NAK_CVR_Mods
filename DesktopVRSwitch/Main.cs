@@ -18,11 +18,11 @@ namespace NAK.DesktopVRSwitch;
 public class DesktopVRSwitch : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-
-    public static readonly MelonPreferences_Category Category = 
+    
+    public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
 
-    public static readonly MelonPreferences_Entry<bool> EntryEnterCalibrationOnSwitch = 
+    public static readonly MelonPreferences_Entry<bool> EntryEnterCalibrationOnSwitch =
         Category.CreateEntry("Enter Calibration on Switch", true, description: "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
 
     public override void OnInitializeMelon()

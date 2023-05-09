@@ -89,45 +89,45 @@ public class DesktopVRSwitcher : MonoBehaviour
         yield break;
     }
 
-    //one frame after switch attempt
-    public void FailedVRModeSwitch(bool isVR)
-    {
-        if (_softVRSwitch) return;
-        //let tracked objects know a switch failed
-        VRModeSwitchTracker.FailVRModeSwitch(isVR);
-    }
-
     //one frame before switch attempt
-    public void PreVRModeSwitch(bool isVR)
+    public void PreVRModeSwitch(bool enableVR)
     {
         if (_softVRSwitch) return;
         //let tracked objects know we are attempting to switch
-        VRModeSwitchTracker.PreVRModeSwitch(isVR);
+        VRModeSwitchTracker.PreVRModeSwitch(enableVR);
     }
 
     //one frame after switch attempt
-    public void PostVRModeSwitch(bool isVR)
+    public void FailedVRModeSwitch(bool enableVR)
+    {
+        if (_softVRSwitch) return;
+        //let tracked objects know a switch failed
+        VRModeSwitchTracker.FailVRModeSwitch(enableVR);
+    }
+
+    //one frame after switch attempt
+    public void PostVRModeSwitch(bool enableVR)
     {
         if (_softVRSwitch) return;
         //close the menus
         TryCatchHell.CloseCohtmlMenus();
 
         //the base of VR checks
-        TryCatchHell.SetCheckVR(isVR);
-        TryCatchHell.SetMetaPort(isVR);
+        TryCatchHell.SetCheckVR(enableVR);
+        TryCatchHell.SetMetaPort(enableVR);
 
         //game basics for functional gameplay post switch
-        TryCatchHell.RepositionCohtmlHud(isVR);
-        TryCatchHell.UpdateHudOperations(isVR);
+        TryCatchHell.RepositionCohtmlHud(enableVR);
+        TryCatchHell.UpdateHudOperations(enableVR);
         TryCatchHell.DisableMirrorCanvas();
-        TryCatchHell.SwitchActiveCameraRigs(isVR);
+        TryCatchHell.SwitchActiveCameraRigs(enableVR);
         TryCatchHell.ResetCVRInputManager();
         TryCatchHell.UpdateRichPresence();
         TryCatchHell.UpdateGestureReconizerCam();
-        TryCatchHell.UpdateMenuCoreData(isVR);
+        TryCatchHell.UpdateMenuCoreData(enableVR);
 
         //let tracked objects know we switched
-        VRModeSwitchTracker.PostVRModeSwitch(isVR);
+        VRModeSwitchTracker.PostVRModeSwitch(enableVR);
 
         //reload avatar by default, optional for debugging
         if (_reloadLocalAvatar)

@@ -1,5 +1,10 @@
 <Project>
 
+    <!-- Hack! MelonLoader is locking the Mod files, this way I can build and output the mod dll with the game running -->
+    <Target Name="DeleteOutputDLLIfExists" BeforeTargets="BeforeBuild">
+    <Exec Command="if exist &quot;$(OutputPath)$(TargetName).dll&quot; del /F /Q &quot;$(OutputPath)$(TargetName).dll&quot;" />
+    </Target>
+
     <PropertyGroup>
         <!-- Put your Chillout vr path in a new environnment variable CVRPATH in Windows -->
         <OutputPath>$(CVRPATH)\Mods\</OutputPath>

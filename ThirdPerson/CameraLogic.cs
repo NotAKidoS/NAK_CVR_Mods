@@ -77,8 +77,16 @@ internal static class CameraLogic
         // Copy basic settings
         ourCamComponent.farClipPlane = playerCamComponent.farClipPlane;
         ourCamComponent.nearClipPlane = playerCamComponent.nearClipPlane;
-        ourCamComponent.cullingMask = playerCamComponent.cullingMask;
         ourCamComponent.depthTextureMode = playerCamComponent.depthTextureMode;
+
+        // We cant copy this because we set it to 0
+        ourCamComponent.cullingMask &= -32769;
+        ourCamComponent.cullingMask |= 256;
+        ourCamComponent.cullingMask |= 512;
+        ourCamComponent.cullingMask |= 32;
+        ourCamComponent.cullingMask &= -4097;
+        ourCamComponent.cullingMask |= 1024;
+        ourCamComponent.cullingMask |= 8192;
 
         // Copy post processing if added
         PostProcessLayer ppLayerPlayerCam = playerCamComponent.GetComponent<PostProcessLayer>();

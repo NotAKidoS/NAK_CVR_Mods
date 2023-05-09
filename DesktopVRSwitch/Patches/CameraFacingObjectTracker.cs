@@ -6,6 +6,7 @@ namespace NAK.DesktopVRSwitch.Patches;
 public class CameraFacingObjectTracker : MonoBehaviour
 {
     public CameraFacingObject cameraFacingObject;
+
     void Start()
     {
         cameraFacingObject = GetComponent<CameraFacingObject>();
@@ -17,7 +18,7 @@ public class CameraFacingObjectTracker : MonoBehaviour
         VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
     }
 
-    public void PostVRModeSwitch(bool isVR, Camera activeCamera)
+    public void PostVRModeSwitch(bool enableVR, Camera activeCamera)
     {
         cameraFacingObject.m_Camera = activeCamera;
     }

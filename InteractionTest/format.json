@@ -1,0 +1,23 @@
+{
+  "_id": 126,
+  "name": "AvatarScale",
+  "modversion": "1.0.5",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes two issues with the Avatar Advanced Settings buffers when loading remote avatars. In simple terms, it means 'fewer wardrobe malfunctions'.\n\nEmpty buffer (all 0/false) will no longer be applied on load.\nReceived AAS data is ignored until the wearer has loaded into the expected avatar.\n(The avatar will sit in its default state until the wearer has loaded and started syncing correct AAS)\nAAS will no longer be sent while switching avatar.\n\nPlease view the GitHub README for links to relevant feedback posts.",
+  "searchtags": [
+    "aas",
+    "sync",
+    "naked",
+    "buffer"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/AvatarScale.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AvatarScale/",
+  "changelog": "",
+  "embedcolor": "9b59b6"
+}
