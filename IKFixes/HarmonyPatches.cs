@@ -14,41 +14,104 @@ internal static class BodySystemPatches
     static float _ikSimulatedRootAngle = 0f;
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(BodySystem), "SetupOffsets")]
-    private static void Postfix_BodySystem_SetupOffsets(List<TrackingPoint> trackingPoints)
+    [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.SetupOffsets))]
+    static void Postfix_BodySystem_SetupOffsets(List<TrackingPoint> trackingPoints)
     {
-        //redo offsets for knees as native is too far from pivot
         foreach (TrackingPoint trackingPoint in trackingPoints)
         {
             Transform parent = null;
-            if (trackingPoint.assignedRole == TrackingPoint.TrackingRole.LeftKnee)
+            float offsetDistance = 0f;
+
+            switch (trackingPoint.assignedRole)
             {
-                parent = IKSystem.vrik.references.leftCalf;
-            }
-            else if (trackingPoint.assignedRole == TrackingPoint.TrackingRole.RightKnee)
-            {
-                parent = IKSystem.vrik.references.rightCalf;
+                case TrackingPoint.TrackingRole.LeftKnee:
+                    parent = IKSystem.vrik.references.leftCalf;
+                    offsetDistance = 0.15f;
+                    break;
+                case TrackingPoint.TrackingRole.RightKnee:
+                    parent = IKSystem.vrik.references.rightCalf;
+                    offsetDistance = 0.15f;
+                    break;
+                case TrackingPoint.TrackingRole.LeftElbow:
+                    parent = IKSystem.vrik.references.leftForearm;
+                    offsetDistance = -0.15f;
+                    break;
+                case TrackingPoint.TrackingRole.RightElbow:
+                    parent = IKSystem.vrik.references.rightForearm;
+                    offsetDistance = -0.15f;
+                    break;
+                default:
+                    break;
             }
 
             if (parent != null)
             {
+                // Set the offset transform's parent and reset its local position and rotation
                 trackingPoint.offsetTransform.parent = parent;
                 trackingPoint.offsetTransform.localPosition = Vector3.zero;
                 trackingPoint.offsetTransform.localRotation = Quaternion.identity;
                 trackingPoint.offsetTransform.parent = trackingPoint.referenceTransform;
 
-                // small amount forward, as pivot is different for users who place
-                // tracker on upper/lower leg. 0.5f was too much for users using upper leg.
-                Vector3 b = IKSystem.vrik.references.root.forward * 0.1f;
-                trackingPoint.offsetTransform.position += b;
+                // Apply additional offset based on the assigned role
+                Vector3 additionalOffset = IKSystem.vrik.references.root.forward * offsetDistance;
+
+                if (IKFixes.EntryAltElbowDirection.Value)
+                {
+                    switch (trackingPoint.assignedRole)
+                    {
+                        case TrackingPoint.TrackingRole.LeftElbow:
+                            additionalOffset += IKSystem.vrik.references.root.up * -0.15f;
+                            break;
+                        case TrackingPoint.TrackingRole.RightElbow:
+                            additionalOffset += IKSystem.vrik.references.root.up * -0.15f;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                trackingPoint.offsetTransform.position += additionalOffset;
+
+                // Game originally sets them to about half a meter out, which fucks with slime tracker users and
+                // makes the bendGoals less responsive/less accurate. 
+
+                //Funny thing is that IKTweaks specifically made this an option, which should be added to both CVR & Standable for the same reason.
+
+                /// Elbow / knee / chest bend goal offset - controls how far bend goal targets will be away from the actual joint.
+                /// Lower values should produce better precision with bent joint, higher values - better stability with straight joint. 
+                /// Sensible range of values is between 0 and 1.
             }
         }
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(BodySystem), "Update")]
-    private static bool Prefix_BodySystem_Update(ref BodySystem __instance)
+    [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.Update))]
+    static bool Prefix_BodySystem_Update(ref BodySystem __instance)
     {
+        void SetArmWeight(IKSolverVR.Arm arm, float weight)
+        {
+            arm.positionWeight = weight;
+            arm.rotationWeight = weight;
+            arm.shoulderRotationWeight = weight;
+            arm.shoulderTwistWeight = weight;
+            // assumed fix of bend goal weight if arms disabled with elbows (havent tested)
+            // why is there no "usingElbowTracker" flag like knees? where is the consistancy???
+            arm.bendGoalWeight = arm.bendGoal != null ? weight : 0f;
+        }
+        void SetLegWeight(IKSolverVR.Leg leg, float weight)
+        {
+            leg.positionWeight = weight;
+            leg.rotationWeight = weight;
+            // fixes knees bending to tracker if feet disabled (running anim)
+            leg.bendGoalWeight = leg.usingKneeTracker ? weight : 0f;
+        }
+        void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
+        {
+            // looks better when hips are disabled while running
+            spine.pelvisPositionWeight = weight;
+            spine.pelvisRotationWeight = weight;
+        }
+
         if (IKSystem.vrik != null)
         {
             IKSolverVR solver = IKSystem.vrik.solver;
@@ -87,29 +150,26 @@ internal static class BodySystemPatches
                 SetPelvisWeight(solver.spine, 0f);
             }
 
-            if (IKFixes.EntryUseFakeRootAngle.Value && !BodySystem.isCalibratedAsFullBody)
+            float maxRootAngle = BodySystem.isCalibratedAsFullBody || IKFixes.EntryUseFakeRootAngle.Value ? (PlayerSetup.Instance._emotePlaying ? 180f : 0f) : (PlayerSetup.Instance._emotePlaying ? 180f : 25f);
+            solver.spine.maxRootAngle = maxRootAngle;
+
+            if (IKFixes.EntryUseFakeRootAngle.Value)
             {
                 // Emulate maxRootAngle because CVR doesn't have the player controller set up ideally for VRIK.
+                // I believe they'd need to change which object vrik.references.root is, as using avatar object is bad!
                 // This is a small small fix, but makes it so the feet dont point in the direction of the head
                 // when turning. It also means turning with joystick & turning IRL make feet behave the same and follow behind.
                 float weightedAngleLimit = IKFixes.EntryFakeRootAngleLimit.Value * solver.locomotion.weight;
                 float pivotAngle = MovementSystem.Instance.rotationPivot.eulerAngles.y;
                 float deltaAngleRoot = Mathf.DeltaAngle(pivotAngle, _ikSimulatedRootAngle);
                 float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
+
                 if (absDeltaAngleRoot > weightedAngleLimit)
                 {
                     deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
                     _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, pivotAngle, absDeltaAngleRoot - weightedAngleLimit);
                 }
-                solver.spine.maxRootAngle = 0f;
                 solver.spine.rootHeadingOffset = deltaAngleRoot;
-            }
-            else
-            {
-                // Allow avatar to rotate seperatly from Player (Desktop&VR)
-                // FBT needs avatar root to follow head
-                // VR default is 25 degrees, but maybe during emotes needs 180 degrees..?
-                solver.spine.maxRootAngle = BodySystem.isCalibratedAsFullBody ? 0f : 25f;
             }
 
             // custom IK settings
@@ -118,7 +178,6 @@ internal static class BodySystemPatches
             solver.spine.rotateChestByHands = IKFixes.EntryRotateChestByHands.Value;
         }
 
-        int num = 0;
         int count = IKSystem.Instance.AllTrackingPoints.FindAll((TrackingPoint m) => m.isActive && m.isValid && m.suggestedRole > TrackingPoint.TrackingRole.Invalid).Count;
 
         // fixes having all tracking points disabled forcing calibration
@@ -129,6 +188,7 @@ internal static class BodySystemPatches
         }
 
         // solid body count block
+        int num = 0;
         if (BodySystem.enableLeftFootTracking) num++;
         if (BodySystem.enableRightFootTracking) num++;
         if (BodySystem.enableHipTracking) num++;
@@ -140,30 +200,66 @@ internal static class BodySystemPatches
 
         __instance._fbtAvailable = (count >= num);
 
-        void SetArmWeight(IKSolverVR.Arm arm, float weight)
+        return false;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.AssignRemainingTrackers))]
+    static bool Prefix_BodySystem_AssignRemainingTrackers()
+    {
+        return IKFixes.EntryAssignRemainingTrackers.Value;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.MuscleUpdate))]
+    static void Prefix_BodySystem_MuscleUpdate()
+    {
+        if (BodySystem.isCalibrating)
         {
-            arm.positionWeight = weight;
-            arm.rotationWeight = weight;
-            arm.shoulderRotationWeight = weight;
-            arm.shoulderTwistWeight = weight;
-            // assumed fix of bend goal weight if arms disabled with elbows (havent tested)
-            arm.bendGoalWeight = arm.bendGoal != null ? weight : 0f;
-        }
-        void SetLegWeight(IKSolverVR.Leg leg, float weight)
-        {
-            leg.positionWeight = weight;
-            leg.rotationWeight = weight;
-            // fixes knees bending to tracker if feet disabled (running anim)
-            leg.bendGoalWeight = leg.bendGoal != null ? weight : 0f;
-        }
-        void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
-        {
-            // looks better when hips are disabled while running
-            spine.pelvisPositionWeight = weight;
-            spine.pelvisRotationWeight = weight;
+            IKSystem.Instance.humanPose.bodyRotation = Quaternion.identity;
+            IKSystem.vrik.solver.spine.maxRootAngle = 0f; // idk, testing
         }
 
-        return false;
+        if (BodySystem.isCalibratedAsFullBody && BodySystem.TrackingPositionWeight > 0f)
+        {
+            bool isRunning = BodySystem.PlayRunningAnimationInFullBody && MovementSystem.Instance.movementVector.magnitude > 0f;
+            if (!isRunning)
+            {
+                // Resetting bodyRotation made running animations look funky
+                IKSystem.Instance.applyOriginalHipPosition = true;
+                IKSystem.Instance.applyOriginalHipRotation = false;
+                IKSystem.Instance.humanPose.bodyRotation = Quaternion.identity;
+            }
+            else
+            {
+                // This looks much better when running
+                IKSystem.Instance.applyOriginalHipPosition = true;
+                IKSystem.Instance.applyOriginalHipRotation = true;
+            }
+        }
+
+        // TODO: Rewrite to exclude setting T-pose to limbs that are not tracked
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.Calibrate))]
+    static void Postfix_BodySystem_Calibrate()
+    {
+        IKSystem.Instance.applyOriginalHipPosition = false;
+        IKSystem.Instance.applyOriginalHipRotation = false;
+        IKSystem.vrik.solver.leftLeg.bendToTargetWeight = 0.25f;
+        IKSystem.vrik.solver.rightLeg.bendToTargetWeight = 0.25f;
+    }
+}
+
+internal static class IKSystemPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeAvatar))]
+    static void Prefix_IKSystem_InitializeAvatar(ref IKSystem __instance)
+    {
+        __instance.applyOriginalHipPosition = true;
+        __instance.applyOriginalHipRotation = true;
     }
 }
 
@@ -174,12 +270,29 @@ internal static class VRIKPatches
         This breaks as you playspace up, because calf and foot position aren't offset yet in solve order.
     **/
 
+    // Add ApplyBendGoal(); to the second line of RootMotionNew.FinalIK.IKSolverVR.Leg.Solve(bool)
+    // https://github.com/knah/VRCMods/tree/b6c4198fb8e06174ea511fe1f8a3257dfef2fdd2 IKTweaks
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.Stretching))]
+    static void Postfix_IKSolverVR_Leg_Stretching(ref IKSolverVR.Leg __instance)
+    {
+        // I am patching here because Stretching() is always called
+        // and i am not doing a transpiler to place it on the second line
+        __instance.ApplyBendGoal();
+    }
+
+    // IKTweaks original method does not do this?
+    // idk i prefer it, upper leg rotates weird otherwise
+
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(IKSolverVR.Leg), "ApplyOffsets")]
-    private static bool Prefix_IKSolverVR_Leg_ApplyOffsets(ref IKSolverVR.Leg __instance)
+    [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.ApplyOffsets))]
+    static bool Prefix_IKSolverVR_Leg_ApplyOffsets(ref IKSolverVR.Leg __instance)
     {
         //This is the second part of the above fix, preventing the solver from calculating a bad bendNormal
         //when it doesn't need to. The knee tracker should dictate the bendNormal completely.
+
+        //TODO: investigate lower leg not bending towards knee direction
 
         if (__instance.usingKneeTracker)
         {
@@ -198,16 +311,6 @@ internal static class VRIKPatches
         __instance.bendGoalWeight = num;
         return false;
     }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(IKSolverVR.Leg), "Solve")]
-    private static void Prefix_IKSolverVR_Leg_Solve(ref IKSolverVR.Leg __instance)
-    {
-        //Turns out VRIK applies bend goal maths before root is offset in solving process.
-        //We will apply ourselves before then to fix it.
-        if (__instance.usingKneeTracker)
-            __instance.ApplyBendGoal();
-    }
 }
 
 internal static class PlayerSetupPatches
@@ -218,8 +321,8 @@ internal static class PlayerSetupPatches
     static Quaternion lastMovementRotation;
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(PlayerSetup), "ResetIk")]
-    private static bool Prefix_PlayerSetup_ResetIk()
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ResetIk))]
+    static bool Prefix_PlayerSetup_ResetIk()
     {
         if (IKSystem.vrik == null) return false;
 
