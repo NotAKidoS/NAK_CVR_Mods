@@ -1,26 +1,26 @@
 ## NotAKids ChilloutVR Mods
 
-| Mod Name                                                                                                  | Approval State | Released in this repo |
-|------------------------------------------------------------------------------------------------------------|----------------|-----------------------|
-| [AASBufferFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix)                      | Approved       | No                    |
-| [BadAnimatorFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix)                  | Approved       | No                    |
-| [Blackout](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Blackout)                              | Approved       | No                    |
-| [CVRGizmos](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos)                            | Approved       | Yes                   |
-| [ClearHudNotifications](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ClearHudNotifications)    | Approved       | No                    |
-| [DesktopVRIK](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK)                        | Approved       | Yes                   |
-| [DesktopVRSwitch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch)                | Approved       | No                    |
-| [FuckMetrics](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMetrics)                        | Approved       | No                    |
-| [FuckToes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes)                              | Approved       | No                    |
-| [GestureLock](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/GestureLock)                        | Approved       | No                    |
-| [IKFixes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes)                                | Approved       | Yes                   |
-| [JumpPatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/JumpPatch)                            | Approved       | Yes                   |
-| [MenuScalePatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch)                  | Approved       | Yes                   |
-| [NAK.CustomComponents](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/NAK.CustomComponents)      | N/A            | No                    |
-| [Nevermind](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Nevermind)                            | N/A            | No                    |
-| [PathCamDisabler](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler)                | Approved       | No                    |
-| [PickupPushPull](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PickupPushPull)                  | Approved       | No                    |
-| [PortableCameraAdditions](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions)| Approved       | No                    |
-| [PropUndoButton](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndo)                        | Approved       | No                    |
+| Mod Name                                                                                                  | Approval State | Released in this repo | CVRMG Category          |
+|------------------------------------------------------------------------------------------------------------|----------------|-----------------------|-------------------------|
+| [AASBufferFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix)                      | Approved       | No                    | Utilities & Tweaks      |
+| [BadAnimatorFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix)                  | Approved       | No                    | N/A                     |
+| [Blackout](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Blackout)                              | Approved       | No                    | New Features & Overhauls|
+| [CVRGizmos](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos)                            | Approved       | Yes                   | Very Niche              |
+| [ClearHudNotifications](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ClearHudNotifications)    | Approved       | No                    | N/A                     |
+| [DesktopVRIK](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK)                        | Approved       | Yes                   | Utilities & Tweaks      |
+| [DesktopVRSwitch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch)                | Approved       | No                    | New Features & Overhauls|
+| [FuckMetrics](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMetrics)                        | Approved       | No                    | N/A                     |
+| [FuckToes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes)                              | Approved       | No                    | Utilities & Tweaks      |
+| [GestureLock](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/GestureLock)                        | Approved       | No                    | Utilities & Tweaks      |
+| [IKFixes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes)                                | Approved       | Yes                   | N/A                     |
+| [JumpPatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/JumpPatch)                            | Approved       | Yes                   | N/A                     |
+| [MenuScalePatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch)                  | Approved       | Yes                   | N/A                     |
+| [NAK.CustomComponents](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/NAK.CustomComponents)      | N/A            | No                    | N/A                     |
+| [Nevermind](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Nevermind)                            | N/A            | No                    | N/A                     |
+| [PathCamDisabler](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler)                | Approved       | No                    | Very Niche              |
+| [PickupPushPull](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PickupPushPull)                  | Approved       | No                    | Utilities & Tweaks      |
+| [PortableCameraAdditions](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions)| Approved       | No                    | Camera                  |
+| [PropUndoButton](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndo)                        | Approved       | No                    | N/A                     |
 
 ### Note: This is a newly created central repository for my ChilloutVR mods. As I update and improve them, I will migrate releases to this repository and include them in each new release, following the approach used by SDraw and Kafejao.
 
