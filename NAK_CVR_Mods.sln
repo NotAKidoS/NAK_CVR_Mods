@@ -5,10 +5,6 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackedControllerFix", "TrackedControllerFix\TrackedControllerFix.csproj", "{883F7EC3-9A1E-4EBA-9A51-E2E7882DC5D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AASBufferFix", "AASBufferFix\AASBufferFix.csproj", "{DBC8A547-F07B-40DB-8745-D79042C6C1A1}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BadAnimatorFix", "BadAnimatorFix\BadAnimatorFix.csproj", "{E56C36DE-5F8D-41CC-A801-376D27D22EF5}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blackout", "Blackout\Blackout.csproj", "{24BE113B-5D9F-4BFA-A883-CAD8279304A1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatBoxExtensions", "ChatBoxExtensions\ChatBoxExtensions.csproj", "{E3709319-8EDB-42C7-8A99-0F1FDF5AC312}"
@@ -21,15 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopVRIK", "DesktopVRIK\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopXRSwitch", "DesktopXRSwitch\DesktopXRSwitch.csproj", "{30F56FE1-1654-4213-A51C-4C0278FB43A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckMetrics", "FuckMetrics\FuckMetrics.csproj", "{55E805A5-404C-4BB9-9AF1-A432443B1424}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckToes", "FuckToes\FuckToes.csproj", "{79B2A7C4-348D-4A8E-94D1-BA22FDD5FEED}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestureLock", "GestureLock\GestureLock.csproj", "{45A65AEB-4BFC-4E47-B181-BBB43BD81283}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IKFixes", "IKFixes\IKFixes.csproj", "{95D40C1C-6A7D-4AB3-8893-3E7B8375D01D}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JumpPatch", "JumpPatch\JumpPatch.csproj", "{06AA6DE3-967A-4F1E-83B1-6DDA1524A638}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuScalePatch", "MenuScalePatch\MenuScalePatch.csproj", "{A089D5AA-B539-423C-9331-A30E8147EEF5}"
 EndProject
@@ -49,8 +41,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvatarScaleMod", "AvatarSca
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nevermind", "Nevermind\Nevermind.csproj", "{0432AB34-549E-4E36-8C92-6B9991800D67}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraFixes", "CameraFixes\CameraFixes.csproj", "{3090F446-1122-4EF1-B9D9-6ACE724C87DF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,14 +51,6 @@ Global
 		{883F7EC3-9A1E-4EBA-9A51-E2E7882DC5D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{883F7EC3-9A1E-4EBA-9A51-E2E7882DC5D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{883F7EC3-9A1E-4EBA-9A51-E2E7882DC5D4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DBC8A547-F07B-40DB-8745-D79042C6C1A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DBC8A547-F07B-40DB-8745-D79042C6C1A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DBC8A547-F07B-40DB-8745-D79042C6C1A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DBC8A547-F07B-40DB-8745-D79042C6C1A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E56C36DE-5F8D-41CC-A801-376D27D22EF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E56C36DE-5F8D-41CC-A801-376D27D22EF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E56C36DE-5F8D-41CC-A801-376D27D22EF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E56C36DE-5F8D-41CC-A801-376D27D22EF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{24BE113B-5D9F-4BFA-A883-CAD8279304A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{24BE113B-5D9F-4BFA-A883-CAD8279304A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24BE113B-5D9F-4BFA-A883-CAD8279304A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -93,10 +75,6 @@ Global
 		{30F56FE1-1654-4213-A51C-4C0278FB43A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{30F56FE1-1654-4213-A51C-4C0278FB43A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{30F56FE1-1654-4213-A51C-4C0278FB43A6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{55E805A5-404C-4BB9-9AF1-A432443B1424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{55E805A5-404C-4BB9-9AF1-A432443B1424}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{55E805A5-404C-4BB9-9AF1-A432443B1424}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{55E805A5-404C-4BB9-9AF1-A432443B1424}.Release|Any CPU.Build.0 = Release|Any CPU
 		{79B2A7C4-348D-4A8E-94D1-BA22FDD5FEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{79B2A7C4-348D-4A8E-94D1-BA22FDD5FEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{79B2A7C4-348D-4A8E-94D1-BA22FDD5FEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -109,10 +87,6 @@ Global
 		{95D40C1C-6A7D-4AB3-8893-3E7B8375D01D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95D40C1C-6A7D-4AB3-8893-3E7B8375D01D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95D40C1C-6A7D-4AB3-8893-3E7B8375D01D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06AA6DE3-967A-4F1E-83B1-6DDA1524A638}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06AA6DE3-967A-4F1E-83B1-6DDA1524A638}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06AA6DE3-967A-4F1E-83B1-6DDA1524A638}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06AA6DE3-967A-4F1E-83B1-6DDA1524A638}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A089D5AA-B539-423C-9331-A30E8147EEF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A089D5AA-B539-423C-9331-A30E8147EEF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A089D5AA-B539-423C-9331-A30E8147EEF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -149,10 +123,6 @@ Global
 		{0432AB34-549E-4E36-8C92-6B9991800D67}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0432AB34-549E-4E36-8C92-6B9991800D67}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0432AB34-549E-4E36-8C92-6B9991800D67}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3090F446-1122-4EF1-B9D9-6ACE724C87DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3090F446-1122-4EF1-B9D9-6ACE724C87DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3090F446-1122-4EF1-B9D9-6ACE724C87DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3090F446-1122-4EF1-B9D9-6ACE724C87DF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
