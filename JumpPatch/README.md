@@ -1,14 +1,15 @@
-# TrackedControllerFix **(Depricated)**
+# JumpPatch **(Depricated)**
 
-  # This fix is no longer applicable due to the OpenVR->OpenXR change.
+  # This fix is now partially built into ChilloutVR.
 
-lazy af fix for a small issue
+Prevents you from jumping until you've been grounded for a frame.
 
-Your Left/Right hand controllers will now track faster and while in the Steam overlay.
+This ensures Grounded parameter fires when hitting the ground while holding jump.
 
-This approach to fixing the issue is made lazy to support DesktopVRSwitch.
+https://user-images.githubusercontent.com/37721153/231921029-f5bf5236-3dbb-4720-8eb0-fafce4e59cf8.mp4
 
-(also because im lazy)
+## Relevant Feedback Posts:
+https://feedback.abinteractive.net/p/grounded-parameter-does-not-fire-immediatly-after-landing
 
 ---
 

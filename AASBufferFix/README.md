@@ -1,4 +1,6 @@
 # AASBufferFix **(Depricated)**
+
+  # This fix is now built into ChilloutVR.
  
 Fixes two issues with the Avatar Advanced Settings buffers when loading remote avatars:
 
@@ -24,3 +26,4 @@ https://documentation.abinteractive.net/official/legal/tos/#7-modding-our-games
 > Use of this mod is done so at the user's own risk and the creator cannot be held responsible for any issues arising from its use.
 
 > To the best of my knowledge, I have adhered to the Modding Guidelines established by Alpha Blend Interactive.
+ 
