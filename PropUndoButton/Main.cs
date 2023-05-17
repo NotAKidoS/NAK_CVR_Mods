@@ -3,6 +3,7 @@ using ABI_RC.Core.AudioEffects;
 using ABI_RC.Core.Networking;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util;
+using ABI_RC.Systems.InputManagement.InputModules;
 using DarkRift;
 using MelonLoader;
 using System.Reflection;
@@ -14,7 +15,7 @@ namespace NAK.PropUndoButton;
 
 public class PropUndoButton : MelonMod
 {
-    public static readonly MelonPreferences_Category Category = 
+    public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(PropUndoButton));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
@@ -22,7 +23,7 @@ public class PropUndoButton : MelonMod
 
     public static readonly MelonPreferences_Entry<bool> EntryUseSFX =
         Category.CreateEntry("Use SFX", true, description: "Toggle audio queues for prop spawn, undo, redo, and warning.");
-    
+
     internal static List<DeletedProp> deletedProps = new List<DeletedProp>();
 
     // audio clip names, InterfaceAudio adds "PropUndo_" prefix
@@ -54,7 +55,7 @@ public class PropUndoButton : MelonMod
             postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeletePropByInstanceId), BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // desktop input patch so we don't run in menus/gui
-            typeof(InputModuleMouseKeyboard).GetMethod(nameof(InputModuleMouseKeyboard.UpdateInput)),
+            typeof(CVRInputModule_Keyboard).GetMethod(nameof(CVRInputModule_Keyboard.UpdateInput)),
             postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnUpdateInput), BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // clear redo list on world change
