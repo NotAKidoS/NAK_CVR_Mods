@@ -5,22 +5,15 @@ namespace NAK.DesktopVRIK;
 
 public static class VRIKUtils
 {
-    public static void ConfigureVRIKReferences(VRIK vrik, bool useVRIKToes, bool findUnmappedToes, out bool foundUnmappedToes)
+    public static void ConfigureVRIKReferences(VRIK vrik, bool useVRIKToes)
     {
-        foundUnmappedToes = false;
-
         //might not work over netik
-        FixChestAndSpineReferences(vrik);
+        //FixChestAndSpineReferences(vrik);
 
         if (!useVRIKToes)
         {
             vrik.references.leftToes = null;
             vrik.references.rightToes = null;
-        }
-        else if (findUnmappedToes)
-        {
-            //doesnt work with netik, but its toes...
-            FindAndSetUnmappedToes(vrik, out foundUnmappedToes);
         }
 
         //bullshit fix to not cause death
@@ -39,41 +32,6 @@ public static class VRIKUtils
             vrik.references.chest = assumedChest;
             vrik.references.spine = assumedChest.parent;
         }
-    }
-
-    private static void FindAndSetUnmappedToes(VRIK vrik, out bool foundUnmappedToes)
-    {
-        foundUnmappedToes = false;
-
-        Transform leftToes = vrik.references.leftToes;
-        Transform rightToes = vrik.references.rightToes;
-
-        if (leftToes == null && rightToes == null)
-        {
-            leftToes = FindUnmappedToe(vrik.references.leftFoot);
-            rightToes = FindUnmappedToe(vrik.references.rightFoot);
-
-            if (leftToes != null && rightToes != null)
-            {
-                vrik.references.leftToes = leftToes;
-                vrik.references.rightToes = rightToes;
-                foundUnmappedToes = true;
-            }
-        }
-    }
-
-    private static Transform FindUnmappedToe(Transform foot)
-    {
-        foreach (Transform bone in foot)
-        {
-            if (bone.name.ToLowerInvariant().Contains("toe") ||
-                bone.name.ToLowerInvariant().EndsWith("_end"))
-            {
-                return bone;
-            }
-        }
-
-        return null;
     }
 
     private static void FixFingerBonesError(VRIK vrik)

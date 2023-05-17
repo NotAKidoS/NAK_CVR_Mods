@@ -26,10 +26,12 @@ public static class BTKUIAddon
 
         // Calibration Settings
         AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryUseVRIKToes);
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryFindUnmappedToes);
 
         // Fine-tuning Settings
         AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryResetFootstepsOnIdle);
+
+        // Funny Settings
+        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryProneThrusting);
 
         // Body Leaning Weight
         AddMelonSlider(ref desktopVRIKPage, DesktopVRIK.EntryBodyLeanWeight, 0, 1f, 1);

@@ -23,9 +23,6 @@ public class DesktopVRIK : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryUseVRIKToes =
         CategoryDesktopVRIK.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
 
-    public static readonly MelonPreferences_Entry<bool> EntryFindUnmappedToes =
-        CategoryDesktopVRIK.CreateEntry("Find Unmapped Toes", false, description: "Determines if DesktopVRIK should look for unmapped toe bones if the humanoid rig does not have any.");
-
     public static readonly MelonPreferences_Entry<float> EntryBodyLeanWeight =
         CategoryDesktopVRIK.CreateEntry("Body Lean Weight", 0.5f, description: "Adds rotational influence to the body solver when looking up/down. Set to 0 to disable.");
 
@@ -42,7 +39,7 @@ public class DesktopVRIK : MelonMod
         CategoryDesktopVRIK.CreateEntry("IK Lerp Speed", 10f, description: "Determines fast the IK & Locomotion weights blend after entering idle. Set to 0 to disable.");
 
     public static readonly MelonPreferences_Entry<bool> EntryProneThrusting =
-        CategoryDesktopVRIK.CreateEntry("Prone Thrusting", false, description: "Allows Body Lean Weight to take affect while crouched or prone.");
+        CategoryDesktopVRIK.CreateEntry("Prone Thrusting", false, description: "Allows Body Lean Weight to take effect while crouched or prone.");
 
     public static readonly MelonPreferences_Entry<bool> EntryIntegrationAMT =
         CategoryDesktopVRIK.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
@@ -92,7 +89,6 @@ public class DesktopVRIK : MelonMod
 
         // Calibration Settings
         DesktopVRIKSystem.Instance.Setting_UseVRIKToes = EntryUseVRIKToes.Value;
-        DesktopVRIKSystem.Instance.Setting_FindUnmappedToes = EntryFindUnmappedToes.Value;
 
         // Fine-tuning Settings
         DesktopVRIKSystem.Instance.Setting_ResetFootsteps = EntryResetFootstepsOnIdle.Value;

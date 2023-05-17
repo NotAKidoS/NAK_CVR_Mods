@@ -516,10 +516,10 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarVRIK.AutoDetectReferences();
         avatarIKSolver = avatarVRIK.solver;
 
-        VRIKUtils.ConfigureVRIKReferences(avatarVRIK, Setting_UseVRIKToes, Setting_FindUnmappedToes, out bool foundUnmappedToes);
+        VRIKUtils.ConfigureVRIKReferences(avatarVRIK, Setting_UseVRIKToes);
 
-        // Fix animator issue or non-human mapped toes
-        avatarVRIK.fixTransforms = _vrikFixTransformsRequired || foundUnmappedToes;
+        // Fix animator issue
+        avatarVRIK.fixTransforms = _vrikFixTransformsRequired;
 
         // Default solver settings
         avatarIKSolver.locomotion.weight = 0f;
@@ -531,16 +531,21 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarIKSolver.spine.maintainPelvisPosition = 0f;
 
         // Body leaning settings
-        avatarIKSolver.spine.neckStiffness = 0.0001f;
         avatarIKSolver.spine.bodyPosStiffness = 1f;
         avatarIKSolver.spine.bodyRotStiffness = 0.2f;
+        // this is a hack, allows chest to rotate slightly
+        // independent from hip rotation. Funny Spine.Solve()->Bend()
+        avatarIKSolver.spine.neckStiffness = 0.0001f;
 
         // Disable locomotion
+        // Setting velocity to 0 aleviated nameplate jitter issue on remote
         avatarIKSolver.locomotion.velocityFactor = 0f;
         avatarIKSolver.locomotion.maxVelocity = 0f;
         avatarIKSolver.locomotion.rootSpeed = 1000f;
 
         // Disable chest rotation by hands
+        // this fixed Effector, Player Arm Movement, BetterInteractDesktop, ect
+        // from making entire body shake, as well as while running
         avatarIKSolver.spine.rotateChestByHands = 0f;
 
         // Prioritize LookAtIK
@@ -552,6 +557,8 @@ internal class DesktopVRIKSystem : MonoBehaviour
 
         // Set so emotes play properly
         avatarIKSolver.spine.maxRootAngle = 180f;
+        // this is different in VR, as CVR player controller is not set up optimally for VRIK.
+        // Desktop avatar rotates 1:1 with _PlayerLocal. VR has a disconnect because you can turn IRL.
 
         // We disable these ourselves now, as we no longer use BodySystem
         avatarIKSolver.spine.maintainPelvisPosition = 1f;
