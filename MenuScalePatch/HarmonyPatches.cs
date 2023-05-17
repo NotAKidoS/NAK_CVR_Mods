@@ -1,12 +1,11 @@
-﻿using ABI.CCK.Components;
-using ABI_RC.Core;
+﻿using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
+using ABI_RC.Systems.InputManagement;
+using ABI_RC.Systems.InputManagement.InputModules;
 using HarmonyLib;
 using NAK.MenuScalePatch.Helpers;
-using System.Reflection;
-using System.Reflection.Emit;
 using UnityEngine;
 
 namespace NAK.MenuScalePatch.HarmonyPatches;
@@ -21,7 +20,7 @@ internal class HarmonyPatches
 {
     //stuff needed on start
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), "Start")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
     private static void Postfix_PlayerSetup_Start()
     {
         MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
@@ -31,7 +30,7 @@ internal class HarmonyPatches
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(CVR_MenuManager), "SetScale")]
+    [HarmonyPatch(typeof(CVR_MenuManager), nameof(CVR_MenuManager.SetScale))]
     private static bool Prefix_CVR_MenuManager_SetScale(float avatarHeight, ref float ____scaleFactor)
     {
         ____scaleFactor = avatarHeight / 1.8f;
@@ -46,7 +45,7 @@ internal class HarmonyPatches
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(ViewManager), "SetScale")]
+    [HarmonyPatch(typeof(ViewManager), nameof(ViewManager.SetScale))]
     private static bool Prefix_ViewManager_SetScale()
     {
         return false;
@@ -55,7 +54,7 @@ internal class HarmonyPatches
     //nuke UpdateMenuPosition methods
     //there are 2 Jobs calling this each second, which is fucking my shit
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(CVR_MenuManager), "UpdateMenuPosition")]
+    [HarmonyPatch(typeof(CVR_MenuManager), nameof(CVR_MenuManager.UpdateMenuPosition))]
     private static bool Prefix_CVR_MenuManager_UpdateMenuPosition()
     {
         if (QuickMenuHelper.Instance == null) return true;
@@ -63,7 +62,7 @@ internal class HarmonyPatches
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(ViewManager), "UpdateMenuPosition")]
+    [HarmonyPatch(typeof(ViewManager), nameof(ViewManager.UpdateMenuPosition))]
     private static bool Prefix_ViewManager_UpdateMenuPosition(ref float ___cachedScreenAspectRatio)
     {
         if (MainMenuHelper.Instance == null) return true;
@@ -76,7 +75,7 @@ internal class HarmonyPatches
 
     //Set QM stuff
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVR_MenuManager), "Start")]
+    [HarmonyPatch(typeof(CVR_MenuManager), nameof(CVR_MenuManager.Start))]
     private static void Postfix_CVR_MenuManager_Start(ref CVR_MenuManager __instance, ref GameObject ____leftVrAnchor)
     {
         QuickMenuHelper helper = __instance.quickMenu.gameObject.AddComponent<QuickMenuHelper>();
@@ -85,7 +84,7 @@ internal class HarmonyPatches
 
     //Set MM stuff
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(ViewManager), "Start")]
+    [HarmonyPatch(typeof(ViewManager), nameof(ViewManager.Start))]
     private static void Postfix_ViewManager_Start(ref ViewManager __instance)
     {
         __instance.gameObject.AddComponent<MainMenuHelper>();
@@ -93,14 +92,14 @@ internal class HarmonyPatches
 
     //hook quickmenu open/close
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(CVR_MenuManager), "ToggleQuickMenu", new Type[] { typeof(bool) })]
+    [HarmonyPatch(typeof(CVR_MenuManager), nameof(CVR_MenuManager.ToggleQuickMenu))]
     private static bool Prefix_CVR_MenuManager_ToggleQuickMenu(bool show, ref CVR_MenuManager __instance, ref bool ____quickMenuOpen)
     {
         if (QuickMenuHelper.Instance == null) return true;
         if (show != ____quickMenuOpen)
         {
             ____quickMenuOpen = show;
-            __instance.quickMenu.enabled = true;
+            __instance.quickMenu.ShouldRender = show;
             __instance.quickMenuAnimator.SetBool("Open", show);
             QuickMenuHelper.Instance.MenuIsOpen = show;
             QuickMenuHelper.Instance.UpdateWorldAnchors(show);
@@ -119,20 +118,21 @@ internal class HarmonyPatches
         return false;
     }
 
-    //hook menu open/close
+    // Hook menu open/close
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(ViewManager), "UiStateToggle", new Type[] { typeof(bool) })]
-    private static bool Prefix_ViewManager_UiStateToggle(bool show, ref ViewManager __instance, ref bool ____gameMenuOpen)
+    [HarmonyPatch(typeof(ViewManager), nameof(ViewManager.UiStateToggle), new Type[] { typeof(bool) })]
+    private static bool Prefix_ViewManager_UiStateToggle(bool show, ref ViewManager __instance)
     {
         if (MainMenuHelper.Instance == null) return true;
-        if (show != ____gameMenuOpen)
+        if (show != __instance._gameMenuOpen)
         {
-            ____gameMenuOpen = show;
-            __instance.gameMenuView.enabled = true;
+            __instance._gameMenuOpen = show;
+            __instance.gameMenuView.ShouldRender = show;
             __instance.uiMenuAnimator.SetBool("Open", show);
             MainMenuHelper.Instance.MenuIsOpen = show;
             MainMenuHelper.Instance.UpdateWorldAnchors(show);
-            //shouldnt run if switching menus on desktop
+
+            // Shouldn't run if switching menus on desktop
             if (!MetaPort.Instance.isUsingVr)
             {
                 if (!show && QuickMenuHelper.Instance.MenuIsOpen)
@@ -141,6 +141,7 @@ internal class HarmonyPatches
                 }
                 CVR_MenuManager.Instance.ToggleQuickMenu(false);
             }
+
             MSP_MenuInfo.ToggleDesktopInputMethod(show);
             CVRPlayerManager.Instance.ReloadAllNameplates();
         }
@@ -149,39 +150,24 @@ internal class HarmonyPatches
 
     //add independent head movement to important input
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(InputModuleMouseKeyboard), "UpdateImportantInput")]
-    private static void Postfix_InputModuleMouseKeyboard_UpdateImportantInput(ref CVRInputManager ____inputManager)
+    [HarmonyPatch(typeof(CVRInputModule_Keyboard), nameof(CVRInputModule_Keyboard.Update_Always))]
+    private static void Postfix_CVRInputModule_Keyboard_Update_Always(ref CVRInputModule_Keyboard __instance)
     {
-        ____inputManager.independentHeadTurn |= Input.GetKey(KeyCode.LeftAlt);
+        if (!__instance._inputManager.inputEnabled) //only run while in menu, so input isnt handled twice
+        {
+            __instance._inputManager.independentHeadTurn |= CVRInputManager.Controls.MouseAndKeyboard.Character.IndependantHeadTurn.IsPressed();
+            if (CVRInputManager.Controls.MouseAndKeyboard.Character.IndependantHeadTurnToggle.WasPerformedThisFrame())
+            {
+                __instance._inputManager.independentHeadToggle = !__instance._inputManager.independentHeadToggle;
+            }
+        }
     }
 
     //Support for changing VRMode during runtime.
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVRTools), "ConfigureHudAffinity")]
+    [HarmonyPatch(typeof(CVRTools), nameof(CVRTools.ConfigureHudAffinity))]
     private static void Postfix_CVRTools_ConfigureHudAffinity()
     {
         MSP_MenuInfo.CameraTransform = PlayerSetup.Instance.GetActiveCamera().transform;
-    }
-
-    // prevents CVRWorld from closing menus when world transitioning, cause cool
-    [HarmonyTranspiler]
-    [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.Start), MethodType.Enumerator)]
-    private static IEnumerable<CodeInstruction> Transpiler_CVRWorld_Start(IEnumerable<CodeInstruction> instructions, ILGenerator il)
-    {
-        var patchedInstructions = new CodeMatcher(instructions).MatchForward(false,
-            new CodeMatch(OpCodes.Ldsfld),
-            new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(i => i.opcode == OpCodes.Callvirt && i.operand is MethodInfo { Name: "ForceUiStatus" }))
-            .RemoveInstructions(3)
-            .InstructionEnumeration();
-
-        patchedInstructions = new CodeMatcher(patchedInstructions).MatchForward(false,
-            new CodeMatch(OpCodes.Ldsfld),
-            new CodeMatch(OpCodes.Ldc_I4_0),
-            new CodeMatch(i => i.opcode == OpCodes.Callvirt && i.operand is MethodInfo { Name: "ToggleQuickMenu" }))
-            .RemoveInstructions(3)
-            .InstructionEnumeration();
-
-        return patchedInstructions;
     }
 }

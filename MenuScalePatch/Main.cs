@@ -4,7 +4,7 @@ namespace NAK.MenuScalePatch;
 
 public class MenuScalePatch : MelonMod
 {
-    public static MelonPreferences_Category Category = 
+    public static MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(MenuScalePatch));
 
     public static MelonPreferences_Entry<bool> EntryUseIndependentHeadTurn =
