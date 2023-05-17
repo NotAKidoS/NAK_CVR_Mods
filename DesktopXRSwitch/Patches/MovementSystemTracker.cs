@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Systems.MovementSystem;
 using UnityEngine;
 
-namespace NAK.DesktopVRSwitch.Patches;
+namespace NAK.Melons.DesktopXRSwitch.Patches;
 
 public class MovementSystemTracker : MonoBehaviour
 {
@@ -12,17 +12,17 @@ public class MovementSystemTracker : MonoBehaviour
     void Start()
     {
         movementSystem = GetComponent<MovementSystem>();
-        VRModeSwitchTracker.OnPreVRModeSwitch += PreVRModeSwitch;
-        VRModeSwitchTracker.OnPostVRModeSwitch += PostVRModeSwitch;
+        XRModeSwitchTracker.OnPreXRModeSwitch += PreXRModeSwitch;
+        XRModeSwitchTracker.OnPostXRModeSwitch += PostXRModeSwitch;
     }
 
     void OnDestroy()
     {
-        VRModeSwitchTracker.OnPreVRModeSwitch -= PreVRModeSwitch;
-        VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
+        XRModeSwitchTracker.OnPreXRModeSwitch -= PreXRModeSwitch;
+        XRModeSwitchTracker.OnPostXRModeSwitch -= PostXRModeSwitch;
     }
 
-    public void PreVRModeSwitch(bool enableVR, Camera activeCamera)
+    public void PreXRModeSwitch(bool isXR, Camera activeCamera)
     {
         //correct rotationPivot y position, so we dont teleport up/down
         Vector3 position = movementSystem.rotationPivot.transform.position;
@@ -39,14 +39,14 @@ public class MovementSystemTracker : MonoBehaviour
         movementSystem.ChangeProne(false);
     }
 
-    public void PostVRModeSwitch(bool enableVR, Camera activeCamera)
+    public void PostXRModeSwitch(bool isXR, Camera activeCamera)
     {
         //immediatly update camera to new camera transform
         movementSystem.rotationPivot = activeCamera.transform;
         //lazy way of correcting Desktop & VR offset issue (game does the maths)
         movementSystem.TeleportToPosRot(preSwitchWorldPosition, preSwitchWorldRotation, false);
         //recenter desktop collision to player object
-        if (!enableVR) movementSystem.UpdateColliderCenter(movementSystem.transform.position);
+        if (!isXR) movementSystem.UpdateColliderCenter(movementSystem.transform.position);
 
         movementSystem.ChangeCrouch(false);
         movementSystem.ChangeProne(false);

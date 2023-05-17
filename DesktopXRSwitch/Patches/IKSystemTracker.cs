@@ -3,7 +3,7 @@ using ABI_RC.Systems.IK.SubSystems;
 using ABI_RC.Systems.IK.TrackingModules;
 using UnityEngine;
 
-namespace NAK.DesktopVRSwitch.Patches;
+namespace NAK.Melons.DesktopXRSwitch.Patches;
 
 public class IKSystemTracker : MonoBehaviour
 {
@@ -12,18 +12,18 @@ public class IKSystemTracker : MonoBehaviour
     void Start()
     {
         ikSystem = GetComponent<IKSystem>();
-        VRModeSwitchTracker.OnPreVRModeSwitch += PreVRModeSwitch;
-        VRModeSwitchTracker.OnFailVRModeSwitch += FailedVRModeSwitch;
-        VRModeSwitchTracker.OnPostVRModeSwitch += PostVRModeSwitch;
+        XRModeSwitchTracker.OnPreXRModeSwitch += PreXRModeSwitch;
+        XRModeSwitchTracker.OnFailXRModeSwitch += FailedXRModeSwitch;
+        XRModeSwitchTracker.OnPostXRModeSwitch += PostXRModeSwitch;
     }
     void OnDestroy()
     {
-        VRModeSwitchTracker.OnPreVRModeSwitch -= PreVRModeSwitch;
-        VRModeSwitchTracker.OnFailVRModeSwitch -= FailedVRModeSwitch;
-        VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
+        XRModeSwitchTracker.OnPreXRModeSwitch -= PreXRModeSwitch;
+        XRModeSwitchTracker.OnFailXRModeSwitch -= FailedXRModeSwitch;
+        XRModeSwitchTracker.OnPostXRModeSwitch -= PostXRModeSwitch;
     }
 
-    public void PreVRModeSwitch(bool enableVR, Camera activeCamera)
+    public void PreXRModeSwitch(bool inXR, Camera activeCamera)
     {
         BodySystem.TrackingEnabled = false;
         BodySystem.TrackingPositionWeight = 0f;
@@ -32,7 +32,7 @@ public class IKSystemTracker : MonoBehaviour
             IKSystem.vrik.enabled = false;
     }
 
-    public void FailedVRModeSwitch(bool enableVR, Camera activeCamera)
+    public void FailedXRModeSwitch(bool inXR, Camera activeCamera)
     {
         BodySystem.TrackingEnabled = true;
         BodySystem.TrackingPositionWeight = 1f;
@@ -41,7 +41,7 @@ public class IKSystemTracker : MonoBehaviour
             IKSystem.vrik.enabled = true;
     }
 
-    public void PostVRModeSwitch(bool enableVR, Camera activeCamera)
+    public void PostXRModeSwitch(bool inXR, Camera activeCamera)
     {
         if (IKSystem.vrik != null)
             DestroyImmediate(IKSystem.vrik);
@@ -54,33 +54,35 @@ public class IKSystemTracker : MonoBehaviour
         BodySystem.isCalibrating = false;
         BodySystem.isRecalibration = false;
         //make it so you dont instantly end up in FBT from Desktop
-        IKSystem.firstAvatarLoaded = DesktopVRSwitch.EntryEnterCalibrationOnSwitch.Value;
+        IKSystem.firstAvatarLoaded = DesktopXRSwitch.EntryEnterCalibrationOnSwitch.Value;
         //turn of finger tracking just in case user switched controllers
         ikSystem.FingerSystem.controlActive = false;
 
         //vrik should be deleted by avatar switch
 
-        SetupSteamVRTrackingModule(enableVR);
+        SetupOpenXRTrackingModule(inXR);
     }
 
-    void SetupSteamVRTrackingModule(bool enableVR)
+    void SetupOpenXRTrackingModule(bool enableVR)
     {
-        var openVRModule = ikSystem._trackingModules.OfType<SteamVRTrackingModule>().FirstOrDefault();
+        var openXRTrackingModule = ikSystem._trackingModules.OfType<OpenXRTrackingModule>().FirstOrDefault();
 
-        if (openVRModule != null)
+        if (openXRTrackingModule != null)
         {
             if (enableVR)
             {
-                openVRModule.ModuleStart();
+                openXRTrackingModule.ModuleStart();
             }
             else
             {
-                openVRModule.ModuleDestroy();
+                openXRTrackingModule.ModuleDestroy();
+                if (openXRTrackingModule != null)
+                ikSystem._trackingModules.Remove(openXRTrackingModule);
             }
         }
         else if (enableVR)
         {
-            var newVRModule = new SteamVRTrackingModule();
+            var newVRModule = new OpenXRTrackingModule();
             ikSystem.AddTrackingModule(newVRModule);
         }
     }

@@ -444,6 +444,10 @@
             <HintPath>$(MsBuildThisFileDirectory)\_ManagedLibs\Unity.Entities.Hybrid.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="Unity.InputSystem">
+            <HintPath>$(MsBuildThisFileDirectory)\_ManagedLibs\Unity.InputSystem.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="Unity.InternalAPIEngineBridge.003">
             <HintPath>$(MsBuildThisFileDirectory)\_ManagedLibs\Unity.InternalAPIEngineBridge.003.dll</HintPath>
             <Private>False</Private>

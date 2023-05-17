@@ -3,13 +3,12 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.IK;
-using ABI_RC.Systems.IK.TrackingModules;
 using ABI_RC.Systems.MovementSystem;
 using HarmonyLib;
-using NAK.DesktopVRSwitch.Patches;
+using NAK.Melons.DesktopXRSwitch.Patches;
 using UnityEngine;
 
-namespace NAK.DesktopVRSwitch.HarmonyPatches;
+namespace NAK.Melons.DesktopXRSwitch.HarmonyPatches;
 
 internal class PlayerSetupPatches
 {
@@ -17,13 +16,14 @@ internal class PlayerSetupPatches
     [HarmonyPatch(typeof(PlayerSetup), "Start")]
     private static void Postfix_PlayerSetup_Start(ref PlayerSetup __instance)
     {
+        __instance.gameObject.AddComponent<PlayerSetupTracker>();
         if (CheckVR.Instance != null)
         {
-            CheckVR.Instance.gameObject.AddComponent<DesktopVRSwitcher>();
+            CheckVR.Instance.gameObject.AddComponent<DesktopXRSwitcher>();
             return;
         }
-        __instance.gameObject.AddComponent<DesktopVRSwitcher>();
-        DesktopVRSwitch.Logger.Error("CheckVR not found. Reverting to fallback method. This should never happen!");
+        __instance.gameObject.AddComponent<DesktopXRSwitcher>();
+        DesktopXRSwitch.Logger.Error("CheckVR not found. Reverting to fallback method. This should never happen!");
     }
 }
 
@@ -89,32 +89,5 @@ internal class IKSystemPatches
     private static void Postfix_IKSystem_Start(ref IKSystem __instance)
     {
         __instance.gameObject.AddComponent<IKSystemTracker>();
-    }
-
-    [HarmonyPostfix] //lazy fix so i dont need to wait few frames
-    [HarmonyPatch(typeof(TrackingPoint), "Initialize")]
-    private static void Postfix_TrackingPoint_Initialize(ref TrackingPoint __instance)
-    {
-        __instance.referenceTransform.localScale = Vector3.one;
-    }
-    [HarmonyPostfix] //lazy fix so device indecies can change properly
-    [HarmonyPatch(typeof(SteamVRTrackingModule), "ModuleDestroy")]
-    private static void Postfix_SteamVRTrackingModule_ModuleDestroy(ref SteamVRTrackingModule __instance)
-    {
-        for (int i = 0; i < __instance.TrackingPoints.Count; i++)
-        {
-            UnityEngine.Object.Destroy(__instance.TrackingPoints[i].referenceGameObject);
-        }
-        __instance.TrackingPoints.Clear();
-    }
-}
-
-internal class VRTrackerManagerPatches
-{
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(VRTrackerManager), "Start")]
-    private static void Postfix_VRTrackerManager_Start(ref VRTrackerManager __instance)
-    {
-        __instance.gameObject.AddComponent<VRTrackerManagerTracker>();
     }
 }

@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CVRGizmos", "CVRGizmos\CVRG
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopVRIK", "DesktopVRIK\DesktopVRIK.csproj", "{CD33AB69-F9A4-4F32-B69A-473131F6393B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopVRSwitch", "DesktopVRSwitch\DesktopVRSwitch.csproj", "{30F56FE1-1654-4213-A51C-4C0278FB43A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopXRSwitch", "DesktopXRSwitch\DesktopXRSwitch.csproj", "{30F56FE1-1654-4213-A51C-4C0278FB43A6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckMetrics", "FuckMetrics\FuckMetrics.csproj", "{55E805A5-404C-4BB9-9AF1-A432443B1424}"
 EndProject

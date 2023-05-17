@@ -3,7 +3,7 @@ using UnityEngine;
 
 //Thanks Ben! I was scared of transpiler so I reworked a bit...
 
-namespace NAK.DesktopVRSwitch.Patches;
+namespace NAK.Melons.DesktopXRSwitch.Patches;
 
 public class CVRPickupObjectTracker : MonoBehaviour
 {
@@ -12,15 +12,15 @@ public class CVRPickupObjectTracker : MonoBehaviour
 
     void Start()
     {
-        VRModeSwitchTracker.OnPostVRModeSwitch += PostVRModeSwitch;
+        XRModeSwitchTracker.OnPostXRModeSwitch += PostXRModeSwitch;
     }
 
     void OnDestroy()
     {
-        VRModeSwitchTracker.OnPostVRModeSwitch -= PostVRModeSwitch;
+        XRModeSwitchTracker.OnPostXRModeSwitch -= PostXRModeSwitch;
     }
 
-    public void PostVRModeSwitch(bool enableVR, Camera activeCamera)
+    public void PostXRModeSwitch(bool isXR, Camera activeCamera)
     {
         if (pickupObject != null)
         {

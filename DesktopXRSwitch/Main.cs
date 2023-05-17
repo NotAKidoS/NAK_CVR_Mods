@@ -9,18 +9,18 @@
     It is also just in case other mods break or tweak functionality that
     could fuck with switching. Or if they try to detect switching and break...
 
-    The VRModeSwitchTracker system is also built so I can easily & quickly make adjustments to
+    The XRModeSwitchTracker system is also built so I can easily & quickly make adjustments to
     components that may or may not change between builds without breaking the rest of the mod.
 **/
 
-namespace NAK.DesktopVRSwitch;
+namespace NAK.Melons.DesktopXRSwitch;
 
-public class DesktopVRSwitch : MelonMod
+public class DesktopXRSwitch : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-    
+
     public static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
+        MelonPreferences.CreateCategory(nameof(DesktopXRSwitch));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnterCalibrationOnSwitch =
         Category.CreateEntry("Enter Calibration on Switch", true, description: "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
@@ -34,7 +34,6 @@ public class DesktopVRSwitch : MelonMod
         ApplyPatches(typeof(HarmonyPatches.CameraFacingObjectPatches));
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
         ApplyPatches(typeof(HarmonyPatches.MovementSystemPatches));
-        ApplyPatches(typeof(HarmonyPatches.VRTrackerManagerPatches));
     }
 
     private void ApplyPatches(Type type)
