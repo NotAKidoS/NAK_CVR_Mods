@@ -103,7 +103,7 @@ internal static class BodySystemPatches
             leg.positionWeight = weight;
             leg.rotationWeight = weight;
             // fixes knees bending to tracker if feet disabled (running anim)
-            leg.bendGoalWeight = leg.usingKneeTracker ? weight : 0f;
+            leg.bendGoalWeight = leg.usingKneeTracker ? 0.9f : 0f;
         }
         void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
         {
@@ -247,8 +247,10 @@ internal static class BodySystemPatches
     {
         IKSystem.Instance.applyOriginalHipPosition = false;
         IKSystem.Instance.applyOriginalHipRotation = false;
-        IKSystem.vrik.solver.leftLeg.bendToTargetWeight = 0.25f;
-        IKSystem.vrik.solver.rightLeg.bendToTargetWeight = 0.25f;
+        IKSystem.vrik.solver.leftLeg.bendToTargetWeight = 0.1f;
+        IKSystem.vrik.solver.rightLeg.bendToTargetWeight = 0.1f;
+        IKSystem.vrik.solver.leftLeg.bendGoalWeight = 0.9f;
+        IKSystem.vrik.solver.rightLeg.bendGoalWeight = 0.9f;
     }
 }
 
@@ -289,26 +291,42 @@ internal static class VRIKPatches
     [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.ApplyOffsets))]
     static bool Prefix_IKSolverVR_Leg_ApplyOffsets(ref IKSolverVR.Leg __instance)
     {
-        //This is the second part of the above fix, preventing the solver from calculating a bad bendNormal
-        //when it doesn't need to. The knee tracker should dictate the bendNormal completely.
+        // Apply position and rotation offsets
+        __instance.ApplyPositionOffset(__instance.footPositionOffset, 1f);
+        __instance.ApplyRotationOffset(__instance.footRotationOffset, 1f);
 
-        //TODO: investigate lower leg not bending towards knee direction
+        // Calculate new foot position and rotation
+        Quaternion footQuaternion = Quaternion.FromToRotation(__instance.footPosition - __instance.position, __instance.footPosition + __instance.heelPositionOffset - __instance.position);
+        __instance.footPosition = __instance.position + footQuaternion * (__instance.footPosition - __instance.position);
+        __instance.footRotation = footQuaternion * __instance.footRotation;
 
         if (__instance.usingKneeTracker)
         {
-            __instance.ApplyPositionOffset(__instance.footPositionOffset, 1f);
-            __instance.ApplyRotationOffset(__instance.footRotationOffset, 1f);
-            Quaternion quaternion = Quaternion.FromToRotation(__instance.footPosition - __instance.position, __instance.footPosition + __instance.heelPositionOffset - __instance.position);
-            __instance.footPosition = __instance.position + quaternion * (__instance.footPosition - __instance.position);
-            __instance.footRotation = quaternion * __instance.footRotation;
+            float angle = 0f;
+            if (__instance.bendGoal != null && __instance.bendGoalWeight > 0f)
+            {
+                Vector3 crossProduct = Vector3.Cross(__instance.bendGoal.position - __instance.thigh.solverPosition, __instance.position - __instance.thigh.solverPosition);
+                Vector3 rotatedPoint = Quaternion.Inverse(Quaternion.LookRotation(__instance.bendNormal, __instance.thigh.solverPosition - __instance.foot.solverPosition)) * crossProduct;
+                angle = Mathf.Atan2(rotatedPoint.x, rotatedPoint.z) * Mathf.Rad2Deg * __instance.bendGoalWeight;
+            }
+
+            // Adjust bend normal and thigh rotation for knee tracker
+            // Knee tracker should take priority over swivelOffset
+            __instance.bendNormal = Quaternion.AngleAxis(angle, __instance.thigh.solverPosition - __instance.lastBone.solverPosition) * __instance.bendNormal;
+            __instance.thigh.solverRotation = Quaternion.AngleAxis(-angle, __instance.thigh.solverRotation * __instance.thigh.axis) * __instance.thigh.solverRotation;
             return false;
         }
 
-        // run full method like normal otherwise
-        float num = __instance.bendGoalWeight;
-        __instance.bendGoalWeight = 0f;
-        __instance.ApplyOffsetsOld();
-        __instance.bendGoalWeight = num;
+        // Adjust bend normal and thigh rotation for swivel offset
+        float adjustedAngle = __instance.swivelOffset;
+        if (adjustedAngle > 90f) adjustedAngle = 180f - adjustedAngle;
+        if (adjustedAngle < -90f) adjustedAngle = -180f - adjustedAngle;
+        if (adjustedAngle != 0f)
+        {
+            __instance.bendNormal = Quaternion.AngleAxis(adjustedAngle, __instance.thigh.solverPosition - __instance.lastBone.solverPosition) * __instance.bendNormal;
+            __instance.thigh.solverRotation = Quaternion.AngleAxis(-adjustedAngle, __instance.thigh.solverRotation * __instance.thigh.axis) * __instance.thigh.solverRotation;
+        }
+
         return false;
     }
 }
