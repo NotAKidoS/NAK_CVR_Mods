@@ -26,6 +26,9 @@ class PlayerSetupPatches
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ClearAvatar))]
     static void Prefix_PlayerSetup_ClearAvatar(ref PlayerSetup __instance, ref float ____avatarHeight)
     {
+        // dumb fix cause ClearAvatar() runs twice when switching
+        if (__instance._avatar == null) return;
+
         if (!AvatarScaleMod.EntryEnabled.Value) return;
 
         if (!IsSupportedAvatar(__instance.animatorManager) && !AvatarScaleMod.EntryPersistAnyways.Value)
