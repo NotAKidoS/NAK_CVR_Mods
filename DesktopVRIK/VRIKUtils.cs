@@ -135,10 +135,12 @@ public static class VRIKUtils
         var footsteps = locomotionSolver.footsteps;
         var footstepLeft = footsteps[0];
         var footstepRight = footsteps[1];
-
+        
+        var root = vrik.references.root;
         var rootWorldRot = vrik.references.root.rotation;
-        footstepLeft.Reset(rootWorldRot, vrik.transform.TransformPoint(footPosLeft), rootWorldRot * footRotLeft);
-        footstepRight.Reset(rootWorldRot, vrik.transform.TransformPoint(footPosRight), rootWorldRot * footRotRight);
+        // hack, use parent transform instead as setting feet position moves root
+        footstepLeft.Reset(rootWorldRot, root.parent.TransformPoint(footPosLeft), rootWorldRot * footRotLeft);
+        footstepRight.Reset(rootWorldRot, root.parent.TransformPoint(footPosRight), rootWorldRot * footRotRight);
     }
 
     public static void SetupHeadIKTarget(VRIK vrik)
@@ -155,9 +157,10 @@ public static class VRIKUtils
 
     public static void ApplyScaleToVRIK(VRIK vrik, float footDistance, float stepThreshold, float stepHeight, float modifier)
     {
-        vrik.solver.locomotion.footDistance = footDistance * modifier;
-        vrik.solver.locomotion.stepThreshold = stepThreshold * modifier;
-        ScaleStepHeight(vrik.solver.locomotion.stepHeight, stepHeight * modifier);
+        var locomotionSolver = vrik.solver.locomotion;
+        locomotionSolver.footDistance = footDistance * modifier;
+        locomotionSolver.stepThreshold = stepThreshold * modifier;
+        ScaleStepHeight(locomotionSolver.stepHeight, stepHeight * modifier);
     }
 
     private static void ScaleStepHeight(AnimationCurve stepHeightCurve, float mag)

@@ -28,40 +28,70 @@ namespace NAK.DesktopVRIK.HarmonyPatches;
 class PlayerSetupPatches
 {
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), "Start")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
     static void Postfix_PlayerSetup_Start(ref PlayerSetup __instance)
     {
         __instance.gameObject.AddComponent<DesktopVRIKSystem>();
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), "SetupAvatarDesktop")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatarDesktop))]
     static void Postfix_PlayerSetup_SetupAvatarDesktop(ref Animator ____animator)
     {
-        if (____animator != null && ____animator.avatar != null && ____animator.avatar.isHuman)
+        // only intercept if DesktopVRIK is being used
+        if (DesktopVRIKSystem.Instance != null)
         {
-            DesktopVRIKSystem.Instance?.OnSetupAvatarDesktop();
+            DesktopVRIKSystem.Instance.OnSetupAvatarDesktop(____animator);
         }
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), "Update")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Update))]
     static void Postfix_PlayerSetup_Update(ref bool ____emotePlaying)
     {
-        DesktopVRIKSystem.Instance?.OnPlayerSetupUpdate(____emotePlaying);
+        // only intercept if DesktopVRIK is being used
+        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        {
+            DesktopVRIKSystem.Instance.OnPlayerSetupUpdate(____emotePlaying);
+        }
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(PlayerSetup), "SetupIKScaling")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupIKScaling))]
     private static bool Prefix_PlayerSetup_SetupIKScaling(float height, ref Vector3 ___scaleDifference)
     {
-        return !(bool)DesktopVRIKSystem.Instance?.OnSetupIKScaling(1f + ___scaleDifference.y);
+        // only intercept if DesktopVRIK is being used
+        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        {
+            DesktopVRIKSystem.Instance.OnSetupIKScaling(1f + ___scaleDifference.y);
+            return false;
+        }
+
+        return true;
+    }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetSitting))]
+    static void Postfix_PlayerSetup_SetSitting()
+    {
+        // only intercept if DesktopVRIK is being used
+        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        {
+            DesktopVRIKSystem.Instance.OnPlayerSetupSetSitting();
+        }
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(PlayerSetup), "ResetIk")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ResetIk))]
     static bool Prefix_PlayerSetup_ResetIk()
     {
-        return !(bool)DesktopVRIKSystem.Instance?.OnPlayerSetupResetIk();
+        // only intercept if DesktopVRIK is being used
+        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        {
+            DesktopVRIKSystem.Instance.OnPlayerSetupResetIk();
+            return false;
+        }
+
+        return true;
     }
 }

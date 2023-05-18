@@ -184,7 +184,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
     // Last Movement Parent Info
     Vector3 _movementPosition;
     Quaternion _movementRotation;
-    CVRMovementParent _currentParent;
+    CVRMovementParent _movementParent;
 
     DesktopVRIKSystem()
     {
@@ -316,17 +316,23 @@ internal class DesktopVRIKSystem : MonoBehaviour
         avatarTransform.localRotation = Quaternion.identity;
     }
 
-    public void OnSetupAvatarDesktop()
+    public void OnSetupAvatarDesktop(Animator animator)
     {
         if (!Setting_Enabled) return;
 
-        CalibrateDesktopVRIK();
-        ResetDesktopVRIK();
+        // only run for humanoid avatars
+        if (animator != null && animator.avatar != null && animator.avatar.isHuman)
+        {
+            CalibrateDesktopVRIK();
+            ResetDesktopVRIK();
+        }
     }
 
     public bool OnSetupIKScaling(float scaleDifference)
     {
         if (avatarVRIK == null) return false;
+
+        _scaleDifference = scaleDifference;
 
         VRIKUtils.ApplyScaleToVRIK
         (
@@ -334,20 +340,24 @@ internal class DesktopVRIKSystem : MonoBehaviour
             _vrikInitialFootDistance,
             _vrikInitialStepThreshold,
             _vrikInitialStepHeight,
-            scaleDifference
+            _scaleDifference
         );
 
-        _scaleDifference = scaleDifference;
-
-        avatarIKSolver.Reset();
+        //VRIKUtils.SetFootsteps
+        //(
+        //    avatarVRIK,
+        //    _vrikInitialFootPosLeft * _scaleDifference,
+        //    _vrikInitialFootPosRight * _scaleDifference,
+        //    _vrikInitialFootRotLeft,
+        //    _vrikInitialFootRotRight
+        //);
+        
         ResetDesktopVRIK();
         return true;
     }
 
     public void OnPlayerSetupUpdate(bool isEmotePlaying)
     {
-        if (avatarVRIK == null) return;
-
         if (isEmotePlaying == _ikEmotePlaying) return;
         _ikEmotePlaying = isEmotePlaying;
 
@@ -360,39 +370,49 @@ internal class DesktopVRIKSystem : MonoBehaviour
         ResetDesktopVRIK();
     }
 
-    public bool OnPlayerSetupResetIk()
+    public void OnPlayerSetupSetSitting()
     {
-        if (avatarVRIK == null) return false;
+        avatarIKSolver.Reset();
+        ResetDesktopVRIK();
+    }
 
+    public void OnPlayerSetupResetIk()
+    {
         // Check if PlayerSetup.ResetIk() was called for movement parent
         CVRMovementParent currentParent = movementSystem._currentParent;
-        if (currentParent == null || currentParent._referencePoint == null) return false;
-
-        // Get current position
-        var currentPosition = currentParent._referencePoint.position;
-        var currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
-
-        // Convert to delta position (how much changed since last frame)
-        var deltaPosition = currentPosition - _movementPosition;
-        var deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
-
-        // desktop pivots from playerlocal transform
-        var platformPivot = transform.position;
-
-        // Prevent targeting other parent position
-        if (_currentParent == currentParent)
+        if (currentParent != null && currentParent._referencePoint != null)
         {
-            // Add platform motion to IK solver
-            avatarIKSolver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
-            ResetDesktopVRIK();
+            // Get current position
+            var currentPosition = currentParent._referencePoint.position;
+            var currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
+
+            // Convert to delta position (how much changed since last frame)
+            var deltaPosition = currentPosition - _movementPosition;
+            var deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
+
+            // desktop pivots from playerlocal transform
+            var platformPivot = transform.position;
+
+            // Prevent targeting other parent position
+            if (_movementParent == currentParent)
+            {
+                // Add platform motion to IK solver
+                avatarIKSolver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
+                ResetDesktopVRIK();
+            }
+
+            // Store for next frame
+            _movementParent = currentParent;
+            _movementPosition = currentPosition;
+            _movementRotation = currentRotation;
+
+            return;
         }
-
-        // Store for next frame
-        _currentParent = currentParent;
-        _movementPosition = currentPosition;
-        _movementRotation = currentRotation;
-
-        return true;
+        
+        // if not for movementparent, reset ik solver
+        avatarIKSolver.Reset();
+        ResetDesktopVRIK();
+        //IKResetFootsteps();
     }
 
     public void OnPreSolverUpdate()
