@@ -156,6 +156,16 @@ internal class DesktopVRIKSystem : MonoBehaviour
         }
     }
 
+    void ResetBodySystem()
+    {
+        // DesktopVRSwitch should handle this, but I am not pushing an update yet.
+        BodySystem.TrackingEnabled = true;
+        BodySystem.TrackingPositionWeight = 1f;
+        BodySystem.isCalibratedAsFullBody = false;
+        BodySystem.isCalibrating = false;
+        BodySystem.isRecalibration = false;
+    }
+
     void ResetAvatarLocalPosition()
     {
         // Reset avatar offset
@@ -171,6 +181,7 @@ internal class DesktopVRIKSystem : MonoBehaviour
         if (animator != null && animator.avatar != null && animator.avatar.isHuman)
         {
             Calibrator.CalibrateDesktopVRIK(animator);
+            ResetBodySystem();
             ResetDesktopVRIK();
         }
     }
