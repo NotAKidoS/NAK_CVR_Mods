@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.1.8",
+  "modversion": "4.2.0",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r5/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
-  "changelog": "- Fixed feet targeting previous movement parent position for a frame.\n- Fixed issue with incorrect initialHeadHeight value causing avatar to always have footsteps disabled.",
+  "changelog": "- Fixed IK not being reset when teleporting/respawning/sitting.\n- Fixed IK Locomotion not being disabled while sitting.\n- Cleanup of VRIK Calibration & Configuration to make updating & debugging easier.\n- Added a temporary fix for DesktopVRSwitch BodySystem handling to ensure tracking is correctly enabled after switch.\n- Added \"NetIKPass\" after VRIK solving, which fixes many rotational errors that were only visible on the local client.\n- Removed Chest VRIK reference fix & find unmapped toe options as they didn't stream over NetIK.",
   "embedcolor": "9b59b6"
 }
