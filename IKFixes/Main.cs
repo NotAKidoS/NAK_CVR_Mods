@@ -31,7 +31,6 @@ public class IKFixes : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryNetIKPass =
         Category.CreateEntry("Network IK Pass", true, description: "Should NetIK pass be run?");
 
-
     public override void OnInitializeMelon()
     {
         ApplyPatches(typeof(HarmonyPatches.VRIKPatches));
