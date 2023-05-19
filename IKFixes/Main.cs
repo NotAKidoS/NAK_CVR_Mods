@@ -28,6 +28,10 @@ public class IKFixes : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryAltElbowDirection =
         Category.CreateEntry("Alt Elbow Direction", true, description: "Should bodyRotation be reset to identity when muscleupdate happens? Should fix chest tracking & tpose while running.");
 
+    public static readonly MelonPreferences_Entry<bool> EntryNetIKPass =
+        Category.CreateEntry("Network IK Pass", true, description: "Should NetIK pass be run?");
+
+
     public override void OnInitializeMelon()
     {
         ApplyPatches(typeof(HarmonyPatches.VRIKPatches));

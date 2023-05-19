@@ -6,6 +6,7 @@ using ABI_RC.Systems.MovementSystem;
 using HarmonyLib;
 using RootMotion.FinalIK;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace NAK.IKFixes.HarmonyPatches;
 
@@ -262,6 +263,38 @@ internal static class IKSystemPatches
     {
         __instance.applyOriginalHipPosition = true;
         __instance.applyOriginalHipRotation = true;
+    }
+
+    static HumanPose _enforcementPose;
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeHalfBodyIK))]
+    static void Prefix_IKSystem_InitializeHalfBodyIK(IKSystem __instance)
+    {
+        if (IKSystem._vrik != null)
+        {
+            UnityAction onPostSolverUpdate = null;
+            onPostSolverUpdate = () =>
+            {
+                if (!IKFixes.EntryNetIKPass.Value) return;
+
+                // This will enforce locally what we see over the network
+                if (__instance._poseHandler == null)
+                    __instance._poseHandler = new HumanPoseHandler(__instance.animator.avatar, __instance.animator.transform);
+
+                Transform hipTransform = __instance.animator.GetBoneTransform(HumanBodyBones.Hips);
+                Vector3 hipPosition = hipTransform.position;
+                Quaternion hipRotation = hipTransform.rotation;
+
+                __instance._poseHandler.GetHumanPose(ref _enforcementPose);
+                __instance._poseHandler.SetHumanPose(ref _enforcementPose);
+
+                hipTransform.position = hipPosition;
+                hipTransform.rotation = hipRotation;
+            };
+
+            IKSystem._vrik.onPostSolverUpdate.AddListener(onPostSolverUpdate);
+        }
     }
 }
 
