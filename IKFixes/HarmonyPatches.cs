@@ -55,29 +55,12 @@ internal static class BodySystemPatches
 
                 // Apply additional offset based on the assigned role
                 Vector3 additionalOffset = IKSystem.vrik.references.root.forward * offsetDistance;
-
-                if (IKFixes.EntryAltElbowDirection.Value)
-                {
-                    switch (trackingPoint.assignedRole)
-                    {
-                        case TrackingPoint.TrackingRole.LeftElbow:
-                            additionalOffset += IKSystem.vrik.references.root.up * -0.15f;
-                            break;
-                        case TrackingPoint.TrackingRole.RightElbow:
-                            additionalOffset += IKSystem.vrik.references.root.up * -0.15f;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
                 trackingPoint.offsetTransform.position += additionalOffset;
 
                 // Game originally sets them to about half a meter out, which fucks with slime tracker users and
                 // makes the bendGoals less responsive/less accurate. 
 
                 //Funny thing is that IKTweaks specifically made this an option, which should be added to both CVR & Standable for the same reason.
-
                 /// Elbow / knee / chest bend goal offset - controls how far bend goal targets will be away from the actual joint.
                 /// Lower values should produce better precision with bent joint, higher values - better stability with straight joint. 
                 /// Sensible range of values is between 0 and 1.
@@ -265,8 +248,6 @@ internal static class IKSystemPatches
         __instance.applyOriginalHipRotation = true;
     }
 
-    static HumanPose _enforcementPose;
-
     [HarmonyPrefix]
     [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeHalfBodyIK))]
     static void Prefix_IKSystem_InitializeHalfBodyIK(IKSystem __instance)
@@ -278,19 +259,13 @@ internal static class IKSystemPatches
             {
                 if (!IKFixes.EntryNetIKPass.Value) return;
 
-                // This will enforce locally what we see over the network
-                if (__instance._poseHandler == null)
-                    __instance._poseHandler = new HumanPoseHandler(__instance.animator.avatar, __instance.animator.transform);
-
-                Transform hipTransform = __instance.animator.GetBoneTransform(HumanBodyBones.Hips);
-                Vector3 hipPosition = hipTransform.position;
-                Quaternion hipRotation = hipTransform.rotation;
-
-                __instance._poseHandler.GetHumanPose(ref _enforcementPose);
-                __instance._poseHandler.SetHumanPose(ref _enforcementPose);
-
-                hipTransform.position = hipPosition;
-                hipTransform.rotation = hipRotation;
+                Transform hips = __instance.animator.GetBoneTransform(HumanBodyBones.Hips);
+                __instance._referenceRootPosition = hips.position;
+                __instance._referenceRootRotation = hips.rotation;
+                __instance._poseHandler.GetHumanPose(ref __instance.humanPose);
+                __instance._poseHandler.SetHumanPose(ref __instance.humanPose);
+                hips.position = __instance._referenceRootPosition; 
+                hips.rotation = __instance._referenceRootRotation;
             };
 
             IKSystem._vrik.onPostSolverUpdate.AddListener(onPostSolverUpdate);
