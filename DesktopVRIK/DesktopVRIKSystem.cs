@@ -233,9 +233,10 @@ internal class DesktopVRIKSystem : MonoBehaviour
         bool isCrouching = movementSystem.crouching;
         bool isProne = movementSystem.prone;
         bool isFlying = movementSystem.flying;
+        bool isSitting = movementSystem.sitting;
         bool isStanding = IsStanding();
 
-        return !(isMoving || isCrouching || isProne || isFlying || !isGrounded || !isStanding);
+        return !(isMoving || isCrouching || isProne || isFlying || isSitting || !isGrounded || !isStanding);
     }
 
     bool IsStanding()
