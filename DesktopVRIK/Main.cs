@@ -1,5 +1,4 @@
 ﻿using MelonLoader;
-using UnityEngine;
 
 namespace NAK.DesktopVRIK;
 
@@ -8,41 +7,44 @@ public class DesktopVRIK : MelonMod
     internal static MelonLogger.Instance Logger;
     internal const string SettingsCategory = nameof(DesktopVRIK);
 
-    public static readonly MelonPreferences_Category CategoryDesktopVRIK = 
+    public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(SettingsCategory);
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
-        CategoryDesktopVRIK.CreateEntry("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
+        Category.CreateEntry("Enabled", true, description: "Toggle DesktopVRIK entirely. Requires avatar reload.");
 
     public static readonly MelonPreferences_Entry<bool> EntryPlantFeet =
-        CategoryDesktopVRIK.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movement.");
+        Category.CreateEntry("Enforce Plant Feet", true, description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movement.");
 
     public static readonly MelonPreferences_Entry<bool> EntryResetFootstepsOnIdle =
-        CategoryDesktopVRIK.CreateEntry("Reset Footsteps on Idle", true, description: "Determins if the Locomotion Footsteps will be reset to their calibration position when entering idle.");
+        Category.CreateEntry("Reset Footsteps on Idle", false, description: "Determins if the Locomotion Footsteps will be reset to their calibration position when entering idle.");
 
     public static readonly MelonPreferences_Entry<bool> EntryUseVRIKToes =
-        CategoryDesktopVRIK.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
+        Category.CreateEntry("Use VRIK Toes", false, description: "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
 
     public static readonly MelonPreferences_Entry<float> EntryBodyLeanWeight =
-        CategoryDesktopVRIK.CreateEntry("Body Lean Weight", 0.5f, description: "Adds rotational influence to the body solver when looking up/down. Set to 0 to disable.");
+        Category.CreateEntry("Body Lean Weight", 0.5f, description: "Adds rotational influence to the body solver when looking up/down. Set to 0 to disable.");
 
     public static readonly MelonPreferences_Entry<float> EntryBodyHeadingLimit =
-        CategoryDesktopVRIK.CreateEntry("Body Heading Limit", 20f, description: "Specifies the maximum angle the lower body can have relative to the head when rotating. Set to 0 to disable.");
+        Category.CreateEntry("Body Heading Limit", 20f, description: "Specifies the maximum angle the lower body can have relative to the head when rotating. Set to 0 to disable.");
 
     public static readonly MelonPreferences_Entry<float> EntryPelvisHeadingWeight =
-        CategoryDesktopVRIK.CreateEntry("Pelvis Heading Weight", 0.25f, description: "Determines how much the pelvis will face the Body Heading Limit. Set to 0 to align with head.");
+        Category.CreateEntry("Pelvis Heading Weight", 0.25f, description: "Determines how much the pelvis will face the Body Heading Limit. Set to 0 to align with head.");
 
     public static readonly MelonPreferences_Entry<float> EntryChestHeadingWeight =
-        CategoryDesktopVRIK.CreateEntry("Chest Heading Weight", 0.75f, description: "Determines how much the chest will face the Body Heading Limit. Set to 0 to align with head.");
+        Category.CreateEntry("Chest Heading Weight", 0.75f, description: "Determines how much the chest will face the Body Heading Limit. Set to 0 to align with head.");
 
     public static readonly MelonPreferences_Entry<float> EntryIKLerpSpeed =
-        CategoryDesktopVRIK.CreateEntry("IK Lerp Speed", 10f, description: "Determines fast the IK & Locomotion weights blend after entering idle. Set to 0 to disable.");
+        Category.CreateEntry("IK Lerp Speed", 10f, description: "Determines fast the IK & Locomotion weights blend after entering idle. Set to 0 to disable.");
 
     public static readonly MelonPreferences_Entry<bool> EntryProneThrusting =
-        CategoryDesktopVRIK.CreateEntry("Prone Thrusting", false, description: "Allows Body Lean Weight to take effect while crouched or prone.");
+        Category.CreateEntry("Prone Thrusting", false, description: "Allows Body Lean Weight to take effect while crouched or prone.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryNetIKPass =
+        Category.CreateEntry("Network IK Pass", true, description: "Should NetIK pass be applied? This fixes a bunch of small rotation errors after VRIK is run.");
 
     public static readonly MelonPreferences_Entry<bool> EntryIntegrationAMT =
-        CategoryDesktopVRIK.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
+        Category.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
 
     public static bool integration_AMT = false;
 
@@ -50,56 +52,26 @@ public class DesktopVRIK : MelonMod
     {
         Logger = LoggerInstance;
 
-        CategoryDesktopVRIK.Entries.ForEach(e => e.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings));
-
-        ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
-
         //BTKUILib Misc Tab
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "BTKUILib"))
         {
             Logger.Msg("Initializing BTKUILib support.");
-            BTKUIAddon.Init();
+            Integrations.BTKUIAddon.Init();
         }
+
         //AvatarMotionTweaker Handling
         if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "AvatarMotionTweaker"))
         {
-            Logger.Msg("AvatarMotionTweaker was found. Relying on it to handle VRIK locomotion.");
             integration_AMT = true;
+            Logger.Msg("AvatarMotionTweaker was found. Relying on it to handle VRIK locomotion.");
         }
         else
         {
             Logger.Msg("AvatarMotionTweaker was not found. Using built-in VRIK locomotion handling.");
         }
+
+        ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
     }
-
-    internal static void UpdateAllSettings()
-    {
-        if (!DesktopVRIKSystem.Instance) return;
-        // DesktopVRIK Settings
-        DesktopVRIKSystem.Instance.Setting_Enabled = EntryEnabled.Value;
-        DesktopVRIKSystem.Instance.Setting_PlantFeet = EntryPlantFeet.Value;
-        DesktopVRIKSystem.Instance.Setting_ResetFootsteps = EntryResetFootstepsOnIdle.Value;
-
-        DesktopVRIKSystem.Instance.Setting_BodyLeanWeight = Mathf.Clamp01(EntryBodyLeanWeight.Value);
-        DesktopVRIKSystem.Instance.Setting_BodyHeadingLimit = Mathf.Clamp(EntryBodyHeadingLimit.Value, 0f, 90f);
-        DesktopVRIKSystem.Instance.Setting_PelvisHeadingWeight = (1f - Mathf.Clamp01(EntryPelvisHeadingWeight.Value));
-        DesktopVRIKSystem.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(EntryChestHeadingWeight.Value));
-        DesktopVRIKSystem.Instance.Setting_ChestHeadingWeight = (1f - Mathf.Clamp01(EntryChestHeadingWeight.Value));
-        DesktopVRIKSystem.Instance.Setting_IKLerpSpeed = Mathf.Clamp(EntryIKLerpSpeed.Value, 0f, 20f);
-
-        // Calibration Settings
-        DesktopVRIKSystem.Instance.Setting_UseVRIKToes = EntryUseVRIKToes.Value;
-
-        // Fine-tuning Settings
-        DesktopVRIKSystem.Instance.Setting_ResetFootsteps = EntryResetFootstepsOnIdle.Value;
-
-        // Integration Settings
-        DesktopVRIKSystem.Instance.Setting_IntegrationAMT = EntryIntegrationAMT.Value && integration_AMT;
-
-        // Funny Settings
-        DesktopVRIKSystem.Instance.Setting_ProneThrusting = EntryProneThrusting.Value;
-    }
-    void OnUpdateSettings(object arg1, object arg2) => UpdateAllSettings();
 
     void ApplyPatches(Type type)
     {
