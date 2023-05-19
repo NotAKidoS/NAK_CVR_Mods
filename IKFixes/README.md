@@ -6,10 +6,12 @@ A few small fixes to IK.
 * Running animations..
 * Emotes playing in wrong direction.
 * Forced to calibrate if all IK Tracking Settings are disabled.
+* Root animation bleeding into IK.
 
 **Halfbody Fixes** - 
 * Locomotion footsteps while on Movement Parents.
 * Root Angle Offset while looking around. Fixes feet only pointing in direction of head.
+* Halfbody feet pointing upward.
 
 ## Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/ik-knee-tracking
