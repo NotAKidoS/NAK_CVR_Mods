@@ -264,13 +264,135 @@ internal static class IKSystemPatches
                 __instance._referenceRootRotation = hips.rotation;
                 __instance._poseHandler.GetHumanPose(ref __instance.humanPose);
                 __instance._poseHandler.SetHumanPose(ref __instance.humanPose);
-                hips.position = __instance._referenceRootPosition; 
+                hips.position = __instance._referenceRootPosition;
                 hips.rotation = __instance._referenceRootRotation;
             };
 
             IKSystem._vrik.onPostSolverUpdate.AddListener(onPostSolverUpdate);
         }
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeHalfBodyIK))]
+    static void Postfix_IKSystem_InitializeHalfBodyIK(ref IKSystem __instance)
+    {
+        if (!IKFixes.EntryUseIKPose.Value) return;
+
+        __instance._poseHandler.GetHumanPose(ref __instance.humanPose);
+
+        for (int i = 0; i < IKPoseMuscles.Length; i++)
+        {
+            __instance.ApplyMuscleValue((MuscleIndex)i, IKPoseMuscles[i], ref __instance.humanPose.muscles);
+        }
+        __instance.humanPose.bodyPosition = Vector3.up;
+        __instance.humanPose.bodyRotation = Quaternion.identity;
+        __instance._poseHandler.SetHumanPose(ref __instance.humanPose);
+
+        // recentering avatar so it doesnt need to step from random place on switch
+        IKSystem.vrik.transform.localPosition = Vector3.zero;
+        IKSystem.vrik.transform.localRotation = Quaternion.identity;
+        // janky fix, initializing early with correct pose
+        IKSystem.vrik.solver.Initiate(IKSystem.vrik.transform);
+    } 
+
+    static readonly float[] IKPoseMuscles = new float[]
+    {
+            0.00133321f,
+            8.195831E-06f,
+            8.537738E-07f,
+            -0.002669832f,
+            -7.651234E-06f,
+            -0.001659694f,
+            0f,
+            0f,
+            0f,
+            0.04213953f,
+            0.0003007996f,
+            -0.008032114f,
+            -0.03059979f,
+            -0.0003182998f,
+            0.009640567f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0f,
+            0.5768794f,
+            0.01061097f,
+            -0.1127839f,
+            0.9705755f,
+            0.07972051f,
+            -0.0268422f,
+            0.007237188f,
+            0f,
+            0.5768792f,
+            0.01056608f,
+            -0.1127519f,
+            0.9705756f,
+            0.07971933f,
+            -0.02682396f,
+            0.007229362f,
+            0f,
+            -5.651802E-06f,
+            -3.034899E-07f,
+            0.4100508f,
+            0.3610304f,
+            -0.0838329f,
+            0.9262537f,
+            0.1353517f,
+            -0.03578902f,
+            0.06005657f,
+            -4.95989E-06f,
+            -1.43007E-06f,
+            0.4096187f,
+            0.363263f,
+            -0.08205152f,
+            0.9250782f,
+            0.1345718f,
+            -0.03572125f,
+            0.06055461f,
+            -1.079177f,
+            0.2095419f,
+            0.6140652f,
+            0.6365265f,
+            0.6683931f,
+            -0.4764312f,
+            0.8099416f,
+            0.8099371f,
+            0.6658203f,
+            -0.7327053f,
+            0.8113618f,
+            0.8114051f,
+            0.6643661f,
+            -0.40341f,
+            0.8111364f,
+            0.8111367f,
+            0.6170399f,
+            -0.2524227f,
+            0.8138723f,
+            0.8110135f,
+            -1.079171f,
+            0.2095456f,
+            0.6140658f,
+            0.6365255f,
+            0.6683878f,
+            -0.4764301f,
+            0.8099402f,
+            0.8099376f,
+            0.6658241f,
+            -0.7327023f,
+            0.8113653f,
+            0.8113793f,
+            0.664364f,
+            -0.4034042f,
+            0.811136f,
+            0.8111364f,
+            0.6170469f,
+            -0.2524345f,
+            0.8138595f,
+            0.8110138f
+     };
 }
 
 internal static class VRIKPatches

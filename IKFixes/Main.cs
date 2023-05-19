@@ -25,6 +25,9 @@ public class IKFixes : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryAssignRemainingTrackers =
         Category.CreateEntry("Assign Remaining Trackers", true, description: "Should the game calibrate any additional trackers as secondary trackers for already-tracked points?");
 
+    public static readonly MelonPreferences_Entry<bool> EntryUseIKPose =
+        Category.CreateEntry("Use IK Pose", true, description: "Should an IKPose be used after VRIK initialization? This can fix some issues with feet targeting.");
+
     public static readonly MelonPreferences_Entry<bool> EntryNetIKPass =
         Category.CreateEntry("Network IK Pass", true, description: "Should NetIK pass be applied? This fixes a bunch of small rotation errors after VRIK is run.");
 
