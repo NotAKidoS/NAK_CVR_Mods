@@ -1,5 +1,5 @@
 # IKFixes
-A few small fixes to IK.
+Adds a few small fixes and configuration options to IK.
 
 **FBT Fixes** - 
 * Knee tracking.
@@ -13,6 +13,18 @@ A few small fixes to IK.
 * Root Angle Offset while looking around. Fixes feet only pointing in direction of head.
 * Halfbody feet pointing upward.
 
+**Configurations** -
+* Neck Stiffness
+* Body Rot Stiffness
+* Rot Chest By Hands
+* Assign Remaining Trackers
+* Network IK Pass
+
+**NOTE**
+The mod works, but is done in a very janky way with patches everywhere.
+
+I could spend some time to properly clean it up and make the fixes more "stable", but there isn't much reason to as the IKSystem is still in active development. This mod is just mostly a collection of quick fixes to a bunch of things that bothered me, and that I knew or could guess how to fix after working on DesktopVRIK for however long.
+
 ## Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/ik-knee-tracking
 
@@ -25,6 +37,8 @@ https://feedback.abinteractive.net/p/about-ik-behaviour
 https://feedback.abinteractive.net/p/vrik-addplatformmotion-for-movement-parents
 
 https://feedback.abinteractive.net/p/halfbodyik-feet-will-only-point-in-direction-of-head
+
+https://feedback.abinteractive.net/p/halfbodyik-heels-are-low-as-of-iksystem-update
 
 ---
 
