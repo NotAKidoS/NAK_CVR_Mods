@@ -68,34 +68,34 @@ internal static class BodySystemPatches
         }
     }
 
+    static void SetArmWeight(IKSolverVR.Arm arm, float weight)
+    {
+        arm.positionWeight = weight;
+        arm.rotationWeight = weight;
+        arm.shoulderRotationWeight = weight;
+        arm.shoulderTwistWeight = weight;
+        // assumed fix of bend goal weight if arms disabled with elbows (havent tested)
+        // why is there no "usingElbowTracker" flag like knees? where is the consistancy???
+        arm.bendGoalWeight = arm.bendGoal != null ? weight : 0f;
+    }
+    static void SetLegWeight(IKSolverVR.Leg leg, float weight)
+    {
+        leg.positionWeight = weight;
+        leg.rotationWeight = weight;
+        // fixes knees bending to tracker if feet disabled (running anim)
+        leg.bendGoalWeight = leg.usingKneeTracker ? weight : 0f;
+    }
+    static void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
+    {
+        // looks better when hips are disabled while running
+        spine.pelvisPositionWeight = weight;
+        spine.pelvisRotationWeight = weight;
+    }
+
     [HarmonyPrefix]
     [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.Update))]
     static bool Prefix_BodySystem_Update(ref BodySystem __instance)
     {
-        void SetArmWeight(IKSolverVR.Arm arm, float weight)
-        {
-            arm.positionWeight = weight;
-            arm.rotationWeight = weight;
-            arm.shoulderRotationWeight = weight;
-            arm.shoulderTwistWeight = weight;
-            // assumed fix of bend goal weight if arms disabled with elbows (havent tested)
-            // why is there no "usingElbowTracker" flag like knees? where is the consistancy???
-            arm.bendGoalWeight = arm.bendGoal != null ? weight : 0f;
-        }
-        void SetLegWeight(IKSolverVR.Leg leg, float weight)
-        {
-            leg.positionWeight = weight;
-            leg.rotationWeight = weight;
-            // fixes knees bending to tracker if feet disabled (running anim)
-            leg.bendGoalWeight = leg.usingKneeTracker ? 0.9f : 0f;
-        }
-        void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
-        {
-            // looks better when hips are disabled while running
-            spine.pelvisPositionWeight = weight;
-            spine.pelvisRotationWeight = weight;
-        }
-
         if (IKSystem.vrik != null)
         {
             IKSolverVR solver = IKSystem.vrik.solver;
@@ -113,13 +113,6 @@ internal static class BodySystemPatches
                 SetLegWeight(solver.leftLeg, BodySystem.TrackingLeftLegEnabled && solver.leftLeg.target != null ? 1f : 0f);
                 SetLegWeight(solver.rightLeg, BodySystem.TrackingRightLegEnabled && solver.leftLeg.target != null ? 1f : 0f);
                 SetPelvisWeight(solver.spine, solver.spine.pelvisTarget != null ? 1f : 0f);
-
-                // makes running animation look better
-                if (BodySystem.isCalibratedAsFullBody)
-                {
-                    bool isRunning = BodySystem.PlayRunningAnimationInFullBody && MovementSystem.Instance.movementVector.magnitude > 0f;
-                    if (isRunning) SetPelvisWeight(solver.spine, 0f);
-                }
             }
             else
             {
@@ -204,21 +197,25 @@ internal static class BodySystemPatches
             IKSystem.vrik.solver.spine.maxRootAngle = 0f; // idk, testing
         }
 
-        if (BodySystem.isCalibratedAsFullBody && BodySystem.TrackingPositionWeight > 0f)
+        // makes running animation look better
+        if (BodySystem.isCalibratedAsFullBody && BodySystem.PlayRunningAnimationInFullBody && BodySystem.TrackingPositionWeight > 0f)
         {
-            bool isRunning = BodySystem.PlayRunningAnimationInFullBody && MovementSystem.Instance.movementVector.magnitude > 0f;
-            if (!isRunning)
+            bool isRunning = MovementSystem.Instance.movementVector.magnitude > 0f;
+            bool isGrounded = MovementSystem.Instance._isGrounded;
+            bool isFlying = MovementSystem.Instance.flying;
+            if (isRunning || !isGrounded && !isFlying)
+            {
+                SetPelvisWeight(IKSystem.vrik.solver.spine, 0f);
+                // This looks much better when running
+                IKSystem.Instance.applyOriginalHipPosition = true;
+                IKSystem.Instance.applyOriginalHipRotation = true;
+            }
+            else
             {
                 // Resetting bodyRotation made running animations look funky
                 IKSystem.Instance.applyOriginalHipPosition = true;
                 IKSystem.Instance.applyOriginalHipRotation = false;
                 IKSystem.Instance.humanPose.bodyRotation = Quaternion.identity;
-            }
-            else
-            {
-                // This looks much better when running
-                IKSystem.Instance.applyOriginalHipPosition = true;
-                IKSystem.Instance.applyOriginalHipRotation = true;
             }
         }
 
@@ -231,10 +228,10 @@ internal static class BodySystemPatches
     {
         IKSystem.Instance.applyOriginalHipPosition = false;
         IKSystem.Instance.applyOriginalHipRotation = false;
-        IKSystem.vrik.solver.leftLeg.bendToTargetWeight = 0.1f;
-        IKSystem.vrik.solver.rightLeg.bendToTargetWeight = 0.1f;
-        IKSystem.vrik.solver.leftLeg.bendGoalWeight = 0.9f;
-        IKSystem.vrik.solver.rightLeg.bendGoalWeight = 0.9f;
+        IKSystem.vrik.solver.leftLeg.bendToTargetWeight = 0f;
+        IKSystem.vrik.solver.rightLeg.bendToTargetWeight = 0f;
+        IKSystem.vrik.solver.leftLeg.bendGoalWeight = 1f;
+        IKSystem.vrik.solver.rightLeg.bendGoalWeight = 1f;
     }
 }
 
@@ -293,7 +290,7 @@ internal static class IKSystemPatches
         IKSystem.vrik.transform.localRotation = Quaternion.identity;
         // janky fix, initializing early with correct pose
         IKSystem.vrik.solver.Initiate(IKSystem.vrik.transform);
-    } 
+    }
 
     static readonly float[] IKPoseMuscles = new float[]
     {
@@ -411,7 +408,8 @@ internal static class VRIKPatches
     {
         // I am patching here because Stretching() is always called
         // and i am not doing a transpiler to place it on the second line
-        __instance.ApplyBendGoal();
+        if (__instance.usingKneeTracker)
+            __instance.ApplyBendGoal();
     }
 
     // IKTweaks original method does not do this?
@@ -421,17 +419,17 @@ internal static class VRIKPatches
     [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.ApplyOffsets))]
     static bool Prefix_IKSolverVR_Leg_ApplyOffsets(ref IKSolverVR.Leg __instance)
     {
-        // Apply position and rotation offsets
-        __instance.ApplyPositionOffset(__instance.footPositionOffset, 1f);
-        __instance.ApplyRotationOffset(__instance.footRotationOffset, 1f);
-
-        // Calculate new foot position and rotation
-        Quaternion footQuaternion = Quaternion.FromToRotation(__instance.footPosition - __instance.position, __instance.footPosition + __instance.heelPositionOffset - __instance.position);
-        __instance.footPosition = __instance.position + footQuaternion * (__instance.footPosition - __instance.position);
-        __instance.footRotation = footQuaternion * __instance.footRotation;
-
         if (__instance.usingKneeTracker)
         {
+            // Apply position and rotation offsets
+            __instance.ApplyPositionOffset(__instance.footPositionOffset, 1f);
+            __instance.ApplyRotationOffset(__instance.footRotationOffset, 1f);
+
+            // Calculate new foot position and rotation
+            Quaternion footQuaternion = Quaternion.FromToRotation(__instance.footPosition - __instance.position, __instance.footPosition + __instance.heelPositionOffset - __instance.position);
+            __instance.footPosition = __instance.position + footQuaternion * (__instance.footPosition - __instance.position);
+            __instance.footRotation = footQuaternion * __instance.footRotation;
+
             float angle = 0f;
             if (__instance.bendGoal != null && __instance.bendGoalWeight > 0f)
             {
@@ -447,17 +445,7 @@ internal static class VRIKPatches
             return false;
         }
 
-        // Adjust bend normal and thigh rotation for swivel offset
-        float adjustedAngle = __instance.swivelOffset;
-        if (adjustedAngle > 90f) adjustedAngle = 180f - adjustedAngle;
-        if (adjustedAngle < -90f) adjustedAngle = -180f - adjustedAngle;
-        if (adjustedAngle != 0f)
-        {
-            __instance.bendNormal = Quaternion.AngleAxis(adjustedAngle, __instance.thigh.solverPosition - __instance.lastBone.solverPosition) * __instance.bendNormal;
-            __instance.thigh.solverRotation = Quaternion.AngleAxis(-adjustedAngle, __instance.thigh.solverRotation * __instance.thigh.axis) * __instance.thigh.solverRotation;
-        }
-
-        return false;
+        return true;
     }
 }
 
