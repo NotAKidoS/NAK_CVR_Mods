@@ -55,6 +55,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CameraFixes", "CameraFixes\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IKAdjustments", "IKAdjustments\IKAdjustments.csproj", "{CCD510BF-1A32-441F-B52B-8A937BF75CE3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmoothRay", "SmoothRay\SmoothRay.csproj", "{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,10 @@ Global
 		{CCD510BF-1A32-441F-B52B-8A937BF75CE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCD510BF-1A32-441F-B52B-8A937BF75CE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCD510BF-1A32-441F-B52B-8A937BF75CE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
