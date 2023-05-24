@@ -1,6 +1,11 @@
-# SmoothRay
+# TrackedPointFix (Depricated)
+lazy af fix for a small issue
 
-Smoothes your controller while using the Quick and Main menus to make it easier to navigate.
+Your Left/Right hand controllers will now track faster and while in the Steam overlay.
+
+This approach to fixing the issue is made lazy to support DesktopVRSwitch.
+
+(also because im lazy)
 
 ---
 

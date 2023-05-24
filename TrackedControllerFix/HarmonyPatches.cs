@@ -10,12 +10,11 @@ class PlayerSetupPatches
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
     static void Post_PlayerSetup_Start(ref PlayerSetup __instance)
     {
-        // Add TrackedControllerFix
-        var vrLeftHandTracker = __instance.vrLeftHandTracker.AddComponent<TrackedControllerFixer>();
-        vrLeftHandTracker.inputSource = SteamVR_Input_Sources.LeftHand;
-        var vrRightHandTracker = __instance.vrRightHandTracker.AddComponent<TrackedControllerFixer>();
-        vrRightHandTracker.inputSource = SteamVR_Input_Sources.RightHand;
-        vrLeftHandTracker.Initialize();
-        vrRightHandTracker.Initialize();
+        var leftFixer = __instance.vrLeftHandTracker.AddComponent<TrackedControllerFixer>();
+        leftFixer.inputSource = SteamVR_Input_Sources.LeftHand;
+        leftFixer.Initialize();
+        var rightFixer = __instance.vrRightHandTracker.AddComponent<TrackedControllerFixer>();
+        rightFixer.inputSource = SteamVR_Input_Sources.RightHand;
+        rightFixer.Initialize();
     }
 }

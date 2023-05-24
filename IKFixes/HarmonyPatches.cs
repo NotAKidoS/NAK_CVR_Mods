@@ -127,27 +127,30 @@ internal static class BodySystemPatches
                 SetPelvisWeight(solver.spine, 0f);
             }
 
-            float maxRootAngle = BodySystem.isCalibratedAsFullBody || IKFixes.EntryUseFakeRootAngle.Value ? (PlayerSetup.Instance._emotePlaying ? 180f : 0f) : (PlayerSetup.Instance._emotePlaying ? 180f : 25f);
-            solver.spine.maxRootAngle = maxRootAngle;
+            float maxRootAngle = 25f;
+            float rootHeadingOffset = 0f;
 
-            if (IKFixes.EntryUseFakeRootAngle.Value)
+            if (BodySystem.isCalibratedAsFullBody || IKFixes.EntryUseFakeRootAngle.Value)
+                maxRootAngle = 0f;
+
+            if (PlayerSetup.Instance._emotePlaying)
+                maxRootAngle = 180f;
+
+            if (IKFixes.EntryUseFakeRootAngle.Value && !BodySystem.isCalibratedAsFullBody)
             {
-                // Emulate maxRootAngle because CVR doesn't have the player controller set up ideally for VRIK.
-                // I believe they'd need to change which object vrik.references.root is, as using avatar object is bad!
-                // This is a small small fix, but makes it so the feet dont point in the direction of the head
-                // when turning. It also means turning with joystick & turning IRL make feet behave the same and follow behind.
                 float weightedAngleLimit = IKFixes.EntryFakeRootAngleLimit.Value * solver.locomotion.weight;
                 float pivotAngle = MovementSystem.Instance.rotationPivot.eulerAngles.y;
                 float deltaAngleRoot = Mathf.DeltaAngle(pivotAngle, _ikSimulatedRootAngle);
                 float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
 
-                if (absDeltaAngleRoot > weightedAngleLimit)
-                {
-                    deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
-                    _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, pivotAngle, absDeltaAngleRoot - weightedAngleLimit);
-                }
-                solver.spine.rootHeadingOffset = deltaAngleRoot;
+                deltaAngleRoot = Mathf.Clamp(deltaAngleRoot, -weightedAngleLimit, weightedAngleLimit);
+                _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, pivotAngle, absDeltaAngleRoot - weightedAngleLimit);
+
+                rootHeadingOffset = deltaAngleRoot;
             }
+
+            solver.spine.maxRootAngle = maxRootAngle;
+            solver.spine.rootHeadingOffset = rootHeadingOffset;
 
             // custom IK settings
             solver.spine.neckStiffness = IKFixes.EntryNeckStiffness.Value;
@@ -194,25 +197,24 @@ internal static class BodySystemPatches
         if (BodySystem.isCalibrating)
         {
             IKSystem.Instance.humanPose.bodyRotation = Quaternion.identity;
-            IKSystem.vrik.solver.spine.maxRootAngle = 0f; // idk, testing
+            //IKSystem.vrik.solver.spine.maxRootAngle = 0f; // idk, testing
         }
 
-        // makes running animation look better
-        if (BodySystem.isCalibratedAsFullBody && BodySystem.PlayRunningAnimationInFullBody && BodySystem.TrackingPositionWeight > 0f)
+        if (BodySystem.isCalibratedAsFullBody && BodySystem.TrackingPositionWeight > 0f)
         {
             bool isRunning = MovementSystem.Instance.movementVector.magnitude > 0f;
             bool isGrounded = MovementSystem.Instance._isGrounded;
             bool isFlying = MovementSystem.Instance.flying;
-            if (isRunning || !isGrounded && !isFlying)
+            bool playRunningAnimation = BodySystem.PlayRunningAnimationInFullBody;
+
+            if ((playRunningAnimation && (isRunning || !isGrounded && !isFlying)))
             {
                 SetPelvisWeight(IKSystem.vrik.solver.spine, 0f);
-                // This looks much better when running
                 IKSystem.Instance.applyOriginalHipPosition = true;
                 IKSystem.Instance.applyOriginalHipRotation = true;
             }
             else
             {
-                // Resetting bodyRotation made running animations look funky
                 IKSystem.Instance.applyOriginalHipPosition = true;
                 IKSystem.Instance.applyOriginalHipRotation = false;
                 IKSystem.Instance.humanPose.bodyRotation = Quaternion.identity;

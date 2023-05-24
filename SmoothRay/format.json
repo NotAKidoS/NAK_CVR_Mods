@@ -6,10 +6,10 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Allows your controllers to track while the SteamVR overlay is open. This also fixes Quest/Touch controllers feeling slow during fast movements.",
+  "description": "Smoothes your controller while using the Quick and Main menus to make it easier to navigate.",
   "searchtags": [
     "vr",
-    "quest",
+    "ray",
     "controller",
     "tracking"
   ],
@@ -19,5 +19,5 @@
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/SmoothRay.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SmoothRay/",
   "changelog": "Initial Release",
-  "embedcolor": "3498db"
+  "embedcolor": "dc8105"
 }

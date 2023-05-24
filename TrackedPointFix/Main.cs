@@ -1,12 +1,12 @@
 ﻿using MelonLoader;
 
-namespace NAK.TrackedControllerFix;
+namespace NAK.TrackedPointFix;
 
-public class TrackedControllerFix : MelonMod
+public class TrackedPointFix : MelonMod
 {
     public override void OnInitializeMelon()
     {
-        ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
+        ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
     }
 
     void ApplyPatches(Type type)
