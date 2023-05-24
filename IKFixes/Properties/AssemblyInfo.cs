@@ -25,6 +25,6 @@ using System.Reflection;
 namespace NAK.IKFixes.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.5";
+    public const string Version = "1.0.6";
     public const string Author = "NotAKidoS";
 }
