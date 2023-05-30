@@ -2,7 +2,7 @@
   {
     "_id": 16,
     "name": "ThirdPerson",
-    "modversion": "1.0.2",
+    "modversion": "1.0.3",
     "gameversion": "2022r170",
     "loaderversion": "0.5.7",
     "modtype": "Mod",
@@ -14,9 +14,9 @@
       "third person"
     ],
     "requirements": [],
-    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/ThirdPerson.dll",
+    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r8/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Disable desktop camera while in thirdperson for performance.\n- Add cycle backward modifier while holding Shift.\n- Fixed bug where loading into a world in thirdperson broke nameplates. (imagine using Camera.main)",
+    "changelog": "- Submit changes I made three weeks ago and forgot about... no longer disables desktop camera, so no more null ref errors with nameplates & camera indicator.",
     "embedcolor": "F61961"
   }
 ]
