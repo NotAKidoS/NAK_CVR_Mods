@@ -2,7 +2,7 @@
  
 Makes "AvatarScale" parameter persistant across avatars. 
 
-Combined with AvatarScaleTool, this allows for crossa consistant scale when switching between avatars.
+Combined with AvatarScaleTool, this allows for consistant scale when switching between avatars.
     
 ---
 

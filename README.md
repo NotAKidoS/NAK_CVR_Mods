@@ -21,6 +21,7 @@
 | [PickupPushPull](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PickupPushPull)                  | Approved       | No                    | Utilities & Tweaks      |
 | [PortableCameraAdditions](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions)| Approved       | No                    | Camera                  |
 | [PropUndoButton](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndo)                        | Approved       | No                    | N/A                     |
+| [ThirdPerson](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson)                        | Approved       | No                    | New Features & Overhauls|
 
 ### Note: This is a newly created central repository for my ChilloutVR mods. As I update and improve them, I will migrate releases to this repository and include them in each new release, following the approach used by SDraw and Kafejao.
 
