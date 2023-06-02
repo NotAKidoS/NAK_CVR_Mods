@@ -1,7 +1,7 @@
 {
   "_id": 142,
   "name": "IKFixes",
-  "modversion": "1.0.4",
+  "modversion": "1.0.6",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r5/IKFixes.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r8/IKFixes.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes/",
-  "changelog": "- Added fix for animations affecting root to bleed into IK. This fixes chest tracker flailing around when running.\n- Added fix to use an IKPose after HalfbodyIK Initialization. This fixes feet pointing upward in halfbody.\n- Fixed patch to leg solver that prevented lower leg rotation while using knee trackers.\n- Adjusted elbow target offsets for a balance between accuracy and stability. Makes StandableFBE-tracked elbows feel much better to use.\n- Added option to disable AssignRemainingTrackers feature.",
+  "changelog": "- Added fix for animations affecting root to bleed into IK.\n- Use an IKPose after HalfbodyIK Initialization.\n- Fixed patch to leg solver that prevented lower leg rotation while using knee trackers.\n- Adjusted elbow target offsets for a balance between accuracy and stability. Makes StandableFBE-tracked elbows feel much better to use.\n- Added option to disable AssignRemainingTrackers feature.\n- Exposed a couple VRIK solver settings for more fine-tuning.",
   "embedcolor": "f46e49"
 }

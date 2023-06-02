@@ -22,6 +22,9 @@ public class IKFixes : MelonMod
     public static readonly MelonPreferences_Entry<float> EntryRotateChestByHands =
         Category.CreateEntry("Rot Chest By Hands", 1f, description: "Rotate chest by hands.");
 
+    public static readonly MelonPreferences_Entry<float> EntryBendToTargetWeight =
+        Category.CreateEntry("Leg Bend To Target", 1f, description: "Leg bend to target weight");
+
     public static readonly MelonPreferences_Entry<bool> EntryAssignRemainingTrackers =
         Category.CreateEntry("Assign Remaining Trackers", true, description: "Should the game calibrate any additional trackers as secondary trackers for already-tracked points?");
 

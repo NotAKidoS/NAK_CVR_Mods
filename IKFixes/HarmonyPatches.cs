@@ -156,8 +156,13 @@ internal static class BodySystemPatches
             solver.spine.neckStiffness = IKFixes.EntryNeckStiffness.Value;
             solver.spine.bodyRotStiffness = IKFixes.EntryBodyRotStiffness.Value;
             solver.spine.rotateChestByHands = IKFixes.EntryRotateChestByHands.Value;
-        }
 
+            if (!IKSystem.vrik.solver.leftLeg.usingKneeTracker)
+                IKSystem.vrik.solver.leftLeg.bendToTargetWeight = IKFixes.EntryBendToTargetWeight.Value;
+            if (!IKSystem.vrik.solver.rightLeg.usingKneeTracker)
+                IKSystem.vrik.solver.rightLeg.bendToTargetWeight = IKFixes.EntryBendToTargetWeight.Value;
+        }
+        
         int count = IKSystem.Instance.AllTrackingPoints.FindAll((TrackingPoint m) => m.isActive && m.isValid && m.suggestedRole > TrackingPoint.TrackingRole.Invalid).Count;
 
         // fixes having all tracking points disabled forcing calibration
@@ -230,10 +235,16 @@ internal static class BodySystemPatches
     {
         IKSystem.Instance.applyOriginalHipPosition = false;
         IKSystem.Instance.applyOriginalHipRotation = false;
-        IKSystem.vrik.solver.leftLeg.bendToTargetWeight = 0f;
-        IKSystem.vrik.solver.rightLeg.bendToTargetWeight = 0f;
-        IKSystem.vrik.solver.leftLeg.bendGoalWeight = 1f;
-        IKSystem.vrik.solver.rightLeg.bendGoalWeight = 1f;
+        if (IKSystem.vrik.solver.leftLeg.usingKneeTracker)
+        {
+            IKSystem.vrik.solver.leftLeg.bendToTargetWeight = 0f;
+            IKSystem.vrik.solver.leftLeg.bendGoalWeight = 1f;
+        }
+        if (IKSystem.vrik.solver.rightLeg.usingKneeTracker)
+        {
+            IKSystem.vrik.solver.rightLeg.bendToTargetWeight = 0f;
+            IKSystem.vrik.solver.rightLeg.bendGoalWeight = 1f;
+        }
     }
 }
 
