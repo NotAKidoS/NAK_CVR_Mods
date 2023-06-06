@@ -1,7 +1,7 @@
 {
   "_id": 126,
   "name": "AASBufferFix",
-  "modversion": "1.0.5",
+  "modversion": "1.0.6",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/AASBufferFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r9/AASBufferFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix/",
-  "changelog": "",
+  "changelog": "Fixed an error when a remote avatar does not have an Animator component.",
   "embedcolor": "9b59b6"
 }

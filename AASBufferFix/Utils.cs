@@ -20,8 +20,6 @@ public class Utils
                     case AnimatorControllerParameterType.Float:
                         avatarFloatCount++;
                         break;
-                    case (AnimatorControllerParameterType)2:
-                        break;
                     case AnimatorControllerParameterType.Int:
                         avatarIntCount++;
                         break;

@@ -21,15 +21,17 @@ internal class HarmonyPatches
     private static void Postfix_PuppetMaster_AvatarInstantiated(ref PuppetMaster __instance, ref Animator ____animator)
     {
         AASBufferHelper externalBuffer = __instance.GetComponent<AASBufferHelper>();
-        if (externalBuffer != null) externalBuffer.OnAvatarInstantiated(____animator);
-    }
 
+        externalBuffer?.OnAvatarInstantiated(____animator);
+    }
+    
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PuppetMaster), "AvatarDestroyed")]
     private static void Postfix_PuppetMaster_AvatarDestroyed(ref PuppetMaster __instance)
     {
         AASBufferHelper externalBuffer = __instance.GetComponent<AASBufferHelper>();
-        if (externalBuffer != null) externalBuffer.OnAvatarDestroyed();
+
+        externalBuffer?.OnAvatarDestroyed();
     }
 
     [HarmonyPrefix]

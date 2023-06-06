@@ -27,6 +27,13 @@ public class AASBufferHelper : MonoBehaviour
 
     public void OnAvatarInstantiated(Animator animator)
     {
+        // have never run into an avatar without an animator until today
+        if (animator == null)
+        {
+            GameHandlesAAS = true;
+            return;
+        }
+        
         //check if avatar uses Avatar Advanced Settings
         ///SendDebug("[OnInit] Remote avatar initialized. Checking for AAS...");
         CVRAvatar avatar = animator.GetComponent<CVRAvatar>();
