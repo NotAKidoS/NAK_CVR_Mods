@@ -1,4 +1,4 @@
-# TrackedControllerFix (Depricated)
+# TrackedControllerFix
 lazy af fix for a small issue
 
 Your Left/Right hand controllers will now track faster and while in the Steam overlay.

@@ -1,23 +1,23 @@
 {
   "_id": -1,
   "name": "SmoothRay",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2022r170",
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Smoothes your controller while using the Quick and Main menus to make it easier to navigate.",
+  "description": "Smoothes your controller while using the Quick and Main menus to make it easier to navigate.\nThis is a CVR adaptation of a Beat Saber mod: [BeatSaber_SmoothedController](https://github.com/kinsi55/BeatSaber_SmoothedController)\n\nSupport for TrackedControllerFix & DesktopVRSwitch.",
   "searchtags": [
     "vr",
     "ray",
     "controller",
-    "tracking"
+    "smoothing"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/SmoothRay.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r9/SmoothRay.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SmoothRay/",
-  "changelog": "Initial Release",
+  "changelog": "Initial CVRMG Release",
   "embedcolor": "dc8105"
 }
