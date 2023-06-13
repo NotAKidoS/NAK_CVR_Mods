@@ -91,10 +91,13 @@ internal class DesktopVRIKSystem : MonoBehaviour
         // Let AMT handle it if available
         if (DesktopVRIK.EntryIntegrationAMT.Value) return true;
 
-        // Get Upright value
-        Vector3 delta = cachedSolver.Spine.headPosition - avatarTransform.position;
-        Vector3 deltaRotated = Quaternion.Euler(0, avatarTransform.rotation.eulerAngles.y, 0) * delta;
-        float upright = Mathf.InverseLerp(0f, calibrationData.InitialHeadHeight * _scaleDifference, deltaRotated.y);
+        // Convert head position to avatar's local coordinate system
+        Vector3 headPositionInAvatarLocal = avatarTransform.InverseTransformPoint(cachedSolver.Spine.headPosition);
+
+        // Get Upright value (assuming avatar's local up is its standing direction)
+        float distance = headPositionInAvatarLocal.y;
+        float upright = Mathf.InverseLerp(0f, calibrationData.InitialHeadHeight * _scaleDifference, Mathf.Abs(distance));
+
         return upright > 0.85f;
     }
 
@@ -263,54 +266,76 @@ internal class DesktopVRIKSystem : MonoBehaviour
         // Apply custom VRIK solving effects
         IKBodyLeaningOffset(_ikWeightLerp);
         IKBodyHeadingOffset(_ikWeightLerp);
+    }
 
-        void IKBodyLeaningOffset(float weight)
+
+    void IKBodyLeaningOffset(float weight)
+    {
+        // Emulate old VRChat hip movement
+        if (DesktopVRIK.EntryBodyLeanWeight.Value <= 0) return;
+
+        if (DesktopVRIK.EntryProneThrusting.Value) weight = 1f;
+        float weightedAngle = DesktopVRIK.EntryBodyLeanWeight.Value * weight;
+        float angle = _cameraTransform.localEulerAngles.x;
+        angle = angle > 180 ? angle - 360 : angle;
+        Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, avatarTransform.right);
+        cachedSolver.Spine.headRotationOffset *= rotation;
+    }
+
+    void IKBodyHeadingOffset(float weight)
+    {
+        // Make root heading follow within a set limit
+        if (DesktopVRIK.EntryBodyHeadingLimit.Value <= 0)
         {
-            // Emulate old VRChat hip movement
-            if (DesktopVRIK.EntryBodyLeanWeight.Value <= 0) return;
-
-            if (DesktopVRIK.EntryProneThrusting.Value) weight = 1f;
-            float weightedAngle = DesktopVRIK.EntryBodyLeanWeight.Value * weight;
-            float angle = _cameraTransform.localEulerAngles.x;
-            angle = angle > 180 ? angle - 360 : angle;
-            Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, avatarTransform.right);
-            cachedSolver.Spine.headRotationOffset *= rotation;
+            // reset when value is 0
+            cachedSolver.Spine.rootHeadingOffset = 0f;
+            return;
         }
 
-        void IKBodyHeadingOffset(float weight)
+        // Get the real localYRotation
+        Vector3 projectedForward = Vector3.ProjectOnPlane(transform.forward, transform.up);
+        Vector3 worldProjectedForward = Vector3.ProjectOnPlane(Vector3.forward, transform.up);
+
+        float localYRotation = Vector3.SignedAngle(projectedForward, worldProjectedForward, transform.up);
+        if (localYRotation < 0) localYRotation += 360;
+
+        float weightedAngleLimit = DesktopVRIK.EntryBodyHeadingLimit.Value * weight;
+        float deltaAngleRoot = Mathf.DeltaAngle(_ikSimulatedRootAngle, localYRotation);
+
+        float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
+        if (absDeltaAngleRoot > weightedAngleLimit)
         {
-            // Make root heading follow within a set limit
-            if (DesktopVRIK.EntryBodyHeadingLimit.Value <= 0) return;
-
-            float weightedAngleLimit = DesktopVRIK.EntryBodyHeadingLimit.Value * weight;
-            float deltaAngleRoot = Mathf.DeltaAngle(transform.eulerAngles.y, _ikSimulatedRootAngle);
-            float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
-
-            if (absDeltaAngleRoot > weightedAngleLimit)
-            {
-                deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
-                _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, transform.eulerAngles.y, absDeltaAngleRoot - weightedAngleLimit);
-            }
-
-            cachedSolver.Spine.rootHeadingOffset = deltaAngleRoot;
-
-            if (DesktopVRIK.EntryPelvisHeadingWeight.Value > 0)
-            {
-                cachedSolver.Spine.pelvisRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * DesktopVRIK.EntryPelvisHeadingWeight.Value, 0f);
-                cachedSolver.Spine.chestRotationOffset *= Quaternion.Euler(0f, -deltaAngleRoot * DesktopVRIK.EntryPelvisHeadingWeight.Value, 0f);
-            }
-
-            if (DesktopVRIK.EntryChestHeadingWeight.Value > 0)
-            {
-                cachedSolver.Spine.chestRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * DesktopVRIK.EntryChestHeadingWeight.Value, 0f);
-            }
+            deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
+            _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, localYRotation, absDeltaAngleRoot - weightedAngleLimit);
         }
+        
+        cachedSolver.Spine.rootHeadingOffset = deltaAngleRoot;
+
+        float pelvisHeadingWeight = DesktopVRIK.EntryPelvisHeadingWeight.Value;
+        if (pelvisHeadingWeight > 0)
+        {
+            AdjustBodyPartRotation(deltaAngleRoot * pelvisHeadingWeight, ref cachedSolver.Spine.pelvisRotationOffset);
+            AdjustBodyPartRotation(-deltaAngleRoot * pelvisHeadingWeight, ref cachedSolver.Spine.chestRotationOffset);
+        }
+
+        float chestHeadingWeight = DesktopVRIK.EntryChestHeadingWeight.Value;
+        if (chestHeadingWeight > 0)
+        {
+            AdjustBodyPartRotation(deltaAngleRoot * chestHeadingWeight, ref cachedSolver.Spine.chestRotationOffset);
+        }
+    }
+    
+    void AdjustBodyPartRotation(float angle, ref Quaternion bodyPartRotationOffset)
+    {
+        // this has to be flipped back cause vrik dumb
+        Vector3 localOffset = bodyPartRotationOffset * transform.InverseTransformDirection(new Vector3(0f, angle, 0f));
+        bodyPartRotationOffset *= Quaternion.Euler(localOffset);
     }
 
     public void OnPostSolverUpdate()
     {
         if (!DesktopVRIK.EntryNetIKPass.Value) return;
-        Calibrator.ApplyNetIKPass();
+        Calibrator.ApplyNetIKPass(); // lazy cause Calibrator has humanposehandler
     }
 
     void IKResetSolver()
