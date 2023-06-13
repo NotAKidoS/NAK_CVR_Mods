@@ -1,4 +1,4 @@
-﻿using CameraFixes.Properties;
+﻿using DesktopCameraFix.Properties;
 using MelonLoader;
 using System.Reflection;
 
@@ -22,7 +22,7 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace CameraFixes.Properties;
+namespace DesktopCameraFix.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.0";
