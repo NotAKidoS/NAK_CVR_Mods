@@ -42,7 +42,6 @@ internal class DesktopVRIKSystem : MonoBehaviour
     void Start()
     {
         Instance = this;
-
         Calibrator = new DesktopVRIKCalibrator();
 
         playerSetup = GetComponent<PlayerSetup>();

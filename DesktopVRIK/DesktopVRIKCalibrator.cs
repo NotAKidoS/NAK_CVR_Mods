@@ -123,10 +123,10 @@ internal class DesktopVRIKCalibrator
     Animator _animator;
 
     // Calibration Objects
-    public HumanPoseHandler _humanPoseHandler;
-    public HumanPose _humanPose;
-    public HumanPose _humanPoseInitial;
-
+    HumanPoseHandler _humanPoseHandler;
+    HumanPose _humanPose;
+    HumanPose _humanPoseInitial;
+    
     // Animator Info
     int _animLocomotionLayer = -1;
     int _animIKPoseLayer = -1;
@@ -198,14 +198,72 @@ internal class DesktopVRIKCalibrator
         // Add and configure VRIK
         ikSystem.avatarVRIK = ikSystem.avatarTransform.AddComponentIfMissing<VRIK>();
         ikSystem.avatarVRIK.AutoDetectReferences();
-        ikSystem.cachedSolver = new CachedSolver(ikSystem.avatarVRIK.solver);
 
         // Why do I love to overcomplicate things?
         VRIKUtils.ConfigureVRIKReferences(ikSystem.avatarVRIK, DesktopVRIK.EntryUseVRIKToes.Value);
-        VRIKConfigurator.ApplyVRIKConfiguration(ikSystem.cachedSolver, VRIKConfigurations.DesktopVRIKConfiguration());
 
-        // Fix potential animator issue
+        // Fix animator issue
         ikSystem.avatarVRIK.fixTransforms = ikSystem.calibrationData.FixTransformsRequired;
+
+        CachedSolver solver = new CachedSolver(ikSystem.avatarVRIK.solver);
+
+        // Default solver settings
+        solver.Locomotion.weight = 0f;
+        solver.Locomotion.angleThreshold = 30f;
+        solver.Locomotion.maxLegStretch = 1f;
+        solver.Spine.minHeadHeight = 0f;
+        solver.Spine.chestClampWeight = 0f;
+        solver.Spine.maintainPelvisPosition = 0f;
+        solver.Solver.IKPositionWeight = 1f;
+
+        // Body leaning settings
+        solver.Spine.bodyPosStiffness = 1f;
+        solver.Spine.bodyRotStiffness = 0.2f;
+        // this is a hack, allows chest to rotate slightly
+        // independent from hip rotation. Funny Spine.Solve()->Bend()
+        solver.Spine.neckStiffness = 0.0001f;
+
+        // Disable locomotion
+        // Setting velocity to 0 aleviated nameplate jitter issue on remote
+        solver.Locomotion.velocityFactor = 0f;
+        solver.Locomotion.maxVelocity = 0f;
+        solver.Locomotion.rootSpeed = 1000f;
+
+        // Disable chest rotation by hands
+        // this fixed Effector, Player Arm Movement, BetterInteractDesktop, ect
+        // from making entire body shake, as well as while running
+        solver.Spine.rotateChestByHands = 0f;
+
+        // Prioritize LookAtIK
+        solver.Spine.headClampWeight = 0.2f;
+
+        // Disable going on tippytoes
+        solver.Spine.positionWeight = 0f;
+        solver.Spine.rotationWeight = 1f;
+
+        // Set so emotes play properly
+        solver.Spine.maxRootAngle = 180f;
+        // this is different in VR, as CVR player controller is not set up optimally for VRIK.
+        // Desktop avatar rotates 1:1 with _PlayerLocal. VR has a disconnect because you can turn IRL.
+
+        // We disable these ourselves now, as we no longer use BodySystem
+        solver.Spine.maintainPelvisPosition = 1f;
+        solver.Spine.positionWeight = 0f;
+        solver.Spine.pelvisPositionWeight = 0f;
+        solver.LeftArm.positionWeight = 0f;
+        solver.LeftArm.rotationWeight = 0f;
+        solver.RightArm.positionWeight = 0f;
+        solver.RightArm.rotationWeight = 0f;
+        solver.LeftLeg.positionWeight = 0f;
+        solver.LeftLeg.rotationWeight = 0f;
+        solver.RightLeg.positionWeight = 0f;
+        solver.RightLeg.rotationWeight = 0f;
+
+        // This is now our master Locomotion weight
+        solver.Locomotion.weight = 1f;
+        solver.Solver.IKPositionWeight = 1f;
+
+        ikSystem.cachedSolver = solver;
     }
 
     void CalibrateVRIK()
