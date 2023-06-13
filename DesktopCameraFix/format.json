@@ -6,7 +6,7 @@
   "loaderversion": "0.5.7",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Fixes Desktop camera pivoting in place.\n\n[Feedback Post](https://feedback.abinteractive.net/p/pivot-desktop-camera-with-head)",
+  "description": "Fixes Desktop camera pivoting in place. Please view the README for more info: [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/main/DesktopCameraFix/README.md)",
   "searchtags": [
     "desktop",
     "camera",
