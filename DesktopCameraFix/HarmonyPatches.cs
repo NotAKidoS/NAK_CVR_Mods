@@ -14,6 +14,7 @@ class PlayerSetupPatches
         if (!DesktopCameraFix.EntryEnabled.Value)
             return;
 
+        // this would be much simplier if I bothered with transpilers
         if (____movementSystem.disableCameraControl && !ignore)
             return;
 
@@ -25,18 +26,5 @@ class PlayerSetupPatches
         {
             __instance.desktopCamera.transform.position = viewpointTransform.position;
         }
-        
-        /**
-            desktopCameraRig -> desktopCamera
-            desktopCameraRig is parent of desktopCamera. 
-
-            desktopCamera rotates, so it pivots in place.
-            desktopCameraRig is moved to head bone, local position of camera is viewpoint offset when standing
-
-            if rig was moving position & rotation, this would work
-            but because rig handles position and camera handles rotation, camera pivots in place instead of at correct point
-            which is gross
-
-        **/
     }
 }
