@@ -1,15 +1,15 @@
 ﻿using ABI_RC.Core.Player;
 using MelonLoader;
 
-namespace NAK.DesktopCameraFix;
+namespace NAK.HeadBobbingFix;
 
-public class DesktopCameraFix : MelonMod
+public class HeadBobbingFix : MelonMod
 {
     public static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(DesktopCameraFix));
+        MelonPreferences.CreateCategory(nameof(HeadBobbingFix));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
-        Category.CreateEntry("Enabled", true, description: "Toggle DesktopCameraFix entirely.");
+        Category.CreateEntry("Enabled", true, description: "Toggle HeadBobbingFix entirely. You need full headbobbing enabled for the mod to take effect.");
 
     public override void OnInitializeMelon()
     {
@@ -19,7 +19,7 @@ public class DesktopCameraFix : MelonMod
 
     void OnEntryEnabledChanged(bool newValue, bool oldValue)
     {
-        if (newValue) PlayerSetup.Instance.SetViewPointOffset();
+        if (newValue) PlayerSetup.Instance?.SetViewPointOffset();
     }
 
     void ApplyPatches(Type type)

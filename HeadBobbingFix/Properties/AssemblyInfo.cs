@@ -1,20 +1,20 @@
-﻿using DesktopCameraFix.Properties;
-using MelonLoader;
+﻿using MelonLoader;
+using NAK.HeadBobbingFix.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.DesktopCameraFix))]
+[assembly: AssemblyTitle(nameof(NAK.HeadBobbingFix))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.DesktopCameraFix))]
+[assembly: AssemblyProduct(nameof(NAK.HeadBobbingFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.DesktopCameraFix.DesktopCameraFix),
-    nameof(NAK.DesktopCameraFix),
+    typeof(NAK.HeadBobbingFix.HeadBobbingFix),
+    nameof(NAK.HeadBobbingFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopCameraFix"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/HeadBobbingFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -22,9 +22,9 @@ using System.Reflection;
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: HarmonyDontPatchAll]
 
-namespace DesktopCameraFix.Properties;
+namespace NAK.HeadBobbingFix.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }

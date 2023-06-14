@@ -1,0 +1,23 @@
+{
+  "_id": 165,
+  "name": "HeadBobbingFix",
+  "modversion": "1.0.1",
+  "gameversion": "2022r170",
+  "loaderversion": "0.5.7",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes Desktop camera pivoting in place when full head bobbing is enabled. Please view the README for more info: [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/main/HeadBobbingFix/README.md)",
+  "searchtags": [
+    "desktop",
+    "camera",
+    "pivot",
+    "fix"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r11/HeadBobbingFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/HeadBobbingFix/",
+  "changelog": "- Initial Release\n- Rename to HeadBobbingFix to prevent confusion",
+  "embedcolor": "#e33b24"
+}

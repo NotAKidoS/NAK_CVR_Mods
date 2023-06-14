@@ -59,7 +59,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmoothRay", "SmoothRay\Smoo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackedPointFix", "TrackedPointFix\TrackedPointFix.csproj", "{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DesktopCameraFix", "DesktopCameraFix\DesktopCameraFix.csproj", "{E17F78BF-90FB-44F7-A919-EDDF0BC1AF01}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadBobbingFix", "HeadBobbingFix\HeadBobbingFix.csproj", "{EFE40A43-3FA4-4B61-8A7E-78789792F127}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -179,10 +179,10 @@ Global
 		{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E17F78BF-90FB-44F7-A919-EDDF0BC1AF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E17F78BF-90FB-44F7-A919-EDDF0BC1AF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E17F78BF-90FB-44F7-A919-EDDF0BC1AF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E17F78BF-90FB-44F7-A919-EDDF0BC1AF01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

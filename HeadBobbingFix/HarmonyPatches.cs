@@ -3,7 +3,7 @@ using ABI_RC.Systems.MovementSystem;
 using HarmonyLib;
 using UnityEngine;
 
-namespace NAK.DesktopCameraFix.HarmonyPatches;
+namespace NAK.HeadBobbingFix.HarmonyPatches;
 
 class PlayerSetupPatches
 {
@@ -11,7 +11,7 @@ class PlayerSetupPatches
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.HandleDesktopCameraPosition))]
     public static void Postfix_PlayerSetup_HandleDesktopCameraPosition(bool ignore, ref PlayerSetup __instance, ref MovementSystem ____movementSystem, ref int ___headBobbingLevel)
     {
-        if (!DesktopCameraFix.EntryEnabled.Value)
+        if (!HeadBobbingFix.EntryEnabled.Value)
             return;
 
         // this would be much simplier if I bothered with transpilers
