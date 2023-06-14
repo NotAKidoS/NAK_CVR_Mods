@@ -16,7 +16,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r10/BadAnimatorFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r11/BadAnimatorFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix/",
   "changelog": "- Speculative fix for possible error while loading default cvr scenes",
   "embedcolor": "e25352"
