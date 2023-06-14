@@ -9,18 +9,17 @@ public class BadAnimatorFixer : MonoBehaviour
 
     private Animator animator;
 
-    private void Start()
+    void Start()
     {
         animator = GetComponent<Animator>();
     }
 
-    private void OnEnable() => BadAnimatorFixManager.Add(this);
-    private void OnDisable() => BadAnimatorFixManager.Remove(this);
+    void OnEnable() => BadAnimatorFixManager.Add(this);
+    void OnDisable() => BadAnimatorFixManager.Remove(this);
 
     public void AttemptRewindAnimator()
     {
         bool rewound = false;
-
         if (animator != null && animator.isActiveAndEnabled)
         {
             for (int layerIndex = 0; layerIndex < animator.layerCount; layerIndex++)
@@ -38,9 +37,7 @@ public class BadAnimatorFixer : MonoBehaviour
             }
 
             if (rewound)
-            {
                 PlayableExtensions.SetTime<Playable>(animator.playableGraph.GetRootPlayable(0), 0);
-            }
         }
 
         if (BadAnimatorFix.EntryLogging.Value)

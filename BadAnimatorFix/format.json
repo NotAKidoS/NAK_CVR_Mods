@@ -1,9 +1,9 @@
 {
-  "_id": -1,
+  "_id": 152,
   "name": "BadAnimatorFix",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2022r170",
-  "loaderversion": "0.5.7",
+  "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "This mod occasionally rewinds animation states that have loop enabled.\n\nUnity seems to have a weird quirk where *sometimes* animations with loop cause performance issues after running for a long time.\nYou'll only start to notice this after a few hours to a few days of idling.\n\nIf you don't happen to be AFK for long periods of time, you probably don't need this mod. This issue seems to be primarily caused by one-two frame animation clips meant for toggles with loop needlessly enabled.",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/BadAnimatorFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r10/BadAnimatorFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix/",
-  "changelog": "Initial Release",
-  "embedcolor": "7F3F99"
+  "changelog": "- Speculative fix for possible error while loading default cvr scenes",
+  "embedcolor": "e25352"
 }

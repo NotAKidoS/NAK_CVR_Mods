@@ -6,17 +6,17 @@ using UnityEngine;
 
 namespace NAK.BadAnimatorFix.HarmonyPatches;
 
-internal static class AnimatorPatches
+static class AnimatorPatches
 {
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), "Start")]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
     private static void Postfix_PlayerSetup_Start()
     {
         BadAnimatorFixManager.OnPlayerLoaded();
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVRAvatar), "Start")]
+    [HarmonyPatch(typeof(CVRAvatar), nameof(CVRAvatar.Start))]
     private static void Postfix_CVRAvatar_Start(CVRAvatar __instance)
     {
         if (!BadAnimatorFix.EntryCVRAvatar.Value) return;
@@ -24,7 +24,7 @@ internal static class AnimatorPatches
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVRSpawnable), "Start")]
+    [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.Start))]
     private static void Postfix_CVRSpawnable_Start(CVRSpawnable __instance)
     {
         if (!BadAnimatorFix.EntryCVRSpawnable.Value) return;
@@ -33,7 +33,7 @@ internal static class AnimatorPatches
 
     // Set QM stuff
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVR_MenuManager), "Start")]
+    [HarmonyPatch(typeof(CVR_MenuManager), nameof(CVR_MenuManager.Start))]
     private static void Postfix_CVR_MenuManager_Start(ref CVR_MenuManager __instance)
     {
         if (!BadAnimatorFix.EntryMenus.Value) return;
@@ -42,7 +42,7 @@ internal static class AnimatorPatches
 
     // Set MM stuff
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(ViewManager), "Start")]
+    [HarmonyPatch(typeof(ViewManager), nameof(ViewManager.Start))]
     private static void Postfix_ViewManager_Start(ref ViewManager __instance)
     {
         if (!BadAnimatorFix.EntryMenus.Value) return;

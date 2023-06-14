@@ -6,20 +6,20 @@ namespace NAK.BadAnimatorFix;
 
 public static class BadAnimatorFixManager
 {
-    private static List<BadAnimatorFixer> badAnimatorFixes = new List<BadAnimatorFixer>();
-    private static int currentIndex = 0;
-    private static float checkInterval = 5f;
+    static List<BadAnimatorFixer> _animatorFixers = new List<BadAnimatorFixer>();
+    static int _currentIndex = 0;
+    static float _checkInterval = 5f;
 
     public static void Add(BadAnimatorFixer bad)
     {
-        if (!badAnimatorFixes.Contains(bad))
-            badAnimatorFixes.Add(bad);
+        if (!_animatorFixers.Contains(bad))
+            _animatorFixers.Add(bad);
     }
 
     public static void Remove(BadAnimatorFixer bad)
     {
-        if (badAnimatorFixes.Contains(bad))
-            badAnimatorFixes.Remove(bad);
+        if (_animatorFixers.Contains(bad))
+            _animatorFixers.Remove(bad);
     }
 
     public static void OnPlayerLoaded()
@@ -43,25 +43,25 @@ public static class BadAnimatorFixManager
         }
     }
 
-    private static void CheckNextAnimator()
-    {
-        if (badAnimatorFixes.Count == 0) return;
-        currentIndex = (currentIndex + 1) % badAnimatorFixes.Count;
-
-        BadAnimatorFixer currentAnimatorFix = badAnimatorFixes[currentIndex];
-        currentAnimatorFix.AttemptRewindAnimator();
-    }
-
     public static void ToggleJob(bool enable)
     {
-        var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == "CheckNextAnimator").Job;
+        var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == nameof(CheckNextAnimator)).Job;
         if (enable && job == null)
         {
-            SchedulerSystem.AddJob(new SchedulerSystem.Job(CheckNextAnimator), 0f, checkInterval, -1);
+            SchedulerSystem.AddJob(new SchedulerSystem.Job(CheckNextAnimator), 0f, _checkInterval, -1);
         }
         else if (!enable && job != null)
         {
             SchedulerSystem.RemoveJob(job);
         }
+    }
+
+    static void CheckNextAnimator()
+    {
+        if (_animatorFixers.Count == 0) return;
+        _currentIndex = (_currentIndex + 1) % _animatorFixers.Count;
+
+        BadAnimatorFixer currentAnimatorFix = _animatorFixers[_currentIndex];
+        currentAnimatorFix.AttemptRewindAnimator();
     }
 }

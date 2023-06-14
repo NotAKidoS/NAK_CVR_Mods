@@ -10,7 +10,7 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.BadAnimatorFix))]
 
 [assembly: MelonInfo(
-    typeof(NAK.BadAnimatorFix.BadAnimatorFixer),
+    typeof(NAK.BadAnimatorFix.BadAnimatorFix),
     nameof(NAK.BadAnimatorFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
@@ -25,6 +25,6 @@ using System.Reflection;
 namespace NAK.BadAnimatorFix.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }
