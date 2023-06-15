@@ -1,27 +1,30 @@
 ## NotAKids ChilloutVR Mods
 
-| Mod Name                                                                                                  | Approval State | Released in this repo | CVRMG Category          |
+| Mod Name                                                                                                   | Approval State | Released in this repo | CVRMG Category          |
 |------------------------------------------------------------------------------------------------------------|----------------|-----------------------|-------------------------|
 | [AASBufferFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix)                      | Approved       | Yes                   | Utilities & Tweaks      |
-| [BadAnimatorFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix)                  | Approved       | Yes                   | N/A                     |
+| [BadAnimatorFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix)                  | Approved       | Yes                   | Fixes                   |
 | [Blackout](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Blackout)                              | Approved       | No                    | New Features & Overhauls|
 | [CVRGizmos](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos)                            | Approved       | Yes                   | Very Niche              |
-| [ClearHudNotifications](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ClearHudNotifications)    | Approved       | No                    | N/A                     |
+| [ClearHudNotifications](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ClearHudNotifications)    | Approved       | No                    | UI                      |
 | [DesktopVRIK](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK)                        | Approved       | Yes                   | Utilities & Tweaks      |
 | [DesktopVRSwitch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch)                | Approved       | No                    | New Features & Overhauls|
-| [FuckMetrics](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMetrics)                        | Approved       | No                    | N/A                     |
+| [FuckMetrics](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMetrics)                        | Approved       | No                    | Performance & Fidelity  |
 | [FuckToes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes)                              | Approved       | No                    | Utilities & Tweaks      |
 | [GestureLock](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/GestureLock)                        | Approved       | No                    | Utilities & Tweaks      |
-| [IKFixes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes)                                | Approved       | Yes                   | N/A                     |
-| [JumpPatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/JumpPatch)                            | Approved       | Yes                   | N/A                     |
-| [MenuScalePatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch)                  | Approved       | Yes                   | N/A                     |
+| [HeadBobbingFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/HeadBobbingFix)                  | N/A            | Yes                   | N/A                     |
+| [IKFixes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes)                                | Approved       | Yes                   | Fixes                   |
+| [JumpPatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/JumpPatch)                            | Approved       | Yes                   | Utilities & Tweaks      |
+| [MenuScalePatch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch)                  | Approved       | Yes                   | Utilities & Tweaks      |
 | [NAK.CustomComponents](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/NAK.CustomComponents)      | N/A            | No                    | N/A                     |
 | [Nevermind](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Nevermind)                            | N/A            | No                    | N/A                     |
 | [PathCamDisabler](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler)                | Approved       | No                    | Very Niche              |
 | [PickupPushPull](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PickupPushPull)                  | Approved       | No                    | Utilities & Tweaks      |
 | [PortableCameraAdditions](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions)| Approved       | No                    | Camera                  |
-| [PropUndoButton](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndo)                        | Approved       | No                    | N/A                     |
+| [PropUndoButton](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndo)                        | Approved       | No                    | Utilities & Tweaks      |
+| [SmoothRay](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SmoothRay)                            | Approved       | Yes                   | Utilities & Tweaks      |
 | [ThirdPerson](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson)                        | Approved       | Yes                   | New Features & Overhauls|
+| [TrackedControllerFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/TrackedControllerFix)      | Approved       | Yes                   | Fixes                   |
 
 ### Note: This is a newly created central repository for my ChilloutVR mods. As I update and improve them, I will migrate releases to this repository and include them in each new release, following the approach used by SDraw and Kafejao.
 
