@@ -11,10 +11,10 @@ public class TrackedControllerFixer : MonoBehaviour
     SteamVR_TrackedObject trackedObject;
     SteamVR_Behaviour_Pose oldBehaviourPose;
     SteamVR_Action_Pose actionPose;
-    
+
     SteamVR_RenderModel renderModel;
 
-    public void Initialize()
+    void Awake()
     {
         trackedObject = gameObject.AddComponent<SteamVR_TrackedObject>();
         oldBehaviourPose = gameObject.GetComponent<SteamVR_Behaviour_Pose>();
@@ -46,9 +46,7 @@ public class TrackedControllerFixer : MonoBehaviour
     void Update()
     {
         if (deviceIndex < 0)
-        {
             CheckDeviceIndex();
-        }
     }
 
     void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
