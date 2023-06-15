@@ -5,7 +5,7 @@
 
 # Nstrip & ManagedLibs stuff
 NStrip.exe
-_ManagedLibs/*.dll
+.ManagedLibs/*.dll
 
 # User-specific files
 *.rsuser

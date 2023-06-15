@@ -4,7 +4,7 @@
     <!-- Didn't put in the Directory.Build.props because it spams funny warnings... -->
     <ItemGroup>
         <Reference Include="ml_prm">
-            <HintPath>$(MsBuildThisFileDirectory)\..\_ManagedLibs\ml_prm.dll</HintPath>
+            <HintPath>$(MsBuildThisFileDirectory)\..\.ManagedLibs\ml_prm.dll</HintPath>
             <Private>False</Private>
         </Reference>
     </ItemGroup>

@@ -29,7 +29,7 @@ else {
 }
 
 $scriptDir = Split-Path -Parent -Path $MyInvocation.MyCommand.Definition
-$managedLibsFolder = $scriptDir + "\_ManagedLibs"
+$managedLibsFolder = $scriptDir + "\.ManagedLibs"
 
 Write-Host ""
 Write-Host "Copying the DLLs from the CVR, MelonLoader, and Mods folder to the ManagedLibs"
@@ -53,12 +53,12 @@ foreach ($modName in $modNames) {
 
     # Attempt to grab from the mods folder
     if (Test-Path $modPath -PathType Leaf) {
-        Write-Host "    Copying $modDll from $melonModsPath to \_ManagedLibs!"
+        Write-Host "    Copying $modDll from $melonModsPath to \.ManagedLibs!"
         Copy-Item $modPath -Destination $managedLibsFolder
     }
     # Check if they already exist in the ManagedLibs
     elseif (Test-Path $managedLibsModPath -PathType Leaf) {
-        Write-Host "    Ignoring $modDll since already exists in \_ManagedLibs!"
+        Write-Host "    Ignoring $modDll since already exists in \.ManagedLibs!"
     }
     # If we fail, lets add to the missing mods list
     else {
