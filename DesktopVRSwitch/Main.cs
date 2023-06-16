@@ -28,7 +28,7 @@ public class DesktopVRSwitch : MelonMod
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
-        ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
+        ApplyPatches(typeof(HarmonyPatches.CheckVRPatches));
         ApplyPatches(typeof(HarmonyPatches.CVRPickupObjectPatches));
         ApplyPatches(typeof(HarmonyPatches.CVRWorldPatches));
         ApplyPatches(typeof(HarmonyPatches.CameraFacingObjectPatches));
@@ -37,7 +37,7 @@ public class DesktopVRSwitch : MelonMod
         ApplyPatches(typeof(HarmonyPatches.VRTrackerManagerPatches));
     }
 
-    private void ApplyPatches(Type type)
+    void ApplyPatches(Type type)
     {
         try
         {
@@ -45,8 +45,8 @@ public class DesktopVRSwitch : MelonMod
         }
         catch (Exception e)
         {
-            Logger.Msg($"Failed while patching {type.Name}!");
-            Logger.Error(e);
+            LoggerInstance.Msg($"Failed while patching {type.Name}!");
+            LoggerInstance.Error(e);
         }
     }
 }

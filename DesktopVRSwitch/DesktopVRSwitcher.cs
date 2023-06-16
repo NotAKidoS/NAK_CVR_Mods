@@ -3,6 +3,20 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.XR;
 using Valve.VR;
+using ABI_RC.Core.Savior;
+using ABI_RC.Core;
+
+/**
+
+    SteamVR overrides:
+    
+    Application.targetFrameRate = -1;
+    Application.runInBackground = true;
+    QualitySettings.maxQueuedFrames = -1;
+    QualitySettings.vSyncCount = 0;
+    Time.fixedDeltaTime = Time.timeScale / hmd_DisplayFrequency;
+
+**/
 
 namespace NAK.DesktopVRSwitch;
 
@@ -46,10 +60,10 @@ public class DesktopVRSwitcher : MonoBehaviour
 
     private IEnumerator StartVRSystem()
     {
-
         PreVRModeSwitch(true);
         XRSettings.LoadDeviceByName("OpenVR");
         yield return null; //wait a frame before checking
+
         if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
         {
             DesktopVRSwitch.Logger.Msg("Starting SteamVR...");
@@ -59,10 +73,13 @@ public class DesktopVRSwitcher : MonoBehaviour
             //but only if SteamVR_Settings.instance.activateFirstActionSetOnStart is enabled
             //which in ChilloutVR, it is, because all those settings are default
             SteamVR_Input.Initialize(true);
+
             yield return null;
+
             PostVRModeSwitch(true);
             yield break;
         }
+
         DesktopVRSwitch.Logger.Error("Initializing VR Failed. Is there no VR device connected?");
         FailedVRModeSwitch(true);
         yield break;
@@ -72,6 +89,7 @@ public class DesktopVRSwitcher : MonoBehaviour
     {
         PreVRModeSwitch(false);
         yield return null;
+
         if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
         {
             //SteamVR.SafeDispose(); //might fuck with SteamVRTrackingModule
@@ -79,11 +97,14 @@ public class DesktopVRSwitcher : MonoBehaviour
             SteamVR_Input.actionSets[0].Deactivate(SteamVR_Input_Sources.Any);
             XRSettings.LoadDeviceByName("");
             XRSettings.enabled = false;
+
             yield return null;
-            Time.fixedDeltaTime = 0.02f; //reset physics time to Desktop default
+
+            ResetSteamVROverrides();
             PostVRModeSwitch(false);
             yield break;
         }
+
         DesktopVRSwitch.Logger.Error("Attempted to exit VR without a VR device loaded.");
         FailedVRModeSwitch(false);
         yield break;
@@ -136,6 +157,39 @@ public class DesktopVRSwitcher : MonoBehaviour
         }
 
         _switchInProgress = false;
+    }
+
+    public void ResetSteamVROverrides()
+    {
+        // Reset physics time to Desktop default
+        Time.fixedDeltaTime = 0.02f;
+
+        // Reset queued frames
+        QualitySettings.maxQueuedFrames = 2;
+        
+        // Reset framerate target
+        int graphicsFramerateTarget = MetaPort.Instance.settings.GetSettingInt("GraphicsFramerateTarget", 0);
+        CVRTools.SetFramerateTarget(graphicsFramerateTarget);
+
+        // Reset VSync setting
+        bool graphicsVSync = MetaPort.Instance.settings.GetSettingsBool("GraphicsVSync", false);
+        QualitySettings.vSyncCount = graphicsVSync ? 1 : 0;
+
+        // Reset anti-aliasing
+        int graphicsMsaaLevel = MetaPort.Instance.settings.GetSettingInt("GraphicsMsaaLevel", 0);
+        QualitySettings.antiAliasing = graphicsMsaaLevel;
+
+        // Reset eye tracking initialization
+        bool interactionTobiiEyeTracking = MetaPort.Instance.settings.GetSettingsBool("InteractionTobiiEyeTracking", false);
+        if (interactionTobiiEyeTracking)
+        {
+            MetaPort.Instance.TobiiXrInitializer.Initialize();
+        }
+        else
+        {
+            // Won't do anything if not already running
+            MetaPort.Instance.TobiiXrInitializer.DeInitialize();
+        }
     }
 }
 
