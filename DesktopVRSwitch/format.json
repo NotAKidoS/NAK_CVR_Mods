@@ -1,9 +1,9 @@
 {
   "_id": 103,
   "name": "DesktopVRSwitch",
-  "modversion": "4.3.5",
-  "gameversion": "2022r170",
-  "loaderversion": "0.5.7",
+  "modversion": "4.4.0",
+  "gameversion": "2022r170p1",
+  "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "Allows you to switch between Desktop and VR with a keybind.\n**Press Control + F6 to switch.**\n\nWhile this mod is a nice convienence feature to have access to, not every chillout system or mod is built to support it. I cannot possibly cover every edge case or mitigate issues with every mod. **Use at your own discretion.**",

@@ -61,6 +61,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackedPointFix", "TrackedP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadBobbingFix", "HeadBobbingFix\HeadBobbingFix.csproj", "{EFE40A43-3FA4-4B61-8A7E-78789792F127}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClickToMove", "ClickToMove\ClickToMove.csproj", "{8D392BEE-E959-4906-A2A7-5EB9E3AE4D00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,10 @@ Global
 		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D392BEE-E959-4906-A2A7-5EB9E3AE4D00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D392BEE-E959-4906-A2A7-5EB9E3AE4D00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D392BEE-E959-4906-A2A7-5EB9E3AE4D00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D392BEE-E959-4906-A2A7-5EB9E3AE4D00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
