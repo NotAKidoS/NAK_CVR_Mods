@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Systems.UI;
+using NAK.DesktopVRSwitch.VRModeTrackers;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,7 +17,7 @@ using Valve.VR;
 
 **/
 
-namespace NAK.DesktopVRSwitch.VRModeTrackers;
+namespace NAK.DesktopVRSwitch;
 
 public class VRModeSwitchManager : MonoBehaviour
 {

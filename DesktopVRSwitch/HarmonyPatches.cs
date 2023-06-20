@@ -7,6 +7,7 @@ using HarmonyLib;
 using NAK.DesktopVRSwitch.Patches;
 using NAK.DesktopVRSwitch.VRModeTrackers;
 using UnityEngine;
+using cohtml;
 
 namespace NAK.DesktopVRSwitch.HarmonyPatches;
 
@@ -64,6 +65,49 @@ class CameraFacingObjectPatches
     [HarmonyPatch(typeof(CameraFacingObject), nameof(CameraFacingObject.Start))]
     static void Postfix_CameraFacingObject_Start(ref CameraFacingObject __instance)
     {
-        __instance.gameObject.AddComponent<CameraFacingObjectTracker>();
+        __instance.gameObject.AddComponent<CameraFacingObjectTracker>()._cameraFacingObject = __instance;
+    }
+}
+
+class CVRPickupObjectPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(CVRPickupObject), nameof(CVRPickupObject.Start))]
+    static void Prefix_CVRPickupObject_Start(ref CVRPickupObject __instance)
+    {
+        if (__instance.gripType == CVRPickupObject.GripType.Free) 
+            return;
+        
+        Transform vrOrigin = __instance.gripOrigin;
+        Transform desktopOrigin = __instance.gripOrigin.Find("[Desktop]");
+        if (vrOrigin != null && desktopOrigin != null)
+        {
+            var tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
+            tracker._pickupObject = __instance;
+            tracker._storedGripOrigin = (!MetaPort.Instance.isUsingVr ? vrOrigin : desktopOrigin);
+        }
+    }
+}
+
+class CohtmlUISystemPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(CohtmlUISystem), nameof(CohtmlUISystem.RegisterGamepad))]
+    [HarmonyPatch(typeof(CohtmlUISystem), nameof(CohtmlUISystem.UnregisterGamepad))]
+    [HarmonyPatch(typeof(CohtmlUISystem), nameof(CohtmlUISystem.UpdateGamepadState))]
+    static bool Prefix_CohtmlUISystem_FuckOff()
+    {
+        /** 
+         GameFace Version 1.34.0.4 – released 10 Nov 2022
+        	Fixed a crash when registering and unregistering gamepads
+            Fix	Fixed setting a gamepad object when creating GamepadEvent from JavaScript
+            Fix	Fixed a crash when unregistering a gamepad twice
+            Fix	Fixed a GamepadEvent related crash during garbage collector tracing
+
+            we are using 1.17.0 (released 10/09/21) :):):)
+        **/
+
+        // dont
+        return false;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Systems.MovementSystem;
+
 using UnityEngine;
 
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
@@ -12,12 +13,14 @@ public class MovementSystemTracker : VRModeTracker
     public override void TrackerInit()
     {
         VRModeSwitchManager.OnPreVRModeSwitch += OnPreSwitch;
+        VRModeSwitchManager.OnFailVRModeSwitch += OnFailedSwitch;
         VRModeSwitchManager.OnPostVRModeSwitch += OnPostSwitch;
     }
 
     public override void TrackerDestroy()
     {
         VRModeSwitchManager.OnPreVRModeSwitch -= OnPreSwitch;
+        VRModeSwitchManager.OnFailVRModeSwitch -= OnFailedSwitch;
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
@@ -28,8 +31,14 @@ public class MovementSystemTracker : VRModeTracker
         preSwitchWorldPosition = Utils.GetPlayerRootPosition();
         preSwitchWorldRotation = _movementSystem.rotationPivot.transform.rotation;
 
+        _movementSystem.SetImmobilized(true);
         _movementSystem.ChangeCrouch(false);
         _movementSystem.ChangeProne(false);
+    }
+
+    private void OnFailedSwitch(bool intoVR)
+    {
+        _movementSystem.SetImmobilized(false);
     }
 
     private void OnPostSwitch(bool intoVR)
@@ -40,6 +49,7 @@ public class MovementSystemTracker : VRModeTracker
         if (!intoVR)
             _movementSystem.UpdateColliderCenter(_movementSystem.transform.position);
 
+        _movementSystem.SetImmobilized(false);
         _movementSystem.ChangeCrouch(false);
         _movementSystem.ChangeProne(false);
     }

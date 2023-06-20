@@ -5,18 +5,17 @@ namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class CVRPickupObjectTracker : MonoBehaviour
 {
-    private CVRPickupObject _pickupObject;
-    private Transform _storedGripOrigin;
+    internal CVRPickupObject _pickupObject;
+    internal Transform _storedGripOrigin;
 
-    public CVRPickupObjectTracker(CVRPickupObject pickupObject, Transform storedGripOrigin)
+    void Start()
     {
-        this._pickupObject = pickupObject;
-        this._storedGripOrigin = storedGripOrigin;
+        VRModeSwitchManager.OnPostVRModeSwitch += OnPostSwitch;
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
-
+        VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
     public void OnPostSwitch(bool intoVR)

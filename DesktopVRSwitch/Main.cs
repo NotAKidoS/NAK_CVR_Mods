@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿
+using MelonLoader;
 using NAK.DesktopVRSwitch.VRModeTrackers;
 using UnityEngine;
 
@@ -28,7 +29,10 @@ public class DesktopVRSwitch : MelonMod
         Category.CreateEntry("Enter Calibration on Switch", true, description: "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
 
     public static readonly MelonPreferences_Entry<bool> EntryUseTransitionOnSwitch =
-    Category.CreateEntry("Use Transition on Switch", true, description: "Should the world transition play on VRMode switch?");
+        Category.CreateEntry("Use Transition on Switch", true, description: "Should the world transition play on VRMode switch?");
+
+    public static readonly MelonPreferences_Entry<bool> EntryRenderVRGameView =
+        Category.CreateEntry("Render VR Game View", true, description: "Should the VR view be displayed in the game window?");
 
     public override void OnInitializeMelon()
     {
@@ -40,10 +44,14 @@ public class DesktopVRSwitch : MelonMod
         ApplyPatches(typeof(HarmonyPatches.CheckVRPatches));
         // nameplate fixes
         ApplyPatches(typeof(HarmonyPatches.CameraFacingObjectPatches));
+        // pickup fixes
+        ApplyPatches(typeof(HarmonyPatches.CVRPickupObjectPatches));
         // lazy fix to reset iksystem
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
         // post processing fixes
         ApplyPatches(typeof(HarmonyPatches.CVRWorldPatches));
+        // cohtml gamepad handling nuke
+        ApplyPatches(typeof(HarmonyPatches.CohtmlUISystemPatches));
     }
 
     public override void OnUpdate()

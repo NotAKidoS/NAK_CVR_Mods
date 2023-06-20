@@ -5,20 +5,17 @@ namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class CameraFacingObjectTracker : MonoBehaviour
 {
-    private CameraFacingObject _cameraFacingObject;
+    internal CameraFacingObject _cameraFacingObject;
 
-    public CameraFacingObjectTracker(CameraFacingObject cameraFacingObject)
+    void Start()
     {
-        this._cameraFacingObject = cameraFacingObject;
+        VRModeSwitchManager.OnPostVRModeSwitch += OnPostSwitch;
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
+        VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
-
-    public void OnPreSwitch(bool intoVR) { }
-
-    public void OnFailedSwitch(bool intoVR) { }
 
     public void OnPostSwitch(bool intoVR)
     {
