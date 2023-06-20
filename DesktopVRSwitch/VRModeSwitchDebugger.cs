@@ -5,25 +5,29 @@ namespace NAK.DesktopVRSwitch;
 
 class VRModeSwitchDebugger : MonoBehaviour
 {
-    private Coroutine _switchCoroutine;
-    private WaitForSeconds _sleep = new WaitForSeconds(2.5f);
+    Coroutine _switchCoroutine;
+    WaitForSeconds _sleep;
 
-    private void OnEnable()
+    void OnEnable()
     {
         if (_switchCoroutine == null)
+        {
             _switchCoroutine = StartCoroutine(SwitchLoop());
+            _sleep = new WaitForSeconds(2f);
+        }
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         if (_switchCoroutine != null)
         {
             StopCoroutine(_switchCoroutine);
             _switchCoroutine = null;
+            _sleep = null;
         }
     }
 
-    private IEnumerator SwitchLoop()
+    IEnumerator SwitchLoop()
     {
         while (true)
         {
@@ -32,7 +36,6 @@ class VRModeSwitchDebugger : MonoBehaviour
                 VRModeSwitchManager.Instance.AttemptSwitch();
                 yield return _sleep;
             }
-
             yield return null;
         }
     }

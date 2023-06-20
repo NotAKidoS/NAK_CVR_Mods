@@ -8,6 +8,7 @@ using HarmonyLib;
 using NAK.DesktopVRSwitch.Patches;
 using NAK.DesktopVRSwitch.VRModeTrackers;
 using UnityEngine;
+using Valve.VR;
 
 namespace NAK.DesktopVRSwitch.HarmonyPatches;
 
@@ -109,5 +110,22 @@ class CohtmlUISystemPatches
 
         // dont
         return false;
+    }
+}
+
+class SteamVRBehaviourPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(SteamVR_Behaviour), nameof(SteamVR_Behaviour.OnQuit))]
+    static bool Prefix_SteamVR_Behaviour_OnQuit()
+    {
+        if (DesktopVRSwitch.EntrySwitchToDesktopOnExit.Value)
+        {
+            // If we don't switch fast enough, SteamVR will force close.
+            // World Transition might cause issues. Might need to override.
+            VRModeSwitchManager.Instance?.AttemptSwitch();
+            return false;
+        }
+        return true;
     }
 }
