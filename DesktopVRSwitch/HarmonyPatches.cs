@@ -18,7 +18,15 @@ class CheckVRPatches
     [HarmonyPatch(typeof(CheckVR), nameof(CheckVR.Start))]
     static void Postfix_CheckVR_Start(ref CheckVR __instance)
     {
-        __instance.gameObject.AddComponent<VRModeSwitchManager>();
+        try
+        {
+            __instance.gameObject.AddComponent<VRModeSwitchManager>();
+        }
+        catch (Exception e)
+        {
+            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_CheckVR_Start)}");
+            DesktopVRSwitch.Logger.Error(e);
+        }
     }
 }
 
@@ -28,18 +36,34 @@ class IKSystemPatches
     [HarmonyPatch(typeof(TrackingPoint), nameof(TrackingPoint.Initialize))]
     static void Postfix_TrackingPoint_Initialize(ref TrackingPoint __instance)
     {
-        __instance.referenceTransform.localScale = Vector3.one;
+        try
+        {
+            __instance.referenceTransform.localScale = Vector3.one;
+        }
+        catch (Exception e)
+        {
+            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_TrackingPoint_Initialize)}");
+            DesktopVRSwitch.Logger.Error(e);
+        }
     }
 
     [HarmonyPostfix] //lazy fix so device indecies can change properly
     [HarmonyPatch(typeof(SteamVRTrackingModule), nameof(SteamVRTrackingModule.ModuleDestroy))]
     static void Postfix_SteamVRTrackingModule_ModuleDestroy(ref SteamVRTrackingModule __instance)
     {
-        for (int i = 0; i < __instance.TrackingPoints.Count; i++)
+        try
         {
-            UnityEngine.Object.Destroy(__instance.TrackingPoints[i].referenceGameObject);
+            for (int i = 0; i < __instance.TrackingPoints.Count; i++)
+            {
+                UnityEngine.Object.Destroy(__instance.TrackingPoints[i].referenceGameObject);
+            }
+            __instance.TrackingPoints.Clear();
         }
-        __instance.TrackingPoints.Clear();
+        catch (Exception e)
+        {
+            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_SteamVRTrackingModule_ModuleDestroy)}");
+            DesktopVRSwitch.Logger.Error(e);
+        }
     }
 }
 
@@ -50,7 +74,15 @@ class CVRWorldPatches
     [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.CopyRefCamValues))]
     static void Postfix_CVRWorld_HandleCamValues()
     {
-        ReferenceCameraPatch.OnWorldLoad();
+        try
+        {
+            ReferenceCameraPatch.OnWorldLoad();
+        }
+        catch (Exception e)
+        {
+            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_CVRWorld_HandleCamValues)}");
+            DesktopVRSwitch.Logger.Error(e);
+        }
     }
 }
 
@@ -60,7 +92,15 @@ class CameraFacingObjectPatches
     [HarmonyPatch(typeof(CameraFacingObject), nameof(CameraFacingObject.Start))]
     static void Postfix_CameraFacingObject_Start(ref CameraFacingObject __instance)
     {
-        __instance.gameObject.AddComponent<CameraFacingObjectTracker>();
+        try
+        {
+            __instance.gameObject.AddComponent<CameraFacingObjectTracker>();
+        }
+        catch (Exception e)
+        {
+            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_CameraFacingObject_Start)}");
+            DesktopVRSwitch.Logger.Error(e);
+        }
     }
 }
 
@@ -70,16 +110,24 @@ class CVRPickupObjectPatches
     [HarmonyPatch(typeof(CVRPickupObject), nameof(CVRPickupObject.Start))]
     static void Prefix_CVRPickupObject_Start(ref CVRPickupObject __instance)
     {
-        if (__instance.gripType == CVRPickupObject.GripType.Free)
-            return;
-
-        Transform vrOrigin = __instance.gripOrigin;
-        Transform desktopOrigin = __instance.gripOrigin.Find("[Desktop]");
-        if (vrOrigin != null && desktopOrigin != null)
+        try
         {
-            var tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
-            tracker._pickupObject = __instance;
-            tracker._storedGripOrigin = (!MetaPort.Instance.isUsingVr ? vrOrigin : desktopOrigin);
+            if (__instance.gripType == CVRPickupObject.GripType.Free)
+                return;
+
+            Transform vrOrigin = __instance.gripOrigin;
+            Transform desktopOrigin = __instance.gripOrigin.Find("[Desktop]");
+            if (vrOrigin != null && desktopOrigin != null)
+            {
+                var tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
+                tracker._pickupObject = __instance;
+                tracker._storedGripOrigin = (!MetaPort.Instance.isUsingVr ? vrOrigin : desktopOrigin);
+            }
+        }
+        catch (Exception e)
+        {
+            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Prefix_CVRPickupObject_Start)}");
+            DesktopVRSwitch.Logger.Error(e);
         }
     }
 }
