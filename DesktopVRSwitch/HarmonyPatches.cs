@@ -47,14 +47,8 @@ class CVRWorldPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.SetDefaultCamValues))]
-    static void Postfix_CVRWorld_SetDefaultCamValues()
-    {
-        ReferenceCameraPatch.OnWorldLoad();
-    }
-
-    [HarmonyPostfix]
     [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.CopyRefCamValues))]
-    static void Postfix_CVRWorld_CopyRefCamValues()
+    static void Postfix_CVRWorld_HandleCamValues()
     {
         ReferenceCameraPatch.OnWorldLoad();
     }
@@ -66,7 +60,7 @@ class CameraFacingObjectPatches
     [HarmonyPatch(typeof(CameraFacingObject), nameof(CameraFacingObject.Start))]
     static void Postfix_CameraFacingObject_Start(ref CameraFacingObject __instance)
     {
-        __instance.gameObject.AddComponent<CameraFacingObjectTracker>()._cameraFacingObject = __instance;
+        __instance.gameObject.AddComponent<CameraFacingObjectTracker>();
     }
 }
 

@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core;
 using ABI_RC.Core.UI;
-
 using UnityEngine;
 
 namespace NAK.DesktopVRSwitch.VRModeTrackers;

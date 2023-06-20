@@ -2,7 +2,6 @@
 using ABI_RC.Systems.IK.SubSystems;
 using ABI_RC.Systems.IK.TrackingModules;
 
-
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class IKSystemTracker : VRModeTracker

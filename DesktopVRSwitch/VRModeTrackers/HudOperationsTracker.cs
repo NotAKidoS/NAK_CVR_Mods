@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core.Player;
 
-
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class HudOperationsTracker : VRModeTracker

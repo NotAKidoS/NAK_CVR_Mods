@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core.Savior;
 
-
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class CheckVRTracker : VRModeTracker

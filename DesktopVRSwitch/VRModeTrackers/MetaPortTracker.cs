@@ -57,14 +57,12 @@ public class MetaPortTracker : VRModeTracker
         if (intoVR)
         {
             // Testing
-            XRSettings.eyeTextureResolutionScale = 1;
-            XRSettings.gameViewRenderMode = DesktopVRSwitch.EntryRenderVRGameView.Value ? GameViewRenderMode.LeftEye : GameViewRenderMode.None;
+            //XRSettings.gameViewRenderMode = DesktopVRSwitch.EntryRenderVRGameView.Value ? GameViewRenderMode.LeftEye : GameViewRenderMode.None;
+            XRSettings.eyeTextureResolutionScale = 1; // unsure if will cause issues with FSR?
             SteamVR_Settings.instance.pauseGameWhenDashboardVisible = false;
 
             if (MetaPort.Instance.settings.GetSettingsBool("InteractionTobiiEyeTracking", false))
-            {
                 MetaPort.Instance.TobiiXrInitializer.Initialize();
-            }
 
             return;
         }

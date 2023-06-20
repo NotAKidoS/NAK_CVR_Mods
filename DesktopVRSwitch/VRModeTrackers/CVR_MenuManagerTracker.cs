@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core.InteractionSystem;
 
-
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class CVR_MenuManagerTracker : VRModeTracker

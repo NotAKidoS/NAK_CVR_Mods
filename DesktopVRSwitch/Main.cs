@@ -3,19 +3,6 @@ using MelonLoader;
 using NAK.DesktopVRSwitch.VRModeTrackers;
 using UnityEngine;
 
-/**
-    I know the TryCatchHell thing might be a bit exessive, but it is
-    built so if a user that happens to have access to a build I do not,
-    I will have a good idea of what broke and where, and what to look out
-    for when updates/experimentals release. (which has happened a few times)
-
-    It is also just in case other mods break or tweak functionality that
-    could fuck with switching. Or if they try to detect switching and break...
-
-    The VRModeSwitchTracker system is also built so I can easily & quickly make adjustments to
-    components that may or may not change between builds without breaking the rest of the mod.
-**/
-
 namespace NAK.DesktopVRSwitch;
 
 public class DesktopVRSwitch : MelonMod
@@ -94,6 +81,9 @@ public class DesktopVRSwitch : MelonMod
 
         // Portable camera tracker
         VRModeSwitchManager.RegisterVRModeTracker(new PortableCameraTracker());
+
+        // CVRWorld tracker - Must come after PlayerSetupTracker
+        VRModeSwitchManager.RegisterVRModeTracker(new CVRWorldTracker());
     }
 
     void ApplyPatches(Type type)

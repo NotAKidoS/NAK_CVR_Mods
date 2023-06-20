@@ -23,6 +23,7 @@ public class MovementSystemTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
+    // why do i do this
     private MovementSystem GetMovementSystemInstance()
     {
         MovementSystem _movementSystem = MovementSystem.Instance;

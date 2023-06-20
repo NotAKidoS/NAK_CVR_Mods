@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Systems.Camera;
 
-
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class PortableCameraTracker : VRModeTracker
