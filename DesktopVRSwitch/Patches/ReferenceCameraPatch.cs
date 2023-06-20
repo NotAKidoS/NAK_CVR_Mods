@@ -6,7 +6,6 @@ using BeautifyEffect;
 using UnityEngine;
 using UnityEngine.AzureSky;
 using UnityEngine.Rendering.PostProcessing;
-using Object = UnityEngine.Object;
 
 namespace NAK.DesktopVRSwitch.Patches;
 
@@ -21,15 +20,26 @@ class ReferenceCameraPatch
 
     static void CopyToInactiveCam(Camera activeCam, Camera inactiveCam)
     {
+        if (inactiveCam == null || activeCam == null)
+            return;
+
         DesktopVRSwitch.Logger.Msg("Copying active camera settings & components to inactive camera.");
 
-        //steal basic settings
+        // Copy basic settings
         inactiveCam.farClipPlane = activeCam.farClipPlane;
         inactiveCam.nearClipPlane = activeCam.nearClipPlane;
-        inactiveCam.cullingMask = activeCam.cullingMask;
         inactiveCam.depthTextureMode = activeCam.depthTextureMode;
 
-        //steal post processing if added
+        // We cant copy this because we set it to 0 with ThirdPerson
+        inactiveCam.cullingMask &= -32769;
+        inactiveCam.cullingMask |= 256;
+        inactiveCam.cullingMask |= 512;
+        inactiveCam.cullingMask |= 32;
+        inactiveCam.cullingMask &= -4097;
+        inactiveCam.cullingMask |= 1024;
+        inactiveCam.cullingMask |= 8192;
+
+        // Copy post processing if added
         PostProcessLayer ppLayerActiveCam = activeCam.GetComponent<PostProcessLayer>();
         PostProcessLayer ppLayerInactiveCam = inactiveCam.AddComponentIfMissing<PostProcessLayer>();
         if (ppLayerActiveCam != null && ppLayerInactiveCam != null)
@@ -38,7 +48,7 @@ class ReferenceCameraPatch
             ppLayerInactiveCam.volumeLayer = ppLayerActiveCam.volumeLayer;
         }
 
-        //what even is this aura camera stuff
+        // Copy Aura camera settings
         AuraCamera auraActiveCam = activeCam.GetComponent<AuraCamera>();
         AuraCamera auraInactiveCam = inactiveCam.AddComponentIfMissing<AuraCamera>();
         if (auraActiveCam != null && auraInactiveCam != null)
@@ -51,7 +61,7 @@ class ReferenceCameraPatch
             auraInactiveCam.enabled = false;
         }
 
-        //flare layer thing? the sun :_:_:_:_:_:
+        // Copy Flare layer settings
         FlareLayer flareActiveCam = activeCam.GetComponent<FlareLayer>();
         FlareLayer flareInactiveCam = inactiveCam.AddComponentIfMissing<FlareLayer>();
         if (flareActiveCam != null && flareInactiveCam != null)
@@ -63,7 +73,7 @@ class ReferenceCameraPatch
             flareInactiveCam.enabled = false;
         }
 
-        //and now what the fuck is fog scattering
+        // Copy Azure Fog Scattering settings
         AzureFogScattering azureFogActiveCam = activeCam.GetComponent<AzureFogScattering>();
         AzureFogScattering azureFogInactiveCam = inactiveCam.AddComponentIfMissing<AzureFogScattering>();
         if (azureFogActiveCam != null && azureFogInactiveCam != null)
@@ -72,10 +82,10 @@ class ReferenceCameraPatch
         }
         else
         {
-            Object.Destroy(inactiveCam.GetComponent<AzureFogScattering>());
+            UnityEngine.Object.Destroy(inactiveCam.GetComponent<AzureFogScattering>());
         }
 
-        //why is there so many thingsssssssss
+        // Copy Beautify settings
         Beautify beautifyActiveCam = activeCam.GetComponent<Beautify>();
         Beautify beautifyInactiveCam = inactiveCam.AddComponentIfMissing<Beautify>();
         if (beautifyActiveCam != null && beautifyInactiveCam != null)
@@ -85,7 +95,7 @@ class ReferenceCameraPatch
         }
         else
         {
-            Object.Destroy(inactiveCam.gameObject.GetComponent<Beautify>());
+            UnityEngine.Object.Destroy(inactiveCam.gameObject.GetComponent<Beautify>());
         }
     }
 }
