@@ -1,4 +1,4 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI_RC.Core;
 using ABI_RC.Core.UI;
 using UnityEngine;
 
@@ -26,9 +26,9 @@ public class CohtmlHudTracker : VRModeTracker
         }
         DesktopVRSwitch.Logger.Msg("Configuring new hud affinity for CohtmlHud.");
 
-        _cohtmlHud.gameObject.transform.parent = intoVR ? PlayerSetup.Instance.vrCamera.transform : PlayerSetup.Instance.desktopCamera.transform;
+        _cohtmlHud.gameObject.transform.parent = Utils.GetPlayerCameraObject(intoVR).transform;
         // This handles rotation and position
-        ABI_RC.Core.CVRTools.ConfigureHudAffinity();
+        CVRTools.ConfigureHudAffinity();
         _cohtmlHud.gameObject.transform.localScale = new Vector3(1.2f, 1f, 1.2f);
     }
 }

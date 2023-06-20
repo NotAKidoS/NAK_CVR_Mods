@@ -22,12 +22,13 @@ public class VRModeSwitchManager : MonoBehaviour
 {
     public static VRModeSwitchManager Instance { get; private set; }
 
-    // I don't think I *need* this. Only using cause I don't want stuff just floating off.
+    // I don't think I *need* this. Only using cause I don't want stuff just existing.
     private static readonly List<VRModeTracker> _vrModeTrackers = new List<VRModeTracker>();
 
     public static event UnityAction<bool> OnPreVRModeSwitch;
     public static event UnityAction<bool> OnPostVRModeSwitch;
     public static event UnityAction<bool> OnFailVRModeSwitch;
+    const string XRSETTINGS_DEVICE = "OpenVR";
 
     public static void RegisterVRModeTracker(VRModeTracker observer)
     {
@@ -55,7 +56,6 @@ public class VRModeSwitchManager : MonoBehaviour
             DestroyImmediate(this);
             return;
         }
-
         Instance = this;
     }
 
@@ -85,11 +85,11 @@ public class VRModeSwitchManager : MonoBehaviour
         // Start switch
         if (!isUsingVr)
         {
-            yield return StartCoroutine(StartOpenVR());
+            yield return StartCoroutine(StartSteamVR());
         }
         else
         {
-            yield return StartCoroutine(StopOpenVR());
+            StopSteamVR();
         }
 
         // Check for updated VR mode
@@ -143,43 +143,36 @@ public class VRModeSwitchManager : MonoBehaviour
 
     public bool IsInVR() => XRSettings.enabled;
 
-    private IEnumerator StartOpenVR()
+    private IEnumerator StartSteamVR()
     {
-        XRSettings.LoadDeviceByName("OpenVR");
-        yield return null; //wait a frame before checking
+        XRSettings.LoadDeviceByName(XRSETTINGS_DEVICE);
+        yield return null; // wait a frame before checking
 
         if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
         {
-            DesktopVRSwitch.Logger.Msg("Starting SteamVR...");
-            XRSettings.enabled = true;
-            SteamVR_Input.Initialize(true);
-            yield return null;
-            yield break;
+            //SteamVR.Initialize is fucking useless
+            SteamVR_Behaviour.Initialize(true);
+            SteamVR_Behaviour.instance.InitializeSteamVR(true);
         }
 
-        DesktopVRSwitch.Logger.Error("Initializing VR Failed. Is there no VR device connected?");
         yield return null;
         yield break;
     }
 
-    private IEnumerator StopOpenVR()
+    private void StopSteamVR()
     {
-        SteamVR_Behaviour.instance.enabled = false;
+        // Forces SteamVR to reinitialize SteamVR_Input next switch
+        SteamVR_ActionSet_Manager.DisableAllActionSets();
+        SteamVR_Input.initialized = false;
 
-        yield return null;
+        // Remove SteamVR
+        DestroyImmediate(SteamVR_Behaviour.instance.gameObject);
+        SteamVR.enabled = false;
 
-        if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
-        {
-            SteamVR_Input.actionSets[0].Deactivate(SteamVR_Input_Sources.Any);
-            XRSettings.LoadDeviceByName("");
-            XRSettings.enabled = false;
+        // Disable UnityXR
+        XRSettings.LoadDeviceByName("");
+        XRSettings.enabled = false;
 
-            yield return null;
-            yield break;
-        }
-
-        DesktopVRSwitch.Logger.Error("Attempted to exit VR without a VR device loaded.");
-        yield return null;
-        yield break;
+        // We don't really need to wait on Stop()
     }
 }

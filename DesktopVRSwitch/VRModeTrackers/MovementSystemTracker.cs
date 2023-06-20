@@ -25,9 +25,7 @@ public class MovementSystemTracker : VRModeTracker
     {
         _movementSystem = MovementSystem.Instance;
 
-        Vector3 position = _movementSystem.rotationPivot.transform.position;
-        position.y = _movementSystem.transform.position.y;
-        preSwitchWorldPosition = position;
+        preSwitchWorldPosition = Utils.GetPlayerRootPosition();
         preSwitchWorldRotation = _movementSystem.rotationPivot.transform.rotation;
 
         _movementSystem.ChangeCrouch(false);

@@ -10,16 +10,16 @@ using Object = UnityEngine.Object;
 
 namespace NAK.DesktopVRSwitch.Patches;
 
-internal class ReferenceCameraPatch
+class ReferenceCameraPatch
 {
-    internal static void OnWorldLoad()
+    public static void OnWorldLoad()
     {
         Camera activeCamera = (MetaPort.Instance.isUsingVr ? PlayerSetup.Instance.vrCamera : PlayerSetup.Instance.desktopCamera).GetComponent<Camera>();
         Camera inactiveCamera = (MetaPort.Instance.isUsingVr ? PlayerSetup.Instance.desktopCamera : PlayerSetup.Instance.vrCamera).GetComponent<Camera>();
         CopyToInactiveCam(activeCamera, inactiveCamera);
     }
 
-    internal static void CopyToInactiveCam(Camera activeCam, Camera inactiveCam)
+    static void CopyToInactiveCam(Camera activeCam, Camera inactiveCam)
     {
         DesktopVRSwitch.Logger.Msg("Copying active camera settings & components to inactive camera.");
 

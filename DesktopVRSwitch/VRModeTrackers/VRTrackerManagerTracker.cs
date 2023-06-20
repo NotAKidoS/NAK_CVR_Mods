@@ -22,7 +22,7 @@ public class VRTrackerManagerTracker : VRModeTracker
             DesktopVRSwitch.Logger.Error("Error while getting VRTrackerManager!");
             return;
         }
-        DesktopVRSwitch.Logger.Msg($"Resetting VRTrackerManager.");
+        DesktopVRSwitch.Logger.Msg("Resetting VRTrackerManager.");
 
         _vrTrackerManager.poses = null;
         _vrTrackerManager.leftHand = null;

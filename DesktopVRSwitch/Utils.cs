@@ -1,6 +1,7 @@
 ﻿using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
+using ABI_RC.Systems.MovementSystem;
 using UnityEngine;
 
 namespace NAK.DesktopVRSwitch;
@@ -14,6 +15,15 @@ internal static class Utils
             return PlayerSetup.Instance.vrCamera;
         }
         return PlayerSetup.Instance.desktopCamera;
+    }
+
+    //stole from kafe :>
+    internal static Vector3 GetPlayerRootPosition()
+    {
+        return MovementSystem.Instance.rotationPivot.position with
+        {
+            y = MovementSystem.Instance.transform.position.y
+        };
     }
 
     internal static void ReloadLocalAvatar()
