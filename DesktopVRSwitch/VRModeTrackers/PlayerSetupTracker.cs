@@ -34,7 +34,7 @@ public class PlayerSetupTracker : VRModeTracker
             CVR_DesktopCameraController._cam = _playerSetup.desktopCamera.GetComponent<UnityEngine.Camera>();
 
         CVR_DesktopCameraController.UpdateFov();
-        
+
         // UICamera has a script that copies the FOV from the desktop cam.
         // Toggling the cameras on/off resets the aspect ratio,
         // so when rigs switch, that is already handled.

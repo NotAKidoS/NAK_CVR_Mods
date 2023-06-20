@@ -7,8 +7,6 @@ namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
 public class MetaPortTracker : VRModeTracker
 {
-    private MetaPort _metaPort;
-
     public override void TrackerInit()
     {
         VRModeSwitchManager.OnPostVRModeSwitch += OnPostSwitch;
@@ -21,7 +19,7 @@ public class MetaPortTracker : VRModeTracker
 
     private void OnPostSwitch(bool intoVR)
     {
-        _metaPort = MetaPort.Instance;
+        MetaPort _metaPort = MetaPort.Instance;
         if (_metaPort == null)
         {
             DesktopVRSwitch.Logger.Error("Error while getting MetaPort!");
@@ -33,11 +31,11 @@ public class MetaPortTracker : VRModeTracker
         _metaPort.isUsingVr = intoVR;
 
         // replace
-        UpdateRichPresence();
+        UpdateRichPresence(_metaPort);
         ResetSteamVROverrides(intoVR);
     }
 
-    private void UpdateRichPresence()
+    private void UpdateRichPresence(MetaPort _metaPort)
     {
         // Hacky way of updating rich presence
         if (_metaPort.settings.GetSettingsBool("ImplementationRichPresenceDiscordEnabled", true))

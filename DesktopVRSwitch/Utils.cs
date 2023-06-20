@@ -1,7 +1,6 @@
 ﻿using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
-using ABI_RC.Systems.MovementSystem;
 using UnityEngine;
 
 namespace NAK.DesktopVRSwitch;
@@ -17,13 +16,10 @@ internal static class Utils
         return PlayerSetup.Instance.desktopCamera;
     }
 
-    //stole from kafe :>
-    internal static Vector3 GetPlayerRootPosition()
+    internal static void ClearLocalAvatar()
     {
-        return MovementSystem.Instance.rotationPivot.position with
-        {
-            y = MovementSystem.Instance.transform.position.y
-        };
+        DesktopVRSwitch.Logger.Msg("Clearing local avatar.");
+        PlayerSetup.Instance.ClearAvatar();
     }
 
     internal static void ReloadLocalAvatar()
@@ -31,4 +27,10 @@ internal static class Utils
         DesktopVRSwitch.Logger.Msg("Attempting to reload current local avatar from GUID.");
         AssetManagement.Instance.LoadLocalAvatar(MetaPort.Instance.currentAvatarGuid);
     }
+
+    internal static bool IsLocalAvatarLoaded()
+    {
+        return PlayerSetup.Instance._avatar != null;
+    }
+
 }

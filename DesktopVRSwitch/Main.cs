@@ -58,7 +58,7 @@ public class DesktopVRSwitch : MelonMod
     {
         if (Input.GetKeyDown(KeyCode.F6) && Input.GetKey(KeyCode.LeftControl))
         {
-            VRModeSwitchManager.Instance?.StartSwitch();
+            VRModeSwitchManager.Instance?.AttemptSwitch();
         }
     }
 

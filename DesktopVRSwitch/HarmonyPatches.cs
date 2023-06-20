@@ -3,11 +3,11 @@ using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.TrackingModules;
+using cohtml;
 using HarmonyLib;
 using NAK.DesktopVRSwitch.Patches;
 using NAK.DesktopVRSwitch.VRModeTrackers;
 using UnityEngine;
-using cohtml;
 
 namespace NAK.DesktopVRSwitch.HarmonyPatches;
 
@@ -75,9 +75,9 @@ class CVRPickupObjectPatches
     [HarmonyPatch(typeof(CVRPickupObject), nameof(CVRPickupObject.Start))]
     static void Prefix_CVRPickupObject_Start(ref CVRPickupObject __instance)
     {
-        if (__instance.gripType == CVRPickupObject.GripType.Free) 
+        if (__instance.gripType == CVRPickupObject.GripType.Free)
             return;
-        
+
         Transform vrOrigin = __instance.gripOrigin;
         Transform desktopOrigin = __instance.gripOrigin.Find("[Desktop]");
         if (vrOrigin != null && desktopOrigin != null)

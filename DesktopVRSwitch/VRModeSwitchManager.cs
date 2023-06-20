@@ -44,11 +44,11 @@ public class VRModeSwitchManager : MonoBehaviour
     }
 
     // Settings
-    private bool _useWorldTransition = true;
-    private bool _reloadLocalAvatar = true;
+    public bool _useWorldTransition = true;
+    public bool _reloadLocalAvatar = true;
 
-    // Internal
-    private bool _switchInProgress = false;
+    // Info
+    public bool SwitchInProgress { get; private set; }
 
     void Awake()
     {
@@ -60,18 +60,18 @@ public class VRModeSwitchManager : MonoBehaviour
         Instance = this;
     }
 
-    public void StartSwitch()
+    public void AttemptSwitch()
     {
         StartCoroutine(StartSwitchCoroutine());
     }
 
     private IEnumerator StartSwitchCoroutine()
     {
-        if (_switchInProgress)
+        if (SwitchInProgress)
         {
             yield break;
         }
-        _switchInProgress = true;
+        SwitchInProgress = true;
         yield return null;
 
 
@@ -96,12 +96,14 @@ public class VRModeSwitchManager : MonoBehaviour
         // Check for updated VR mode
         if (isUsingVr != IsInVR())
         {
-            InvokeOnPostSwitch(!isUsingVr);
-
             // reload the local avatar
-            // only reload on success
             if (_reloadLocalAvatar)
+            {
+                Utils.ClearLocalAvatar();
                 Utils.ReloadLocalAvatar();
+            }
+
+            InvokeOnPostSwitch(!isUsingVr);
         }
         else
         {
@@ -111,7 +113,7 @@ public class VRModeSwitchManager : MonoBehaviour
         if (_useWorldTransition) // finish the visual transition and wait
             yield return WorldTransitionSystem.Instance.ContinueTransitionCoroutine();
 
-        _switchInProgress = false;
+        SwitchInProgress = false;
         yield break;
     }
 
@@ -166,14 +168,14 @@ public class VRModeSwitchManager : MonoBehaviour
         SteamVR_ActionSet_Manager.DisableAllActionSets();
         SteamVR_Input.initialized = false;
 
-        // Remove SteamVR
+        // Remove SteamVR behaviour & render
         DestroyImmediate(SteamVR_Behaviour.instance.gameObject);
-        SteamVR.enabled = false;
+        SteamVR.enabled = false; // disposes SteamVR
 
         // Disable UnityXR
         XRSettings.LoadDeviceByName("");
         XRSettings.enabled = false;
 
-        // We don't really need to wait on Stop()
+        // We don't really need to wait a frame on Stop()
     }
 }
