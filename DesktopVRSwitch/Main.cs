@@ -1,4 +1,6 @@
 ﻿using MelonLoader;
+using NAK.DesktopVRSwitch.VRModeTrackers;
+using UnityEngine;
 
 /**
     I know the TryCatchHell thing might be a bit exessive, but it is
@@ -18,23 +20,66 @@ namespace NAK.DesktopVRSwitch;
 public class DesktopVRSwitch : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-    
+
     public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(DesktopVRSwitch));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnterCalibrationOnSwitch =
         Category.CreateEntry("Enter Calibration on Switch", true, description: "Should you automatically be placed into calibration after switch if FBT is available? Overridden by Save Calibration IK setting.");
 
+    public static readonly MelonPreferences_Entry<bool> EntryUseTransitionOnSwitch =
+    Category.CreateEntry("Use Transition on Switch", true, description: "Should the world transition play on VRMode switch?");
+
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
+
+        RegisterVRModeTrackers();
+
+        // main manager
         ApplyPatches(typeof(HarmonyPatches.CheckVRPatches));
-        ApplyPatches(typeof(HarmonyPatches.CVRPickupObjectPatches));
-        ApplyPatches(typeof(HarmonyPatches.CVRWorldPatches));
+        // nameplate fixes
         ApplyPatches(typeof(HarmonyPatches.CameraFacingObjectPatches));
+        // lazy fix to reset iksystem
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
-        ApplyPatches(typeof(HarmonyPatches.MovementSystemPatches));
-        ApplyPatches(typeof(HarmonyPatches.VRTrackerManagerPatches));
+        // post processing fixes
+        ApplyPatches(typeof(HarmonyPatches.CVRWorldPatches));
+    }
+
+    public override void OnUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.F6) && Input.GetKey(KeyCode.LeftControl))
+        {
+            VRModeSwitchManager.Instance?.StartSwitch();
+        }
+    }
+
+    void RegisterVRModeTrackers()
+    {
+        // Core trackers
+        VRModeSwitchManager.RegisterVRModeTracker(new CheckVRTracker());
+        VRModeSwitchManager.RegisterVRModeTracker(new MetaPortTracker());
+
+        // HUD trackers
+        VRModeSwitchManager.RegisterVRModeTracker(new CohtmlHudTracker());
+        VRModeSwitchManager.RegisterVRModeTracker(new HudOperationsTracker());
+
+        // Player trackers
+        VRModeSwitchManager.RegisterVRModeTracker(new PlayerSetupTracker());
+        VRModeSwitchManager.RegisterVRModeTracker(new MovementSystemTracker());
+        VRModeSwitchManager.RegisterVRModeTracker(new IKSystemTracker());
+
+        // Menu trackers
+        VRModeSwitchManager.RegisterVRModeTracker(new CVR_MenuManagerTracker());
+        VRModeSwitchManager.RegisterVRModeTracker(new ViewManagerTracker());
+
+        // Interaction trackers
+        VRModeSwitchManager.RegisterVRModeTracker(new CVRInputManagerTracker());
+        VRModeSwitchManager.RegisterVRModeTracker(new CVR_InteractableManagerTracker());
+        VRModeSwitchManager.RegisterVRModeTracker(new CVRGestureRecognizerTracker());
+
+        // Portable camera tracker
+        VRModeSwitchManager.RegisterVRModeTracker(new PortableCameraTracker());
     }
 
     void ApplyPatches(Type type)

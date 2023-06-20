@@ -1,4 +1,6 @@
-﻿using NAK.DesktopVRSwitch.Patches;
+﻿/**
+
+using NAK.DesktopVRSwitch.Patches;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR;
@@ -16,7 +18,7 @@ using ABI_RC.Core;
     QualitySettings.vSyncCount = 0;
     Time.fixedDeltaTime = Time.timeScale / hmd_DisplayFrequency;
 
-**/
+**
 
 namespace NAK.DesktopVRSwitch;
 
@@ -130,33 +132,34 @@ public class DesktopVRSwitcher : MonoBehaviour
     public void PostVRModeSwitch(bool enableVR)
     {
         if (_softVRSwitch) return;
-        //close the menus
-        TryCatchHell.CloseCohtmlMenus();
 
-        //the base of VR checks
-        TryCatchHell.SetCheckVR(enableVR);
-        TryCatchHell.SetMetaPort(enableVR);
-
-        //game basics for functional gameplay post switch
-        TryCatchHell.RepositionCohtmlHud(enableVR);
-        TryCatchHell.UpdateHudOperations(enableVR);
-        TryCatchHell.DisableMirrorCanvas();
-        TryCatchHell.SwitchActiveCameraRigs(enableVR);
-        TryCatchHell.ResetCVRInputManager();
-        TryCatchHell.UpdateRichPresence();
-        TryCatchHell.UpdateGestureReconizerCam();
-        TryCatchHell.UpdateMenuCoreData(enableVR);
-
-        //let tracked objects know we switched
-        VRModeSwitchTracker.PostVRModeSwitch(enableVR);
-
-        //reload avatar by default, optional for debugging
-        if (_reloadLocalAvatar)
-        {
-            TryCatchHell.ReloadLocalAvatar();
-        }
+        SetupVR(enableVR);
 
         _switchInProgress = false;
+    }
+
+    public void SetupVR(bool intoVR)
+    {
+        List<TryCatchHell.TryAction> actions = new List<TryCatchHell.TryAction>
+        {
+            TryCatchHell.SetCheckVR,
+            TryCatchHell.SetMetaPort,
+            TryCatchHell.RepositionCohtmlHud,
+            TryCatchHell.UpdateHudOperations,
+            TryCatchHell.DisableMirrorCanvas,
+            TryCatchHell.SwitchActiveCameraRigs,
+            TryCatchHell.ResetCVRInputManager,
+            TryCatchHell.UpdateRichPresence,
+            TryCatchHell.UpdateGestureReconizerCam,
+            TryCatchHell.UpdateMenuCoreData,
+        };
+
+        foreach (var action in actions)
+        {
+            TryCatchHell.TryExecute(action, intoVR);
+        }
+
+        TryCatchHell.TryExecute(VRModeSwitchTracker.PostVRModeSwitch, intoVR);
     }
 
     public void ResetSteamVROverrides()
@@ -193,3 +196,6 @@ public class DesktopVRSwitcher : MonoBehaviour
     }
 }
 
+
+
+**/
