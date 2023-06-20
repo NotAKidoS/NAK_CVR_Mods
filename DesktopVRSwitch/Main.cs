@@ -18,8 +18,8 @@ public class DesktopVRSwitch : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryUseTransitionOnSwitch =
         Category.CreateEntry("Use Transition on Switch", true, description: "Should the world transition play on VRMode switch?");
 
-    public static readonly MelonPreferences_Entry<bool> EntryRenderVRGameView =
-        Category.CreateEntry("Render VR Game View", true, description: "Should the VR view be displayed in the game window after VRMode switch?");
+    //public static readonly MelonPreferences_Entry<bool> EntryRenderVRGameView =
+    //    Category.CreateEntry("Render VR Game View", true, description: "Should the VR view be displayed in the game window after VRMode switch?");
 
     public static readonly MelonPreferences_Entry<bool> EntrySwitchToDesktopOnExit =
         Category.CreateEntry("Switch to Desktop on SteamVR Exit", true, description: "Should the game switch to Desktop when SteamVR quits?");
