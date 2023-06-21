@@ -25,7 +25,7 @@ public class CVRWorldTracker : VRModeTracker
         CVRWorld.Instance.UpdatePostProcessing();
         UpdateCVRDesktopCameraController();
     }
-    
+
     private void UpdateCVRDesktopCameraController()
     {
         // Just making sure- Starting in VR will not call Start() as rig is disabled

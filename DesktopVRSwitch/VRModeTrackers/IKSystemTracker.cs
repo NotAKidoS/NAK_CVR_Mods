@@ -52,7 +52,7 @@ public class IKSystemTracker : VRModeTracker
         BodySystem.isCalibratedAsFullBody = false;
         BodySystem.isCalibrating = false;
         BodySystem.isRecalibration = false;
-        
+
         // Make it so you don't instantly end up in FBT from Desktop
         IKSystem.firstAvatarLoaded = DesktopVRSwitch.EntryEnterCalibrationOnSwitch.Value;
 

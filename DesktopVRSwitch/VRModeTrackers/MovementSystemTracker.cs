@@ -35,7 +35,7 @@ public class MovementSystemTracker : VRModeTracker
         MovementSystem.Instance.ChangeCrouch(false);
         MovementSystem.Instance.ChangeProne(false);
         MovementSystem.Instance.SetImmobilized(true);
-        
+
     }
 
     private void OnFailedSwitch(bool intoVR)
@@ -50,7 +50,7 @@ public class MovementSystemTracker : VRModeTracker
         // Lazy
         MelonLoader.MelonCoroutines.Start(TeleportFrameAfter(intoVR));
     }
-    
+
     private IEnumerator TeleportFrameAfter(bool intoVR)
     {
         yield return null; // need to wait a frame
@@ -66,7 +66,7 @@ public class MovementSystemTracker : VRModeTracker
         MovementSystem.Instance.ChangeCrouch(false);
         MovementSystem.Instance.ChangeProne(false);
         MovementSystem.Instance.SetImmobilized(false);
-        
+
         yield break;
     }
 }

@@ -44,10 +44,9 @@ public class VRModeSwitchManager : MonoBehaviour
     }
 
     // Settings
-    public bool _useWorldTransition = true;
-    public bool _reloadLocalAvatar = true;
-
-    // Info
+    public bool UseWorldTransition = true;
+    public bool ReloadLocalAvatar = true;
+    
     public bool SwitchInProgress { get; private set; }
 
     void Awake()
@@ -75,12 +74,12 @@ public class VRModeSwitchManager : MonoBehaviour
         yield return null;
 
 
-        if (_useWorldTransition)
+        if (UseWorldTransition)
         {   // start visual transition and wait for it to complete
             WorldTransitionSystem.Instance.StartTransition();
             yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
         }
-        
+
         // Check if OpenVR is running
         bool isUsingVr = IsInVR();
 
@@ -100,7 +99,7 @@ public class VRModeSwitchManager : MonoBehaviour
         if (isUsingVr != IsInVR())
         {
             // reload the local avatar
-            if (_reloadLocalAvatar)
+            if (ReloadLocalAvatar)
             {
                 Utils.ClearLocalAvatar();
                 Utils.ReloadLocalAvatar();
@@ -113,9 +112,9 @@ public class VRModeSwitchManager : MonoBehaviour
             InvokeOnFailedSwitch(!isUsingVr);
         }
 
-        if (_useWorldTransition)
+        if (UseWorldTransition)
         {   // would be cool to have out length
-            WorldTransitionSystem.Instance.ContinueTransitionCoroutine();
+            WorldTransitionSystem.Instance.ContinueTransition();
             yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
         }
 

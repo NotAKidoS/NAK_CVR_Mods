@@ -16,14 +16,6 @@ public class CheckVRTracker : VRModeTracker
 
     private void OnPostSwitch(bool intoVR)
     {
-        CheckVR _checkVR = CheckVR.Instance;
-        if (_checkVR == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting CheckVR!");
-            return;
-        }
-        DesktopVRSwitch.Logger.Msg($"Setting CheckVR hasVrDeviceLoaded to {intoVR}.");
-
-        _checkVR.hasVrDeviceLoaded = intoVR;
+        CheckVR.Instance.hasVrDeviceLoaded = intoVR;
     }
 }
