@@ -3,6 +3,7 @@ using ABI_RC.Core.Player;
 using MelonLoader;
 using System.Reflection;
 using static NAK.ThirdPerson.CameraLogic;
+using ABI_RC.Core;
 
 namespace NAK.ThirdPerson;
 
@@ -22,10 +23,15 @@ internal static class Patches
             typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.SetupIKScaling), BindingFlags.NonPublic | BindingFlags.Instance),
             postfix: typeof(Patches).GetMethod(nameof(OnScaleAdjusted), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
          );
+        harmony.Patch(
+            typeof(CVRTools).GetMethod(nameof(CVRTools.ConfigureHudAffinity), BindingFlags.Public | BindingFlags.Static),
+            postfix: typeof(Patches).GetMethod(nameof(OnConfigureHudAffinity), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
+         );
     }
 
     //Copy camera settings & postprocessing components
     private static void OnWorldStart() => CopyPlayerCamValues();
     //Adjust camera distance with height as modifier
     private static void OnScaleAdjusted(float height) => AdjustScale(height);
+    private static void OnConfigureHudAffinity() => CheckVRMode();
 }

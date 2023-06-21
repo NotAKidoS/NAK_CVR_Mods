@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core.Base;
 using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
 using Aura2API;
 using BeautifyEffect;
@@ -187,7 +188,9 @@ internal static class CameraLogic
         }
     }
 
+
     private static void ResetDist() => _dist = 0;
     internal static void ScrollDist(float sign) { _dist += sign * 0.25f; RelocateCam(CurrentLocation); }
     internal static void AdjustScale(float height) { _scale = height; RelocateCam(CurrentLocation); }
+    internal static void CheckVRMode() { if (MetaPort.Instance.isUsingVr) State = false; }
 }
