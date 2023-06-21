@@ -75,9 +75,12 @@ public class VRModeSwitchManager : MonoBehaviour
         yield return null;
 
 
-        if (_useWorldTransition) // start visual transition and wait for it to complete
-            yield return WorldTransitionSystem.Instance.StartTransitionCoroutine();
-
+        if (_useWorldTransition)
+        {   // start visual transition and wait for it to complete
+            WorldTransitionSystem.Instance.StartTransition();
+            yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
+        }
+        
         // Check if OpenVR is running
         bool isUsingVr = IsInVR();
 
@@ -110,8 +113,11 @@ public class VRModeSwitchManager : MonoBehaviour
             InvokeOnFailedSwitch(!isUsingVr);
         }
 
-        if (_useWorldTransition) // finish the visual transition and wait
-            yield return WorldTransitionSystem.Instance.ContinueTransitionCoroutine();
+        if (_useWorldTransition)
+        {   // would be cool to have out length
+            WorldTransitionSystem.Instance.ContinueTransitionCoroutine();
+            yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
+        }
 
         SwitchInProgress = false;
         yield break;

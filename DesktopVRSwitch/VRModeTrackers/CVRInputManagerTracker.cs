@@ -17,26 +17,20 @@ public class CVRInputManagerTracker : VRModeTracker
 
     void OnPostSwitch(bool intoVR)
     {
-        CVRInputManager _cvrInputManager = CVRInputManager.Instance;
-        if (_cvrInputManager == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting CVRInputManager!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg("Resetting CVRInputManager inputs.");
 
-        _cvrInputManager.inputEnabled = true;
+        CVRInputManager.Instance.inputEnabled = true;
 
         //just in case
-        _cvrInputManager.blockedByUi = false;
+        CVRInputManager.Instance.blockedByUi = false;
         //sometimes head can get stuck, so just in case
-        _cvrInputManager.independentHeadToggle = false;
+        CVRInputManager.Instance.independentHeadToggle = false;
         //just nice to load into desktop with idle gesture
-        _cvrInputManager.gestureLeft = 0f;
-        _cvrInputManager.gestureLeftRaw = 0f;
-        _cvrInputManager.gestureRight = 0f;
-        _cvrInputManager.gestureRightRaw = 0f;
+        CVRInputManager.Instance.gestureLeft = 0f;
+        CVRInputManager.Instance.gestureLeftRaw = 0f;
+        CVRInputManager.Instance.gestureRight = 0f;
+        CVRInputManager.Instance.gestureRightRaw = 0f;
         //turn off finger tracking input
-        _cvrInputManager.individualFingerTracking = false;
+        CVRInputManager.Instance.individualFingerTracking = false;
     }
 }

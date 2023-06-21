@@ -18,27 +18,15 @@ public class CVR_MenuManagerTracker : VRModeTracker
 
     private void OnPreSwitch(bool intoVR)
     {
-        CVR_MenuManager _cvrMenuManager = CVR_MenuManager.Instance;
-        if (_cvrMenuManager == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting CVR_MenuManager!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg("Closing CVR_MenuManager - Quick Menu.");
 
-        _cvrMenuManager.ToggleQuickMenu(false);
+        CVR_MenuManager.Instance.ToggleQuickMenu(false);
     }
 
     private void OnPostSwitch(bool intoVR)
     {
-        CVR_MenuManager _cvrMenuManager = CVR_MenuManager.Instance;
-        if (_cvrMenuManager == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting CVR_MenuManager!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg("Updating CVR_Menu_Data core data.");
 
-        _cvrMenuManager.coreData.core.inVr = intoVR;
+        CVR_MenuManager.Instance.coreData.core.inVr = intoVR;
     }
 }

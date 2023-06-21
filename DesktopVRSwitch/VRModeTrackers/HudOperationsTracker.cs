@@ -16,15 +16,9 @@ public class HudOperationsTracker : VRModeTracker
 
     private void OnPostSwitch(bool intoVR)
     {
-        HudOperations _hudOperations = HudOperations.Instance;
-        if (_hudOperations == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting HudOperations!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg("Switching HudOperations worldLoadingItem & worldLoadStatus.");
 
-        _hudOperations.worldLoadingItem = intoVR ? _hudOperations.worldLoadingItemVr : _hudOperations.worldLoadingItemDesktop;
-        _hudOperations.worldLoadStatus = intoVR ? _hudOperations.worldLoadStatusVr : _hudOperations.worldLoadStatusDesktop;
+        HudOperations.Instance.worldLoadingItem = intoVR ? HudOperations.Instance.worldLoadingItemVr : HudOperations.Instance.worldLoadingItemDesktop;
+        HudOperations.Instance.worldLoadStatus = intoVR ? HudOperations.Instance.worldLoadStatusVr : HudOperations.Instance.worldLoadStatusDesktop;
     }
 }

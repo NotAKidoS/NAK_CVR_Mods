@@ -52,13 +52,12 @@ public class IKSystemTracker : VRModeTracker
         BodySystem.isCalibratedAsFullBody = false;
         BodySystem.isCalibrating = false;
         BodySystem.isRecalibration = false;
-
+        
         // Make it so you don't instantly end up in FBT from Desktop
         IKSystem.firstAvatarLoaded = DesktopVRSwitch.EntryEnterCalibrationOnSwitch.Value;
 
         // Turn off finger tracking just in case the user switched controllers
-        if (IKSystem.Instance != null)
-            IKSystem.Instance.FingerSystem.controlActive = false;
+        IKSystem.Instance.FingerSystem.controlActive = false;
 
         SetupSteamVRTrackingModule(intoVR);
     }

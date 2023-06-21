@@ -16,14 +16,8 @@ public class ViewManagerTracker : VRModeTracker
 
     public void OnPreSwitch(bool intoVR)
     {
-        ViewManager _viewManager = ViewManager.Instance;
-        if (_viewManager == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting ViewManager!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg("Closing ViewManager - Main Menu.");
 
-        _viewManager.UiStateToggle(false);
+        ViewManager.Instance.UiStateToggle(false);
     }
 }

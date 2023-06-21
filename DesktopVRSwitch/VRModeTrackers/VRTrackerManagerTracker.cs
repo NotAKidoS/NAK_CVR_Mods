@@ -16,17 +16,15 @@ public class VRTrackerManagerTracker : VRModeTracker
 
     private void OnPostSwitch(bool intoVR)
     {
-        VRTrackerManager _vrTrackerManager = VRTrackerManager.Instance;
-        if (_vrTrackerManager == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting VRTrackerManager!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg("Resetting VRTrackerManager.");
 
-        _vrTrackerManager.poses = null;
-        _vrTrackerManager.leftHand = null;
-        _vrTrackerManager.rightHand = null;
-        _vrTrackerManager.hasCheckedForKnuckles = false;
+        // VRTrackerManager will still get old Left/Right hand objects.
+        // This only breaks CVRGlobalParams1 reporting battry status
+        // MetaPort.Update
+
+        VRTrackerManager.Instance.poses = null;
+        VRTrackerManager.Instance.leftHand = null;
+        VRTrackerManager.Instance.rightHand = null;
+        VRTrackerManager.Instance.hasCheckedForKnuckles = false;
     }
 }

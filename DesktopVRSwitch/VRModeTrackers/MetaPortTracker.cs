@@ -19,36 +19,30 @@ public class MetaPortTracker : VRModeTracker
 
     private void OnPostSwitch(bool intoVR)
     {
-        MetaPort _metaPort = MetaPort.Instance;
-        if (_metaPort == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting MetaPort!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg($"Setting MetaPort isUsingVr to {intoVR}.");
 
         // Main thing most of the game checks for if using VR
-        _metaPort.isUsingVr = intoVR;
+        MetaPort.Instance.isUsingVr = intoVR;
 
         // replace
-        UpdateRichPresence(_metaPort);
+        UpdateRichPresence();
         ResetSteamVROverrides(intoVR);
     }
 
-    private void UpdateRichPresence(MetaPort _metaPort)
+    private void UpdateRichPresence()
     {
         // Hacky way of updating rich presence
-        if (_metaPort.settings.GetSettingsBool("ImplementationRichPresenceDiscordEnabled", true))
+        if (MetaPort.Instance.settings.GetSettingsBool("ImplementationRichPresenceDiscordEnabled", true))
         {
             DesktopVRSwitch.Logger.Msg("Forcing Discord Rich Presence update.");
-            _metaPort.settings.SetSettingsBool("ImplementationRichPresenceDiscordEnabled", false);
-            _metaPort.settings.SetSettingsBool("ImplementationRichPresenceDiscordEnabled", true);
+            MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceDiscordEnabled", false);
+            MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceDiscordEnabled", true);
         }
-        if (_metaPort.settings.GetSettingsBool("ImplementationRichPresenceSteamEnabled", true))
+        if (MetaPort.Instance.settings.GetSettingsBool("ImplementationRichPresenceSteamEnabled", true))
         {
             DesktopVRSwitch.Logger.Msg("Forcing Steam Rich Presence update.");
-            _metaPort.settings.SetSettingsBool("ImplementationRichPresenceSteamEnabled", false);
-            _metaPort.settings.SetSettingsBool("ImplementationRichPresenceSteamEnabled", true);
+            MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceSteamEnabled", false);
+            MetaPort.Instance.settings.SetSettingsBool("ImplementationRichPresenceSteamEnabled", true);
         }
     }
 

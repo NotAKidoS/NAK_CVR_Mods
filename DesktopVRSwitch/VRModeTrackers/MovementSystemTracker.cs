@@ -23,41 +23,26 @@ public class MovementSystemTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    // why do i do this
-    private MovementSystem GetMovementSystemInstance()
-    {
-        MovementSystem _movementSystem = MovementSystem.Instance;
-        if (_movementSystem == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting MovementSystem!");
-        }
-        return _movementSystem;
-    }
-
     private void OnPreSwitch(bool intoVR)
     {
-        MovementSystem _movementSystem = GetMovementSystemInstance();
-        if (_movementSystem != null)
-        {
-            DesktopVRSwitch.Logger.Msg("Storing player world position and rotation.");
-            preSwitchWorldPosition = _movementSystem.rotationPivot.transform.position;
-            preSwitchWorldPosition.y = _movementSystem.transform.position.y;
-            preSwitchWorldRotation = _movementSystem.rotationPivot.transform.rotation;
 
-            _movementSystem.ChangeCrouch(false);
-            _movementSystem.ChangeProne(false);
-            _movementSystem.SetImmobilized(true);
-        }
+        DesktopVRSwitch.Logger.Msg("Storing player world position and rotation.");
+
+        preSwitchWorldPosition = MovementSystem.Instance.rotationPivot.transform.position;
+        preSwitchWorldPosition.y = MovementSystem.Instance.transform.position.y;
+        preSwitchWorldRotation = MovementSystem.Instance.rotationPivot.transform.rotation;
+
+        MovementSystem.Instance.ChangeCrouch(false);
+        MovementSystem.Instance.ChangeProne(false);
+        MovementSystem.Instance.SetImmobilized(true);
+        
     }
 
     private void OnFailedSwitch(bool intoVR)
     {
-        MovementSystem _movementSystem = GetMovementSystemInstance();
-        if (_movementSystem != null)
-        {
-            DesktopVRSwitch.Logger.Msg("Resetting MovementSystem mobility.");
-            _movementSystem.SetImmobilized(false);
-        }
+        DesktopVRSwitch.Logger.Msg("Resetting MovementSystem mobility.");
+
+        MovementSystem.Instance.SetImmobilized(false);
     }
 
     private void OnPostSwitch(bool intoVR)
@@ -65,27 +50,23 @@ public class MovementSystemTracker : VRModeTracker
         // Lazy
         MelonLoader.MelonCoroutines.Start(TeleportFrameAfter(intoVR));
     }
-
+    
     private IEnumerator TeleportFrameAfter(bool intoVR)
     {
         yield return null; // need to wait a frame
 
-        MovementSystem _movementSystem = GetMovementSystemInstance();
-        if (_movementSystem != null)
-        {
-            DesktopVRSwitch.Logger.Msg("Resetting MovementSystem mobility and applying stored position and rotation.");
+        DesktopVRSwitch.Logger.Msg("Resetting MovementSystem mobility and applying stored position and rotation.");
 
-            _movementSystem.rotationPivot = Utils.GetPlayerCameraObject(intoVR).transform;
-            _movementSystem.TeleportToPosRot(preSwitchWorldPosition, preSwitchWorldRotation, false);
+        MovementSystem.Instance.rotationPivot = Utils.GetPlayerCameraObject(intoVR).transform;
+        MovementSystem.Instance.TeleportToPosRot(preSwitchWorldPosition, preSwitchWorldRotation, false);
 
-            if (!intoVR)
-                _movementSystem.UpdateColliderCenter(_movementSystem.transform.position);
+        if (!intoVR)
+            MovementSystem.Instance.UpdateColliderCenter(MovementSystem.Instance.transform.position);
 
-            _movementSystem.ChangeCrouch(false);
-            _movementSystem.ChangeProne(false);
-            _movementSystem.SetImmobilized(false);
-        }
-
+        MovementSystem.Instance.ChangeCrouch(false);
+        MovementSystem.Instance.ChangeProne(false);
+        MovementSystem.Instance.SetImmobilized(false);
+        
         yield break;
     }
 }

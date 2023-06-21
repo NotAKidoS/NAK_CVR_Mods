@@ -16,12 +16,6 @@ public class CVR_InteractableManagerTracker : VRModeTracker
 
     private void OnPostSwitch(bool intoVR)
     {
-        CVR_InteractableManager _cvrInteractableManager = CVR_InteractableManager.Instance;
-        if (_cvrInteractableManager == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting CVR_InteractableManager!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg($"Setting CVRInputManager inputEnabled & CVR_InteractableManager enableInteractions to {!intoVR}");
 
         CVR_InteractableManager.enableInteractions = !intoVR;

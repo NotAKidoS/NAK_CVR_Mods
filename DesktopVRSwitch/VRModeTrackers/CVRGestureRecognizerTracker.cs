@@ -17,14 +17,8 @@ public class CVRGestureRecognizerTracker : VRModeTracker
 
     private void OnPostSwitch(bool intoVR)
     {
-        CVRGestureRecognizer _cvrGestureRecognizer = CVRGestureRecognizer.Instance;
-        if (_cvrGestureRecognizer == null)
-        {
-            DesktopVRSwitch.Logger.Error("Error while getting CVRGestureRecognizer!");
-            return;
-        }
         DesktopVRSwitch.Logger.Msg("Updating CVRGestureRecognizer _camera to active camera.");
 
-        _cvrGestureRecognizer._camera = Utils.GetPlayerCameraObject(intoVR).GetComponent<Camera>();
+        CVRGestureRecognizer.Instance._camera = Utils.GetPlayerCameraObject(intoVR).GetComponent<Camera>();
     }
 }

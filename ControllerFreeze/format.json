@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "ControllerFreeze",
+  "modversion": "1.0.5",
+  "gameversion": "2022r170p1",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Allows your controllers to track while the SteamVR overlay is open. This also fixes Quest/Touch controllers feeling slow during fast movements.\n\nSupport for SmoothRay & DesktopVRSwitch.",
+  "searchtags": [
+    "vr",
+    "quest",
+    "controller",
+    "tracking"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r9/ControllerFreeze.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ControllerFreeze/",
+  "changelog": "Initial CVRMG Release",
+  "embedcolor": "3498db"
+}
