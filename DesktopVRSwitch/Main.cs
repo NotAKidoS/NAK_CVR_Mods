@@ -22,7 +22,7 @@ public class DesktopVRSwitch : MelonMod
     //    Category.CreateEntry("Render VR Game View", true, description: "Should the VR view be displayed in the game window after VRMode switch?");
 
     public static readonly MelonPreferences_Entry<bool> EntrySwitchToDesktopOnExit =
-        Category.CreateEntry("Switch to Desktop on SteamVR Exit", true, description: "Should the game switch to Desktop when SteamVR quits?");
+        Category.CreateEntry("Switch to Desktop on SteamVR Exit", false, description: "Should the game switch to Desktop when SteamVR quits?");
 
     public override void OnInitializeMelon()
     {
