@@ -116,7 +116,7 @@ class CVRPickupObjectPatches
                 return;
 
             Transform vrOrigin = __instance.gripOrigin;
-            Transform desktopOrigin = __instance.gripOrigin.Find("[Desktop]");
+            Transform desktopOrigin = vrOrigin?.Find("[Desktop]");
             if (vrOrigin != null && desktopOrigin != null)
             {
                 var tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
