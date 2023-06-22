@@ -1,8 +1,8 @@
 # ControllerFreeze
 
-This made no sense to dirty ControllerFreeze with, so it is now its own mod.
+This made no sense to dirty TrackedControllerFix with, so it is now its own mod.
 
-Prevents game disabling arm tracking when a controller is inactive.
+Prevents game disabling arm tracking when a controller is inactive. This obviously will cause issues if you only play with one controller.
 
 ---
 
