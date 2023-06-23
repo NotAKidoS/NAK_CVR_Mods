@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "FuckCohtmlResourceHandler",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170p1",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Allows your controllers to track while the SteamVR overlay is open. This also fixes Quest/Touch controllers feeling slow during fast movements.",
+  "searchtags": [
+    "vr",
+    "quest",
+    "controller",
+    "tracking"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/FuckCohtmlResourceHandler.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckCohtmlResourceHandler/",
+  "changelog": "Initial Release",
+  "embedcolor": "3498db"
+}
