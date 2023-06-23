@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClickToMove", "ClickToMove\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllerFreeze", "ControllerFreeze\ControllerFreeze.csproj", "{ADAAC4FB-D78B-4FD2-B23A-EA6AF6B0B4A5}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckCohtmlResourceHandler", "FuckCohtmlResourceHandler\FuckCohtmlResourceHandler.csproj", "{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -195,6 +197,10 @@ Global
 		{ADAAC4FB-D78B-4FD2-B23A-EA6AF6B0B4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADAAC4FB-D78B-4FD2-B23A-EA6AF6B0B4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADAAC4FB-D78B-4FD2-B23A-EA6AF6B0B4A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
