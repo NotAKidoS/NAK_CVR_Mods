@@ -10,14 +10,14 @@ static class ModSettings
         AvatarScaleMod.EntryUseScaleGesture.OnEntryValueChanged.Subscribe(OnEntryUseScaleGestureChanged);
     }
 
-    static void OnEntryEnabledChanged(bool newValue, bool oldValue)
+    static void OnEntryEnabledChanged(bool oldVal, bool newVal)
     {
         if (AvatarScaleManager.LocalAvatar != null)
-            AvatarScaleManager.LocalAvatar.enabled = newValue;
+            AvatarScaleManager.LocalAvatar.enabled = newVal;
     }
 
-    static void OnEntryUseScaleGestureChanged(bool newValue, bool oldValue)
+    static void OnEntryUseScaleGestureChanged(bool oldVal, bool newVal)
     {
-        AvatarScaleGesture.GestureEnabled = newValue;
+        AvatarScaleGesture.GestureEnabled = newVal;
     }
 }
