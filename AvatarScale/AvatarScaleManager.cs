@@ -1,4 +1,6 @@
 ﻿using ABI.CCK.Components;
+using NAK.AvatarScaleMod.ScaledComponents;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Animations;
 
@@ -19,8 +21,8 @@ public class AvatarScaleManager : MonoBehaviour
         typeof(ScaleConstraint),
     };
 
-    public const float MinimumHeight = 0.25f;
-    public const float MaximumHeight = 2.5f;
+    public const float MinimumHeight = 0.1f;
+    public const float MaximumHeight = 10f;
 
     // Scalable Components
     private List<ScaledLight> _lights = new List<ScaledLight>();
@@ -102,6 +104,11 @@ public class AvatarScaleManager : MonoBehaviour
         // local player manager
         if (LocalAvatar == this)
             LocalAvatar = null;
+    }
+
+    private void OnDisable()
+    {
+        ResetAllToInitialScale();
     }
 
     private void FindComponentsOfType(params System.Type[] types)
@@ -205,5 +212,59 @@ public class AvatarScaleManager : MonoBehaviour
             scaledScaleConstraint.Component.scaleAtRest = scaledScaleConstraint.InitialScaleAtRest * ScaleFactor;
             scaledScaleConstraint.Component.scaleOffset = scaledScaleConstraint.InitialScaleOffset * ScaleFactor;
         }
+    }
+
+    private void ResetAllToInitialScale()
+    {
+        // quick n lazy for right now
+        transform.localScale = InitialScale;
+
+        foreach (var scaledLight in _lights)
+        {
+            scaledLight.Component.range = scaledLight.InitialRange;
+        }
+        foreach (var scaledAudioSource in _audioSources)
+        {
+            scaledAudioSource.Component.minDistance = scaledAudioSource.InitialMinDistance;
+            scaledAudioSource.Component.maxDistance = scaledAudioSource.InitialMaxDistance;
+        }
+        foreach (var scaledParentConstraint in _parentConstraints)
+        {
+            scaledParentConstraint.Component.translationAtRest = scaledParentConstraint.InitialTranslationAtRest;
+
+            for (int i = 0; i < scaledParentConstraint.InitialTranslationOffsets.Count; i++)
+            {
+                scaledParentConstraint.Component.translationOffsets[i] = scaledParentConstraint.InitialTranslationOffsets[i];
+            }
+        }
+        foreach (var scaledPositionConstraint in _positionConstraints)
+        {
+            scaledPositionConstraint.Component.translationAtRest = scaledPositionConstraint.InitialTranslationAtRest;
+            scaledPositionConstraint.Component.translationOffset = scaledPositionConstraint.InitialTranslationOffset;
+        }
+        foreach (var scaledScaleConstraint in _scaleConstraints)
+        {
+            scaledScaleConstraint.Component.scaleAtRest = scaledScaleConstraint.InitialScaleAtRest;
+            scaledScaleConstraint.Component.scaleOffset = scaledScaleConstraint.InitialScaleOffset;
+        }
+    }
+
+    // use for slow transition between avatars initial height & saved height>>>??????????????
+    public IEnumerator SetTargetHeightOverTime(float newHeight, float duration)
+    {
+        float startTime = Time.time;
+        float startHeight = TargetHeight;
+        newHeight = Mathf.Clamp(newHeight, MinimumHeight, MaximumHeight);
+
+        while (Time.time < startTime + duration)
+        {
+            float t = (Time.time - startTime) / duration;
+            TargetHeight = Mathf.Lerp(startHeight, newHeight, t);
+            UpdateScaleFactor();
+            yield return null;
+        }
+
+        TargetHeight = newHeight;
+        UpdateScaleFactor();
     }
 }

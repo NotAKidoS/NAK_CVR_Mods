@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Animations;
 
-namespace NAK.AvatarScaleMod;
+namespace NAK.AvatarScaleMod.ScaledComponents;
 
 public class ScaledAudioSource
 {

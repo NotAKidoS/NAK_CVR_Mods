@@ -20,6 +20,9 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
+[assembly: MelonColor(255, 241, 200, 82)]
+[assembly: MelonAuthorColor(255, 114, 17, 25)]
+[assembly: HarmonyDontPatchAll]
 
 namespace NAK.AvatarScaleMod.Properties;
 internal static class AssemblyInfoParams

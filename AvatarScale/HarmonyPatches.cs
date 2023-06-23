@@ -38,6 +38,7 @@ class GesturePlaneTestPatches
                 name = "avatarScale",
                 type = CVRGesture.GestureType.Hold,
             };
+            // TODO: Expose these settings in-game and tune till they feel right
             gesture.steps.Add(new CVRGestureStep
             {
                 firstGesture = CVRGestureStep.Gesture.Fist,

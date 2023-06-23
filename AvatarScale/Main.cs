@@ -13,11 +13,13 @@ public class AvatarScaleMod : MelonMod
         Category.CreateEntry("Enabled", true, description: "Toggle AvatarScaleMod entirely.");
 
     public static readonly MelonPreferences_Entry<bool> EntryUseScaleGesture =
-        Category.CreateEntry("Scale Gesture", true, description: "Use two fists to scale yourself easily.");
+        Category.CreateEntry("Scale Gesture", false, description: "Use two fists to scale yourself easily.");
 
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
+
+        ModSettings.InitializeModSettings();
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.GesturePlaneTestPatches));
     }
