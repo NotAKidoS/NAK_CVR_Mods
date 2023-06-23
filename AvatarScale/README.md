@@ -1,11 +1,9 @@
 # AvatarScaleMod
  
-Makes "AvatarScale" parameter persistant across avatars. 
+Proof of concept mod to add Avatar Scaling to any avatar. This is local-only.
 
-Combined with [AvatarScaleTool](https://github.com/NotAKidOnSteam/AvatarScaleTool), this allows for consistant scale when switching between avatars.
+Legit threw this together in three hours. ChilloutVR handles all the hard stuff already lmao.
 
-
-    
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
