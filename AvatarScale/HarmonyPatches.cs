@@ -1,11 +1,11 @@
-﻿using ABI_RC.Core;
-using ABI_RC.Core.Player;
+﻿using ABI_RC.Core.Player;
 using HarmonyLib;
 
 namespace NAK.AvatarScaleMod.HarmonyPatches;
 
 class PlayerSetupPatches
 {
+    /**
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatar))]
     static void Postfix_PlayerSetup_SetupAvatar(ref PlayerSetup __instance, ref float ____initialAvatarHeight)
@@ -19,7 +19,7 @@ class PlayerSetupPatches
         }
 
         // User has cleared MelonPrefs, store a default value.
-        AvatarScaleMod.HiddenAvatarScale.Value = CalculateParameterValue(____initialAvatarHeight);
+        AvatarScaleMod.HiddenAvatarScale.Value = Utils.CalculateParameterValue(____initialAvatarHeight);
     }
 
     [HarmonyPrefix]
@@ -28,29 +28,27 @@ class PlayerSetupPatches
     {
         if (!AvatarScaleMod.EntryEnabled.Value) return;
 
-        if (!IsSupportedAvatar(__instance.animatorManager) && !AvatarScaleMod.EntryPersistAnyways.Value)
+        if (!Utils.IsSupportedAvatar(__instance.animatorManager) && !AvatarScaleMod.EntryPersistAnyways.Value)
         {
             return;
         }
-
-        AvatarScaleMod.HiddenAvatarScale.Value = CalculateParameterValue(____avatarHeight);
+        
+        AvatarScaleMod.HiddenAvatarScale.Value = Utils.CalculateParameterValue(____avatarHeight);
     }
+    **/
 
-    public static float CalculateParameterValue(float lastAvatarHeight)
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatar))]
+    static void Postfix_PlayerSetup_SetupAvatar(ref PlayerSetup __instance)
     {
-        float t = (lastAvatarHeight - AvatarScaleMod.MinimumHeight) / (AvatarScaleMod.MaximumHeight - AvatarScaleMod.MinimumHeight);
-        return t;
-    }
-
-    public static bool IsSupportedAvatar(CVRAnimatorManager manager)
-    {
-        if (manager.animatorParameterFloatList.Contains(AvatarScaleMod.ParameterName) && manager._animator != null)
+        try
         {
-            if (manager._advancedAvatarIndicesFloat.TryGetValue(AvatarScaleMod.ParameterName, out int index))
-            {
-                return index < manager._advancedAvatarCacheFloat.Count;
-            }
+            __instance._avatar.AddComponent<AvatarScaleManager>().Initialize(__instance._initialAvatarHeight, __instance.initialScale);
         }
-        return false;
+        catch (Exception e)
+        {
+            AvatarScaleMod.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_SetupAvatar)}");
+            AvatarScaleMod.Logger.Error(e);
+        }
     }
 }

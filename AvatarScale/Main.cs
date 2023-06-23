@@ -8,6 +8,8 @@ public class AvatarScaleMod : MelonMod
     internal const float MinimumHeight = 0.25f;
     internal const float MaximumHeight = 2.5f;
 
+    internal static MelonLogger.Instance Logger;
+
     public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(AvatarScaleMod));
 
@@ -22,6 +24,7 @@ public class AvatarScaleMod : MelonMod
 
     public override void OnInitializeMelon()
     {
+        Logger = LoggerInstance;
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
     }
 
