@@ -25,17 +25,20 @@ class PlayerSetupPatches
         Vector3 newPosition = __instance.vrCamera.transform.position;
         newPosition.y = __instance.transform.position.y;
         
-        Vector3 offset = __state + newPosition;
+        Vector3 offset = newPosition - __state;
 
         // Offset _PlayerLocal to keep player in place
-        __instance.transform.position += offset;
+        __instance.transform.position -= offset;
 
         // TODO: Figure out why VRIK is wonky still
+        // PlayerSetup runs after VRIK solving?? Fuck
+        /**
         if (IKSystem.vrik != null)
         {
-            IKSystem.vrik.solver.locomotion.AddDeltaPosition(offset);
-            IKSystem.vrik.solver.raycastOriginPelvis += offset;
             IKSystem.vrik.transform.position += offset;
+            IKSystem.vrik.solver.Reset();
+            IKSystem.vrik.solver.AddPlatformMotion(offset, Quaternion.identity, __instance.transform.position);
         }
+        **/
     }
 }
