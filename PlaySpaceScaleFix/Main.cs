@@ -14,7 +14,7 @@ public class PlaySpaceScaleFix : MelonMod
     {
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
     }
-
+    
     void ApplyPatches(Type type)
     {
         try
