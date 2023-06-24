@@ -67,6 +67,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControllerFreeze", "Control
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckCohtmlResourceHandler", "FuckCohtmlResourceHandler\FuckCohtmlResourceHandler.csproj", "{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlaySpaceScaleFix", "PlaySpaceScaleFix\PlaySpaceScaleFix.csproj", "{61368493-5B0E-489B-828C-DE10428AB81A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -201,6 +203,10 @@ Global
 		{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61368493-5B0E-489B-828C-DE10428AB81A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61368493-5B0E-489B-828C-DE10428AB81A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61368493-5B0E-489B-828C-DE10428AB81A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61368493-5B0E-489B-828C-DE10428AB81A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

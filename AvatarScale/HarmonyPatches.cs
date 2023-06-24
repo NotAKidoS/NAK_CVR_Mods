@@ -25,36 +25,6 @@ class PlayerSetupPatches
             AvatarScaleMod.Logger.Error(e);
         }
     }
-
-    static Vector3 originalPosition;
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetPlaySpaceScale))]
-    static void Prefix_PlayerSetup_SetPlaySpaceScale(ref PlayerSetup __instance)
-    {
-        originalPosition = __instance.vrCamera.transform.position;
-        originalPosition.y = __instance.transform.position.y;
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetPlaySpaceScale))]
-    static void Postfix_PlayerSetup_SetPlaySpaceScale(ref PlayerSetup __instance)
-    {
-        Vector3 newPosition = __instance.vrCamera.transform.position;
-        newPosition.y = __instance.transform.position.y;
-
-        Vector3 offset = newPosition - originalPosition;
-
-        // Apply the offset to the VR camera rig's position
-        __instance.transform.position -= offset;
-        
-        //if (IKSystem.vrik != null)
-        //{
-        //    IKSystem.vrik.solver.locomotion.AddDeltaPosition(offset * 2);
-        //    IKSystem.vrik.solver.raycastOriginPelvis += offset * 2;
-        //    IKSystem.vrik.solver.Reset();
-        //}
-    }
 }
 
 class PuppetMasterPatches
