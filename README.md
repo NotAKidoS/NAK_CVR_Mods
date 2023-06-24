@@ -3,12 +3,15 @@
 | Mod Name                                                                                                   | Approval State | Released in this repo | CVRMG Category          |
 |------------------------------------------------------------------------------------------------------------|----------------|-----------------------|-------------------------|
 | [AASBufferFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix)                      | Approved       | Yes                   | Utilities & Tweaks      |
+| [AvatarScaleMod](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AvatarScale)                     | N/A            | No                    | N/A                     |
 | [BadAnimatorFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix)                  | Approved       | Yes                   | Fixes                   |
 | [Blackout](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Blackout)                              | Approved       | No                    | New Features & Overhauls|
+| [ControllerFreeze](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ControllerFreeze)              | N/A            | No                    | N/A                     |
 | [CVRGizmos](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos)                            | Approved       | Yes                   | Very Niche              |
 | [ClearHudNotifications](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ClearHudNotifications)    | Approved       | No                    | UI                      |
 | [DesktopVRIK](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK)                        | Approved       | Yes                   | Utilities & Tweaks      |
 | [DesktopVRSwitch](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch)                | Approved       | No                    | New Features & Overhauls|
+| [FuckCohtmlResourceHandler](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckCohtmlResourceHandler) | N/A       | No                    | N/A                     |
 | [FuckMetrics](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMetrics)                        | Approved       | No                    | Performance & Fidelity  |
 | [FuckToes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes)                              | Approved       | No                    | Utilities & Tweaks      |
 | [GestureLock](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/GestureLock)                        | Approved       | No                    | Utilities & Tweaks      |
