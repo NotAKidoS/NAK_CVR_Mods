@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "PlaySpaceScaleFix",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170p1",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes the issue where the player in VR is incorrectly positioned relative to the center of the playspace when adjusting playspace scales.\n\nEnsures that scaling and switching avatars no longer result in unusual offsets.",
+  "searchtags": [
+    "scale",
+    "play",
+    "space",
+    "offset"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r4/PlaySpaceScaleFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PlaySpaceScaleFix/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#e56597"
+}
