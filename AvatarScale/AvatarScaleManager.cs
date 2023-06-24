@@ -1,4 +1,5 @@
 ﻿using ABI.CCK.Components;
+using ABI_RC.Core.Player;
 using NAK.AvatarScaleMod.ScaledComponents;
 using System.Collections;
 using UnityEngine;
@@ -8,66 +9,143 @@ namespace NAK.AvatarScaleMod;
 
 public class AvatarScaleManager : MonoBehaviour
 {
-    public static AvatarScaleManager LocalAvatar { get; private set; }
+    // Constants
+    public const float MinHeight = 0.1f; // TODO: Make into Setting
+    public const float MaxHeight = 10f; // TODO: Make into Setting
+    public const string ScaleFactorParameterName = "ScaleFactor";
+    public const string ScaleFactorParameterNameLocal = "#ScaleFactor";
 
-    // List of component types to be collected and scaled
-    private static readonly System.Type[] scaleComponentTypes = new System.Type[]
+    private static readonly System.Type[] scalableComponentTypes =
     {
         typeof(Light),
         typeof(AudioSource),
         typeof(ParticleSystem),
         typeof(ParentConstraint),
         typeof(PositionConstraint),
-        typeof(ScaleConstraint),
+        typeof(ScaleConstraint)
     };
 
-    public const float MinimumHeight = 0.1f;
-    public const float MaximumHeight = 10f;
-
-    // Scalable Components
-    private List<ScaledLight> _lights = new List<ScaledLight>();
-    private List<ScaledAudioSource> _audioSources = new List<ScaledAudioSource>();
-    //private List<ScaledComponent<ParticleSystem>> _particleSystems = new List<ScaledComponent<ParticleSystem>>();
-    private List<ScaledParentConstraint> _parentConstraints = new List<ScaledParentConstraint>();
-    private List<ScaledPositionConstraint> _positionConstraints = new List<ScaledPositionConstraint>();
-    private List<ScaledScaleConstraint> _scaleConstraints = new List<ScaledScaleConstraint>();
+    // Public properties
+    public static bool GlobalEnabled { get; set; }
+    public static AvatarScaleManager LocalAvatar { get; private set; }
 
     public float TargetHeight { get; private set; }
     public float InitialHeight { get; private set; }
     public Vector3 InitialScale { get; private set; }
     public float ScaleFactor { get; private set; }
 
-    public void Initialize(float initialHeight, Vector3 initialScale)
+    // Private properties
+    private bool _isLocalAvatar;
+    private Animator _animator;
+    private CVRAvatar _avatar;
+
+    private List<ScaledLight> _scaledLights = new List<ScaledLight>();
+    private List<ScaledAudioSource> _scaledAudioSources = new List<ScaledAudioSource>();
+    private List<ScaledParentConstraint> _scaledParentConstraints = new List<ScaledParentConstraint>();
+    private List<ScaledPositionConstraint> _scaledPositionConstraints = new List<ScaledPositionConstraint>();
+    private List<ScaledScaleConstraint> _scaledScaleConstraints = new List<ScaledScaleConstraint>();
+
+    public void Initialize(float initialHeight, Vector3 initialScale, bool isLocalAvatar)
     {
-        // Check for zero height
         if (Math.Abs(initialHeight) < 1E-6)
         {
             AvatarScaleMod.Logger.Warning("Cannot initialize with a height of zero!");
             return;
         }
 
-        this.TargetHeight = 1f;
+        if (isLocalAvatar && LocalAvatar == null)
+        {
+            _isLocalAvatar = true;
+            LocalAvatar = this;
+        }
+
+        this.TargetHeight = initialHeight;
         this.InitialHeight = initialHeight;
         this.InitialScale = initialScale;
-        UpdateScaleFactor();
+        this.ScaleFactor = 1f;
+    }
+
+    private async void Start()
+    {
+        _avatar = GetComponent<CVRAvatar>();
+
+        if (_avatar == null)
+        {
+            AvatarScaleMod.Logger.Error("AvatarScaleManager should be attached to a GameObject with a CVRAvatar component.");
+            return;
+        }
+
+        if (!_isLocalAvatar)
+        {
+            _animator = GetComponent<Animator>();
+        }
+
+        // I am unsure if this reduces the hitch or not.
+        // I do not want to patch where the game already does scanning though.
+        await FindComponentsOfTypeAsync(scalableComponentTypes);
+    }
+
+    private void OnDisable()
+    {
+        // TODO: Test with Avatar Distance Hider
+        ResetAllToInitialScale();
+    }
+
+    private void OnDestroy()
+    {
+        ClearLists();
+
+        if (LocalAvatar == this)
+        {
+            LocalAvatar = null;
+        }
+    }
+
+    private void ClearLists()
+    {
+        _scaledAudioSources.Clear();
+        _scaledLights.Clear();
+        _scaledParentConstraints.Clear();
+        _scaledPositionConstraints.Clear();
+        _scaledScaleConstraints.Clear();
     }
 
     public void SetTargetHeight(float newHeight)
     {
-        TargetHeight = Mathf.Clamp(newHeight, MinimumHeight, MaximumHeight);
+        TargetHeight = Mathf.Clamp(newHeight, MinHeight, MaxHeight);
         UpdateScaleFactor();
+        UpdateAnimatorParameter();
     }
 
-    public void UpdateScaleFactor()
+    public void SetTargetHeightOverTime(float newHeight, float duration)
     {
-        // Check for zero
+        StartCoroutine(SetTargetHeightOverTimeCoroutine(newHeight, duration));
+    }
+
+    private void UpdateScaleFactor()
+    {
         if (Math.Abs(InitialHeight) < 1E-6)
         {
             AvatarScaleMod.Logger.Warning("InitialHeight is zero, cannot calculate ScaleFactor.");
             return;
         }
 
-        this.ScaleFactor = TargetHeight / InitialHeight;
+        ScaleFactor = TargetHeight / InitialHeight;
+    }
+
+    private void UpdateAnimatorParameter()
+    {
+        if (_isLocalAvatar)
+        {
+            // Set synced and local parameters for Local Player
+            PlayerSetup.Instance.animatorManager.SetAnimatorParameter(ScaleFactorParameterName, ScaleFactor);
+            PlayerSetup.Instance.animatorManager.SetAnimatorParameter(ScaleFactorParameterNameLocal, ScaleFactor);
+        }
+        else if (_animator != null)
+        {
+            // Set local parameter for Remote Player
+            _animator.SetFloat(ScaleFactorParameterNameLocal, ScaleFactor);
+        }
     }
 
     private Vector3 CalculateNewScale()
@@ -75,68 +153,70 @@ public class AvatarScaleManager : MonoBehaviour
         return InitialScale * ScaleFactor;
     }
 
-    private void Awake()
+    private IEnumerator SetTargetHeightOverTimeCoroutine(float newHeight, float duration)
     {
-        // why am i caching the avatar
-        CVRAvatar avatar = GetComponent<CVRAvatar>();
-        if (avatar == null)
+        float startTime = Time.time;
+        float startHeight = TargetHeight;
+
+        // Clamping the newHeight to be between MinHeight and MaxHeight
+        newHeight = Mathf.Clamp(newHeight, MinHeight, MaxHeight);
+
+        while (Time.time < startTime + duration)
         {
-            AvatarScaleMod.Logger.Error("AvatarScaleManager should be attached to a GameObject with a CVRAvatar component.");
-            return;
+            float t = (Time.time - startTime) / duration;
+            TargetHeight = Mathf.Lerp(startHeight, newHeight, t);
+            UpdateScaleFactor();
+            yield return null;
         }
 
-        // i cant believe i would stoop this low
-        if (gameObject.layer == 8 && LocalAvatar == null)
-            LocalAvatar = this;
-
-        FindComponentsOfType(scaleComponentTypes);
+        // Final setting of the TargetHeight after the loop is done.
+        TargetHeight = newHeight;
+        UpdateScaleFactor();
     }
 
-    private void OnDestroy()
+    // TODO: actually profile this
+    private async Task FindComponentsOfTypeAsync(Type[] types)
     {
-        _audioSources.Clear();
-        _lights.Clear();
-        //_particleSystems.Clear(); // fuck no
-        _parentConstraints.Clear();
-        _positionConstraints.Clear();
-        _scaleConstraints.Clear();
+        var tasks = new List<Task>();
+        var components = GetComponentsInChildren<Component>(true);
 
-        // local player manager
-        if (LocalAvatar == this)
-            LocalAvatar = null;
-    }
-
-    private void OnDisable()
-    {
-        ResetAllToInitialScale();
-    }
-
-    private void FindComponentsOfType(params System.Type[] types)
-    {
-        foreach (var type in types)
+        foreach (var component in components)
         {
-            var components = gameObject.GetComponentsInChildren(type, true);
-            foreach (var component in components)
+            if (this == null) break;
+            if (component == null) continue;
+
+            tasks.Add(Task.Run(() =>
             {
-                switch (component)
+                var componentType = component.GetType();
+                if (types.Contains(componentType))
                 {
-                    case AudioSource audioSource:
-                        _audioSources.Add(new ScaledAudioSource(audioSource));
-                        break;
-                    case Light light:
-                        _lights.Add(new ScaledLight(light));
-                        break;
-                    case ParentConstraint parentConstraint:
-                        _parentConstraints.Add(new ScaledParentConstraint(parentConstraint));
-                        break;
-                    case PositionConstraint positionConstraint:
-                        _positionConstraints.Add(new ScaledPositionConstraint(positionConstraint));
-                        break;
-                    case ScaleConstraint scaleConstraint:
-                        _scaleConstraints.Add(new ScaledScaleConstraint(scaleConstraint));
-                        break;
+                    AddScaledComponent(componentType, component);
                 }
-            }
+            }));
+        }
+
+        await Task.WhenAll(tasks);
+    }
+
+    private void AddScaledComponent(Type type, Component component)
+    {
+        switch (type)
+        {
+            case Type _ when type == typeof(AudioSource):
+                _scaledAudioSources.Add(new ScaledAudioSource((AudioSource)component));
+                break;
+            case Type _ when type == typeof(Light):
+                _scaledLights.Add(new ScaledLight((Light)component));
+                break;
+            case Type _ when type == typeof(ParentConstraint):
+                _scaledParentConstraints.Add(new ScaledParentConstraint((ParentConstraint)component));
+                break;
+            case Type _ when type == typeof(PositionConstraint):
+                _scaledPositionConstraints.Add(new ScaledPositionConstraint((PositionConstraint)component));
+                break;
+            case Type _ when type == typeof(ScaleConstraint):
+                _scaledScaleConstraints.Add(new ScaledScaleConstraint((ScaleConstraint)component));
+                break;
         }
     }
 
@@ -154,11 +234,17 @@ public class AvatarScaleManager : MonoBehaviour
 
     private void ApplyAvatarScaling()
     {
+        if (!GlobalEnabled)
+            return;
+
         transform.localScale = CalculateNewScale();
     }
 
     private void ApplyComponentScaling()
     {
+        if (!GlobalEnabled)
+            return;
+
         UpdateLightScales();
         UpdateAudioSourceScales();
         UpdateParentConstraintScales();
@@ -168,103 +254,89 @@ public class AvatarScaleManager : MonoBehaviour
 
     private void UpdateLightScales()
     {
-        foreach (var scaledLight in _lights)
+        // Update range of each light component
+        foreach (var light in _scaledLights)
         {
-            scaledLight.Component.range = scaledLight.InitialRange * ScaleFactor;
+            light.Component.range = light.InitialRange * ScaleFactor;
         }
     }
 
     private void UpdateAudioSourceScales()
     {
-        foreach (var scaledAudioSource in _audioSources)
+        // Update min and max distance of each audio source component
+        foreach (var audioSource in _scaledAudioSources)
         {
-            scaledAudioSource.Component.minDistance = scaledAudioSource.InitialMinDistance * ScaleFactor;
-            scaledAudioSource.Component.maxDistance = scaledAudioSource.InitialMaxDistance * ScaleFactor;
+            audioSource.Component.minDistance = audioSource.InitialMinDistance * ScaleFactor;
+            audioSource.Component.maxDistance = audioSource.InitialMaxDistance * ScaleFactor;
         }
     }
 
     private void UpdateParentConstraintScales()
     {
-        foreach (var scaledParentConstraint in _parentConstraints)
+        // Update translationAtRest and translationOffsets of each parent constraint component
+        foreach (var parentConstraint in _scaledParentConstraints)
         {
-            scaledParentConstraint.Component.translationAtRest = scaledParentConstraint.InitialTranslationAtRest * ScaleFactor;
+            parentConstraint.Component.translationAtRest = parentConstraint.InitialTranslationAtRest * ScaleFactor;
 
-            for (int i = 0; i < scaledParentConstraint.InitialTranslationOffsets.Count; i++)
+            for (int i = 0; i < parentConstraint.InitialTranslationOffsets.Count; i++)
             {
-                scaledParentConstraint.Component.translationOffsets[i] = scaledParentConstraint.InitialTranslationOffsets[i] * ScaleFactor;
+                parentConstraint.Component.translationOffsets[i] = parentConstraint.InitialTranslationOffsets[i] * ScaleFactor;
             }
         }
     }
 
     private void UpdatePositionConstraintScales()
     {
-        foreach (var scaledPositionConstraint in _positionConstraints)
+        // Update translationAtRest and translationOffset of each position constraint component
+        foreach (var positionConstraint in _scaledPositionConstraints)
         {
-            scaledPositionConstraint.Component.translationAtRest = scaledPositionConstraint.InitialTranslationAtRest * ScaleFactor;
-            scaledPositionConstraint.Component.translationOffset = scaledPositionConstraint.InitialTranslationOffset * ScaleFactor;
+            positionConstraint.Component.translationAtRest = positionConstraint.InitialTranslationAtRest * ScaleFactor;
+            positionConstraint.Component.translationOffset = positionConstraint.InitialTranslationOffset * ScaleFactor;
         }
     }
 
     private void UpdateScaleConstraintScales()
     {
-        foreach (var scaledScaleConstraint in _scaleConstraints)
+        // Update scaleAtRest and scaleOffset of each scale constraint component
+        foreach (var scaleConstraint in _scaledScaleConstraints)
         {
-            scaledScaleConstraint.Component.scaleAtRest = scaledScaleConstraint.InitialScaleAtRest * ScaleFactor;
-            scaledScaleConstraint.Component.scaleOffset = scaledScaleConstraint.InitialScaleOffset * ScaleFactor;
+            scaleConstraint.Component.scaleAtRest = scaleConstraint.InitialScaleAtRest * ScaleFactor;
+            scaleConstraint.Component.scaleOffset = scaleConstraint.InitialScaleOffset * ScaleFactor;
         }
     }
 
     private void ResetAllToInitialScale()
     {
-        // quick n lazy for right now
+        // Reset transform scale and each component to their initial scales
         transform.localScale = InitialScale;
 
-        foreach (var scaledLight in _lights)
+        foreach (var light in _scaledLights)
         {
-            scaledLight.Component.range = scaledLight.InitialRange;
+            light.Component.range = light.InitialRange;
         }
-        foreach (var scaledAudioSource in _audioSources)
+        foreach (var audioSource in _scaledAudioSources)
         {
-            scaledAudioSource.Component.minDistance = scaledAudioSource.InitialMinDistance;
-            scaledAudioSource.Component.maxDistance = scaledAudioSource.InitialMaxDistance;
+            audioSource.Component.minDistance = audioSource.InitialMinDistance;
+            audioSource.Component.maxDistance = audioSource.InitialMaxDistance;
         }
-        foreach (var scaledParentConstraint in _parentConstraints)
+        foreach (var parentConstraint in _scaledParentConstraints)
         {
-            scaledParentConstraint.Component.translationAtRest = scaledParentConstraint.InitialTranslationAtRest;
+            parentConstraint.Component.translationAtRest = parentConstraint.InitialTranslationAtRest;
 
-            for (int i = 0; i < scaledParentConstraint.InitialTranslationOffsets.Count; i++)
+            for (int i = 0; i < parentConstraint.InitialTranslationOffsets.Count; i++)
             {
-                scaledParentConstraint.Component.translationOffsets[i] = scaledParentConstraint.InitialTranslationOffsets[i];
+                parentConstraint.Component.translationOffsets[i] = parentConstraint.InitialTranslationOffsets[i];
             }
         }
-        foreach (var scaledPositionConstraint in _positionConstraints)
+        foreach (var positionConstraint in _scaledPositionConstraints)
         {
-            scaledPositionConstraint.Component.translationAtRest = scaledPositionConstraint.InitialTranslationAtRest;
-            scaledPositionConstraint.Component.translationOffset = scaledPositionConstraint.InitialTranslationOffset;
+            positionConstraint.Component.translationAtRest = positionConstraint.InitialTranslationAtRest;
+            positionConstraint.Component.translationOffset = positionConstraint.InitialTranslationOffset;
         }
-        foreach (var scaledScaleConstraint in _scaleConstraints)
+        foreach (var scaleConstraint in _scaledScaleConstraints)
         {
-            scaledScaleConstraint.Component.scaleAtRest = scaledScaleConstraint.InitialScaleAtRest;
-            scaledScaleConstraint.Component.scaleOffset = scaledScaleConstraint.InitialScaleOffset;
+            scaleConstraint.Component.scaleAtRest = scaleConstraint.InitialScaleAtRest;
+            scaleConstraint.Component.scaleOffset = scaleConstraint.InitialScaleOffset;
         }
-    }
-
-    // use for slow transition between avatars initial height & saved height>>>??????????????
-    public IEnumerator SetTargetHeightOverTime(float newHeight, float duration)
-    {
-        float startTime = Time.time;
-        float startHeight = TargetHeight;
-        newHeight = Mathf.Clamp(newHeight, MinimumHeight, MaximumHeight);
-
-        while (Time.time < startTime + duration)
-        {
-            float t = (Time.time - startTime) / duration;
-            TargetHeight = Mathf.Lerp(startHeight, newHeight, t);
-            UpdateScaleFactor();
-            yield return null;
-        }
-
-        TargetHeight = newHeight;
-        UpdateScaleFactor();
     }
 }

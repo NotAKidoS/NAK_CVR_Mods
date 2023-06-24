@@ -1,23 +1,39 @@
-﻿namespace NAK.AvatarScaleMod;
+﻿using MelonLoader;
 
-// Another thing i stole from Kafe, this organizes stuff so much moreee
-// Should I move the entries here too?
+namespace NAK.AvatarScaleMod;
+
+// i like this
+
 static class ModSettings
 {
+    public static readonly MelonPreferences_Category Category =
+        MelonPreferences.CreateCategory(nameof(AvatarScaleMod));
+
+    public static readonly MelonPreferences_Entry<bool> EntryEnabled =
+        Category.CreateEntry("Enabled", true, description: "Toggle AvatarScaleMod entirely for Local user. Kinda.");
+
+    public static readonly MelonPreferences_Entry<bool> EntryUseScaleGesture =
+        Category.CreateEntry("Scale Gesture", false, description: "Use two fists to scale yourself easily.");
+
+    static ModSettings()
+    {
+        EntryEnabled.OnEntryValueChanged.Subscribe(OnEntryEnabledChanged);
+        EntryUseScaleGesture.OnEntryValueChanged.Subscribe(OnEntryUseScaleGestureChanged);
+    }
+    
     public static void InitializeModSettings()
     {
-        AvatarScaleMod.EntryEnabled.OnEntryValueChanged.Subscribe(OnEntryEnabledChanged);
-        AvatarScaleMod.EntryUseScaleGesture.OnEntryValueChanged.Subscribe(OnEntryUseScaleGestureChanged);
+        AvatarScaleManager.GlobalEnabled = EntryEnabled.Value;
+        AvatarScaleGesture.GestureEnabled = EntryUseScaleGesture.Value;
     }
 
-    static void OnEntryEnabledChanged(bool oldVal, bool newVal)
+    static void OnEntryEnabledChanged(bool oldValue, bool newValue)
     {
-        if (AvatarScaleManager.LocalAvatar != null)
-            AvatarScaleManager.LocalAvatar.enabled = newVal;
+        AvatarScaleManager.GlobalEnabled = newValue;
     }
 
-    static void OnEntryUseScaleGestureChanged(bool oldVal, bool newVal)
+    static void OnEntryUseScaleGestureChanged(bool oldValue, bool newValue)
     {
-        AvatarScaleGesture.GestureEnabled = newVal;
+        AvatarScaleGesture.GestureEnabled = newValue;
     }
 }

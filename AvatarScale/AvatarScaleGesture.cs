@@ -1,26 +1,28 @@
-﻿using UnityEngine;
-using ABI_RC.Core.Savior;
+﻿using ABI_RC.Core.Savior;
+using UnityEngine;
 
 namespace NAK.AvatarScaleMod;
 
 public static class AvatarScaleGesture
 {
+    // Toggle for scale gesture
     public static bool GestureEnabled;
+
+    // Require triggers to be down while doing fist? - Exteratta 
     public static bool RequireTriggers = true;
-    public static float InitialModifier = 1f;
-    public static float InitialTargetHeight = 1.8f;
+
+    // Initial values when scale gesture is started
+    public static float InitialModifier;
+    public static float InitialTargetHeight;
 
     public static void OnScaleStart(float modifier, Transform transform1, Transform transform2)
     {
-        // AvatarScaleMod.Logger.Msg("OnScaleStart!");
         if (!GestureEnabled)
             return;
 
-        // you can start the scale, but cant interact with it without holding triggers
-
         if (AvatarScaleManager.LocalAvatar != null)
         {
-            // store initial modifier
+            // Store initial modifier so we can get difference later
             InitialModifier = modifier;
             InitialTargetHeight = AvatarScaleManager.LocalAvatar.TargetHeight;
         }
@@ -28,16 +30,21 @@ public static class AvatarScaleGesture
 
     public static void OnScaleStay(float modifier, Transform transform1, Transform transform2)
     {
-        // AvatarScaleMod.Logger.Msg("OnScaleStay!");
         if (!GestureEnabled)
             return;
 
-        if (RequireTriggers && !IsBothTriggersDown())
+        // Allow user to release triggers to reset "world grip"
+        if (RequireTriggers && !AreBothTriggersDown())
+        {
+            InitialModifier = modifier;
+            InitialTargetHeight = AvatarScaleManager.LocalAvatar.TargetHeight;
             return;
+        }
 
         if (AvatarScaleManager.LocalAvatar != null)
         {
-            float modifierRatio = modifier / InitialModifier;
+            // Invert so the gesture is more of a world squish instead of happy hug
+            float modifierRatio = 1f / (modifier / InitialModifier);
 
             // Determine the adjustment factor for the height, this will be >1 if scaling up, <1 if scaling down.
             float heightAdjustmentFactor = (modifierRatio > 1) ? 1 + (modifierRatio - 1) : 1 - (1 - modifierRatio);
@@ -46,13 +53,14 @@ public static class AvatarScaleGesture
             AvatarScaleManager.LocalAvatar.SetTargetHeight(InitialTargetHeight * heightAdjustmentFactor);
         }
     }
-
+    
     public static void OnScaleEnd(float modifier, Transform transform1, Transform transform2)
     {
-        // AvatarScaleMod.Logger.Msg("OnScaleEnd!");
+        // Unused, needed for mod network?
     }
-
-    public static bool IsBothTriggersDown()
+    
+    // Maybe it should be one trigger? Imagine XSOverlay scaling but for player.
+    public static bool AreBothTriggersDown()
     {
         return CVRInputManager.Instance.interactLeftValue > 0.75f && CVRInputManager.Instance.interactRightValue > 0.75f;
     }
