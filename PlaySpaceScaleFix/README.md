@@ -4,6 +4,8 @@ Fixes the issue where the player in VR is incorrectly positioned relative to the
 
 Ensures that scaling and switching avatars no longer result in unusual offsets.
 
+https://github.com/NotAKidOnSteam/NAK_CVR_Mods/assets/37721153/50cf5934-1548-4e58-b40b-004a74c4e01d
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
