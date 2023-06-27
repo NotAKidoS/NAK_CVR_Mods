@@ -12,7 +12,7 @@ public class ChatBoxExtensions : MelonMod
     {
         Logger = LoggerInstance;
 
-        if (!MelonMod.RegisteredMelons.Any(it => it.Info.Name == "ChatBox"))
+        if (RegisteredMelons.All(it => it.Info.Name != "ChatBox"))
         {
             Logger.Error("ChatBox was not found!");
             return;
@@ -23,12 +23,17 @@ public class ChatBoxExtensions : MelonMod
 
     void ApplyIntegrations()
     {
+
         Integrations.Commands.InitializeCommandHandlers();
         Integrations.ChatBoxCommands.RegisterCommands();
+
         Integrations.ChilloutVRBaseCommands.RegisterCommands();
+        Integrations.ChilloutVRAASCommands.RegisterCommands();
+        Integrations.ChilloutVRInputCommands.RegisterCommands();
+
         ApplyPatches(typeof(HarmonyPatches.CVRInputManagerPatches));
 
-        if (MelonMod.RegisteredMelons.Any(it => it.Info.Name == "PlayerRagdollMod"))
+        if (RegisteredMelons.Any(it => it.Info.Name == "PlayerRagdollMod"))
         {
             Integrations.PlayerRagdollModCommands.RegisterCommands();
         }
