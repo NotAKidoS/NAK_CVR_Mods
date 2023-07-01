@@ -33,7 +33,7 @@ public class AASBufferHelper : MonoBehaviour
             GameHandlesAAS = true;
             return;
         }
-        
+
         //check if avatar uses Avatar Advanced Settings
         ///SendDebug("[OnInit] Remote avatar initialized. Checking for AAS...");
         CVRAvatar avatar = animator.GetComponent<CVRAvatar>();

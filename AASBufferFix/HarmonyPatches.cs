@@ -24,7 +24,7 @@ internal class HarmonyPatches
 
         externalBuffer?.OnAvatarInstantiated(____animator);
     }
-    
+
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PuppetMaster), "AvatarDestroyed")]
     private static void Postfix_PuppetMaster_AvatarDestroyed(ref PuppetMaster __instance)

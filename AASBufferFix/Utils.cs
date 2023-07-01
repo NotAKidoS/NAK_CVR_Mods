@@ -1,5 +1,4 @@
-﻿using MelonLoader;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace NAK.AASBufferFix;
 
@@ -14,7 +13,11 @@ public class Utils
 
         foreach (AnimatorControllerParameter animatorControllerParameter in animator.parameters)
         {
-            if (animatorControllerParameter.name.Length > 0 && animatorControllerParameter.name[0] != '#' && !coreParameters.Contains(animatorControllerParameter.name) && bitCount <= 3200)
+            // Do not count above bit limit
+            if (!(bitCount <= 3200)) 
+                break;
+
+            if (animatorControllerParameter.name.Length > 0 && animatorControllerParameter.name[0] != '#' && !coreParameters.Contains(animatorControllerParameter.name))
             {
                 AnimatorControllerParameterType type = animatorControllerParameter.type;
                 switch (type)
