@@ -1,7 +1,7 @@
 {
   "_id": 95,
   "name": "MenuScalePatch",
-  "modversion": "4.2.7",
+  "modversion": "4.2.8",
   "gameversion": "2022r170p1",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/MenuScalePatch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/MenuScalePatch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch/",
-  "changelog": "- Menus are no longer forced closed on world load.",
+  "changelog": "- Added FOV handling to menu scaling. The menu will scale with changes to your FOV.",
   "embedcolor": "363020"
 }

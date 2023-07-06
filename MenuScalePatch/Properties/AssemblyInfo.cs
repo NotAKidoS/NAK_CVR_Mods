@@ -24,6 +24,6 @@ using System.Reflection;
 namespace NAK.MenuScalePatch.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.2.7";
+    public const string Version = "4.2.8";
     public const string Author = "NotAKidoS";
 }

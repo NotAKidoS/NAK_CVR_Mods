@@ -76,7 +76,7 @@ public class QuickMenuHelper : MonoBehaviour
         if (MSP_MenuInfo.CameraTransform == null || MSP_MenuInfo.DisableQMHelper) return;
 
         Transform activeAnchor = MSP_MenuInfo.isIndependentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
-        transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor, 1f * MSP_MenuInfo.ScaleFactor, 1f);
+        transform.localScale = new Vector3(1f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.FOVAdjustment, 1f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.FOVAdjustment, 1f);
         transform.rotation = activeAnchor.rotation;
         transform.position = activeAnchor.position + activeAnchor.transform.forward * 1f * MSP_MenuInfo.ScaleFactor;
     }

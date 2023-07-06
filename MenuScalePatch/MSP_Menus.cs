@@ -11,6 +11,7 @@ public class MSP_MenuInfo
     //Shared Info
     internal static float ScaleFactor = 1f;
     internal static float AspectRatio = 1f;
+    internal static float FOVAdjustment = 1f;
     internal static Transform CameraTransform;
 
     //Settings...?

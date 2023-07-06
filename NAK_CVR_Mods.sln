@@ -69,6 +69,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckCohtmlResourceHandler",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlaySpaceScaleFix", "PlaySpaceScaleFix\PlaySpaceScaleFix.csproj", "{61368493-5B0E-489B-828C-DE10428AB81A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FOVAdjustment", "FOVAdjustment\FOVAdjustment.csproj", "{EE552804-30B1-49CF-BBDE-3B312895AFF7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,10 @@ Global
 		{61368493-5B0E-489B-828C-DE10428AB81A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61368493-5B0E-489B-828C-DE10428AB81A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61368493-5B0E-489B-828C-DE10428AB81A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE552804-30B1-49CF-BBDE-3B312895AFF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE552804-30B1-49CF-BBDE-3B312895AFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE552804-30B1-49CF-BBDE-3B312895AFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE552804-30B1-49CF-BBDE-3B312895AFF7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

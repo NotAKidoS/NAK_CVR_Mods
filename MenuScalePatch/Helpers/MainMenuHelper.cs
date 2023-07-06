@@ -95,7 +95,7 @@ public class MainMenuHelper : MonoBehaviour
         if (MSP_MenuInfo.CameraTransform == null || MSP_MenuInfo.DisableMMHelper) return;
 
         Transform activeAnchor = MSP_MenuInfo.isIndependentHeadTurn ? worldAnchor : MSP_MenuInfo.CameraTransform;
-        transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor, 0.9f * MSP_MenuInfo.ScaleFactor, 1f);
+        transform.localScale = new Vector3(1.6f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.FOVAdjustment, 0.9f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.FOVAdjustment, 1f);
         transform.position = activeAnchor.position + activeAnchor.forward * 1f * MSP_MenuInfo.ScaleFactor * MSP_MenuInfo.AspectRatio;
         transform.rotation = activeAnchor.rotation;
     }

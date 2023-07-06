@@ -12,6 +12,9 @@ public class MenuScalePatch : MelonMod
 
     public static MelonPreferences_Entry<bool> EntryPlayerAnchorMenus =
         Category.CreateEntry<bool>("Player Anchor Menus", true, description: "Should the menus be anchored to & constantly follow the player?");
+   
+    public static MelonPreferences_Entry<bool> EntryUseFOVAdjustment =
+        Category.CreateEntry<bool>("Use FOV Adjustment", true, description: "Should the menus adjust to your changed FOV?");
 
     public override void OnInitializeMelon()
     {

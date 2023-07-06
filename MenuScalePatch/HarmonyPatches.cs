@@ -184,4 +184,20 @@ internal class HarmonyPatches
 
         return patchedInstructions;
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CVR_DesktopCameraController), nameof(CVR_DesktopCameraController.UpdateFov))]
+    private static void Postfix_CVR_DesktopCameraController_UpdateFov()
+    {
+        if (!MenuScalePatch.EntryUseFOVAdjustment.Value)
+        {
+            MSP_MenuInfo.FOVAdjustment = 1f;
+            return;
+        }
+
+        const float minFovValue = 60f;
+        const float maxFovValue = 120f;
+        MSP_MenuInfo.FOVAdjustment =
+            1f + (2f * Mathf.Clamp01((CVR_DesktopCameraController.defaultFov - minFovValue) / (maxFovValue - minFovValue)));
+    }
 }
