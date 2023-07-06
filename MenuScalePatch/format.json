@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Corrects MM and QM position when avatar is being scaled.\n\nOptional setting to enable Independent Head Turn while in menus.\nOptional setting to force menus to always follow player.",
+  "description": "Corrects MM and QM position when avatar is being scaled.\n\nOptional setting to enable Independent Head Turn while in menus.\nOptional setting to force menus to always follow player.\nOptional setting to adjust with FOV changes.",
   "searchtags": [
     "menu",
     "scale",
