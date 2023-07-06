@@ -1,7 +1,7 @@
 {
   "_id": 126,
   "name": "AASBufferFix",
-  "modversion": "1.0.6",
+  "modversion": "1.0.7",
   "gameversion": "2022r170p1",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r9/AASBufferFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/AASBufferFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix/",
-  "changelog": "Fixed an error when a remote avatar does not have an Animator component.",
+  "changelog": "- Fixed an issue with the avatar footprint being calculated with values that exceed the 3200 AAS bit limit.",
   "embedcolor": "9b59b6"
 }

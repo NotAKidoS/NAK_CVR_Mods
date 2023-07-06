@@ -1,4 +1,4 @@
-# AASBufferFix **(Depricated)**
+# AASBufferFix
  
 Fixes two issues with the Avatar Advanced Settings buffers when loading remote avatars:
 
