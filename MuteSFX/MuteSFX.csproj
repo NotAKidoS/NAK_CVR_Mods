@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <None Remove="SFX\sfx_mute.wav" />
+    <None Remove="SFX\sfx_unmute.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SFX\sfx_mute.wav" />
+    <EmbeddedResource Include="SFX\sfx_unmute.wav" />
+  </ItemGroup>
+</Project>

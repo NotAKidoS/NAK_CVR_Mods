@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "MuteSFX",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170p1",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "Exterrata & NotAKidoS",
+  "description": "A simple mod to add an audio queue for muting and unmuting.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\MuteSFX\\audio'.",
+  "searchtags": [
+    "mute",
+    "unmute",
+    "audio",
+    "sound"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/MuteSFX.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MuteSFX/",
+  "changelog": "- Initial CVRMG release",
+  "embedcolor": "92e492"
+}
