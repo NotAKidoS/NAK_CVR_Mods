@@ -1,12 +1,12 @@
 {
-  "_id": -1,
+  "_id": 172,
   "name": "MuteSFX",
   "modversion": "1.0.0",
   "gameversion": "2022r170p1",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "Exterrata & NotAKidoS",
-  "description": "A simple mod to add an audio queue for muting and unmuting.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\MuteSFX\\audio'.",
+  "description": "A simple mod to add an audio cue for muting and unmuting.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\MuteSFX\\audio'.",
   "searchtags": [
     "mute",
     "unmute",
