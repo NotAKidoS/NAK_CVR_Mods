@@ -16,6 +16,7 @@ internal class InputModuleCurlAdjuster : CVRInputModule
     // Curl smoothing/averaging
     public bool UseCurlSmoothing = false;
     public bool DontSmoothExtremes = true;
+    public bool OnlySmoothNearbyCurl = false;
     public float CurlSimilarityThreshold = 0.5f;
     public float CurlSmoothingFactor = 0.5f;
 
@@ -36,19 +37,38 @@ internal class InputModuleCurlAdjuster : CVRInputModule
 
         if (UseCurlSmoothing)
         {
-            SmoothCurls(
-                ref _inputManager.fingerCurlLeftIndex,
-                ref _inputManager.fingerCurlLeftMiddle,
-                ref _inputManager.fingerCurlLeftRing,
-                ref _inputManager.fingerCurlLeftPinky
-            );
+            if (OnlySmoothNearbyCurl)
+            {
+                SmoothCurlsNear(
+                    ref _inputManager.fingerCurlLeftIndex,
+                    ref _inputManager.fingerCurlLeftMiddle,
+                    ref _inputManager.fingerCurlLeftRing,
+                    ref _inputManager.fingerCurlLeftPinky
+                );
 
-            SmoothCurls(
-                ref _inputManager.fingerCurlRightIndex,
-                ref _inputManager.fingerCurlRightMiddle,
-                ref _inputManager.fingerCurlRightRing,
-                ref _inputManager.fingerCurlRightPinky
-            );
+                SmoothCurlsNear(
+                    ref _inputManager.fingerCurlRightIndex,
+                    ref _inputManager.fingerCurlRightMiddle,
+                    ref _inputManager.fingerCurlRightRing,
+                    ref _inputManager.fingerCurlRightPinky
+                );
+            }
+            else
+            {
+                SmoothCurls(
+                    ref _inputManager.fingerCurlLeftIndex,
+                    ref _inputManager.fingerCurlLeftMiddle,
+                    ref _inputManager.fingerCurlLeftRing,
+                    ref _inputManager.fingerCurlLeftPinky
+                );
+
+                SmoothCurls(
+                    ref _inputManager.fingerCurlRightIndex,
+                    ref _inputManager.fingerCurlRightMiddle,
+                    ref _inputManager.fingerCurlRightRing,
+                    ref _inputManager.fingerCurlRightPinky
+                );
+            }
         }
 
         if (UseCurlSnapping)

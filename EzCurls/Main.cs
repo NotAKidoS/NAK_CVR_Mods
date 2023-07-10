@@ -31,6 +31,11 @@ public class EzCurls : MelonMod
         Category.CreateEntry("UseCurlSmoothing", false,
             description: "Finger curl smoothing to average out similar finger positions.");
 
+    public static readonly MelonPreferences_Entry<bool> EntryOnlySmoothNearbyCurl =
+        Category.CreateEntry("OnlySmoothNearbyCurl", false,
+            description: "Should the curl smoothing only influence the nearest curl?");
+
+
     public static readonly MelonPreferences_Entry<bool> EntryDontSmoothExtremes =
         Category.CreateEntry("DontSmoothExtremes", true,
             description: "Should the finger curl smoothing be less effective on curls towards 0 or 1?");
@@ -67,6 +72,7 @@ public class EzCurls : MelonMod
 
         // curl smoothing
         InputModuleCurlAdjuster.Instance.UseCurlSmoothing = EntryUseCurlSmoothing.Value;
+        InputModuleCurlAdjuster.Instance.OnlySmoothNearbyCurl = EntryOnlySmoothNearbyCurl.Value;
         InputModuleCurlAdjuster.Instance.DontSmoothExtremes = EntryDontSmoothExtremes.Value;
         InputModuleCurlAdjuster.Instance.CurlSimilarityThreshold = EntryCurlSimilarityThreshold.Value;
         InputModuleCurlAdjuster.Instance.CurlSmoothingFactor = EntryCurlSmoothingFactor.Value;
