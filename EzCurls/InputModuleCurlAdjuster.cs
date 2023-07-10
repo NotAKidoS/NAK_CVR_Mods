@@ -9,16 +9,16 @@ internal class InputModuleCurlAdjuster : CVRInputModule
 
     // Curl clamping/adjustment
     public bool UseCurlSnapping = false;
-    public float SnappedCurlValue = 0.5f;
-    public float RangeStartPercent = 0.5f;
-    public float RangeEndPercent = 0.8f;
+    public float SnappedCurlValue = 0.4f;
+    public float RangeStartPercent = 0.25f;
+    public float RangeEndPercent = 0.5f;
 
     // Curl smoothing/averaging
-    public bool UseCurlSmoothing = false;
+    public bool UseCurlSmoothing = true;
     public bool DontSmoothExtremes = true;
     public bool OnlySmoothNearbyCurl = false;
     public float CurlSimilarityThreshold = 0.5f;
-    public float CurlSmoothingFactor = 0.5f;
+    public float CurlSmoothingFactor = 0.4f;
 
     public new void Start()
     {
