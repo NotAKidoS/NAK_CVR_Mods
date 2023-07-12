@@ -136,11 +136,6 @@ internal class IKHandlerDesktop : IKHandler
             _solver.locomotion.weight = _locomotionWeight;
             _solver.spine.maxRootAngle = BodyControl.TrackingMaxRootAngle;
 
-            // Hack to make knees bend properly when in custom pose animations
-            bool useAnimatedBendNormal = _locomotionWeight <= 0.5f;
-            _solver.leftLeg.useAnimatedBendNormal = useAnimatedBendNormal;
-            _solver.rightLeg.useAnimatedBendNormal = useAnimatedBendNormal;
-
             BodyControl.SetHeadWeight(_solver.spine, IKManager.lookAtIk, BodyControl.TrackingHead ? 1f : 0f);
 
             BodyControl.SetArmWeight(_solver.leftArm, BodyControl.TrackingLeftArm && _solver.leftArm.target != null ? 1f : 0f);
@@ -158,9 +153,6 @@ internal class IKHandlerDesktop : IKHandler
             _solver.locomotion.weight = 0f;
             _solver.spine.maxRootAngle = 0f;
 
-            _solver.leftLeg.useAnimatedBendNormal = true;
-            _solver.rightLeg.useAnimatedBendNormal = true;
-
             BodyControl.SetHeadWeight(_solver.spine, IKManager.lookAtIk, 0f);
             BodyControl.SetArmWeight(_solver.leftArm, 0f);
             BodyControl.SetArmWeight(_solver.rightArm, 0f);
@@ -171,6 +163,10 @@ internal class IKHandlerDesktop : IKHandler
 
         // Desktop should never have head position weight
         _solver.spine.positionWeight = 0f;
+
+        // Avatar Motion Tweaker uses this hack, so we must reset it
+        _solver.leftLeg.useAnimatedBendNormal = false;
+        _solver.rightLeg.useAnimatedBendNormal = false;
     }
 
     #endregion
