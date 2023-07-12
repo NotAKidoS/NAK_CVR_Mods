@@ -124,7 +124,7 @@ internal class IKHandlerDesktop : IKHandler
     {
         // Lerp locomotion weight, lerp to BodyControl.TrackingUpright???
         float targetWeight =
-            (BodyControl.TrackingAll && BodyControl.TrackingLocomotion && BodyControl.TrackingUpright > 0.8f)
+            (BodyControl.TrackingAll && BodyControl.TrackingLocomotion && BodyControl.AvatarUpright > 0.8f)
                 ? 1f
                 : 0.0f;
         _locomotionWeight = Mathf.Lerp(_locomotionWeight, targetWeight, Time.deltaTime * 20f);

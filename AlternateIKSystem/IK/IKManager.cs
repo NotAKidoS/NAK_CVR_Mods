@@ -14,6 +14,8 @@ public class IKManager : MonoBehaviour
 {
     public static IKManager Instance;
 
+    public BodyControl BodyControl = new BodyControl();
+
     public static VRIK vrik => _vrik;
     private static VRIK _vrik;
     public static IKSolverVR solver => _vrik?.solver;
@@ -60,9 +62,7 @@ public class IKManager : MonoBehaviour
 
     private void Update()
     {
-        BodyControl.TrackingAll = ShouldTrackAll();
-        BodyControl.TrackingUpright = GetPlayerUpright();
-        BodyControl.TrackingLocomotion = ShouldTrackLocomotion();
+        BodyControl.Update();
 
         if (!_isAvatarInitialized)
             return;
@@ -167,32 +167,6 @@ public class IKManager : MonoBehaviour
         
         _vrik?.solver.Reset();
         return true;
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private bool ShouldTrackAll()
-    {
-        return !PlayerSetup.Instance._emotePlaying;
-    }
-
-    private bool ShouldTrackLocomotion()
-    {
-        return !(MovementSystem.Instance.movementVector.magnitude > 0f
-                 || MovementSystem.Instance.crouching
-                 || MovementSystem.Instance.prone
-                 || MovementSystem.Instance.flying
-                 || MovementSystem.Instance.sitting
-                 || !MovementSystem.Instance._isGrounded);
-    }
-
-    private float GetPlayerUpright()
-    {
-        float avatarHeight = PlayerSetup.Instance._avatarHeight;
-        float currentHeight = PlayerSetup.Instance.GetViewRelativePosition().y;
-        return Mathf.Clamp01((avatarHeight > 0f) ? (currentHeight / avatarHeight) : 0f);
     }
 
     #endregion
