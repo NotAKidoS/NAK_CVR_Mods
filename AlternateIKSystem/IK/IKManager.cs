@@ -20,7 +20,7 @@ public class IKManager : MonoBehaviour
     private static LookAtIK _lookAtIk;
     public static LookAtIK lookAtIk => _lookAtIk;
 
-    private bool _isAvatarInitialized = false;
+    private bool _isAvatarInitialized;
 
     // IK Handling
     private IKHandler _ikHandler;
@@ -157,6 +157,15 @@ public class IKManager : MonoBehaviour
             return false;
 
         _ikHandler?.OnPlayerHandleMovementParent(movementParent);
+        return true;
+    }
+
+    public bool OnPlayerTeleported()
+    {
+        if (!_isAvatarInitialized)
+            return false;
+        
+        _vrik?.solver.Reset();
         return true;
     }
 

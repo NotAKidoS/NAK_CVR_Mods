@@ -20,6 +20,17 @@ public class AlternateIKSystem : MelonMod
 
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
+
+        InitializeIntegration("BTKUILib", Integrations.BTKUIAddon.Initialize);
+    }
+
+    private static void InitializeIntegration(string modName, Action integrationAction)
+    {
+        if (RegisteredMelons.All(it => it.Info.Name != modName)) 
+            return;
+
+        Logger.Msg($"Initializing {modName} integration.");
+        integrationAction.Invoke();
     }
 
     private void ApplyPatches(Type type)

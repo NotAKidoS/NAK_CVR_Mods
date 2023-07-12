@@ -70,27 +70,16 @@ internal class IKHandlerDesktop : IKHandler
 
     #region VRIK Solver Events
 
-    //TODO: properly expose these settings
-
-    private bool EntryPlantFeet = true;
-
-    private float EntryBodyLeanWeight = 1f;
-    private bool EntryProneThrusting = true;
-
-    private float EntryBodyHeadingLimit = 30f;
-    private float EntryPelvisHeadingWeight = 0.25f;
-    private float EntryChestHeadingWeight = 0.75f;
-
     private float _ikSimulatedRootAngle = 0f;
 
     private void OnPreSolverUpdate()
     {
-        _solver.plantFeet = EntryPlantFeet;
+        _solver.plantFeet = ModSettings.EntryPlantFeet.Value;
 
         // Emulate old VRChat hip movement
-        if (EntryBodyLeanWeight > 0)
+        if (ModSettings.EntryBodyLeanWeight.Value > 0)
         {
-            float weightedAngle = EntryProneThrusting ? 1f : EntryBodyLeanWeight * _solver.locomotion.weight;
+            float weightedAngle = ModSettings.EntryProneThrusting.Value ? 1f : ModSettings.EntryBodyLeanWeight.Value * _solver.locomotion.weight;
             float angle = IKManager.Instance._desktopCamera.localEulerAngles.x;
             angle = angle > 180 ? angle - 360 : angle;
             Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, _vrik.transform.right);
@@ -98,9 +87,9 @@ internal class IKHandlerDesktop : IKHandler
         }
 
         // Make root heading follow within a set limit
-        if (EntryBodyHeadingLimit > 0)
+        if (ModSettings.EntryBodyHeadingLimit.Value > 0)
         {
-            float weightedAngleLimit = EntryBodyHeadingLimit * _solver.locomotion.weight;
+            float weightedAngleLimit = ModSettings.EntryBodyHeadingLimit.Value * _solver.locomotion.weight;
             float deltaAngleRoot = Mathf.DeltaAngle(IKManager.Instance.transform.eulerAngles.y, _ikSimulatedRootAngle);
             float absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);
 
@@ -109,18 +98,18 @@ internal class IKHandlerDesktop : IKHandler
                 deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
                 _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, IKManager.Instance.transform.eulerAngles.y, absDeltaAngleRoot - weightedAngleLimit);
             }
-
+             
             _solver.spine.rootHeadingOffset = deltaAngleRoot;
 
-            if (EntryPelvisHeadingWeight > 0)
+            if (ModSettings.EntryPelvisHeadingWeight.Value > 0)
             {
-                _solver.spine.pelvisRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * EntryPelvisHeadingWeight, 0f);
-                _solver.spine.chestRotationOffset *= Quaternion.Euler(0f, -deltaAngleRoot * EntryPelvisHeadingWeight, 0f);
+                _solver.spine.pelvisRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * ModSettings.EntryPelvisHeadingWeight.Value, 0f);
+                _solver.spine.chestRotationOffset *= Quaternion.Euler(0f, -deltaAngleRoot * ModSettings.EntryPelvisHeadingWeight.Value, 0f);
             }
 
-            if (EntryChestHeadingWeight > 0)
+            if (ModSettings.EntryChestHeadingWeight.Value > 0)
             {
-                _solver.spine.chestRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * EntryChestHeadingWeight, 0f);
+                _solver.spine.chestRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * ModSettings.EntryChestHeadingWeight.Value, 0f);
             }
         }
     }

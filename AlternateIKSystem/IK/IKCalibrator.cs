@@ -13,7 +13,7 @@ internal static class IKCalibrator
         vrik = animator.gameObject.AddComponent<VRIK>();
         vrik.AutoDetectReferences();
 
-        if (!ModSettings.EntryUseVRIKToes.Value)
+        if (!ModSettings.EntryUseToesForVRIK.Value)
         {
             vrik.references.leftToes = null;
             vrik.references.rightToes = null;

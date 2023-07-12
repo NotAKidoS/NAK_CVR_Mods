@@ -86,12 +86,13 @@ internal class PlayerSetupPatches
     {
         try
         {
-            CVRMovementParent currentParent = __instance._movementSystem._currentParent;
-            if (currentParent?._referencePoint == null)
+            if (IKManager.Instance == null)
                 return;
 
-            if (IKManager.Instance != null)
-                __runOriginal = !IKManager.Instance.OnPlayerHandleMovementParent(currentParent);
+            CVRMovementParent currentParent = __instance._movementSystem._currentParent;
+            __runOriginal = currentParent?._referencePoint != null
+                ? IKManager.Instance.OnPlayerHandleMovementParent(currentParent)
+                : IKManager.Instance.OnPlayerTeleported();
         }
         catch (Exception e)
         {
