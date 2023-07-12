@@ -4,6 +4,27 @@ This is a super fucked mix of DesktopVRIK, StateBehaviours, IKFixes, & IKTweaks 
 
 It is a personal project that I am unsure how far I will go with. Currently only Desktop VRIK works as that was easiest to implement.
 
+This mod is partially built off of IKTweaks - GPLv3:
+https://github.com/knah/VRCMods/tree/master/IKTweaks
+
+(BodyHandling, MusclePoses)
+
+With a mix of DesktopVRIK:
+https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK
+
+(Desktop IK, VRIKHelpers, IKPose)
+
+And a hint of StateBehaviours:
+https://github.com/NotAKidOnSteam/StateBehaviours/tree/main/Mod/StateBehaviours
+
+(BodyControl)
+
+Then finally IKFixes:
+
+https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes
+
+(Solver Weight Helpers)
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI. 
