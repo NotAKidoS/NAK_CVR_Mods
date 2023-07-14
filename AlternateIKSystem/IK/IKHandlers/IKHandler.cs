@@ -32,8 +32,8 @@ internal abstract class IKHandler
     // Solver Info
     internal float _scaleDifference = 1f;
     internal float _locomotionWeight = 1f;
-    internal float _ikSimulatedRootAngle = 0f;
-    internal bool _wasTrackingLocomotion = false;
+    internal float _ikSimulatedRootAngle;
+    internal bool _wasTrackingLocomotion;
 
     #endregion
 

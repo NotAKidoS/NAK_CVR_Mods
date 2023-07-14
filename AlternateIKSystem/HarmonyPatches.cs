@@ -109,6 +109,6 @@ internal class IKSystemPatches
     private static void Prefix_IKSystem_InitializeAvatar(ref bool __runOriginal)
     {
         // Don't setup with native IKSystem
-        __runOriginal = !ModSettings.EntryEnabled.Value;
+        __runOriginal &= !ModSettings.EntryEnabled.Value;
     }
 }

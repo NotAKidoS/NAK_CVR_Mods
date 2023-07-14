@@ -5,7 +5,6 @@ using NAK.AlternateIKSystem.IK.IKHandlers;
 using NAK.AlternateIKSystem.VRIKHelpers;
 using RootMotion.FinalIK;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace NAK.AlternateIKSystem.IK;
 
@@ -256,8 +255,8 @@ public class IKManager : MonoBehaviour
         SetAvatarPose(AvatarPose.Initial);
 
         VRIKUtils.ApplyScaleToVRIK(_vrik, _ikHandler._locomotionData, 1f);
-        _vrik.onPreSolverUpdate.AddListener(new UnityAction(OnPreSolverUpdateGeneral));
-        _vrik.onPostSolverUpdate.AddListener(new UnityAction(OnPostSolverUpdateGeneral));
+        _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateGeneral);
+        _vrik.onPostSolverUpdate.AddListener(OnPostSolverUpdateGeneral);
     }
 
     #endregion
