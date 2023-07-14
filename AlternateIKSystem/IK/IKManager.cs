@@ -32,6 +32,7 @@ public class IKManager : MonoBehaviour
     // Player Info
     internal Transform _desktopCamera;
     internal Transform _vrCamera;
+    internal Transform _vrHeadTarget;
 
     // Controller Info
     private Transform _leftController;
@@ -75,6 +76,7 @@ public class IKManager : MonoBehaviour
 
         _desktopCamera = PlayerSetup.Instance.desktopCamera.transform;
         _vrCamera = PlayerSetup.Instance.vrCamera.transform;
+        _vrHeadTarget = PlayerSetup.Instance.vrHeadTracker.transform;
         _leftController = PlayerSetup.Instance.vrLeftHandTracker.transform;
         _rightController = PlayerSetup.Instance.vrRightHandTracker.transform;
 
@@ -221,7 +223,7 @@ public class IKManager : MonoBehaviour
         IKCalibrator.ConfigureHalfBodyVrIk(_vrik);
         _ikHandler = new IKHandlerHalfBody(_vrik);
         
-        IKCalibrator.SetupHeadIKTarget(_vrik, _vrCamera);
+        IKCalibrator.SetupHeadIKTarget(_vrik, _vrHeadTarget);
         IKCalibrator.SetupHandIKTarget(_vrik, _leftHandTarget, _leftHandRotations, true);
         IKCalibrator.SetupHandIKTarget(_vrik, _rightHandTarget, _rightHandRotations, false);
 
@@ -240,6 +242,8 @@ public class IKManager : MonoBehaviour
     {
         SetAvatarPose(AvatarPose.Default);
         _vrik = IKCalibrator.SetupVrIk(_animator);
+        _vrik.transform.position = GetPlayerPosition();
+        _vrik.transform.rotation = GetPlayerRotation();
     }
 
     private void InitializeIkGeneral()

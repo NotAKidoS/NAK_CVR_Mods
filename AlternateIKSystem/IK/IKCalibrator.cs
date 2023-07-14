@@ -177,7 +177,7 @@ internal static class IKCalibrator
         vrik.solver.spine.positionWeight = 1f;
         vrik.solver.spine.rotationWeight = 1f;
 
-        vrik.solver.spine.maxRootAngle = 0f;
+        vrik.solver.spine.maxRootAngle = 25f;
 
         vrik.solver.plantFeet = false;
     }
