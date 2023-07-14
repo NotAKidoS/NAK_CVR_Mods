@@ -1,12 +1,13 @@
 ﻿using RootMotion.FinalIK;
 using UnityEngine;
+using Valve.VR;
 using Object = UnityEngine.Object;
 
 namespace NAK.AlternateIKSystem.IK;
 
 internal static class IKCalibrator
 {
-    #region VRIK Setup
+    #region VRIK Solver Setup
 
     public static VRIK SetupVrIk(Animator animator)
     {
@@ -183,14 +184,39 @@ internal static class IKCalibrator
 
     #endregion
 
-    // TODO: figure out proper Desktop & VR organization
-    public static void SetupHeadIKTargetDesktop(VRIK vrik)
+    #region VRIK Calibration
+
+    public static void SetupHeadIKTarget(VRIK vrik, Transform parent = null)
     {
+        // VR Camera may have Head IK Target from previous avatar
+        Transform existingTarget = parent?.Find("Head IK Target");
+        if (existingTarget != null)
+            Object.DestroyImmediate(existingTarget.gameObject);
+
+        parent ??= vrik.references.head;
+        
         // Lazy HeadIKTarget calibration
-        if (vrik.solver.spine.headTarget == null)
-            vrik.solver.spine.headTarget = new GameObject("Head IK Target").transform;
-        vrik.solver.spine.headTarget.parent = vrik.references.head;
-        vrik.solver.spine.headTarget.localPosition = Vector3.zero;
+        vrik.solver.spine.headTarget = new GameObject("Head IK Target").transform;
         vrik.solver.spine.headTarget.localRotation = Quaternion.identity;
+        
+        vrik.solver.spine.headTarget.parent = parent;
+        vrik.solver.spine.headTarget.localPosition = Vector3.zero;
+        vrik.solver.spine.headTarget.localScale = Vector3.one;
     }
+
+    public static void SetupHandIKTarget(VRIK vrik, Transform handOffset, Transform handAnchor, bool isLeft)
+    {
+        handAnchor.SetParent(isLeft ? vrik.references.leftHand : vrik.references.rightHand);
+        handAnchor.localPosition = Vector3.zero;
+        handAnchor.localRotation = Quaternion.identity;
+        handAnchor.SetParent(handOffset, true);
+        handAnchor.localPosition = Vector3.zero;
+
+        if (isLeft)
+            vrik.solver.leftArm.target = handAnchor;
+        else
+            vrik.solver.rightArm.target = handAnchor;
+    }
+    
+    #endregion
 }

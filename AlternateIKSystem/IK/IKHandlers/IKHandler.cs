@@ -41,9 +41,34 @@ internal abstract class IKHandler
 
     public virtual void OnInitializeIk() { }
 
-    public virtual void OnPlayerScaled(float scaleDifference) { }
+    public virtual void OnPlayerScaled(float scaleDifference)
+    {
+        VRIKUtils.ApplyScaleToVRIK
+        (
+            _vrik,
+            _locomotionData,
+            _scaleDifference = scaleDifference
+        );
+    }
 
-    public virtual void OnPlayerHandleMovementParent(CVRMovementParent currentParent) { }
+    public virtual void OnPlayerHandleMovementParent(CVRMovementParent currentParent, Vector3 platformPivot)
+    {
+        Vector3 currentPosition = currentParent._referencePoint.position;
+        Quaternion currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
+
+        Vector3 deltaPosition = currentPosition - _movementPosition;
+        Quaternion deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
+
+        if (_movementParent == currentParent)
+        {
+            _solver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
+            _ikSimulatedRootAngle = Mathf.Repeat(_ikSimulatedRootAngle + deltaRotation.eulerAngles.y, 360f);
+        }
+
+        _movementParent = currentParent;
+        _movementPosition = currentPosition;
+        _movementRotation = currentRotation;
+    }
 
     #endregion
 

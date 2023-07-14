@@ -6,6 +6,7 @@ using NAK.AlternateIKSystem.VRIKHelpers;
 using RootMotion.FinalIK;
 using UnityEngine;
 using UnityEngine.Events;
+using Object = System.Object;
 
 namespace NAK.AlternateIKSystem.IK;
 
@@ -32,6 +33,18 @@ public class IKManager : MonoBehaviour
     internal Transform _desktopCamera;
     internal Transform _vrCamera;
 
+    // Controller Info
+    private Transform _leftController;
+    private Transform _rightController;
+    private Transform _leftHandTarget;
+    private Transform _leftHandRotations;
+    private Transform _rightHandTarget;
+    private Transform _rightHandRotations;
+
+    // Hand Anchor Offsets
+    private Vector3 _handAnchorPositionOffset = new Vector3(-0.038f, 0.0389f, -0.138f);
+    private Vector3 _handAnchorRotationOffset = Vector3.zero;
+
     // Avatar Info
     private Animator _animator;
     private Transform _hipTransform;
@@ -39,6 +52,8 @@ public class IKManager : MonoBehaviour
     // Animator Info
     private int _animLocomotionLayer = -1;
     private int _animIKPoseLayer = -1;
+    private const string _locomotionLayerName = "Locomotion/Emotes";
+    private const string _ikposeLayerName = "IKPose";
 
     // Pose Info
     private HumanPoseHandler _humanPoseHandler;
@@ -60,8 +75,16 @@ public class IKManager : MonoBehaviour
 
         _desktopCamera = PlayerSetup.Instance.desktopCamera.transform;
         _vrCamera = PlayerSetup.Instance.vrCamera.transform;
-    }
+        _leftController = PlayerSetup.Instance.vrLeftHandTracker.transform;
+        _rightController = PlayerSetup.Instance.vrRightHandTracker.transform;
 
+        // ouchie
+        _leftHandTarget = _leftController.Find("LeftHandTarget");
+        _leftHandRotations = _leftHandTarget.Find("LeftHandRotations");
+        _rightHandTarget = _rightController.Find("RightHandTarget");
+        _rightHandRotations = _rightHandTarget.Find("RightHandRotations");
+    }
+    
     private void Update()
     {
         BodyControl.Update();
@@ -91,8 +114,8 @@ public class IKManager : MonoBehaviour
 
         _animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
 
-        _animIKPoseLayer = _animator.GetLayerIndex("IKPose");
-        _animLocomotionLayer = _animator.GetLayerIndex("Locomotion/Emotes");
+        _animIKPoseLayer = _animator.GetLayerIndex(_ikposeLayerName);
+        _animLocomotionLayer = _animator.GetLayerIndex(_locomotionLayerName);
 
         _hipTransform = _animator.GetBoneTransform(HumanBodyBones.Hips);
 
@@ -160,7 +183,7 @@ public class IKManager : MonoBehaviour
         if (!_isAvatarInitialized)
             return false;
 
-        _ikHandler?.OnPlayerHandleMovementParent(movementParent);
+        _ikHandler?.OnPlayerHandleMovementParent(movementParent, GetPlayerPosition());
         return true;
     }
 
@@ -184,7 +207,7 @@ public class IKManager : MonoBehaviour
         IKCalibrator.ConfigureDesktopVrIk(_vrik);
         _ikHandler = new IKHandlerDesktop(_vrik);
 
-        IKCalibrator.SetupHeadIKTargetDesktop(_vrik);
+        IKCalibrator.SetupHeadIKTarget(_vrik);
 
         InitializeIkGeneral();
 
@@ -197,7 +220,17 @@ public class IKManager : MonoBehaviour
 
         IKCalibrator.ConfigureHalfBodyVrIk(_vrik);
         _ikHandler = new IKHandlerHalfBody(_vrik);
+        
+        IKCalibrator.SetupHeadIKTarget(_vrik, _vrCamera);
+        IKCalibrator.SetupHandIKTarget(_vrik, _leftHandTarget, _leftHandRotations, true);
+        IKCalibrator.SetupHandIKTarget(_vrik, _rightHandTarget, _rightHandRotations, false);
 
+        // Configure controller offsets
+        _leftHandTarget.localPosition = _handAnchorPositionOffset;
+        _leftHandTarget.localEulerAngles = _handAnchorRotationOffset;
+        _rightHandTarget.localPosition = Vector3.Scale(_handAnchorPositionOffset, new Vector3(-1, 1, 1));
+        _rightHandTarget.localEulerAngles = Vector3.Scale(_handAnchorRotationOffset, new Vector3(1, -1, -1));
+        
         InitializeIkGeneral();
         
         _ikHandler.OnInitializeIk();
@@ -222,6 +255,30 @@ public class IKManager : MonoBehaviour
 
         _vrik.onPreSolverUpdate.AddListener(new UnityAction(OnPreSolverUpdateGeneral));
         _vrik.onPostSolverUpdate.AddListener(new UnityAction(OnPostSolverUpdateGeneral));
+    }
+
+    #endregion
+
+    #region Public Methods
+
+    public Vector3 GetPlayerPosition()
+    {
+        if (!MetaPort.Instance.isUsingVr) 
+            return transform.position;
+
+        Vector3 vrPosition = _vrCamera.transform.position;
+        vrPosition.y = transform.position.y;
+        return vrPosition;
+    }
+    
+    public Quaternion GetPlayerRotation()
+    {
+        if (!MetaPort.Instance.isUsingVr) 
+            return transform.rotation;
+
+        Vector3 vrForward = _vrCamera.transform.forward;
+        vrForward.y = 0f; 
+        return Quaternion.LookRotation(vrForward, Vector3.up);
     }
 
     #endregion

@@ -25,42 +25,33 @@ internal class IKHandlerHalfBody : IKHandler
         shouldTrackRightLeg = false;
         shouldTrackPelvis = false;
         shouldTrackLocomotion = true;
+
+        _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateHalfBody);
     }
+    
+    #endregion
 
-    public override void OnPlayerScaled(float scaleDifference)
+    #region VRIK Solver Events
+
+    private void OnPreSolverUpdateHalfBody()
     {
-        VRIKUtils.ApplyScaleToVRIK
-        (
-            _vrik,
-            _locomotionData,
-            _scaleDifference = scaleDifference
-        );
-    }
+        _solver.plantFeet = ModSettings.EntryPlantFeet.Value;
 
-    public override void OnPlayerHandleMovementParent(CVRMovementParent currentParent)
-    {
-        // Get current position
-        Vector3 currentPosition = currentParent._referencePoint.position;
-        Quaternion currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
-
-        // Convert to delta position (how much changed since last frame)
-        Vector3 deltaPosition = currentPosition - _movementPosition;
-        Quaternion deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
-
-        // Desktop pivots from playerlocal transform
-        Vector3 platformPivot = IKManager.Instance.transform.position;
-
-        // Prevent targeting other parent position
-        if (_movementParent == currentParent)
+        // Make root heading follow within a set limit
+        if (ModSettings.EntryBodyHeadingLimit.Value > 0)
         {
-            _solver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
-            _ikSimulatedRootAngle = Mathf.Repeat(_ikSimulatedRootAngle + deltaRotation.eulerAngles.y, 360f);
-        }
+            float weightedAngleLimit = ModSettings.EntryBodyHeadingLimit.Value * _solver.locomotion.weight;
+            float currentRotation = IKManager.Instance.GetPlayerRotation().y;
+            float deltaAngleRoot = Mathf.DeltaAngle(currentRotation, _ikSimulatedRootAngle);
 
-        // Store for next frame
-        _movementParent = currentParent;
-        _movementPosition = currentPosition;
-        _movementRotation = currentRotation;
+            if (Mathf.Abs(deltaAngleRoot) > weightedAngleLimit)
+            {
+                deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
+                _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, currentRotation, Mathf.Abs(deltaAngleRoot) - weightedAngleLimit);
+            }
+
+            _solver.spine.rootHeadingOffset = deltaAngleRoot;
+        }
     }
 
     #endregion
