@@ -6,6 +6,8 @@ namespace NAK.AlternateIKSystem.Integrations;
 
 public static class BTKUIAddon
 {
+    #region Initialization
+
     [MethodImpl(MethodImplOptions.NoInlining)]
     public static void Initialize()
     {
@@ -17,8 +19,12 @@ public static class BTKUIAddon
 
         SetupGeneralIKConfigurationPage(ref miscCategory);
         SetupDesktopIKConfigurationPage(ref miscCategory);
-        //SetupHalfBodyIKConfigurationPage(ref miscCategory);
+        SetupHalfBodyIKConfigurationPage(ref miscCategory);
     }
+
+    #endregion
+
+    #region Pages Setup
 
     private static void SetupGeneralIKConfigurationPage(ref Category parentCategory)
     {
@@ -63,8 +69,10 @@ public static class BTKUIAddon
     {
         Page halfBodyIKPage = parentCategory.AddPage("HalfBody IK Settings", "", "Configure the settings for halfbody IK.", ModSettings.SettingsCategory);
         halfBodyIKPage.MenuTitle = "HalfBody IK Settings";
-        Category halfBodyIKCategory = halfBodyIKPage.AddCategory(halfBodyIKPage.MenuTitle);
+        //Category halfBodyIKCategory = halfBodyIKPage.AddCategory(halfBodyIKPage.MenuTitle);
     }
+
+    #endregion
 
     #region Melon Pref Helpers
 
