@@ -188,36 +188,43 @@ internal static class IKCalibrator
 
     public static void SetupHeadIKTarget(VRIK vrik, Transform parent = null)
     {
-        // VR Camera may have Head IK Target from previous avatar
         Transform existingTarget = parent?.Find("Head IK Target");
         if (existingTarget != null)
             Object.DestroyImmediate(existingTarget.gameObject);
 
         parent ??= vrik.references.head;
-        
-        // Lazy HeadIKTarget calibration
-        vrik.solver.spine.headTarget = new GameObject("Head IK Target").transform;
-        vrik.solver.spine.headTarget.parent = vrik.references.head;
-        vrik.solver.spine.headTarget.localRotation = Quaternion.identity;
-        
-        vrik.solver.spine.headTarget.parent = parent;
-        vrik.solver.spine.headTarget.localPosition = Vector3.zero;
-        vrik.solver.spine.headTarget.localScale = Vector3.one;
-    }
 
-    public static void SetupHandIKTarget(VRIK vrik, Transform handOffset, Transform handAnchor, bool isLeft)
+        vrik.solver.spine.headTarget = new GameObject("Head IK Target").transform;
+        vrik.solver.spine.headTarget.SetParent(parent);
+        vrik.solver.spine.headTarget.localPosition = Vector3.zero;
+        vrik.solver.spine.headTarget.localRotation = CalculateLocalRotation(vrik.references.root, vrik.references.head);
+    }
+    
+    public static void SetupHandIKTarget(VRIK vrik, Transform handAnchor, bool isLeft)
     {
-        handAnchor.SetParent(isLeft ? vrik.references.leftHand : vrik.references.rightHand);
+        Transform parent = handAnchor.parent;
+        Transform handRef = isLeft ? vrik.references.leftHand : vrik.references.rightHand;
+
+        handAnchor.SetParent(parent);
         handAnchor.localPosition = Vector3.zero;
-        handAnchor.localRotation = Quaternion.identity;
-        handAnchor.SetParent(handOffset, true);
-        handAnchor.localPosition = Vector3.zero;
+        handAnchor.localRotation = CalculateLocalRotation(vrik.references.root, handRef);
 
         if (isLeft)
             vrik.solver.leftArm.target = handAnchor;
         else
             vrik.solver.rightArm.target = handAnchor;
     }
-    
+
+    #endregion
+
+    #region Private Methods
+
+    private static Quaternion CalculateLocalRotation(Transform root, Transform reference)
+    {
+        Vector3 forward = Quaternion.Inverse(reference.rotation) * root.forward;
+        Vector3 upwards = Quaternion.Inverse(reference.rotation) * root.up;
+        return Quaternion.Inverse(reference.rotation * Quaternion.LookRotation(forward, upwards)) * reference.rotation;
+    }
+
     #endregion
 }

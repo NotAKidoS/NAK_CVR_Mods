@@ -43,9 +43,9 @@ public class IKManager : MonoBehaviour
     private Transform _rightHandRotations;
 
     // Hand Anchor Offsets
-    private Vector3 _handAnchorPositionOffset = new Vector3(-0.038f, 0.0389f, -0.138f);
-    private Vector3 _handAnchorRotationOffset = Vector3.zero;
-
+    private readonly Vector3 _handAnchorPositionOffset = new Vector3(-0.038f, 0.0389f, -0.138f);
+    private readonly Vector3 _handAnchorRotationOffset = new Vector3(55, 10, 50);
+    
     // Avatar Info
     private Animator _animator;
     private Transform _hipTransform;
@@ -224,8 +224,8 @@ public class IKManager : MonoBehaviour
         _ikHandler = new IKHandlerHalfBody(_vrik);
         
         IKCalibrator.SetupHeadIKTarget(_vrik, _vrHeadTarget);
-        IKCalibrator.SetupHandIKTarget(_vrik, _leftHandTarget, _leftHandRotations, true);
-        IKCalibrator.SetupHandIKTarget(_vrik, _rightHandTarget, _rightHandRotations, false);
+        IKCalibrator.SetupHandIKTarget(_vrik, _leftHandRotations, true);
+        IKCalibrator.SetupHandIKTarget(_vrik, _rightHandRotations, false);
 
         // Configure controller offsets
         _leftHandTarget.localPosition = _handAnchorPositionOffset;
