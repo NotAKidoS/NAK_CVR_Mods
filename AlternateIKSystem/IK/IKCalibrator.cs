@@ -197,6 +197,7 @@ internal static class IKCalibrator
         
         // Lazy HeadIKTarget calibration
         vrik.solver.spine.headTarget = new GameObject("Head IK Target").transform;
+        vrik.solver.spine.headTarget.parent = vrik.references.head;
         vrik.solver.spine.headTarget.localRotation = Quaternion.identity;
         
         vrik.solver.spine.headTarget.parent = parent;
