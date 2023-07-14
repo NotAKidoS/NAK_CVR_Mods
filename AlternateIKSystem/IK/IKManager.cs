@@ -6,7 +6,6 @@ using NAK.AlternateIKSystem.VRIKHelpers;
 using RootMotion.FinalIK;
 using UnityEngine;
 using UnityEngine.Events;
-using Object = System.Object;
 
 namespace NAK.AlternateIKSystem.IK;
 
@@ -42,10 +41,10 @@ public class IKManager : MonoBehaviour
     private Transform _rightHandTarget;
     private Transform _rightHandRotations;
 
-    // Hand Anchor Offsets
-    private readonly Vector3 _handAnchorPositionOffset = new Vector3(-0.038f, 0.0389f, -0.138f);
-    private readonly Vector3 _handAnchorRotationOffset = new Vector3(55, 10, 50);
-    
+    // Hand Anchor Offsets (the magic numbers that make or break the game)
+    private readonly Vector3 _handAnchorPositionOffset = new Vector3(-0.048f, 0.0389f, -0.138f);
+    private readonly Vector3 _handAnchorRotationOffset = new Vector3(70f, 0f, 50f);
+
     // Avatar Info
     private Animator _animator;
     private Transform _hipTransform;
@@ -86,7 +85,7 @@ public class IKManager : MonoBehaviour
         _rightHandTarget = _rightController.Find("RightHandTarget");
         _rightHandRotations = _rightHandTarget.Find("RightHandRotations");
     }
-    
+
     private void Update()
     {
         BodyControl.Update();
@@ -222,7 +221,7 @@ public class IKManager : MonoBehaviour
 
         IKCalibrator.ConfigureHalfBodyVrIk(_vrik);
         _ikHandler = new IKHandlerHalfBody(_vrik);
-        
+
         IKCalibrator.SetupHeadIKTarget(_vrik, _vrHeadTarget);
         IKCalibrator.SetupHandIKTarget(_vrik, _leftHandRotations, true);
         IKCalibrator.SetupHandIKTarget(_vrik, _rightHandRotations, false);
@@ -232,18 +231,18 @@ public class IKManager : MonoBehaviour
         _leftHandTarget.localEulerAngles = _handAnchorRotationOffset;
         _rightHandTarget.localPosition = Vector3.Scale(_handAnchorPositionOffset, new Vector3(-1, 1, 1));
         _rightHandTarget.localEulerAngles = Vector3.Scale(_handAnchorRotationOffset, new Vector3(1, -1, -1));
-        
+
         InitializeIkGeneral();
-        
+
         _ikHandler.OnInitializeIk();
     }
 
     private void SetupIkGeneral()
     {
+        _animator.transform.position = GetPlayerPosition();
+        _animator.transform.rotation = GetPlayerRotation();
         SetAvatarPose(AvatarPose.Default);
         _vrik = IKCalibrator.SetupVrIk(_animator);
-        _vrik.transform.position = GetPlayerPosition();
-        _vrik.transform.rotation = GetPlayerRotation();
     }
 
     private void InitializeIkGeneral()
@@ -252,11 +251,11 @@ public class IKManager : MonoBehaviour
 
         VRIKUtils.CalculateInitialIKScaling(_vrik, ref _ikHandler._locomotionData);
         VRIKUtils.CalculateInitialFootsteps(_vrik, ref _ikHandler._locomotionData);
-
         _vrik.solver.Initiate(_vrik.transform); // initiate a second time
 
-        VRIKUtils.ApplyScaleToVRIK(_vrik, _ikHandler._locomotionData, 1f);
+        SetAvatarPose(AvatarPose.Initial);
 
+        VRIKUtils.ApplyScaleToVRIK(_vrik, _ikHandler._locomotionData, 1f);
         _vrik.onPreSolverUpdate.AddListener(new UnityAction(OnPreSolverUpdateGeneral));
         _vrik.onPostSolverUpdate.AddListener(new UnityAction(OnPostSolverUpdateGeneral));
     }
@@ -267,21 +266,21 @@ public class IKManager : MonoBehaviour
 
     public Vector3 GetPlayerPosition()
     {
-        if (!MetaPort.Instance.isUsingVr) 
+        if (!MetaPort.Instance.isUsingVr)
             return transform.position;
 
         Vector3 vrPosition = _vrCamera.transform.position;
         vrPosition.y = transform.position.y;
         return vrPosition;
     }
-    
+
     public Quaternion GetPlayerRotation()
     {
-        if (!MetaPort.Instance.isUsingVr) 
+        if (!MetaPort.Instance.isUsingVr)
             return transform.rotation;
 
         Vector3 vrForward = _vrCamera.transform.forward;
-        vrForward.y = 0f; 
+        vrForward.y = 0f;
         return Quaternion.LookRotation(vrForward, Vector3.up);
     }
 

@@ -1,6 +1,5 @@
 ﻿using RootMotion.FinalIK;
 using UnityEngine;
-using Valve.VR;
 using Object = UnityEngine.Object;
 
 namespace NAK.AlternateIKSystem.IK;
@@ -199,7 +198,7 @@ internal static class IKCalibrator
         vrik.solver.spine.headTarget.localPosition = Vector3.zero;
         vrik.solver.spine.headTarget.localRotation = CalculateLocalRotation(vrik.references.root, vrik.references.head);
     }
-    
+
     public static void SetupHandIKTarget(VRIK vrik, Transform handAnchor, bool isLeft)
     {
         Transform parent = handAnchor.parent;

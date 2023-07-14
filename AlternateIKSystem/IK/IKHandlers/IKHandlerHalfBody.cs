@@ -1,6 +1,4 @@
-﻿using ABI.CCK.Components;
-using NAK.AlternateIKSystem.VRIKHelpers;
-using RootMotion.FinalIK;
+﻿using RootMotion.FinalIK;
 using UnityEngine;
 
 namespace NAK.AlternateIKSystem.IK.IKHandlers;
@@ -28,7 +26,7 @@ internal class IKHandlerHalfBody : IKHandler
 
         _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateHalfBody);
     }
-    
+
     #endregion
 
     #region VRIK Solver Events
