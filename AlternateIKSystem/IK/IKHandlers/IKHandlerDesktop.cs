@@ -2,7 +2,6 @@
 using NAK.AlternateIKSystem.VRIKHelpers;
 using RootMotion.FinalIK;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace NAK.AlternateIKSystem.IK.IKHandlers;
 
@@ -14,44 +13,44 @@ internal class IKHandlerDesktop : IKHandler
         _solver = vrik.solver;
     }
 
-    #region Overrides
+    #region Game Overrides
 
     public override void OnInitializeIk()
     {
-        _vrik.onPreSolverUpdate.AddListener(new UnityAction(OnPreSolverUpdate));
+        // Default tracking for Desktop
+        shouldTrackHead = true;
+        shouldTrackLeftArm = false;
+        shouldTrackRightArm = false;
+        shouldTrackLeftLeg = false;
+        shouldTrackRightLeg = false;
+        shouldTrackPelvis = false;
+        shouldTrackLocomotion = true;
+
+        _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateDesktop);
     }
 
-    public override void OnUpdate()
-    {
-        // Reset avatar local position
-        _vrik.transform.localPosition = Vector3.zero;
-        _vrik.transform.localRotation = Quaternion.identity;
-
-        UpdateWeights();
-    }
-
-    public override void OnPlayerScaled(float scaleDifference, VRIKCalibrationData calibrationData)
+    public override void OnPlayerScaled(float scaleDifference)
     {
         VRIKUtils.ApplyScaleToVRIK
         (
             _vrik,
-            calibrationData,
-            scaleDifference
+            _locomotionData,
+            _scaleDifference = scaleDifference
         );
     }
 
     public override void OnPlayerHandleMovementParent(CVRMovementParent currentParent)
     {
         // Get current position
-        var currentPosition = currentParent._referencePoint.position;
-        var currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
+        Vector3 currentPosition = currentParent._referencePoint.position;
+        Quaternion currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
 
         // Convert to delta position (how much changed since last frame)
-        var deltaPosition = currentPosition - _movementPosition;
-        var deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
+        Vector3 deltaPosition = currentPosition - _movementPosition;
+        Quaternion deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
 
         // Desktop pivots from playerlocal transform
-        var platformPivot = IKManager.Instance.transform.position;
+        Vector3 platformPivot = IKManager.Instance.transform.position;
 
         // Prevent targeting other parent position
         if (_movementParent == currentParent)
@@ -68,11 +67,76 @@ internal class IKHandlerDesktop : IKHandler
 
     #endregion
 
+    #region Weight Overrides
+
+    public override void UpdateWeights()
+    {
+        // Reset avatar local position
+        _vrik.transform.localPosition = Vector3.zero;
+        _vrik.transform.localRotation = Quaternion.identity;
+
+        base.UpdateWeights();
+
+        // Desktop should never have head position weight
+        _solver.spine.positionWeight = 0f;
+    }
+
+    protected override void Update_HeadWeight()
+    {
+        float targetWeight = GetTargetWeight(BodyControl.TrackingHead, true);
+        BodyControl.SetHeadWeight(_solver.spine, targetWeight);
+        BodyControl.SetLookAtWeight(IKManager.lookAtIk, targetWeight);
+    }
+
+    protected override void Update_LeftArmWeight()
+    {
+        float leftArmWeight = GetTargetWeight(BodyControl.TrackingLeftArm, _solver.leftArm.target != null);
+        BodyControl.SetArmWeight(_solver.leftArm, leftArmWeight);
+    }
+
+    protected override void Update_RightArmWeight()
+    {
+        float rightArmWeight = GetTargetWeight(BodyControl.TrackingRightArm, _solver.rightArm.target != null);
+        BodyControl.SetArmWeight(_solver.rightArm, rightArmWeight);
+    }
+
+    protected override void Update_LeftLegWeight()
+    {
+        float leftLegWeight = GetTargetWeight(BodyControl.TrackingLeftLeg, _solver.leftLeg.target != null);
+        BodyControl.SetLegWeight(_solver.leftLeg, leftLegWeight);
+    }
+
+    protected override void Update_RightLegWeight()
+    {
+        float rightLegWeight = GetTargetWeight(BodyControl.TrackingRightLeg, _solver.rightLeg.target != null);
+        BodyControl.SetLegWeight(_solver.rightLeg, rightLegWeight);
+    }
+
+    protected override void Update_PelvisWeight()
+    {
+        float pelvisWeight = GetTargetWeight(BodyControl.TrackingPelvis, _solver.spine.pelvisTarget != null);
+        BodyControl.SetPelvisWeight(_solver.spine, pelvisWeight);
+    }
+
+    protected override void Update_LocomotionWeight()
+    {
+        _locomotionWeight = Mathf.Lerp(_locomotionWeight, BodyControl.TrackingLocomotion ? 1f : 0f,
+            Time.deltaTime * ModSettings.EntryIKLerpSpeed.Value * 2f);
+        BodyControl.SetLocomotionWeight(_solver.locomotion, _locomotionWeight);
+    }
+
+    protected override void Update_IKPositionWeight()
+    {
+        float ikPositionWeight = BodyControl.TrackingAll ? BodyControl.TrackingIKPositionWeight : 0f;
+        BodyControl.SetIKPositionWeight(_solver, ikPositionWeight);
+        BodyControl.SetIKPositionWeight(IKManager.lookAtIk, ikPositionWeight);
+    }
+
+    #endregion
+
     #region VRIK Solver Events
 
-    private float _ikSimulatedRootAngle = 0f;
-
-    private void OnPreSolverUpdate()
+    private void OnPreSolverUpdateDesktop()
     {
         _solver.plantFeet = ModSettings.EntryPlantFeet.Value;
 
@@ -98,7 +162,7 @@ internal class IKHandlerDesktop : IKHandler
                 deltaAngleRoot = Mathf.Sign(deltaAngleRoot) * weightedAngleLimit;
                 _ikSimulatedRootAngle = Mathf.MoveTowardsAngle(_ikSimulatedRootAngle, IKManager.Instance.transform.eulerAngles.y, absDeltaAngleRoot - weightedAngleLimit);
             }
-             
+
             _solver.spine.rootHeadingOffset = deltaAngleRoot;
 
             if (ModSettings.EntryPelvisHeadingWeight.Value > 0)
@@ -112,61 +176,6 @@ internal class IKHandlerDesktop : IKHandler
                 _solver.spine.chestRotationOffset *= Quaternion.Euler(0f, deltaAngleRoot * ModSettings.EntryChestHeadingWeight.Value, 0f);
             }
         }
-    }
-
-    #endregion
-
-    #region Private Methods
-
-    private float _locomotionWeight = 1f;
-
-    private void UpdateWeights()
-    {
-        // Lerp locomotion weight, lerp to BodyControl.TrackingUpright???
-        float targetWeight =
-            (BodyControl.TrackingAll && BodyControl.TrackingLocomotion && BodyControl.AvatarUpright > 0.8f)
-                ? 1f
-                : 0.0f;
-        _locomotionWeight = Mathf.Lerp(_locomotionWeight, targetWeight, Time.deltaTime * 20f);
-
-        if (BodyControl.TrackingAll)
-        {
-            _vrik.enabled = true;
-            _solver.IKPositionWeight = BodyControl.TrackingPositionWeight;
-            _solver.locomotion.weight = _locomotionWeight;
-            _solver.spine.maxRootAngle = BodyControl.TrackingMaxRootAngle;
-
-            BodyControl.SetHeadWeight(_solver.spine, IKManager.lookAtIk, BodyControl.TrackingHead ? 1f : 0f);
-
-            BodyControl.SetArmWeight(_solver.leftArm, BodyControl.TrackingLeftArm && _solver.leftArm.target != null ? 1f : 0f);
-            BodyControl.SetArmWeight(_solver.rightArm, BodyControl.TrackingRightArm && _solver.rightArm.target != null ? 1f : 0f);
-
-            BodyControl.SetLegWeight(_solver.leftLeg, BodyControl.TrackingLeftLeg && _solver.leftLeg.target != null ? 1f : 0f);
-            BodyControl.SetLegWeight(_solver.rightLeg, BodyControl.TrackingRightLeg && _solver.rightLeg.target != null ? 1f : 0f);
-
-            BodyControl.SetPelvisWeight(_solver.spine, BodyControl.TrackingPelvis && _solver.spine.pelvisTarget != null ? 1f : 0f);
-        }
-        else
-        {
-            _vrik.enabled = false;
-            _solver.IKPositionWeight = 0f;
-            _solver.locomotion.weight = 0f;
-            _solver.spine.maxRootAngle = 0f;
-
-            BodyControl.SetHeadWeight(_solver.spine, IKManager.lookAtIk, 0f);
-            BodyControl.SetArmWeight(_solver.leftArm, 0f);
-            BodyControl.SetArmWeight(_solver.rightArm, 0f);
-            BodyControl.SetLegWeight(_solver.leftLeg, 0f);
-            BodyControl.SetLegWeight(_solver.rightLeg, 0f);
-            BodyControl.SetPelvisWeight(_solver.spine, 0f);
-        }
-
-        // Desktop should never have head position weight
-        _solver.spine.positionWeight = 0f;
-
-        // Avatar Motion Tweaker uses this hack, so we must reset it
-        _solver.leftLeg.useAnimatedBendNormal = false;
-        _solver.rightLeg.useAnimatedBendNormal = false;
     }
 
     #endregion

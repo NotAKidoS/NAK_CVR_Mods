@@ -5,32 +5,150 @@ using UnityEngine;
 
 namespace NAK.AlternateIKSystem.IK.IKHandlers;
 
-internal class IKHandler
+internal abstract class IKHandler
 {
+    #region Variables
+
     internal VRIK _vrik;
     internal IKSolverVR _solver;
+
+    internal bool shouldTrackAll = true;
+    internal bool shouldTrackHead = true;
+    internal bool shouldTrackLeftArm = true;
+    internal bool shouldTrackRightArm = true;
+    internal bool shouldTrackLeftLeg = true;
+    internal bool shouldTrackRightLeg = true;
+    internal bool shouldTrackPelvis = true;
+    internal bool shouldTrackLocomotion = true;
+
+    // VRIK Calibration Info
+    internal VRIKLocomotionData _locomotionData;
 
     // Last Movement Parent Info
     internal Vector3 _movementPosition;
     internal Quaternion _movementRotation;
     internal CVRMovementParent _movementParent;
 
-    #region Virtual Methods
+    // Solver Info
+    internal float _scaleDifference = 1f;
+    internal float _locomotionWeight = 1f;
+    internal float _ikSimulatedRootAngle = 0f;
+    internal bool _wasTrackingLocomotion = false;
 
-    public virtual void OnInitializeIk()
+    #endregion
+
+    #region Virtual Game Methods
+
+    public virtual void OnInitializeIk() { }
+
+    public virtual void OnPlayerScaled(float scaleDifference) { }
+
+    public virtual void OnPlayerHandleMovementParent(CVRMovementParent currentParent) { }
+
+    #endregion
+
+    #region Virtual IK Weights
+
+    public virtual void UpdateWeights()
     {
+        if (!shouldTrackAll)
+            return;
+
+        if (shouldTrackHead)
+            Update_HeadWeight();
+
+        if (shouldTrackLeftArm)
+            Update_LeftArmWeight();
+
+        if (shouldTrackRightArm)
+            Update_RightArmWeight();
+
+        if (shouldTrackLeftLeg)
+            Update_LeftLegWeight();
+
+        if (shouldTrackRightLeg)
+            Update_RightLegWeight();
+
+        if (shouldTrackPelvis)
+            Update_PelvisWeight();
+
+        if (shouldTrackLocomotion)
+        {
+            Update_LocomotionWeight();
+            ResetSolverIfNeeded();
+        }
+
+        Update_IKPositionWeight();
     }
 
-    public virtual void OnUpdate()
+    protected virtual void Update_HeadWeight()
     {
+        float targetWeight = GetTargetWeight(BodyControl.TrackingHead, true);
+        BodyControl.SetHeadWeight(_solver.spine, targetWeight);
+        BodyControl.SetLookAtWeight(IKManager.lookAtIk, targetWeight);
     }
 
-    public virtual void OnPlayerScaled(float scaleDifference, VRIKCalibrationData calibrationData)
+    protected virtual void Update_LeftArmWeight()
     {
+        float leftArmWeight = GetTargetWeight(BodyControl.TrackingLeftArm, _solver.leftArm.target != null);
+        BodyControl.SetArmWeight(_solver.leftArm, leftArmWeight);
     }
 
-    public virtual void OnPlayerHandleMovementParent(CVRMovementParent currentParent)
+    protected virtual void Update_RightArmWeight()
     {
+        float rightArmWeight = GetTargetWeight(BodyControl.TrackingRightArm, _solver.rightArm.target != null);
+        BodyControl.SetArmWeight(_solver.rightArm, rightArmWeight);
+    }
+
+    protected virtual void Update_LeftLegWeight()
+    {
+        float leftLegWeight = GetTargetWeight(BodyControl.TrackingLeftLeg, _solver.leftLeg.target != null);
+        BodyControl.SetLegWeight(_solver.leftLeg, leftLegWeight);
+    }
+
+    protected virtual void Update_RightLegWeight()
+    {
+        float rightLegWeight = GetTargetWeight(BodyControl.TrackingRightLeg, _solver.rightLeg.target != null);
+        BodyControl.SetLegWeight(_solver.rightLeg, rightLegWeight);
+    }
+
+    protected virtual void Update_PelvisWeight()
+    {
+        float pelvisWeight = GetTargetWeight(BodyControl.TrackingPelvis, _solver.spine.pelvisTarget != null);
+        BodyControl.SetPelvisWeight(_solver.spine, pelvisWeight);
+    }
+
+    protected virtual void Update_LocomotionWeight()
+    {
+        _locomotionWeight = Mathf.Lerp(_locomotionWeight, BodyControl.TrackingLocomotion ? 1f : 0f,
+            Time.deltaTime * ModSettings.EntryIKLerpSpeed.Value * 2f);
+        BodyControl.SetLocomotionWeight(_solver.locomotion, _locomotionWeight);
+    }
+
+    protected virtual void Update_IKPositionWeight()
+    {
+        float ikPositionWeight = BodyControl.TrackingAll ? BodyControl.TrackingIKPositionWeight : 0f;
+        BodyControl.SetIKPositionWeight(_solver, ikPositionWeight);
+        BodyControl.SetIKPositionWeight(IKManager.lookAtIk, ikPositionWeight);
+    }
+
+    protected virtual float GetTargetWeight(bool isTracking, bool hasTarget)
+    {
+        return isTracking && hasTarget ? 1f : 0f;
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private void ResetSolverIfNeeded()
+    {
+        if (_wasTrackingLocomotion == BodyControl.TrackingLocomotion)
+            return;
+
+        _wasTrackingLocomotion = BodyControl.TrackingLocomotion;
+        VRIKUtils.ResetToInitialFootsteps(_vrik, _locomotionData, _scaleDifference);
+        _solver.Reset();
     }
 
     #endregion

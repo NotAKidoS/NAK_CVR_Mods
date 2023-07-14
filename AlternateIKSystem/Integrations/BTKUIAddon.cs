@@ -25,7 +25,7 @@ public static class BTKUIAddon
         Page generalIKPage = parentCategory.AddPage("General IK Settings", "", "Configure the settings for general IK.", ModSettings.SettingsCategory);
         generalIKPage.MenuTitle = "General IK Settings";
         Category generalIKCategory = generalIKPage.AddCategory(generalIKPage.MenuTitle);
-        
+
         // General Settings
         AddMelonToggle(ref generalIKCategory, ModSettings.EntryPlantFeet);
 

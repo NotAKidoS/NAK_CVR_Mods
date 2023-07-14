@@ -1,14 +1,17 @@
 ﻿using RootMotion.FinalIK;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace NAK.AlternateIKSystem.IK;
 
 internal static class IKCalibrator
 {
+    #region VRIK Setup
+
     public static VRIK SetupVrIk(Animator animator)
     {
         if (animator.gameObject.TryGetComponent(out VRIK vrik))
-            UnityEngine.Object.DestroyImmediate(vrik);
+            Object.DestroyImmediate(vrik);
 
         vrik = animator.gameObject.AddComponent<VRIK>();
         vrik.AutoDetectReferences();
@@ -66,6 +69,10 @@ internal static class IKCalibrator
         // hack to prevent death
         vrik.fixTransforms = !animator.enabled;
 
+        // Avatar Motion Tweaker uses this hack!
+        vrik.solver.leftLeg.useAnimatedBendNormal = false;
+        vrik.solver.rightLeg.useAnimatedBendNormal = false;
+
         // purposefully initiating early
         vrik.solver.Initiate(vrik.transform);
         vrik.solver.Reset();
@@ -105,6 +112,10 @@ internal static class IKCalibrator
         twistRelaxer.child = hand;
         twistRelaxer.parentChildCrossfade = 0.8f;
     }
+
+    #endregion
+
+    #region VRIK Configuration
 
     public static void ConfigureDesktopVrIk(VRIK vrik)
     {
@@ -169,6 +180,8 @@ internal static class IKCalibrator
 
         vrik.solver.plantFeet = false;
     }
+
+    #endregion
 
     // TODO: figure out proper Desktop & VR organization
     public static void SetupHeadIKTargetDesktop(VRIK vrik)

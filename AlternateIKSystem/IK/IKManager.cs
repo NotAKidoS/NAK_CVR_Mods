@@ -1,7 +1,6 @@
 ﻿using ABI.CCK.Components;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
-using ABI_RC.Systems.MovementSystem;
 using NAK.AlternateIKSystem.IK.IKHandlers;
 using NAK.AlternateIKSystem.VRIKHelpers;
 using RootMotion.FinalIK;
@@ -13,6 +12,8 @@ namespace NAK.AlternateIKSystem.IK;
 public class IKManager : MonoBehaviour
 {
     public static IKManager Instance;
+
+    #region Variables
 
     public BodyControl BodyControl = new BodyControl();
 
@@ -44,8 +45,9 @@ public class IKManager : MonoBehaviour
     private HumanPose _humanPose;
     private HumanPose _humanPoseInitial;
 
-    // VRIK Calibration Info
-    private VRIKCalibrationData _calibrationData;
+    #endregion
+
+    #region Unity Methods
 
     private void Start()
     {
@@ -67,8 +69,10 @@ public class IKManager : MonoBehaviour
         if (!_isAvatarInitialized)
             return;
 
-        _ikHandler?.OnUpdate();
+        _ikHandler?.UpdateWeights();
     }
+
+    #endregion
 
     #region Avatar Events
 
@@ -137,7 +141,7 @@ public class IKManager : MonoBehaviour
         if (!_isAvatarInitialized)
             return false;
 
-        _ikHandler?.OnPlayerScaled(scaleDifference, _calibrationData);
+        _ikHandler?.OnPlayerScaled(scaleDifference);
         return true;
     }
 
@@ -164,7 +168,7 @@ public class IKManager : MonoBehaviour
     {
         if (!_isAvatarInitialized)
             return false;
-        
+
         _vrik?.solver.Reset();
         return true;
     }
@@ -175,23 +179,31 @@ public class IKManager : MonoBehaviour
 
     private void InitializeDesktopIk()
     {
-        PreSetupIkGeneral();
+        SetupIkGeneral();
+
         IKCalibrator.ConfigureDesktopVrIk(_vrik);
+        _ikHandler = new IKHandlerDesktop(_vrik);
+
         IKCalibrator.SetupHeadIKTargetDesktop(_vrik);
+
         InitializeIkGeneral();
 
-        _ikHandler = new IKHandlerDesktop(_vrik);
         _ikHandler.OnInitializeIk();
     }
 
     private void InitializeHalfBodyIk()
     {
-        PreSetupIkGeneral();
+        SetupIkGeneral();
+
         IKCalibrator.ConfigureHalfBodyVrIk(_vrik);
+        _ikHandler = new IKHandlerHalfBody(_vrik);
+
         InitializeIkGeneral();
+        
+        _ikHandler.OnInitializeIk();
     }
 
-    private void PreSetupIkGeneral()
+    private void SetupIkGeneral()
     {
         SetAvatarPose(AvatarPose.Default);
         _vrik = IKCalibrator.SetupVrIk(_animator);
@@ -201,12 +213,12 @@ public class IKManager : MonoBehaviour
     {
         SetAvatarPose(AvatarPose.IKPose);
 
-        VRIKUtils.CalculateInitialIKScaling(_vrik, ref _calibrationData);
-        VRIKUtils.CalculateInitialFootsteps(_vrik, ref _calibrationData);
+        VRIKUtils.CalculateInitialIKScaling(_vrik, ref _ikHandler._locomotionData);
+        VRIKUtils.CalculateInitialFootsteps(_vrik, ref _ikHandler._locomotionData);
 
-        VRIKUtils.ApplyScaleToVRIK(_vrik, _calibrationData, 1f);
+        _vrik.solver.Initiate(_vrik.transform); // initiate a second time
 
-        VRIKUtils.InitiateVRIKSolver(_vrik); // initiate again to store ikpose
+        VRIKUtils.ApplyScaleToVRIK(_vrik, _ikHandler._locomotionData, 1f);
 
         _vrik.onPreSolverUpdate.AddListener(new UnityAction(OnPreSolverUpdateGeneral));
         _vrik.onPostSolverUpdate.AddListener(new UnityAction(OnPostSolverUpdateGeneral));
@@ -263,6 +275,7 @@ public class IKManager : MonoBehaviour
         _hipTransform.rotation = hipRot;
     }
 
+    // "NetIk Pass", or "Additional Humanoid Pass" hack
     private void OnPostSolverUpdateGeneral()
     {
         Vector3 hipPos = _hipTransform.position;

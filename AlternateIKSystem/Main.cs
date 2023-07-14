@@ -26,7 +26,7 @@ public class AlternateIKSystem : MelonMod
 
     private static void InitializeIntegration(string modName, Action integrationAction)
     {
-        if (RegisteredMelons.All(it => it.Info.Name != modName)) 
+        if (RegisteredMelons.All(it => it.Info.Name != modName))
             return;
 
         Logger.Msg($"Initializing {modName} integration.");

@@ -33,7 +33,7 @@ public class BodyControl
     public static bool TrackingLeftLeg = true;
     public static bool TrackingRightLeg = true;
     public static bool TrackingLocomotion = true;
-    public static float TrackingPositionWeight = 1f;
+    public static float TrackingIKPositionWeight = 1f;
 
     // TODO: decide if this is considered "Tracking Controls"
     public static float TrackingMaxRootAngle = 0f;
@@ -52,12 +52,16 @@ public class BodyControl
 
     #endregion
 
+    #region Public Methods
+
     public void Update()
     {
         TrackingAll = ShouldTrackAll();
         TrackingLocomotion = ShouldTrackLocomotion();
         AvatarUpright = GetPlayerUpright();
     }
+
+    #endregion
 
     #region Private Methods
 
@@ -87,20 +91,26 @@ public class BodyControl
 
     #region Solver Weight Helpers
 
-    public static void SetHeadWeight(IKSolverVR.Spine spine, LookAtIK lookAtIk, float weight)
+    // I am unsure on this...?
+
+    public static void SetLookAtWeight(LookAtIK lookAtIk, float weight)
+    {
+        if (lookAtIk != null)
+            lookAtIk.solver.IKPositionWeight = weight;
+    }
+
+    public static void SetHeadWeight(IKSolverVR.Spine spine, float weight)
     {
         spine.positionWeight = weight;
         spine.rotationWeight = weight;
-        if (lookAtIk != null)
-            lookAtIk.solver.IKPositionWeight = weight;
     }
 
     public static void SetArmWeight(IKSolverVR.Arm arm, float weight)
     {
         arm.positionWeight = weight;
         arm.rotationWeight = weight;
-        arm.shoulderRotationWeight = weight;
-        arm.shoulderTwistWeight = weight;
+        //arm.shoulderRotationWeight = weight;
+        //arm.shoulderTwistWeight = weight;
         arm.bendGoalWeight = arm.bendGoal != null ? weight : 0f;
     }
 
@@ -115,6 +125,22 @@ public class BodyControl
     {
         spine.pelvisPositionWeight = weight;
         spine.pelvisRotationWeight = weight;
+    }
+
+    public static void SetLocomotionWeight(IKSolverVR.Locomotion locomotion, float weight)
+    {
+        locomotion.weight = weight;
+    }
+
+    public static void SetIKPositionWeight(IKSolverVR solver, float weight)
+    {
+        solver.IKPositionWeight = weight;
+    }
+
+    public static void SetIKPositionWeight(LookAtIK lookAtIk, float weight)
+    {
+        if (lookAtIk != null)
+            lookAtIk.solver.IKPositionWeight = weight;
     }
 
     #endregion
