@@ -35,6 +35,9 @@ public static class BTKUIAddon
         // Fine-tuning Settings
         AddMelonToggle(ref generalIKCategory, ModSettings.EntryResetFootstepsOnIdle);
 
+        // Fake root heading limit
+        AddMelonSlider(ref generalIKPage, ModSettings.EntryBodyHeadingLimit, 0, 90f, 0);
+        
         // Lerp Speed
         AddMelonSlider(ref generalIKPage, ModSettings.EntryIKLerpSpeed, 0, 20f, 0);
     }
@@ -52,7 +55,6 @@ public static class BTKUIAddon
         AddMelonSlider(ref desktopIKPage, ModSettings.EntryBodyLeanWeight, 0, 1f, 1);
 
         // Max Root Heading Limit & Weights
-        AddMelonSlider(ref desktopIKPage, ModSettings.EntryBodyHeadingLimit, 0, 90f, 0);
         AddMelonSlider(ref desktopIKPage, ModSettings.EntryPelvisHeadingWeight, 0, 1f, 1);
         AddMelonSlider(ref desktopIKPage, ModSettings.EntryChestHeadingWeight, 0, 1f, 1);
     }
