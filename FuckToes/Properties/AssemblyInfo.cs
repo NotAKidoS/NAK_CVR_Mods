@@ -1,4 +1,4 @@
-﻿using FuckToes.Properties;
+﻿using NAK.FuckToes.Properties;
 using MelonLoader;
 using System.Reflection;
 
@@ -20,12 +20,13 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
-[assembly: MelonOptionalDependencies("BTKUILib")]
+[assembly: MelonColor(255, 255, 200, 0)]
+[assembly: MelonAuthorColor(255, 158, 21, 32)]
 [assembly: HarmonyDontPatchAll]
 
-namespace FuckToes.Properties;
+namespace NAK.FuckToes.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.1";
+    public const string Version = "1.0.2";
     public const string Author = "NotAKidoS";
 }
