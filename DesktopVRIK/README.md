@@ -12,9 +12,5 @@ https://user-images.githubusercontent.com/37721153/221870123-fbe4f5e8-8d6e-4a43-
 
 * Options to disable VRIK from using mapped toes &/or find unmapped (non-human) toe bones.
 
-* Autofixes for avatars without fingers & incorrect chest/spine bone mapping (might not play well with netik).
-
 ## Relevant Feedback Posts:
 https://feedback.abinteractive.net/p/desktop-feet-ik-for-avatars
-
-https://feedback.abinteractive.net/p/pivot-desktop-camera-with-head

@@ -6,44 +6,57 @@ namespace NAK.DesktopVRIK.Integrations;
 
 public static class BTKUIAddon
 {
+    #region Initialization
+
     [MethodImpl(MethodImplOptions.NoInlining)]
-    public static void Init()
+    public static void Initialize()
     {
-        //Add myself to the Misc Menu
-
+        // Add mod to the Misc Menu
         Page miscPage = QuickMenuAPI.MiscTabPage;
-        Category miscCategory = miscPage.AddCategory(DesktopVRIK.SettingsCategory);
+        Category miscCategory = miscPage.AddCategory(ModSettings.SettingsCategory);
 
-        AddMelonToggle(ref miscCategory, DesktopVRIK.EntryEnabled);
+        AddMelonToggle(ref miscCategory, ModSettings.EntryEnabled);
 
-        //Add my own page to not clog up Misc Menu
-        Page desktopVRIKPage = miscCategory.AddPage("DesktopVRIK Settings", "", "Configure the settings for DesktopVRIK.", "DesktopVRIK");
-        desktopVRIKPage.MenuTitle = "DesktopVRIK Settings";
-        Category desktopVRIKCategory = desktopVRIKPage.AddCategory(DesktopVRIK.SettingsCategory);
+        SetupDesktopIKConfigurationPage(ref miscCategory);
+    }
+
+    #endregion
+
+    #region Pages Setup
+
+    private static void SetupDesktopIKConfigurationPage(ref Category parentCategory)
+    {
+        Page desktopIKPage = parentCategory.AddPage("DesktopVRIK Settings", "", "Configure the settings for DesktopVRIK.", ModSettings.SettingsCategory);
+        desktopIKPage.MenuTitle = "DesktopVRIK Settings";
+        Category desktopIKCategory = desktopIKPage.AddCategory(desktopIKPage.MenuTitle);
 
         // General Settings
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryPlantFeet);
+        AddMelonToggle(ref desktopIKCategory, ModSettings.EntryPlantFeet);
 
         // Calibration Settings
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryUseVRIKToes);
+        AddMelonToggle(ref desktopIKCategory, ModSettings.EntryUseToesForVRIK);
 
         // Fine-tuning Settings
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryResetFootstepsOnIdle);
+        AddMelonToggle(ref desktopIKCategory, ModSettings.EntryResetFootstepsOnIdle);
 
         // Funny Settings
-        AddMelonToggle(ref desktopVRIKCategory, DesktopVRIK.EntryProneThrusting);
+        AddMelonToggle(ref desktopIKCategory, ModSettings.EntryProneThrusting);
 
         // Body Leaning Weight
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIK.EntryBodyLeanWeight, 0, 1f, 1);
+        AddMelonSlider(ref desktopIKPage, ModSettings.EntryBodyLeanWeight, 0, 1f, 1);
 
         // Max Root Heading Limit & Weights
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIK.EntryBodyHeadingLimit, 0, 90f, 0);
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIK.EntryPelvisHeadingWeight, 0, 1f, 1);
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIK.EntryChestHeadingWeight, 0, 1f, 1);
+        AddMelonSlider(ref desktopIKPage, ModSettings.EntryBodyHeadingLimit, 0, 90f, 0);
+        AddMelonSlider(ref desktopIKPage, ModSettings.EntryPelvisHeadingWeight, 0, 1f, 1);
+        AddMelonSlider(ref desktopIKPage, ModSettings.EntryChestHeadingWeight, 0, 1f, 1);
 
         // Lerp Speed
-        AddMelonSlider(ref desktopVRIKPage, DesktopVRIK.EntryIKLerpSpeed, 0, 20f, 0);
+        AddMelonSlider(ref desktopIKPage, ModSettings.EntryIKLerpSpeed, 0, 20f, 0);
     }
+
+    #endregion
+
+    #region Melon Pref Helpers
 
     private static void AddMelonToggle(ref Category category, MelonLoader.MelonPreferences_Entry<bool> entry)
     {
@@ -54,4 +67,6 @@ public static class BTKUIAddon
     {
         page.AddSlider(entry.DisplayName, entry.Description, entry.Value, min, max, decimalPlaces).OnValueUpdated += f => entry.Value = f;
     }
+
+    #endregion
 }

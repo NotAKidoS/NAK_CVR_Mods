@@ -1,5 +1,7 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI.CCK.Components;
+using ABI_RC.Core.Player;
 using HarmonyLib;
+using NAK.DesktopVRIK.IK;
 using UnityEngine;
 
 /**
@@ -25,73 +27,97 @@ using UnityEngine;
 
 namespace NAK.DesktopVRIK.HarmonyPatches;
 
-class PlayerSetupPatches
+internal class PlayerSetupPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
-    static void Postfix_PlayerSetup_Start(ref PlayerSetup __instance)
+    private static void Postfix_PlayerSetup_Start(ref PlayerSetup __instance)
     {
-        __instance.gameObject.AddComponent<DesktopVRIKSystem>();
+        __instance.gameObject.AddComponent<IKManager>();
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatarDesktop))]
-    static void Postfix_PlayerSetup_SetupAvatarDesktop(ref Animator ____animator)
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatar))]
+    private static void Postfix_PlayerSetup_SetupAvatar(GameObject inAvatar)
     {
-        // only intercept if DesktopVRIK is being used
-        if (DesktopVRIKSystem.Instance != null)
+        if (!ModSettings.EntryEnabled.Value)
+            return;
+
+        try
         {
-            DesktopVRIKSystem.Instance.OnSetupAvatarDesktop(____animator);
+            IKManager.Instance?.OnAvatarInitialized(inAvatar);
+        }
+        catch (Exception e)
+        {
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_SetupAvatar)}");
+            DesktopVRIK.Logger.Error(e);
         }
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Update))]
-    static void Postfix_PlayerSetup_Update(ref bool ____emotePlaying)
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ClearAvatar))]
+    private static void Postfix_PlayerSetup_ClearAvatar()
     {
-        // only intercept if DesktopVRIK is being used
-        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        try
         {
-            DesktopVRIKSystem.Instance.OnPlayerSetupUpdate(____emotePlaying);
+            IKManager.Instance?.OnAvatarDestroyed();
+        }
+        catch (Exception e)
+        {
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_ClearAvatar)}");
+            DesktopVRIK.Logger.Error(e);
         }
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupIKScaling))]
-    private static bool Prefix_PlayerSetup_SetupIKScaling(float height, ref Vector3 ___scaleDifference)
+    private static void Prefix_PlayerSetup_SetupIKScaling(ref Vector3 ___scaleDifference, ref bool __runOriginal)
     {
-        // only intercept if DesktopVRIK is being used
-        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        try
         {
-            DesktopVRIKSystem.Instance.OnSetupIKScaling(1f + ___scaleDifference.y);
-            return false;
+            if (IKManager.Instance != null)
+                __runOriginal = !IKManager.Instance.OnPlayerScaled(1f + ___scaleDifference.y);
         }
-
-        return true;
+        catch (Exception e)
+        {
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Prefix_PlayerSetup_SetupIKScaling)}");
+            DesktopVRIK.Logger.Error(e);
+        }
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetSitting))]
-    static void Postfix_PlayerSetup_SetSitting()
+    private static void Postfix_PlayerSetup_SetSitting(ref bool ___isCurrentlyInSeat)
     {
-        // only intercept if DesktopVRIK is being used
-        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        try
         {
-            DesktopVRIKSystem.Instance.OnPlayerSetupSetSitting();
+            IKManager.Instance?.OnPlayerSeatedStateChanged(___isCurrentlyInSeat);
+        }
+        catch (Exception e)
+        {
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_SetSitting)}");
+            DesktopVRIK.Logger.Error(e);
         }
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ResetIk))]
-    static bool Prefix_PlayerSetup_ResetIk()
+    private static void Prefix_PlayerSetup_ResetIk(ref PlayerSetup __instance, ref bool __runOriginal)
     {
-        // only intercept if DesktopVRIK is being used
-        if (DesktopVRIKSystem.Instance?.avatarVRIK != null)
+        try
         {
-            DesktopVRIKSystem.Instance.OnPlayerSetupResetIk();
-            return false;
-        }
+            if (IKManager.Instance == null)
+                return;
 
-        return true;
+            CVRMovementParent currentParent = __instance._movementSystem._currentParent;
+            __runOriginal = currentParent?._referencePoint != null
+                ? IKManager.Instance.OnPlayerHandleMovementParent(currentParent)
+                : IKManager.Instance.OnPlayerTeleported();
+        }
+        catch (Exception e)
+        {
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Prefix_PlayerSetup_ResetIk)}");
+            DesktopVRIK.Logger.Error(e);
+        }
     }
 }
