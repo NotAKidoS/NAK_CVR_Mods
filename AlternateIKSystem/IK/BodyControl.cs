@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Systems.MovementSystem;
-using RootMotion.FinalIK;
 using UnityEngine;
 
 namespace NAK.AlternateIKSystem.IK;
@@ -54,6 +53,11 @@ public class BodyControl
 
     #region Public Methods
 
+    public void Start()
+    {
+
+    }
+
     public void Update()
     {
         TrackingAll = ShouldTrackAll();
@@ -85,62 +89,6 @@ public class BodyControl
         float avatarHeight = PlayerSetup.Instance._avatarHeight;
         float currentHeight = PlayerSetup.Instance.GetViewRelativePosition().y;
         return Mathf.Clamp01((avatarHeight > 0f) ? (currentHeight / avatarHeight) : 0f);
-    }
-
-    #endregion
-
-    #region Solver Weight Helpers
-
-    // I am unsure on this...?
-
-    public static void SetLookAtWeight(LookAtIK lookAtIk, float weight)
-    {
-        if (lookAtIk != null)
-            lookAtIk.solver.IKPositionWeight = weight;
-    }
-
-    public static void SetHeadWeight(IKSolverVR.Spine spine, float weight)
-    {
-        spine.positionWeight = weight;
-        spine.rotationWeight = weight;
-    }
-
-    public static void SetArmWeight(IKSolverVR.Arm arm, float weight)
-    {
-        arm.positionWeight = weight;
-        arm.rotationWeight = weight;
-        //arm.shoulderRotationWeight = weight;
-        //arm.shoulderTwistWeight = weight;
-        arm.bendGoalWeight = arm.bendGoal != null ? weight : 0f;
-    }
-
-    public static void SetLegWeight(IKSolverVR.Leg leg, float weight)
-    {
-        leg.positionWeight = weight;
-        leg.rotationWeight = weight;
-        leg.bendGoalWeight = leg.usingKneeTracker ? weight : 0f;
-    }
-
-    public static void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
-    {
-        spine.pelvisPositionWeight = weight;
-        spine.pelvisRotationWeight = weight;
-    }
-
-    public static void SetLocomotionWeight(IKSolverVR.Locomotion locomotion, float weight)
-    {
-        locomotion.weight = weight;
-    }
-
-    public static void SetIKPositionWeight(IKSolverVR solver, float weight)
-    {
-        solver.IKPositionWeight = weight;
-    }
-
-    public static void SetIKPositionWeight(LookAtIK lookAtIk, float weight)
-    {
-        if (lookAtIk != null)
-            lookAtIk.solver.IKPositionWeight = weight;
     }
 
     #endregion

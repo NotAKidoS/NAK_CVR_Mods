@@ -2,6 +2,7 @@
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using NAK.AlternateIKSystem.IK.IKHandlers;
+using NAK.AlternateIKSystem.IK.WeightManipulators;
 using NAK.AlternateIKSystem.VRIKHelpers;
 using RootMotion.FinalIK;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class IKManager : MonoBehaviour
     #region Variables
 
     public BodyControl BodyControl = new BodyControl();
+    public WeightManipulatorManager WeightManipulator = new WeightManipulatorManager();
 
     public static VRIK vrik => _vrik;
     private static VRIK _vrik;
@@ -83,14 +85,22 @@ public class IKManager : MonoBehaviour
         _leftHandRotations = _leftHandTarget.Find("LeftHandRotations");
         _rightHandTarget = _rightController.Find("RightHandTarget");
         _rightHandRotations = _rightHandTarget.Find("RightHandRotations");
+
+        WeightManipulator.AddOverride(new TrackingControlManipulator());
+        WeightManipulator.AddOverride(new DeviceControlManipulator());
+
+        BodyControl.Start();
     }
 
     private void Update()
     {
-        BodyControl.Update();
-
         if (!_isAvatarInitialized)
             return;
+
+        BodyControl.Update();
+
+        if (vrik.solver != null)
+            WeightManipulator.UpdateWeights(vrik.solver);
 
         _ikHandler?.UpdateWeights();
     }

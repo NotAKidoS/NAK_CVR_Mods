@@ -43,7 +43,7 @@ public static class BTKUIAddon
 
         // Fake root heading limit
         AddMelonSlider(ref generalIKPage, ModSettings.EntryBodyHeadingLimit, 0, 90f, 0);
-        
+
         // Lerp Speed
         AddMelonSlider(ref generalIKPage, ModSettings.EntryIKLerpSpeed, 0, 20f, 0);
     }

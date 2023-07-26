@@ -1,4 +1,5 @@
-﻿using RootMotion.FinalIK;
+﻿using NAK.AlternateIKSystem.IK.WeightManipulators;
+using RootMotion.FinalIK;
 using UnityEngine;
 
 namespace NAK.AlternateIKSystem.IK.IKHandlers;
@@ -16,13 +17,13 @@ internal class IKHandlerHalfBody : IKHandler
     public override void OnInitializeIk()
     {
         // Default tracking for HalfBody
-        shouldTrackHead = true;
-        shouldTrackLeftArm = true;
-        shouldTrackRightArm = true;
-        shouldTrackLeftLeg = false;
-        shouldTrackRightLeg = false;
-        shouldTrackPelvis = false;
-        shouldTrackLocomotion = true;
+        DeviceControlManipulator.shouldTrackHead = true;
+        DeviceControlManipulator.shouldTrackLeftArm = true;
+        DeviceControlManipulator.shouldTrackRightArm = true;
+        DeviceControlManipulator.shouldTrackLeftLeg = false;
+        DeviceControlManipulator.shouldTrackRightLeg = false;
+        DeviceControlManipulator.shouldTrackPelvis = false;
+        DeviceControlManipulator.shouldTrackLocomotion = true;
 
         _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateHalfBody);
     }

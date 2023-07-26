@@ -109,52 +109,42 @@ internal abstract class IKHandler
     protected virtual void Update_HeadWeight()
     {
         float targetWeight = GetTargetWeight(BodyControl.TrackingHead, true);
-        BodyControl.SetHeadWeight(_solver.spine, targetWeight);
-        BodyControl.SetLookAtWeight(IKManager.lookAtIk, targetWeight);
     }
 
     protected virtual void Update_LeftArmWeight()
     {
         float leftArmWeight = GetTargetWeight(BodyControl.TrackingLeftArm, _solver.leftArm.target != null);
-        BodyControl.SetArmWeight(_solver.leftArm, leftArmWeight);
     }
 
     protected virtual void Update_RightArmWeight()
     {
         float rightArmWeight = GetTargetWeight(BodyControl.TrackingRightArm, _solver.rightArm.target != null);
-        BodyControl.SetArmWeight(_solver.rightArm, rightArmWeight);
     }
 
     protected virtual void Update_LeftLegWeight()
     {
         float leftLegWeight = GetTargetWeight(BodyControl.TrackingLeftLeg, _solver.leftLeg.target != null);
-        BodyControl.SetLegWeight(_solver.leftLeg, leftLegWeight);
     }
 
     protected virtual void Update_RightLegWeight()
     {
         float rightLegWeight = GetTargetWeight(BodyControl.TrackingRightLeg, _solver.rightLeg.target != null);
-        BodyControl.SetLegWeight(_solver.rightLeg, rightLegWeight);
     }
 
     protected virtual void Update_PelvisWeight()
     {
         float pelvisWeight = GetTargetWeight(BodyControl.TrackingPelvis, _solver.spine.pelvisTarget != null);
-        BodyControl.SetPelvisWeight(_solver.spine, pelvisWeight);
     }
 
     protected virtual void Update_LocomotionWeight()
     {
         _locomotionWeight = Mathf.Lerp(_locomotionWeight, BodyControl.TrackingLocomotion ? 1f : 0f,
             Time.deltaTime * ModSettings.EntryIKLerpSpeed.Value * 2f);
-        BodyControl.SetLocomotionWeight(_solver.locomotion, _locomotionWeight);
     }
 
     protected virtual void Update_IKPositionWeight()
     {
         float ikPositionWeight = BodyControl.TrackingAll ? BodyControl.TrackingIKPositionWeight : 0f;
-        BodyControl.SetIKPositionWeight(_solver, ikPositionWeight);
-        BodyControl.SetIKPositionWeight(IKManager.lookAtIk, ikPositionWeight);
     }
 
     protected virtual float GetTargetWeight(bool isTracking, bool hasTarget)

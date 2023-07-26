@@ -1,4 +1,5 @@
-﻿using RootMotion.FinalIK;
+﻿using NAK.AlternateIKSystem.IK.WeightManipulators;
+using RootMotion.FinalIK;
 using UnityEngine;
 
 namespace NAK.AlternateIKSystem.IK.IKHandlers;
@@ -16,13 +17,13 @@ internal class IKHandlerDesktop : IKHandler
     public override void OnInitializeIk()
     {
         // Default tracking for Desktop
-        shouldTrackHead = true;
-        shouldTrackLeftArm = false;
-        shouldTrackRightArm = false;
-        shouldTrackLeftLeg = false;
-        shouldTrackRightLeg = false;
-        shouldTrackPelvis = false;
-        shouldTrackLocomotion = true;
+        DeviceControlManipulator.shouldTrackHead = true;
+        DeviceControlManipulator.shouldTrackLeftArm = false;
+        DeviceControlManipulator.shouldTrackRightArm = false;
+        DeviceControlManipulator.shouldTrackLeftLeg = false;
+        DeviceControlManipulator.shouldTrackRightLeg = false;
+        DeviceControlManipulator.shouldTrackPelvis = false;
+        DeviceControlManipulator.shouldTrackLocomotion = true;
 
         _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateDesktop);
     }
@@ -36,11 +37,6 @@ internal class IKHandlerDesktop : IKHandler
         // Reset avatar local position
         _vrik.transform.localPosition = Vector3.zero;
         _vrik.transform.localRotation = Quaternion.identity;
-
-        base.UpdateWeights();
-
-        // Desktop should never have head position weight
-        _solver.spine.positionWeight = 0f;
     }
 
     #endregion

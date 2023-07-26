@@ -79,6 +79,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlternateIKSystem", "Altern
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoDepthOnlyFlat", "NoDepthOnlyFlat\NoDepthOnlyFlat.csproj", "{6F2F8774-40CF-4DE1-BC6C-DC00CA76D6A8}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ViewpointHeadScaleFix", "ViewpointHeadScaleFix\ViewpointHeadScaleFix.csproj", "{337A284D-C4AC-4B1B-B094-B6F758278BD8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,10 @@ Global
 		{6F2F8774-40CF-4DE1-BC6C-DC00CA76D6A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F2F8774-40CF-4DE1-BC6C-DC00CA76D6A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F2F8774-40CF-4DE1-BC6C-DC00CA76D6A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{337A284D-C4AC-4B1B-B094-B6F758278BD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{337A284D-C4AC-4B1B-B094-B6F758278BD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{337A284D-C4AC-4B1B-B094-B6F758278BD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{337A284D-C4AC-4B1B-B094-B6F758278BD8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
