@@ -196,7 +196,9 @@ internal static class IKCalibrator
         vrik.solver.spine.headTarget = new GameObject("Head IK Target").transform;
         vrik.solver.spine.headTarget.SetParent(parent);
         vrik.solver.spine.headTarget.localPosition = Vector3.zero;
-        vrik.solver.spine.headTarget.localRotation = CalculateLocalRotation(vrik.references.root, vrik.references.head);
+        vrik.solver.spine.headTarget.localRotation = parent == vrik.references.head
+            ? Quaternion.identity
+            : CalculateLocalRotation(vrik.references.root, vrik.references.head);
     }
 
     public static void SetupHandIKTarget(VRIK vrik, Transform handAnchor, bool isLeft)
