@@ -1,5 +1,15 @@
 ## NotAKids ChilloutVR Mods
 
+# Update Notice: ChilloutVR r171
+
+There will be a pause in the updates for my mods. The reason for this break is two-fold. Firstly, it gives time for me to adjust to the new updates made in the game. Secondly, it exposes the issues usually masked by mods.
+
+With this repos mod updates on hold, the issues in the game that are often overlooked will be in plain sight. This should bring more attention to what needs to be improved in the game itself. Your understanding and patience during this time is appreciated.
+
+The mods marked as Deprecated will be moved to their own folder soon. Any mods that are broken may take a bit to receive updates.
+
+---
+
 | Mod Name                                                                                                   | Approval State | Released in this repo | CVRMG Category          |
 |------------------------------------------------------------------------------------------------------------|----------------|-----------------------|-------------------------|
 | [AASBufferFix](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix)                      | Approved       | Yes                   | Utilities & Tweaks      |
