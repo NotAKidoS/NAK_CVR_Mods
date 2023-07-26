@@ -6,8 +6,14 @@ namespace NAK.MuteSFX;
 
 public static class AudioModuleManager
 {
+    #region SFX Strings
+
     public const string sfx_mute = "MuteSFX_sfx_mute";
     public const string sfx_unmute = "MuteSFX_sfx_unmute";
+
+    #endregion
+
+    #region Public Methods
 
     public static void SetupDefaultAudioClips()
     {
@@ -42,8 +48,7 @@ public static class AudioModuleManager
         }
     }
 
-    public static void PlayAudioModule(string module)
-    {
-        InterfaceAudio.PlayModule(module);
-    }
+    public static void PlayAudioModule(string module) => InterfaceAudio.PlayModule(module);
+
+    #endregion
 }

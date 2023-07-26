@@ -1,8 +1,8 @@
 {
   "_id": 172,
   "name": "MuteSFX",
-  "modversion": "1.0.0",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.1",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "Exterrata & NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/MuteSFX.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r14/MuteSFX.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MuteSFX/",
-  "changelog": "- Initial CVRMG release",
-  "embedcolor": "92e492"
+  "changelog": "- Fixes for 2023r171.",
+  "embedcolor": "#92e492"
 }
