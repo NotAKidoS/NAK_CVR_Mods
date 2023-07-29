@@ -47,8 +47,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IKAdjustments", "IKAdjustme
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmoothRay", "SmoothRay\SmoothRay.csproj", "{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackedPointFix", "TrackedPointFix\TrackedPointFix.csproj", "{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HeadBobbingFix", "HeadBobbingFix\HeadBobbingFix.csproj", "{EFE40A43-3FA4-4B61-8A7E-78789792F127}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckCohtmlResourceHandler", "FuckCohtmlResourceHandler\FuckCohtmlResourceHandler.csproj", "{EB73DB1B-62BD-4258-BA85-D3ACAB7CBE91}"
@@ -159,10 +157,6 @@ Global
 		{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BBC97C5-CC9F-4DA2-B166-F507F825DFAA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A6788A8-89E9-4FC4-B4FE-27FE8B39926C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFE40A43-3FA4-4B61-8A7E-78789792F127}.Release|Any CPU.ActiveCfg = Release|Any CPU
