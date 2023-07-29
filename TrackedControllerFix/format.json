@@ -16,7 +16,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r9/TrackedControllerFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/TrackedControllerFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/TrackedControllerFix/",
   "changelog": "- Fixes for 2023r171.\n- Prevented from initializing when launching with OpenXR.",
   "embedcolor": "#3498db"
