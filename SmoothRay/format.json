@@ -1,12 +1,12 @@
 {
-  "_id": -1,
+  "_id": 162,
   "name": "SmoothRay",
-  "modversion": "1.0.1",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.2",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Smoothes your controller while using the Quick and Main menus to make it easier to navigate.\nThis is a CVR adaptation of a Beat Saber mod: [BeatSaber_SmoothedController](https://github.com/kinsi55/BeatSaber_SmoothedController)\n\nSupport for TrackedControllerFix & DesktopVRSwitch.",
+  "description": "Smoothes your controller while using the Quick and Main menus to make it easier to navigate.\nThis is a CVR adaptation of a Beat Saber mod: [BeatSaber_SmoothedController](https://github.com/kinsi55/BeatSaber_SmoothedController)\n\nSupport for TrackedControllerFix & DesktopVRSwitch.\n**Only supports OpenVR, not OpenXR.**",
   "searchtags": [
     "vr",
     "ray",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r9/SmoothRay.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/SmoothRay.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SmoothRay/",
-  "changelog": "Initial CVRMG Release",
-  "embedcolor": "dc8105"
+  "changelog": "- Fixes for 2023r171.\n- Prevented from initializing when launching with OpenXR.",
+  "embedcolor": "#dc8105"
 }
