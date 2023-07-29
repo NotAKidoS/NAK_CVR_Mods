@@ -1,6 +1,7 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Systems.IK.SubSystems;
 using ABI_RC.Systems.MovementSystem;
+using NAK.DesktopVRIK.IK.VRIKHelpers;
 using RootMotion.FinalIK;
 using UnityEngine;
 
@@ -31,9 +32,14 @@ internal class IKHandlerDesktop : IKHandler
         _vrik.transform.localPosition = Vector3.zero;
         _vrik.transform.localRotation = Quaternion.identity;
 
-        UpdateBodySystemTracking();
-
         base.UpdateWeights();
+    }
+
+    public override void UpdateTracking()
+    {
+        BodySystem.TrackingEnabled = ShouldTrackAll();
+        BodySystem.TrackingLocomotionEnabled = BodySystem.TrackingEnabled && ShouldTrackLocomotion();
+        ResetSolverIfNeeded();
     }
 
     #endregion
@@ -85,12 +91,6 @@ internal class IKHandlerDesktop : IKHandler
     #endregion
 
     #region Private Methods
-
-    private void UpdateBodySystemTracking()
-    {
-        BodySystem.TrackingEnabled = ShouldTrackAll();
-        BodySystem.TrackingLocomotionEnabled = ShouldTrackLocomotion();
-    }
     
     private bool ShouldTrackAll()
     {
@@ -109,6 +109,18 @@ internal class IKHandlerDesktop : IKHandler
                           Mathf.Max(PlayerSetup.Instance.avatarProneLimit, PlayerSetup.Instance.avatarCrouchLimit);
         
         return !(isMoving || isCrouching || isProne || isFlying || isSitting || !isGrounded || !isStanding);
+    }
+
+    private void ResetSolverIfNeeded()
+    {
+        if (_wasTrackingLocomotion == BodySystem.TrackingLocomotionEnabled)
+            return;
+
+        _wasTrackingLocomotion = BodySystem.TrackingLocomotionEnabled;
+        if (ModSettings.EntryResetFootstepsOnIdle.Value)
+            VRIKUtils.ResetToInitialFootsteps(_vrik, _locomotionData, _scaleDifference);
+
+        _solver.Reset();
     }
 
     #endregion

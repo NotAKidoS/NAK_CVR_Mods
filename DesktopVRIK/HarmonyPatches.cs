@@ -120,4 +120,19 @@ internal class PlayerSetupPatches
             DesktopVRIK.Logger.Error(e);
         }
     }
+
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Update))]
+    private static void Postfix_PlayerSetup_Update()
+    {
+        try
+        {
+            IKManager.Instance?.OnPlayerUpdate();
+        }
+        catch (Exception e)
+        {
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_Update)}");
+            DesktopVRIK.Logger.Error(e);
+        }
+    }
 }

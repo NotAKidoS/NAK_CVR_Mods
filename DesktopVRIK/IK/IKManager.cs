@@ -1,6 +1,7 @@
 ﻿using ABI.CCK.Components;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
+using ABI_RC.Systems.IK.SubSystems;
 using NAK.DesktopVRIK.IK.IKHandlers;
 using NAK.DesktopVRIK.IK.VRIKHelpers;
 using RootMotion.FinalIK;
@@ -25,6 +26,7 @@ public class IKManager : MonoBehaviour
     // Player Info
     internal Transform _desktopCamera;
     internal Transform _vrCamera;
+    private bool _isEmotePlaying;
 
     // Avatar Info
     private Animator _animator;
@@ -60,10 +62,10 @@ public class IKManager : MonoBehaviour
 
     private void Update()
     {
-        if (!_isAvatarInitialized)
+        if (_ikHandler == null)
             return;
 
-        _ikHandler?.UpdateWeights();
+        _ikHandler.UpdateWeights();
     }
 
     #endregion
@@ -126,37 +128,45 @@ public class IKManager : MonoBehaviour
 
     public bool OnPlayerScaled(float scaleDifference)
     {
-        if (!_isAvatarInitialized)
+        if (_ikHandler == null)
             return false;
 
-        _ikHandler?.OnPlayerScaled(scaleDifference);
+        _ikHandler.OnPlayerScaled(scaleDifference);
         return true;
     }
 
     public void OnPlayerSeatedStateChanged(bool isSitting)
     {
-        if (!_isAvatarInitialized)
+        if (_ikHandler == null)
             return;
 
-        _ikHandler?.Reset();
+        _ikHandler.Reset();
     }
 
     public bool OnPlayerHandleMovementParent(CVRMovementParent movementParent)
     {
-        if (!_isAvatarInitialized)
+        if (_ikHandler == null)
             return false;
 
-        _ikHandler?.OnPlayerHandleMovementParent(movementParent, GetPlayerPosition());
+        _ikHandler.OnPlayerHandleMovementParent(movementParent, GetPlayerPosition());
         return true;
     }
 
     public bool OnPlayerTeleported()
     {
-        if (!_isAvatarInitialized)
+        if (_ikHandler == null)
             return false;
 
-        _ikHandler?.Reset();
+        _ikHandler.Reset();
         return true;
+    }
+
+    public void OnPlayerUpdate()
+    {
+        if (_ikHandler == null)
+            return;
+
+        _ikHandler.UpdateTracking();
     }
 
     #endregion

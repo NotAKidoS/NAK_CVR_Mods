@@ -80,10 +80,11 @@ internal abstract class IKHandler
         Update_PelvisWeight();
 
         Update_LocomotionWeight();
-        ResetSolverIfNeeded();
 
         Update_IKPositionWeight();
     }
+
+    public virtual void UpdateTracking() { }
 
     protected virtual void Update_HeadWeight()
     {
@@ -151,18 +152,6 @@ internal abstract class IKHandler
     private float GetTargetWeight(bool isTracking, bool hasTarget)
     {
         return isTracking && hasTarget ? 1f : 0f;
-    }
-
-    private void ResetSolverIfNeeded()
-    {
-        if (_wasTrackingLocomotion == BodySystem.TrackingLocomotionEnabled)
-            return;
-
-        _wasTrackingLocomotion = BodySystem.TrackingLocomotionEnabled;
-        if (ModSettings.EntryResetFootstepsOnIdle.Value)
-            VRIKUtils.ResetToInitialFootsteps(_vrik, _locomotionData, _scaleDifference);
-
-        _solver.Reset();
     }
 
     #endregion
