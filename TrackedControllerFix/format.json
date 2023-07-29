@@ -1,12 +1,12 @@
 {
-  "_id": -1,
+  "_id": 161,
   "name": "TrackedControllerFix",
-  "modversion": "1.0.5",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.6",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Allows your controllers to track while the SteamVR overlay is open. This also fixes Quest/Touch controllers feeling slow during fast movements.\n\nSupport for SmoothRay & DesktopVRSwitch.",
+  "description": "Allows your controllers to track while the SteamVR overlay is open. This also fixes Quest/Touch controllers feeling slow during fast movements.\n\nSupport for SmoothRay & DesktopVRSwitch.\n**Only supports OpenVR, not OpenXR.**",
   "searchtags": [
     "vr",
     "quest",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r9/TrackedControllerFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/TrackedControllerFix/",
-  "changelog": "Initial CVRMG Release",
-  "embedcolor": "3498db"
+  "changelog": "- Fixes for 2023r171.\n- Prevented from initializing when launching with OpenXR.",
+  "embedcolor": "#3498db"
 }

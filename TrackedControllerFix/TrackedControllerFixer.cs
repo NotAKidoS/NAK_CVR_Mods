@@ -1,72 +1,110 @@
-﻿using UnityEngine;
+﻿using ABI_RC.Core.Savior;
+using UnityEngine;
 using Valve.VR;
 
 namespace NAK.TrackedControllerFix;
 
 public class TrackedControllerFixer : MonoBehaviour
 {
+    #region Variables
+
     public SteamVR_Input_Sources inputSource;
     public int deviceIndex = -1;
 
-    SteamVR_TrackedObject trackedObject;
-    SteamVR_Behaviour_Pose oldBehaviourPose;
-    SteamVR_Action_Pose actionPose;
+    private SteamVR_TrackedObject _trackedObject;
+    private SteamVR_Behaviour_Pose _oldBehaviourPose;
+    private SteamVR_Action_Pose _actionPose;
+    private SteamVR_RenderModel _renderModel;
 
-    SteamVR_RenderModel renderModel;
+    #endregion
 
-    void Awake()
+    #region Unity Methods
+
+    private void Awake()
     {
-        trackedObject = gameObject.AddComponent<SteamVR_TrackedObject>();
-        oldBehaviourPose = gameObject.GetComponent<SteamVR_Behaviour_Pose>();
-        oldBehaviourPose.broadcastDeviceChanges = false; //this fucks us
-        oldBehaviourPose.enabled = false;
-
-        renderModel = gameObject.GetComponentInChildren<SteamVR_RenderModel>();
-
-        actionPose = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose", false);
-        if (actionPose != null) CheckDeviceIndex();
+        _trackedObject = gameObject.AddComponent<SteamVR_TrackedObject>();
+        _oldBehaviourPose = gameObject.GetComponent<SteamVR_Behaviour_Pose>();
+        _oldBehaviourPose.broadcastDeviceChanges = false; //this messes us up
+        _renderModel = gameObject.GetComponentInChildren<SteamVR_RenderModel>();
+        _actionPose = SteamVR_Input.GetAction<SteamVR_Action_Pose>("Pose", false);
     }
 
-    void OnEnable()
+    private void OnEnable()
     {
-        // DesktopVRSwitch support
-        if (actionPose != null) actionPose[inputSource].onDeviceConnectedChanged += OnDeviceConnectedChanged;
-        if (oldBehaviourPose != null)
-            oldBehaviourPose.enabled = false;
+        UpdateBehaviourPose(false);
+        UpdateActionPose(true);
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
-        // DesktopVRSwitch support
-        if (actionPose != null) actionPose[inputSource].onDeviceConnectedChanged -= OnDeviceConnectedChanged;
-        if (oldBehaviourPose != null)
-            oldBehaviourPose.enabled = true;
+        UpdateBehaviourPose(true);
+        UpdateActionPose(false);
     }
 
-    void Update()
+    private void Update()
     {
+        if (_oldBehaviourPose.enabled)
+            return;
+
         if (deviceIndex < 0)
             CheckDeviceIndex();
     }
 
-    void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
+    #endregion
+
+    #region Private Methods
+
+    private void UpdateBehaviourPose(bool enable)
     {
-        if (actionPose != changedAction) actionPose = changedAction;
-        if (changedSource != inputSource) return;
+        if (CheckVR.Instance.forceOpenXr)
+            return;
+
+        if (_oldBehaviourPose == null)
+            return;
+
+        _oldBehaviourPose.enabled = enable;
+    }
+
+    private void UpdateActionPose(bool enable)
+    {
+        if (CheckVR.Instance.forceOpenXr)
+            return;
+
+        if (_actionPose == null)
+            return;
+
+        if (enable)
+        {
+            _actionPose[inputSource].onDeviceConnectedChanged += OnDeviceConnectedChanged;
+            CheckDeviceIndex();
+            return;
+        }
+
+        _actionPose[inputSource].onDeviceConnectedChanged -= OnDeviceConnectedChanged;
+    }
+
+    private void OnDeviceConnectedChanged(SteamVR_Action_Pose changedAction, SteamVR_Input_Sources changedSource, bool connected)
+    {
+        _actionPose = changedAction;
+        if (changedSource != inputSource)
+            return;
+
         CheckDeviceIndex();
     }
 
-    void CheckDeviceIndex()
+    private void CheckDeviceIndex()
     {
-        if (actionPose[inputSource].deviceIsConnected)
-        {
-            int trackedDeviceIndex = (int)actionPose[inputSource].trackedDeviceIndex;
-            if (deviceIndex != trackedDeviceIndex)
-            {
-                deviceIndex = trackedDeviceIndex;
-                trackedObject?.SetDeviceIndex(deviceIndex);
-                renderModel?.SetDeviceIndex(deviceIndex);
-            }
-        }
+        if (!_actionPose[inputSource].deviceIsConnected)
+            return;
+
+        int trackedDeviceIndex = (int)_actionPose[inputSource].trackedDeviceIndex;
+        if (deviceIndex == trackedDeviceIndex)
+            return;
+
+        deviceIndex = trackedDeviceIndex;
+        _trackedObject?.SetDeviceIndex(deviceIndex);
+        _renderModel?.SetDeviceIndex(deviceIndex);
     }
+
+    #endregion
 }

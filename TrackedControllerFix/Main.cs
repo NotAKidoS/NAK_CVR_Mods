@@ -9,7 +9,7 @@ public class TrackedControllerFix : MelonMod
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
     }
 
-    void ApplyPatches(Type type)
+    private void ApplyPatches(Type type)
     {
         try
         {

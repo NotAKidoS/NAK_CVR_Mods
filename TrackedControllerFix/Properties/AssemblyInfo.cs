@@ -20,11 +20,13 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
+[assembly: MelonColor(255, 52, 152, 219)]
+[assembly: MelonAuthorColor(255, 158, 21, 32)]
 [assembly: HarmonyDontPatchAll]
 
 namespace NAK.TrackedControllerFix.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.5";
+    public const string Version = "1.0.6";
     public const string Author = "NotAKidoS";
 }
