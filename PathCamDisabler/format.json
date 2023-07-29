@@ -1,8 +1,8 @@
 {
   "_id": 110,
   "name": "PathCamDisabler",
-  "modversion": "1.0.1",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.2",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/PathCamDisabler.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/PathCamDisabler.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler/",
-  "changelog": "- Organizational changes.\n- No longer using SaveToFile().",
+  "changelog": "- Fixes for 2023r171.",
   "embedcolor": "#9b59b6"
 }

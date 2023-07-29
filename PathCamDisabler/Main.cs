@@ -1,49 +1,34 @@
-﻿using ABI_RC.Core.IO;
-using ABI_RC.Core.Player;
-using MelonLoader;
-using UnityEngine;
+﻿using MelonLoader;
 
 namespace NAK.PathCamDisabler;
 
 public class PathCamDisabler : MelonMod
 {
-    public static readonly MelonPreferences_Category Category = 
+    public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(PathCamDisabler));
 
-    public static readonly MelonPreferences_Entry<bool> EntryDisablePathCam = 
-        Category.CreateEntry("Disable Path Camera Controller.", true, description: "Disable Path Camera Controller.");
+    public static readonly MelonPreferences_Entry<bool> EntryDisablePathCam =
+        Category.CreateEntry("Disable Path Camera Controller", true, description: "Disable Path Camera Controller.");
 
-    public static readonly MelonPreferences_Entry<bool> EntryDisableFlightBind = 
-        Category.CreateEntry("Disable Flight Binding (if controller off).", false, description: "Disable flight bind if Path Camera Controller is also disabled.");
+    public static readonly MelonPreferences_Entry<bool> EntryDisableFlightBind =
+        Category.CreateEntry("Disable Flight Binding", false, description: "Disable flight bind if Path Camera Controller is also disabled.");
 
     public override void OnInitializeMelon()
     {
-        EntryDisablePathCam.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
-
-        MelonLoader.MelonCoroutines.Start(WaitForCVRPathCamController());
+        ApplyPatches(typeof(HarmonyPatches.CVRPathCamControllerPatches));
+        ApplyPatches(typeof(HarmonyPatches.CVRInputModule_KeyboardPatches));
     }
 
-    private System.Collections.IEnumerator WaitForCVRPathCamController()
+    private void ApplyPatches(Type type)
     {
-        while (CVRPathCamController.Instance == null)
-            yield return null;
-        UpdateSettings();
-    }
-
-    private void UpdateSettings()
-    {
-        CVRPathCamController.Instance.enabled = !EntryDisablePathCam.Value;
-    }
-    private void OnUpdateSettings(object arg1, object arg2) => UpdateSettings();
-
-    public override void OnUpdate()
-    {
-        if (EntryDisablePathCam.Value && !EntryDisableFlightBind.Value)
+        try
         {
-            if (Input.GetKeyDown(KeyCode.Keypad5))
-            {
-                PlayerSetup.Instance._movementSystem.ToggleFlight();
-            }
+            HarmonyInstance.PatchAll(type);
+        }
+        catch (Exception e)
+        {
+            LoggerInstance.Msg($"Failed while patching {type.Name}!");
+            LoggerInstance.Error(e);
         }
     }
 }
