@@ -1,23 +1,23 @@
 {
-  "_id": -1,
+  "_id": 171,
   "name": "FOVAdjustment",
-  "modversion": "1.0.0",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.1",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "A simple mod that makes CVR_DesktopCameraController defaultFov configurable by the user if the world author didn't specify a custom world FOV.\n\nCustom FOV values are limited between 60f and 120f to match the limitations imposed on world creators.",
   "searchtags": [
-    "aas",
-    "sync",
-    "naked",
-    "buffer"
+    "fov",
+    "adjustment",
+    "field",
+    "view"
   ],
   "requirements": [
     "UIExpansionKit"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/FOVAdjustment.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/FOVAdjustment.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FOVAdjustment/",
-  "changelog": "- Initial CVRMG release",
-  "embedcolor": "7d7d7d"
+  "changelog": "- Fixes for 2023r171.",
+  "embedcolor": "#7d7d7d"
 }
