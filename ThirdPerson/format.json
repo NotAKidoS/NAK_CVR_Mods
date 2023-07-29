@@ -2,8 +2,8 @@
   {
     "_id": 16,
     "name": "ThirdPerson",
-    "modversion": "1.0.3",
-    "gameversion": "2022r170p1",
+    "modversion": "1.0.4",
+    "gameversion": "2023r171",
     "loaderversion": "0.6.1",
     "modtype": "Mod",
     "author": "Davi & NotAKidoS",
@@ -14,9 +14,9 @@
       "third person"
     ],
     "requirements": [],
-    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r8/ThirdPerson.dll",
+    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Submit changes I made three weeks ago and forgot about... no longer disables desktop camera, so no more null ref errors with nameplates & camera indicator.",
-    "embedcolor": "F61961"
+    "changelog": "- Fixes for 2023r171.",
+    "embedcolor": "#F61961"
   }
 ]
