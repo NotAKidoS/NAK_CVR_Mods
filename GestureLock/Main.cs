@@ -6,10 +6,10 @@ public class GestureLock : MelonMod
 {
     public override void OnInitializeMelon()
     {
-        ApplyPatches(typeof(HarmonyPatches.Patches));
+        ApplyPatches(typeof(HarmonyPatches.CVRInputModule_XRPatches));
     }
 
-    void ApplyPatches(Type type)
+    private void ApplyPatches(Type type)
     {
         try
         {

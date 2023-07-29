@@ -20,10 +20,13 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
+[assembly: MelonColor(255, 128, 66, 33)]
+[assembly: MelonAuthorColor(255, 158, 21, 32)]
+[assembly: HarmonyDontPatchAll]
 
 namespace NAK.GestureLock.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "2.0.0";
+    public const string Version = "2.0.1";
     public const string Author = "NotAKidoS";
 }
