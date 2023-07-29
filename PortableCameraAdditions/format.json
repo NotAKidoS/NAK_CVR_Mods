@@ -1,8 +1,8 @@
 {
   "_id": 123,
   "name": "PortableCameraAdditions",
-  "modversion": "1.0.2",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.3",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -18,8 +18,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/PortableCameraAdditions.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/PortableCameraAdditions.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions/",
-  "changelog": "Added F11 bind to fullscreen Portable Camera on Desktop.",
-  "embedcolor": "9b59b6"
+  "changelog": "Fixes for 2023r171.",
+  "embedcolor": "#ffd96a"
 }

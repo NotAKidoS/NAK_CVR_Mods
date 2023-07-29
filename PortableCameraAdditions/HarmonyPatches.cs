@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace NAK.PortableCameraAdditions.HarmonyPatches;
 
-[HarmonyPatch]
 internal class PortableCameraPatches
 {
     [HarmonyPostfix]
