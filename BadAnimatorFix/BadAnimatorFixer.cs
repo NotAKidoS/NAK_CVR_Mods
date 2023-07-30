@@ -9,13 +9,9 @@ public class BadAnimatorFixer : MonoBehaviour
 
     private Animator animator;
 
-    void Start()
-    {
-        animator = GetComponent<Animator>();
-    }
-
-    void OnEnable() => BadAnimatorFixManager.Add(this);
-    void OnDisable() => BadAnimatorFixManager.Remove(this);
+    private void Start() => animator = GetComponent<Animator>();
+    private void OnEnable() => BadAnimatorFixManager.Add(this);
+    private void OnDisable() => BadAnimatorFixManager.Remove(this);
 
     public void AttemptRewindAnimator()
     {

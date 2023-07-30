@@ -21,9 +21,6 @@ public class BadAnimatorFix : MelonMod
     public static readonly MelonPreferences_Entry<bool> EntryCVRWorld =
         Category.CreateEntry("Add to CVRWorld", true, description: "Should BadAnimatorFix run for CVRWorld? Requires world reload.");
 
-    public static readonly MelonPreferences_Entry<bool> EntryMenus =
-        Category.CreateEntry("Add to Menus", true, description: "Should BadAnimatorFix run for QM & MM? Requires game restart.");
-
     public static readonly MelonPreferences_Entry<bool> EntryLogging =
         Category.CreateEntry("Debugging", false, description: "Toggle to log each rewind if successful. Only needed for debugging.");
 
@@ -42,12 +39,12 @@ public class BadAnimatorFix : MelonMod
             BadAnimatorFixManager.OnSceneInitialized(sceneName);
     }
 
-    void OnEntryEnabledChanged(bool newValue, bool oldValue)
+    private void OnEntryEnabledChanged(bool newValue, bool oldValue)
     {
         BadAnimatorFixManager.ToggleJob(newValue);
     }
 
-    void ApplyPatches(Type type)
+    private void ApplyPatches(Type type)
     {
         try
         {

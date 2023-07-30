@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace NAK.BadAnimatorFix.HarmonyPatches;
 
-static class AnimatorPatches
+internal static class AnimatorPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
@@ -28,24 +28,6 @@ static class AnimatorPatches
     private static void Postfix_CVRSpawnable_Start(CVRSpawnable __instance)
     {
         if (!BadAnimatorFix.EntryCVRSpawnable.Value) return;
-        AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
-    }
-
-    // Set QM stuff
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVR_MenuManager), nameof(CVR_MenuManager.Start))]
-    private static void Postfix_CVR_MenuManager_Start(ref CVR_MenuManager __instance)
-    {
-        if (!BadAnimatorFix.EntryMenus.Value) return;
-        AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
-    }
-
-    // Set MM stuff
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(ViewManager), nameof(ViewManager.Start))]
-    private static void Postfix_ViewManager_Start(ref ViewManager __instance)
-    {
-        if (!BadAnimatorFix.EntryMenus.Value) return;
         AddBadAnimatorFixComponentIfAnimatorExists(__instance.gameObject);
     }
 

@@ -6,9 +6,9 @@ namespace NAK.BadAnimatorFix;
 
 public static class BadAnimatorFixManager
 {
-    static List<BadAnimatorFixer> _animatorFixers = new List<BadAnimatorFixer>();
-    static int _currentIndex = 0;
-    static float _checkInterval = 5f;
+    private static List<BadAnimatorFixer> _animatorFixers = new List<BadAnimatorFixer>();
+    private static int _currentIndex = 0;
+    private static float _checkInterval = 5f;
 
     public static void Add(BadAnimatorFixer bad)
     {

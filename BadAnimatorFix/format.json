@@ -1,8 +1,8 @@
 {
   "_id": 152,
   "name": "BadAnimatorFix",
-  "modversion": "1.0.1",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.2",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r11/BadAnimatorFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r17/BadAnimatorFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix/",
-  "changelog": "- Speculative fix for loading Login, Init, and HQ scenes.",
-  "embedcolor": "e25352"
+  "changelog": "- Fixes for 2023r171.\n- Removed speculative menu fix option. It is no longer needed as menu clips no longer loop.",
+  "embedcolor": "#e25352"
 }
