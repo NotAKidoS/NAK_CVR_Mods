@@ -251,28 +251,23 @@ public class IKManager : MonoBehaviour
 
         for (var i = 0; i < _humanPose.muscles.Length; i++)
         {
-            //if (IkTweaksSettings.IgnoreAnimationsModeParsed == IgnoreAnimationsMode.All && IKTweaksMod.ourRandomPuck.activeInHierarchy)
-            //{
-            //    muscles[i] *= ourBoneResetMasks[i] == BoneResetMask.Never ? 1 : 0;
-            //    continue;
-            //}
-            switch (ourBoneResetMasks[i])
+            switch (BodySystem.boneResetMasks[i])
             {
-                case BoneResetMask.Never:
+                case BodySystem.BoneResetMask.Never:
                     break;
-                case BoneResetMask.Spine:
+                case BodySystem.BoneResetMask.Spine:
                     _humanPose.muscles[i] *= 1 - _solver.spine.pelvisPositionWeight;
                     break;
-                case BoneResetMask.LeftArm:
+                case BodySystem.BoneResetMask.LeftArm:
                     _humanPose.muscles[i] *= 1 - _solver.leftArm.positionWeight;
                     break;
-                case BoneResetMask.RightArm:
+                case BodySystem.BoneResetMask.RightArm:
                     _humanPose.muscles[i] *= 1 - _solver.rightArm.positionWeight;
                     break;
-                case BoneResetMask.LeftLeg:
+                case BodySystem.BoneResetMask.LeftLeg:
                     _humanPose.muscles[i] *= 1 - _solver.leftLeg.positionWeight;
                     break;
-                case BoneResetMask.RightLeg:
+                case BodySystem.BoneResetMask.RightLeg:
                     _humanPose.muscles[i] *= 1 - _solver.rightLeg.positionWeight;
                     break;
                 default:
@@ -357,9 +352,9 @@ public class IKManager : MonoBehaviour
     {
         _humanPoseHandler.GetHumanPose(ref _humanPose);
 
-        for (var i = 0; i < ourBoneResetMasks.Length; i++)
+        for (var i = 0; i < BodySystem.boneResetMasks.Length; i++)
         {
-            if (ourBoneResetMasks[i] != BoneResetMask.Never)
+            if (BodySystem.boneResetMasks[i] != BodySystem.BoneResetMask.Never)
                 _humanPose.muscles[i] = value;
         }
 
@@ -372,9 +367,9 @@ public class IKManager : MonoBehaviour
     {
         _humanPoseHandler.GetHumanPose(ref _humanPose);
 
-        for (var i = 0; i < ourBoneResetMasks.Length; i++)
+        for (var i = 0; i < BodySystem.boneResetMasks.Length; i++)
         {
-            if (ourBoneResetMasks[i] != BoneResetMask.Never)
+            if (BodySystem.boneResetMasks[i] != BodySystem.BoneResetMask.Never)
                 _humanPose.muscles[i] = muscles[i];
         }
 
@@ -382,42 +377,6 @@ public class IKManager : MonoBehaviour
         _humanPose.bodyRotation = Quaternion.identity;
         _humanPoseHandler.SetHumanPose(ref _humanPose);
     }
-
-    #endregion
-
-    #region BodyHandling
-
-    public enum BoneResetMask
-    {
-        Never,
-        Spine,
-        LeftArm,
-        RightArm,
-        LeftLeg,
-        RightLeg,
-    }
-
-    private static readonly string[] ourNeverBones = { "Index", "Thumb", "Middle", "Ring", "Little", "Jaw", "Eye" };
-    private static readonly string[] ourArmBones = { "Arm", "Forearm", "Hand", "Shoulder" };
-    private static readonly string[] ourLegBones = { "Leg", "Foot", "Toes" };
-
-    private static BoneResetMask JudgeBone(string name)
-    {
-        if (ourNeverBones.Any(name.Contains))
-            return BoneResetMask.Never;
-
-        if (ourArmBones.Any(name.Contains))
-        {
-            return name.Contains("Left") ? BoneResetMask.LeftArm : BoneResetMask.RightArm;
-        }
-
-        if (ourLegBones.Any(name.Contains))
-            return name.Contains("Left") ? BoneResetMask.LeftLeg : BoneResetMask.RightLeg;
-
-        return BoneResetMask.Spine;
-    }
-
-    internal static readonly BoneResetMask[] ourBoneResetMasks = HumanTrait.MuscleName.Select(JudgeBone).ToArray();
 
     #endregion
 }
