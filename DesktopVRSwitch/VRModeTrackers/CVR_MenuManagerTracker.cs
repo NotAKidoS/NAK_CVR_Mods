@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core.InteractionSystem;
+using UnityEngine;
 
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
@@ -28,5 +29,7 @@ public class CVR_MenuManagerTracker : VRModeTracker
         DesktopVRSwitch.Logger.Msg("Updating CVR_Menu_Data core data.");
 
         CVR_MenuManager.Instance.coreData.core.inVr = intoVR;
+        CVR_MenuManager.Instance.quickMenu.transform.localPosition = Vector3.zero;
+        CVR_MenuManager.Instance.quickMenu.transform.localRotation = Quaternion.identity;
     }
 }

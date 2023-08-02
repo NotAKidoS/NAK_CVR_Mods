@@ -4,6 +4,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.XR;
+using UnityEngine.XR.Management;
 using Valve.VR;
 
 /**
@@ -81,22 +82,18 @@ public class VRModeSwitchManager : MonoBehaviour
         }
 
         // Check if OpenVR is running
-        bool isUsingVr = IsInVR();
+        bool isUsingVr = IsInXR();
 
         InvokeOnPreSwitch(isUsingVr);
 
         // Start switch
         if (!isUsingVr)
-        {
-            yield return StartCoroutine(StartSteamVR());
-        }
+            yield return StartCoroutine(StartXR());
         else
-        {
-            StopSteamVR();
-        }
+            StopXR();
 
         // Check for updated VR mode
-        if (isUsingVr != IsInVR())
+        if (isUsingVr != IsInXR())
         {
             // reload the local avatar
             if (ReloadLocalAvatar)
@@ -149,26 +146,27 @@ public class VRModeSwitchManager : MonoBehaviour
         SafeInvokeUnityEvent(OnFailVRModeSwitch, isUsingVr);
     }
 
-    public bool IsInVR() => XRSettings.enabled;
+    public bool IsInXR() => XRGeneralSettings.Instance.Manager.activeLoader != null;
 
-    private IEnumerator StartSteamVR()
+    private IEnumerator StartXR()
     {
-        XRSettings.LoadDeviceByName(XRSETTINGS_DEVICE);
         yield return null; // wait a frame before checking
-
-        if (!string.IsNullOrEmpty(XRSettings.loadedDeviceName))
+        yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
+        
+        if (XRGeneralSettings.Instance.Manager.activeLoader != null)
         {
-            //SteamVR.Initialize is fucking useless
-            SteamVR_Behaviour.Initialize(true);
-            SteamVR_Behaviour.instance.InitializeSteamVR(true);
+            XRGeneralSettings.Instance.Manager.StartSubsystems();
         }
 
         yield return null;
         yield break;
     }
 
-    private void StopSteamVR()
+    private void StopXR()
     {
+        if (!XRGeneralSettings.Instance.Manager.isInitializationComplete)
+            return;
+        
         // Forces SteamVR to reinitialize SteamVR_Input next switch
         SteamVR_ActionSet_Manager.DisableAllActionSets();
         SteamVR_Input.initialized = false;
@@ -178,8 +176,8 @@ public class VRModeSwitchManager : MonoBehaviour
         SteamVR.enabled = false; // disposes SteamVR
 
         // Disable UnityXR
-        XRSettings.LoadDeviceByName("");
-        XRSettings.enabled = false;
+        XRGeneralSettings.Instance.Manager.StopSubsystems();
+        XRGeneralSettings.Instance.Manager.DeinitializeLoader();
 
         // We don't really need to wait a frame on Stop()
     }
