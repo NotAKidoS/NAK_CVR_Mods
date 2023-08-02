@@ -8,12 +8,12 @@ public class CVRPickupObjectTracker : MonoBehaviour
     internal CVRPickupObject _pickupObject;
     internal Transform _storedGripOrigin;
 
-    void Start()
+    private void Start()
     {
         VRModeSwitchManager.OnPostVRModeSwitch += OnPostSwitch;
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }

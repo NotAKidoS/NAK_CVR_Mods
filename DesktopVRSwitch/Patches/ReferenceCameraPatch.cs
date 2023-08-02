@@ -9,7 +9,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace NAK.DesktopVRSwitch.Patches;
 
-class ReferenceCameraPatch
+internal class ReferenceCameraPatch
 {
     public static void OnWorldLoad()
     {
@@ -18,7 +18,7 @@ class ReferenceCameraPatch
         CopyToInactiveCam(activeCamera, inactiveCamera);
     }
 
-    static void CopyToInactiveCam(Camera activeCam, Camera inactiveCam)
+    private static void CopyToInactiveCam(Camera activeCam, Camera inactiveCam)
     {
         if (inactiveCam == null || activeCam == null)
             return;

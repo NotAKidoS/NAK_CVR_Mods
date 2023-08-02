@@ -1,4 +1,6 @@
 ﻿using ABI_RC.Core.Savior;
+using ABI_RC.Systems.InputManagement;
+using ABI_RC.Systems.InputManagement.InputModules;
 
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
@@ -14,14 +16,17 @@ public class CVRInputManagerTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(bool intoVR)
     {
         DesktopVRSwitch.Logger.Msg("Resetting CVRInputManager inputs.");
 
         CVRInputManager.Instance.inputEnabled = true;
+        
+        // IM CRYING
+        CVRInputManager.Instance.reload = true;
 
         //just in case
-        CVRInputManager.Instance.blockedByUi = false;
+        CVRInputManager.Instance.textInputFocused = false;
         //sometimes head can get stuck, so just in case
         CVRInputManager.Instance.independentHeadToggle = false;
         //just nice to load into desktop with idle gesture
@@ -31,5 +36,12 @@ public class CVRInputManagerTracker : VRModeTracker
         CVRInputManager.Instance.gestureRightRaw = 0f;
         //turn off finger tracking input
         CVRInputManager.Instance.individualFingerTracking = false;
+        
+        //add input module if you started in desktop
+        if (CVRInputManager._moduleXR == null)
+            CVRInputManager.Instance.AddInputModule(CVRInputManager._moduleXR = new CVRInputModule_XR());
+
+        //enable xr input or whatnot
+        CVRInputManager._moduleXR.InputEnabled = intoVR;
     }
 }

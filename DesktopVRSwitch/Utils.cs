@@ -9,11 +9,7 @@ internal static class Utils
 {
     internal static GameObject GetPlayerCameraObject(bool intoVR)
     {
-        if (intoVR)
-        {
-            return PlayerSetup.Instance.vrCamera;
-        }
-        return PlayerSetup.Instance.desktopCamera;
+        return intoVR ? PlayerSetup.Instance.vrCamera : PlayerSetup.Instance.desktopCamera;
     }
 
     internal static void ClearLocalAvatar()
@@ -27,10 +23,4 @@ internal static class Utils
         DesktopVRSwitch.Logger.Msg("Attempting to reload current local avatar from GUID.");
         AssetManagement.Instance.LoadLocalAvatar(MetaPort.Instance.currentAvatarGuid);
     }
-
-    internal static bool IsLocalAvatarLoaded()
-    {
-        return PlayerSetup.Instance._avatar != null;
-    }
-
 }

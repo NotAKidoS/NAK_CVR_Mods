@@ -3,7 +3,6 @@ using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.TrackingModules;
-using cohtml;
 using HarmonyLib;
 using NAK.DesktopVRSwitch.Patches;
 using NAK.DesktopVRSwitch.VRModeTrackers;
@@ -12,11 +11,11 @@ using Valve.VR;
 
 namespace NAK.DesktopVRSwitch.HarmonyPatches;
 
-class CheckVRPatches
+internal class CheckVRPatches
 {
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CheckVR), nameof(CheckVR.Start))]
-    static void Postfix_CheckVR_Start(ref CheckVR __instance)
+    [HarmonyPatch(typeof(CheckVR), nameof(CheckVR.Awake))]
+    private static void Postfix_CheckVR_Start(ref CheckVR __instance)
     {
         try
         {
@@ -30,33 +29,19 @@ class CheckVRPatches
     }
 }
 
-class IKSystemPatches
+internal class IKSystemPatches
 {
-    [HarmonyPostfix] //lazy fix so i dont need to wait few frames
-    [HarmonyPatch(typeof(TrackingPoint), nameof(TrackingPoint.Initialize))]
-    static void Postfix_TrackingPoint_Initialize(ref TrackingPoint __instance)
-    {
-        try
-        {
-            __instance.referenceTransform.localScale = Vector3.one;
-        }
-        catch (Exception e)
-        {
-            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_TrackingPoint_Initialize)}");
-            DesktopVRSwitch.Logger.Error(e);
-        }
-    }
-
-    [HarmonyPostfix] //lazy fix so device indecies can change properly
+    [HarmonyPostfix] //lazy fix so device indices can change properly
     [HarmonyPatch(typeof(SteamVRTrackingModule), nameof(SteamVRTrackingModule.ModuleDestroy))]
-    static void Postfix_SteamVRTrackingModule_ModuleDestroy(ref SteamVRTrackingModule __instance)
+    private static void Postfix_SteamVRTrackingModule_ModuleDestroy(ref SteamVRTrackingModule __instance)
     {
         try
         {
-            for (int i = 0; i < __instance.TrackingPoints.Count; i++)
+            foreach (TrackingPoint t in __instance.TrackingPoints)
             {
-                UnityEngine.Object.Destroy(__instance.TrackingPoints[i].referenceGameObject);
+                UnityEngine.Object.Destroy(t.referenceGameObject);
             }
+
             __instance.TrackingPoints.Clear();
         }
         catch (Exception e)
@@ -67,12 +52,12 @@ class IKSystemPatches
     }
 }
 
-class CVRWorldPatches
+internal class CVRWorldPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.SetDefaultCamValues))]
     [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.CopyRefCamValues))]
-    static void Postfix_CVRWorld_HandleCamValues()
+    private static void Postfix_CVRWorld_HandleCamValues()
     {
         try
         {
@@ -86,11 +71,11 @@ class CVRWorldPatches
     }
 }
 
-class CameraFacingObjectPatches
+internal class CameraFacingObjectPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CameraFacingObject), nameof(CameraFacingObject.Start))]
-    static void Postfix_CameraFacingObject_Start(ref CameraFacingObject __instance)
+    private static void Postfix_CameraFacingObject_Start(ref CameraFacingObject __instance)
     {
         try
         {
@@ -104,11 +89,11 @@ class CameraFacingObjectPatches
     }
 }
 
-class CVRPickupObjectPatches
+internal class CVRPickupObjectPatches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(CVRPickupObject), nameof(CVRPickupObject.Start))]
-    static void Prefix_CVRPickupObject_Start(ref CVRPickupObject __instance)
+    private static void Prefix_CVRPickupObject_Start(ref CVRPickupObject __instance)
     {
         try
         {
@@ -119,7 +104,7 @@ class CVRPickupObjectPatches
             Transform desktopOrigin = vrOrigin?.Find("[Desktop]");
             if (vrOrigin != null && desktopOrigin != null)
             {
-                var tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
+                CVRPickupObjectTracker tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
                 tracker._pickupObject = __instance;
                 tracker._storedGripOrigin = (!MetaPort.Instance.isUsingVr ? vrOrigin : desktopOrigin);
             }
@@ -132,42 +117,18 @@ class CVRPickupObjectPatches
     }
 }
 
-class CohtmlUISystemPatches
-{
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(CohtmlUISystem), nameof(CohtmlUISystem.RegisterGamepad))]
-    [HarmonyPatch(typeof(CohtmlUISystem), nameof(CohtmlUISystem.UnregisterGamepad))]
-    [HarmonyPatch(typeof(CohtmlUISystem), nameof(CohtmlUISystem.UpdateGamepadState))]
-    static bool Prefix_CohtmlUISystem_FuckOff()
-    {
-        /** 
-         GameFace Version 1.34.0.4 – released 10 Nov 2022
-        	Fixed a crash when registering and unregistering gamepads
-            Fix	Fixed setting a gamepad object when creating GamepadEvent from JavaScript
-            Fix	Fixed a crash when unregistering a gamepad twice
-            Fix	Fixed a GamepadEvent related crash during garbage collector tracing
-
-            we are using 1.17.0 (released 10/09/21) :):):)
-        **/
-
-        // dont
-        return false;
-    }
-}
-
-class SteamVRBehaviourPatches
+internal class SteamVRBehaviourPatches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SteamVR_Behaviour), nameof(SteamVR_Behaviour.OnQuit))]
-    static bool Prefix_SteamVR_Behaviour_OnQuit()
+    private static bool Prefix_SteamVR_Behaviour_OnQuit()
     {
-        if (DesktopVRSwitch.EntrySwitchToDesktopOnExit.Value)
-        {
-            // If we don't switch fast enough, SteamVR will force close.
-            // World Transition might cause issues. Might need to override.
-            VRModeSwitchManager.Instance?.AttemptSwitch();
-            return false;
-        }
-        return true;
+        if (!DesktopVRSwitch.EntrySwitchToDesktopOnExit.Value) 
+            return true;
+        
+        // If we don't switch fast enough, SteamVR will force close.
+        // World Transition might cause issues. Might need to override.
+        VRModeSwitchManager.Instance?.AttemptSwitch();
+        return false;
     }
 }

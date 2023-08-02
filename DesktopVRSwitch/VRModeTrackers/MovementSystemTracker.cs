@@ -28,9 +28,10 @@ public class MovementSystemTracker : VRModeTracker
 
         DesktopVRSwitch.Logger.Msg("Storing player world position and rotation.");
 
-        preSwitchWorldPosition = MovementSystem.Instance.rotationPivot.transform.position;
+        var pivotTransform = MovementSystem.Instance.rotationPivot.transform;
+        preSwitchWorldPosition = pivotTransform.position;
         preSwitchWorldPosition.y = MovementSystem.Instance.transform.position.y;
-        preSwitchWorldRotation = MovementSystem.Instance.rotationPivot.transform.rotation;
+        preSwitchWorldRotation = pivotTransform.rotation;
 
         MovementSystem.Instance.ChangeCrouch(false);
         MovementSystem.Instance.ChangeProne(false);

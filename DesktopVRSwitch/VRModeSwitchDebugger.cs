@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace NAK.DesktopVRSwitch;
 
-class VRModeSwitchDebugger : MonoBehaviour
+internal class VRModeSwitchDebugger : MonoBehaviour
 {
-    Coroutine _switchCoroutine;
-    WaitForSeconds _sleep;
+    private Coroutine _switchCoroutine;
+    private WaitForSeconds _sleep;
 
-    void OnEnable()
+    private void OnEnable()
     {
         if (_switchCoroutine == null)
         {
@@ -17,7 +17,7 @@ class VRModeSwitchDebugger : MonoBehaviour
         }
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         if (_switchCoroutine != null)
         {
@@ -27,7 +27,7 @@ class VRModeSwitchDebugger : MonoBehaviour
         }
     }
 
-    IEnumerator SwitchLoop()
+    private IEnumerator SwitchLoop()
     {
         while (true)
         {

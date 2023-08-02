@@ -29,7 +29,7 @@ public class VRModeSwitchManager : MonoBehaviour
     public static event UnityAction<bool> OnPreVRModeSwitch;
     public static event UnityAction<bool> OnPostVRModeSwitch;
     public static event UnityAction<bool> OnFailVRModeSwitch;
-    const string XRSETTINGS_DEVICE = "OpenVR";
+    private const string XRSETTINGS_DEVICE = "OpenVR";
 
     public static void RegisterVRModeTracker(VRModeTracker observer)
     {
@@ -49,7 +49,7 @@ public class VRModeSwitchManager : MonoBehaviour
     
     public bool SwitchInProgress { get; private set; }
 
-    void Awake()
+    private void Awake()
     {
         if (Instance != null)
         {

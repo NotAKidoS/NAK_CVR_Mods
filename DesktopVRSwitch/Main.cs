@@ -40,8 +40,6 @@ public class DesktopVRSwitch : MelonMod
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
         // post processing fixes
         ApplyPatches(typeof(HarmonyPatches.CVRWorldPatches));
-        // cohtml gamepad handling nuke
-        ApplyPatches(typeof(HarmonyPatches.CohtmlUISystemPatches));
 
         // prevent steamvr behaviour from closing game
         ApplyPatches(typeof(HarmonyPatches.SteamVRBehaviourPatches));
@@ -55,7 +53,7 @@ public class DesktopVRSwitch : MelonMod
         }
     }
 
-    void RegisterVRModeTrackers()
+    private static void RegisterVRModeTrackers()
     {
         // Core trackers
         VRModeSwitchManager.RegisterVRModeTracker(new CheckVRTracker());
@@ -86,7 +84,7 @@ public class DesktopVRSwitch : MelonMod
         VRModeSwitchManager.RegisterVRModeTracker(new CVRWorldTracker());
     }
 
-    void ApplyPatches(Type type)
+    private void ApplyPatches(Type type)
     {
         try
         {
