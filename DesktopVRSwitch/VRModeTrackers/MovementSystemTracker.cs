@@ -23,7 +23,7 @@ public class MovementSystemTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPreSwitch(bool intoVR)
+    private void OnPreSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
 
         DesktopVRSwitch.Logger.Msg("Storing player world position and rotation.");
@@ -39,17 +39,17 @@ public class MovementSystemTracker : VRModeTracker
 
     }
 
-    private void OnFailedSwitch(bool intoVR)
+    private void OnFailedSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Resetting MovementSystem mobility.");
 
         MovementSystem.Instance.SetImmobilized(false);
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         // Lazy
-        MelonLoader.MelonCoroutines.Start(TeleportFrameAfter(intoVR));
+        MelonLoader.MelonCoroutines.Start(TeleportFrameAfter(args.IsUsingVr));
     }
 
     private IEnumerator TeleportFrameAfter(bool intoVR)

@@ -3,6 +3,8 @@ using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.TrackingModules;
+using cohtml;
+using cohtml.Net;
 using HarmonyLib;
 using NAK.DesktopVRSwitch.Patches;
 using NAK.DesktopVRSwitch.VRModeTrackers;
@@ -117,13 +119,36 @@ internal class CVRPickupObjectPatches
     }
 }
 
+internal class CohtmlUISystemPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.RegisterGamepad))]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UnregisterGamepad))]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadState))]
+    private static bool Prefix_UISystem_FuckOff()
+    {
+        /**
+            GameFace Version 1.34.0.4 – released 10 Nov 2022
+            Fixed a crash when registering and unregistering gamepads
+            Fix	Fixed setting a gamepad object when creating GamepadEvent from JavaScript
+            Fix	Fixed a crash when unregistering a gamepad twice
+            Fix	Fixed a GamepadEvent related crash during garbage collector tracing
+
+            it is not fixed you fucking piece of shit
+        **/
+
+        // dont
+        return false;
+    }
+}
+
 internal class SteamVRBehaviourPatches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SteamVR_Behaviour), nameof(SteamVR_Behaviour.OnQuit))]
     private static bool Prefix_SteamVR_Behaviour_OnQuit()
     {
-        if (!DesktopVRSwitch.EntrySwitchToDesktopOnExit.Value) 
+        if (!ModSettings.EntrySwitchToDesktopOnExit.Value) 
             return true;
         
         // If we don't switch fast enough, SteamVR will force close.

@@ -17,7 +17,7 @@ public class CVRWorldTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Configuring CVRWorld. Updating PostProcessing & DesktopCameraController FOV settings.");
 

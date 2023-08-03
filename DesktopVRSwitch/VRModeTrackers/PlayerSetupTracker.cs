@@ -14,11 +14,11 @@ public class PlayerSetupTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Switching active PlayerSetup camera rigs. Updating Desktop camera FOV.");
 
-        PlayerSetup.Instance.desktopCameraRig.SetActive(!intoVR);
-        PlayerSetup.Instance.vrCameraRig.SetActive(intoVR);
+        PlayerSetup.Instance.desktopCameraRig.SetActive(!args.IsUsingVr);
+        PlayerSetup.Instance.vrCameraRig.SetActive(args.IsUsingVr);
     }
 }

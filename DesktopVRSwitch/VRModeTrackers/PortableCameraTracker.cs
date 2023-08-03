@@ -14,7 +14,7 @@ public class PortableCameraTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Forcing PortableCamera canvas mirroring off.");
 

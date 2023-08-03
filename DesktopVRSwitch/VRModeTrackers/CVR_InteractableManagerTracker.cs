@@ -14,10 +14,10 @@ public class CVR_InteractableManagerTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
-        DesktopVRSwitch.Logger.Msg($"Setting CVRInputManager inputEnabled & CVR_InteractableManager enableInteractions to {!intoVR}");
+        DesktopVRSwitch.Logger.Msg($"Setting CVRInputManager inputEnabled & CVR_InteractableManager enableInteractions to {!args.IsUsingVr}");
 
-        CVR_InteractableManager.enableInteractions = !intoVR;
+        CVR_InteractableManager.enableInteractions = !args.IsUsingVr;
     }
 }

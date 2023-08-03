@@ -20,7 +20,7 @@ public class IKSystemTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPreSwitch(bool intoVR)
+    private void OnPreSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         BodySystem.TrackingEnabled = false;
         BodySystem.TrackingPositionWeight = 0f;
@@ -30,7 +30,7 @@ public class IKSystemTracker : VRModeTracker
             IKSystem.vrik.enabled = false;
     }
 
-    private void OnFailedSwitch(bool intoVR)
+    private void OnFailedSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         BodySystem.TrackingEnabled = true;
         BodySystem.TrackingPositionWeight = 1f;
@@ -40,7 +40,7 @@ public class IKSystemTracker : VRModeTracker
             IKSystem.vrik.enabled = true;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         if (IKSystem.vrik != null)
             UnityEngine.Object.DestroyImmediate(IKSystem.vrik);
@@ -54,12 +54,12 @@ public class IKSystemTracker : VRModeTracker
         BodySystem.isRecalibration = false;
 
         // Make it so you don't instantly end up in FBT from Desktop
-        IKSystem.firstAvatarLoaded = DesktopVRSwitch.EntryEnterCalibrationOnSwitch.Value;
+        IKSystem.firstAvatarLoaded = ModSettings.EntryEnterCalibrationOnSwitch.Value;
 
         // Turn off finger tracking just in case the user switched controllers
         IKSystem.Instance.FingerSystem.controlActive = false;
 
-        SetupSteamVRTrackingModule(intoVR);
+        SetupSteamVRTrackingModule(args.IsUsingVr);
     }
 
     private void SetupSteamVRTrackingModule(bool enableVR)
@@ -69,13 +69,9 @@ public class IKSystemTracker : VRModeTracker
         if (openVRModule != null)
         {
             if (enableVR)
-            {
                 openVRModule.ModuleStart();
-            }
             else
-            {
                 openVRModule.ModuleDestroy();
-            }
         }
         else if (enableVR)
         {

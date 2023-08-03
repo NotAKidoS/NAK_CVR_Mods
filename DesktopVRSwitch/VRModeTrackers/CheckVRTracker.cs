@@ -14,8 +14,8 @@ public class CheckVRTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
-        CheckVR.Instance.hasVrDeviceLoaded = intoVR;
+        CheckVR.Instance.hasVrDeviceLoaded = args.IsUsingVr;
     }
 }

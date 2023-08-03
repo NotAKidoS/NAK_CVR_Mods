@@ -2,53 +2,32 @@
 using NAK.DesktopVRSwitch.VRModeTrackers;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.XR;
 using UnityEngine.XR.Management;
-using Valve.VR;
-
-/**
-
-    I am unsure about this observer approach as only a few things need OnPre and OnFailed switch.
-    Those wouldn't be needed if I can start OpenVR before all that anyways.
-
-    Or... I just start OpenVR and see if it worked. OnPreSwitch would only be needed by menus & transition.
-
-    I think I should just use Unity Events as they would allow easier mod support. Subscribe to what you need.
-
-**/
 
 namespace NAK.DesktopVRSwitch;
 
 public class VRModeSwitchManager : MonoBehaviour
 {
+    #region Static
+
     public static VRModeSwitchManager Instance { get; private set; }
+    
+    public static void RegisterVRModeTracker(VRModeTracker observer) => observer.TrackerInit();
+    public static void UnregisterVRModeTracker(VRModeTracker observer) => observer.TrackerDestroy();
+    
+    #endregion
 
-    // I don't think I *need* this. Only using cause I don't want stuff just existing.
-    private static readonly List<VRModeTracker> _vrModeTrackers = new List<VRModeTracker>();
-
-    public static event UnityAction<bool> OnPreVRModeSwitch;
-    public static event UnityAction<bool> OnPostVRModeSwitch;
-    public static event UnityAction<bool> OnFailVRModeSwitch;
-    private const string XRSETTINGS_DEVICE = "OpenVR";
-
-    public static void RegisterVRModeTracker(VRModeTracker observer)
-    {
-        _vrModeTrackers.Add(observer);
-        observer.TrackerInit();
-    }
-
-    public static void UnregisterVRModeTracker(VRModeTracker observer)
-    {
-        _vrModeTrackers.Remove(observer);
-        observer.TrackerDestroy();
-    }
+    #region Variables
 
     // Settings
     public bool UseWorldTransition = true;
     public bool ReloadLocalAvatar = true;
     
     public bool SwitchInProgress { get; private set; }
+
+    #endregion
+    
+    #region Unity Methods
 
     private void Awake()
     {
@@ -60,125 +39,120 @@ public class VRModeSwitchManager : MonoBehaviour
         Instance = this;
     }
 
-    public void AttemptSwitch()
-    {
-        StartCoroutine(StartSwitchCoroutine());
-    }
+    #endregion
 
-    private IEnumerator StartSwitchCoroutine()
+    #region Public Methods
+
+    public static bool IsInXR() => XRGeneralSettings.Instance.Manager.activeLoader != null;
+    
+    public void AttemptSwitch() => StartCoroutine(StartSwitchInternal());
+    
+    #endregion
+    
+    #region Private Methods
+
+    private IEnumerator StartSwitchInternal()
     {
-        if (SwitchInProgress)
-        {
+        if (SwitchInProgress) 
             yield break;
-        }
+        
         SwitchInProgress = true;
         yield return null;
-
-
+    
         if (UseWorldTransition)
-        {   // start visual transition and wait for it to complete
-            WorldTransitionSystem.Instance.StartTransition();
-            yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
-        }
+            yield return StartCoroutine(StartTransition());
 
-        // Check if OpenVR is running
         bool isUsingVr = IsInXR();
 
         InvokeOnPreSwitch(isUsingVr);
 
-        // Start switch
-        if (!isUsingVr)
-            yield return StartCoroutine(StartXR());
-        else
-            StopXR();
-
-        // Check for updated VR mode
-        if (isUsingVr != IsInXR())
-        {
-            // reload the local avatar
-            if (ReloadLocalAvatar)
-            {
-                Utils.ClearLocalAvatar();
-                Utils.ReloadLocalAvatar();
-            }
-
-            InvokeOnPostSwitch(!isUsingVr);
-        }
-        else
-        {
-            InvokeOnFailedSwitch(!isUsingVr);
-        }
+        yield return StartCoroutine(XRAndReloadAvatar(!isUsingVr));
 
         if (UseWorldTransition)
-        {   // would be cool to have out length
-            WorldTransitionSystem.Instance.ContinueTransition();
-            yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
-        }
+            yield return StartCoroutine(ContinueTransition());
 
         SwitchInProgress = false;
-        yield break;
+    }
+    
+    private IEnumerator XRAndReloadAvatar(bool start)
+    {
+        yield return StartCoroutine(start ? XRHandler.StartXR() : XRHandler.StopXR());
+
+        bool isUsingVr = IsInXR();
+        if (isUsingVr == start)
+        {
+            ReloadAvatar();
+            InvokeOnPostSwitch(start);
+        }
+        else
+        {
+            InvokeOnFailedSwitch(start);
+        }
+    }
+    
+    private void ReloadAvatar()
+    {
+        if (!ReloadLocalAvatar) 
+            return;
+        
+        Utils.ClearLocalAvatar();
+        Utils.ReloadLocalAvatar();
     }
 
-    private void SafeInvokeUnityEvent(UnityAction<bool> switchEvent, bool isUsingVr)
+    #endregion
+    
+    #region Transition Coroutines
+
+    private IEnumerator StartTransition()
+    {
+        if (WorldTransitionSystem.Instance == null) yield break;
+        WorldTransitionSystem.Instance.StartTransition();
+        yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
+    }
+
+    private IEnumerator ContinueTransition()
+    {
+        if (WorldTransitionSystem.Instance == null) yield break;
+        WorldTransitionSystem.Instance.ContinueTransition();
+        yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
+    }
+
+    #endregion
+
+    #region Event Handling
+
+    public class VRModeEventArgs : EventArgs
+    {
+        public bool IsUsingVr { get; }
+        public Camera PlayerCamera { get; }
+
+        public VRModeEventArgs(bool isUsingVr, Camera playerCamera)
+        {
+            IsUsingVr = isUsingVr;
+            PlayerCamera = playerCamera;
+        }
+    }
+    
+    public static event EventHandler<VRModeEventArgs> OnPreVRModeSwitch;
+    public static event EventHandler<VRModeEventArgs> OnPostVRModeSwitch;
+    public static event EventHandler<VRModeEventArgs> OnFailVRModeSwitch;
+
+    private void InvokeOnPreSwitch(bool isUsingVr) => SafeInvokeUnityEvent(OnPreVRModeSwitch, isUsingVr);
+    private void InvokeOnPostSwitch(bool isUsingVr) => SafeInvokeUnityEvent(OnPostVRModeSwitch, isUsingVr);
+    private void InvokeOnFailedSwitch(bool isUsingVr) => SafeInvokeUnityEvent(OnFailVRModeSwitch, isUsingVr);
+
+    private void SafeInvokeUnityEvent(EventHandler<VRModeEventArgs> switchEvent, bool isUsingVr)
     {
         try
         {
-            switchEvent.Invoke(isUsingVr);
+            var playerCamera = Utils.GetPlayerCameraObject(isUsingVr).GetComponent<Camera>();
+            switchEvent?.Invoke(this, new VRModeEventArgs(isUsingVr, playerCamera));
         }
         catch (Exception e)
         {
-            Debug.Log($"Error in event handler: {e}");
+            DesktopVRSwitch.Logger.Error($"Error in event handler: {e}");
         }
     }
-
-    private void InvokeOnPreSwitch(bool isUsingVr)
-    {
-        SafeInvokeUnityEvent(OnPreVRModeSwitch, isUsingVr);
-    }
-
-    private void InvokeOnPostSwitch(bool isUsingVr)
-    {
-        SafeInvokeUnityEvent(OnPostVRModeSwitch, isUsingVr);
-    }
-
-    private void InvokeOnFailedSwitch(bool isUsingVr)
-    {
-        SafeInvokeUnityEvent(OnFailVRModeSwitch, isUsingVr);
-    }
-
-    public bool IsInXR() => XRGeneralSettings.Instance.Manager.activeLoader != null;
-
-    private IEnumerator StartXR()
-    {
-        yield return null; // wait a frame before checking
-        yield return XRGeneralSettings.Instance.Manager.InitializeLoader();
-        
-        if (XRGeneralSettings.Instance.Manager.activeLoader != null)
-        {
-            XRGeneralSettings.Instance.Manager.StartSubsystems();
-        }
-
-        yield return null;
-        yield break;
-    }
-
-    private void StopXR()
-    {
-        if (!XRGeneralSettings.Instance.Manager.isInitializationComplete)
-            return;
-        
-        // Forces SteamVR to reinitialize SteamVR_Input next switch
-        SteamVR_ActionSet_Manager.DisableAllActionSets();
-        SteamVR_Input.initialized = false;
-
-        // Remove SteamVR behaviour & render
-        DestroyImmediate(SteamVR_Behaviour.instance.gameObject);
-        SteamVR.enabled = false; // disposes SteamVR
-
-        // Disable UnityXR
-        XRGeneralSettings.Instance.Manager.StopSubsystems();
-        XRGeneralSettings.Instance.Manager.DeinitializeLoader();
-
-        // We don't really need to wait a frame on Stop()
-    }
+    
+    #endregion
 }

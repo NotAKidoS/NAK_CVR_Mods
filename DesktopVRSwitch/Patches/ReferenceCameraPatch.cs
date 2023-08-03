@@ -9,7 +9,7 @@ using UnityEngine.Rendering.PostProcessing;
 
 namespace NAK.DesktopVRSwitch.Patches;
 
-internal class ReferenceCameraPatch
+internal static class ReferenceCameraPatch
 {
     public static void OnWorldLoad()
     {
@@ -31,13 +31,15 @@ internal class ReferenceCameraPatch
         inactiveCam.depthTextureMode = activeCam.depthTextureMode;
 
         // We cant copy this because we set it to 0 with ThirdPerson
-        inactiveCam.cullingMask &= -32769;
-        inactiveCam.cullingMask |= 256;
-        inactiveCam.cullingMask |= 512;
-        inactiveCam.cullingMask |= 32;
-        inactiveCam.cullingMask &= -4097;
-        inactiveCam.cullingMask |= 1024;
-        inactiveCam.cullingMask |= 8192;
+        var cullingMask = inactiveCam.cullingMask;
+        cullingMask &= -32769;
+        cullingMask |= 256;
+        cullingMask |= 512;
+        cullingMask |= 32;
+        cullingMask &= -4097;
+        cullingMask |= 1024;
+        cullingMask |= 8192;
+        inactiveCam.cullingMask = cullingMask;
 
         // Copy post processing if added
         PostProcessLayer ppLayerActiveCam = activeCam.GetComponent<PostProcessLayer>();

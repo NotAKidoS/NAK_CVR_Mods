@@ -17,18 +17,18 @@ public class CVR_MenuManagerTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPreSwitch(bool intoVR)
+    private void OnPreSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Closing CVR_MenuManager - Quick Menu.");
 
         CVR_MenuManager.Instance.ToggleQuickMenu(false);
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Updating CVR_Menu_Data core data.");
 
-        CVR_MenuManager.Instance.coreData.core.inVr = intoVR;
+        CVR_MenuManager.Instance.coreData.core.inVr = args.IsUsingVr;
         CVR_MenuManager.Instance.quickMenu.transform.localPosition = Vector3.zero;
         CVR_MenuManager.Instance.quickMenu.transform.localRotation = Quaternion.identity;
     }

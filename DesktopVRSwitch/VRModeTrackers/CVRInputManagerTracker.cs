@@ -16,14 +16,14 @@ public class CVRInputManagerTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Resetting CVRInputManager inputs.");
 
         CVRInputManager.Instance.inputEnabled = true;
         
         // IM CRYING
-        CVRInputManager.Instance.reload = true;
+        //CVRInputManager.Instance.reload = true;
 
         //just in case
         CVRInputManager.Instance.textInputFocused = false;
@@ -42,6 +42,6 @@ public class CVRInputManagerTracker : VRModeTracker
             CVRInputManager.Instance.AddInputModule(CVRInputManager._moduleXR = new CVRInputModule_XR());
 
         //enable xr input or whatnot
-        CVRInputManager._moduleXR.InputEnabled = intoVR;
+        CVRInputManager._moduleXR.InputEnabled = args.IsUsingVr;
     }
 }

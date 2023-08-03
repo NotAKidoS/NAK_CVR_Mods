@@ -16,11 +16,11 @@ public class CohtmlHudTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         DesktopVRSwitch.Logger.Msg("Configuring new hud affinity for CohtmlHud.");
 
-        CohtmlHud.Instance.gameObject.transform.parent = Utils.GetPlayerCameraObject(intoVR).transform;
+        CohtmlHud.Instance.gameObject.transform.parent = Utils.GetPlayerCameraObject(args.IsUsingVr).transform;
         // This handles rotation and position
         CVRTools.ConfigureHudAffinity();
         CohtmlHud.Instance.gameObject.transform.localScale = new Vector3(1.2f, 1f, 1.2f);

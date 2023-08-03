@@ -18,7 +18,7 @@ public class CVRPickupObjectTracker : MonoBehaviour
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    public void OnPostSwitch(bool intoVR)
+    public void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
         if (_pickupObject != null)
         {

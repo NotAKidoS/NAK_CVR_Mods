@@ -18,9 +18,8 @@ public class CameraFacingObjectTracker : MonoBehaviour
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    public void OnPostSwitch(bool intoVR)
+    public void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
-        // TODO: cache camera
-        _cameraFacingObject.m_Camera = Utils.GetPlayerCameraObject(intoVR).GetComponent<Camera>();
+        _cameraFacingObject.m_Camera = args.PlayerCamera;
     }
 }

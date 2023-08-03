@@ -17,16 +17,16 @@ public class MetaPortTracker : VRModeTracker
         VRModeSwitchManager.OnPostVRModeSwitch -= OnPostSwitch;
     }
 
-    private void OnPostSwitch(bool intoVR)
+    private void OnPostSwitch(object sender, VRModeSwitchManager.VRModeEventArgs args)
     {
-        DesktopVRSwitch.Logger.Msg($"Setting MetaPort isUsingVr to {intoVR}.");
+        DesktopVRSwitch.Logger.Msg($"Setting MetaPort isUsingVr to {args.IsUsingVr}.");
 
         // Main thing most of the game checks for if using VR
-        MetaPort.Instance.isUsingVr = intoVR;
+        MetaPort.Instance.isUsingVr = args.IsUsingVr;
 
         // replace
         UpdateRichPresence();
-        ResetSteamVROverrides(intoVR);
+        ResetSteamVROverrides(args.IsUsingVr);
     }
 
     private void UpdateRichPresence()
