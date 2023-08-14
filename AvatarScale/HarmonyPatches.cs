@@ -8,11 +8,11 @@ using RootMotion.FinalIK;
 
 namespace NAK.AvatarScaleMod.HarmonyPatches;
 
-class PlayerSetupPatches
+internal class PlayerSetupPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatar))]
-    static void Postfix_PlayerSetup_SetupAvatar(ref PlayerSetup __instance)
+    private static void Postfix_PlayerSetup_SetupAvatar(ref PlayerSetup __instance)
     {
         try
         {
@@ -27,11 +27,11 @@ class PlayerSetupPatches
     }
 }
 
-class PuppetMasterPatches
+internal class PuppetMasterPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PuppetMaster), nameof(PuppetMaster.AvatarInstantiated))]
-    static void Postfix_PuppetMaster_AvatarInstantiated(ref PuppetMaster __instance)
+    private static void Postfix_PuppetMaster_AvatarInstantiated(ref PuppetMaster __instance)
     {
         try
         {
@@ -45,11 +45,11 @@ class PuppetMasterPatches
     }
 }
 
-class GesturePlaneTestPatches
+internal class GesturePlaneTestPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(GesturePlaneTest), nameof(GesturePlaneTest.Start))]
-    static void Postfix_GesturePlaneTest_Start()
+    private static void Postfix_GesturePlaneTest_Start()
     {
         try
         {

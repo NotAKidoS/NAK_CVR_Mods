@@ -16,7 +16,7 @@ public class AvatarScaleMod : MelonMod
         ApplyPatches(typeof(HarmonyPatches.GesturePlaneTestPatches));
     }
 
-    void ApplyPatches(Type type)
+    private void ApplyPatches(Type type)
     {
         try
         {

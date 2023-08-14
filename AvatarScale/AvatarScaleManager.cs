@@ -220,13 +220,13 @@ public class AvatarScaleManager : MonoBehaviour
         }
     }
 
-    void Update()
+    private void Update()
     {
         ApplyAvatarScaling();
         ApplyComponentScaling();
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         ApplyAvatarScaling();
         ApplyComponentScaling();

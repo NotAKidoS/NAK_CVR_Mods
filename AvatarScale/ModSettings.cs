@@ -4,7 +4,7 @@ namespace NAK.AvatarScaleMod;
 
 // i like this
 
-static class ModSettings
+internal static class ModSettings
 {
     public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(AvatarScaleMod));
@@ -27,12 +27,12 @@ static class ModSettings
         AvatarScaleGesture.GestureEnabled = EntryUseScaleGesture.Value;
     }
 
-    static void OnEntryEnabledChanged(bool oldValue, bool newValue)
+    private static void OnEntryEnabledChanged(bool oldValue, bool newValue)
     {
         AvatarScaleManager.GlobalEnabled = newValue;
     }
 
-    static void OnEntryUseScaleGestureChanged(bool oldValue, bool newValue)
+    private static void OnEntryUseScaleGestureChanged(bool oldValue, bool newValue)
     {
         AvatarScaleGesture.GestureEnabled = newValue;
     }
