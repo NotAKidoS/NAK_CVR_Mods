@@ -23,12 +23,12 @@ public class MainMenuHelper : MonoBehaviour
     public bool NeedsPositionUpdate;
     public bool MenuIsOpen;
 
-    void Awake()
+    private void Awake()
     {
         Instance = this;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (!MenuIsOpen) return;
 
