@@ -19,7 +19,7 @@ internal class ChatBoxCommands : CommandBase
         {
             RemoteCommandListenForSelf(message, args =>
             {
-                API.SendMessage("/pong " + GetPlayerUsername(sender), false, true);
+                API.SendMessage("/pong " + GetPlayerUsername(sender), false, true, true);
             });
         });
 
@@ -33,10 +33,10 @@ internal class ChatBoxCommands : CommandBase
                 {
                     awaitingPing = false;
                     TimeSpan timeSincePing = DateTime.Now - pingTime; // calculate the time difference
-                    API.SendMessage($"Time since ping: {timeSincePing.TotalMilliseconds}ms", false, true);
+                    API.SendMessage($"Time since ping: {timeSincePing.TotalMilliseconds}ms", false, true, true);
                     return;
                 }
-                API.SendMessage($"You have to ping first, {GetPlayerUsername(sender)}!", false, true);
+                API.SendMessage($"You have to ping first, {GetPlayerUsername(sender)}!", false, true, true);
             });
         });
     }

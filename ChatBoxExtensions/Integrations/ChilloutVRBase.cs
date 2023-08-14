@@ -1,5 +1,5 @@
 ﻿using ABI_RC.Core;
-using ABI_RC.Core.Base;
+using ABI_RC.Core.Vivox;
 
 namespace NAK.ChatBoxExtensions.Integrations;
 
@@ -28,14 +28,14 @@ internal class ChilloutVRBaseCommands : CommandBase
         {
             LocalCommandIgnoreOthers(message, args =>
             {
-                Audio.SetMicrophoneActive(true);
+                VivoxDeviceHandler.InputMuted = true;
             });
         },
         onCommandReceived: (sender, message, sound, displayMsg) =>
         {
             RemoteCommandListenForAll(message, args =>
             {
-                Audio.SetMicrophoneActive(true);
+                VivoxDeviceHandler.InputMuted = false;
             });
         });
     }

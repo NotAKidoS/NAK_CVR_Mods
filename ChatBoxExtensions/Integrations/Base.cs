@@ -1,5 +1,5 @@
-﻿using ABI_RC.Core.Player;
-using ABI_RC.Core.Savior;
+﻿using ABI_RC.Core.Networking;
+using ABI_RC.Core.Player;
 
 namespace NAK.ChatBoxExtensions.Integrations;
 
@@ -18,9 +18,9 @@ public class CommandBase
         {
             string partialName = argument.Replace("*", "").Trim();
             if (String.IsNullOrWhiteSpace(partialName)) return false;
-            return MetaPort.Instance.username.Contains(partialName);
+            return AuthManager.username.Contains(partialName);
         }
-        return MetaPort.Instance.username == argument;
+        return AuthManager.username == argument;
     }
 
     internal static void LocalCommandIgnoreOthers(string argument, Action<string[]> callback)
