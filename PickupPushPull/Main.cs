@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
+using ABI_RC.Systems.InputManagement;
 using MelonLoader;
 using NAK.PickupPushPull.InputModules;
 
@@ -31,6 +32,8 @@ public class PickupPushPull : MelonMod
     public static readonly MelonPreferences_Entry<BindingOptionsVR.BindingOptions> EntryVRRotateBind = 
         Category.CreateEntry<BindingOptionsVR.BindingOptions>("VR Binding", BindingOptionsVR.BindingOptions.ButtonATouch);
 
+    public static PickupPushPull_Module _pushPullModule;
+
     public override void OnInitializeMelon()
     {
         foreach (var entry in Category.Entries)
@@ -43,16 +46,16 @@ public class PickupPushPull : MelonMod
         MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
     }
 
-
-    System.Collections.IEnumerator WaitForLocalPlayer()
+    private System.Collections.IEnumerator WaitForLocalPlayer()
     {
         while (PlayerSetup.Instance == null)
             yield return null;
 
-        CVRInputManager.Instance.gameObject.AddComponent<PickupPushPull_Module>();
+        _pushPullModule = new PickupPushPull_Module();
+        CVRInputManager.Instance.AddInputModule(_pushPullModule);
 
         //update BlackoutController settings after it initializes
-        while (PickupPushPull_Module.Instance == null)
+        while (_pushPullModule == null)
             yield return null;
 
         UpdateVRBinding();
@@ -64,7 +67,8 @@ public class PickupPushPull : MelonMod
 
     private void UpdateAllSettings()
     {
-        if (!PickupPushPull_Module.Instance) return;
+        if (PickupPushPull_Module.Instance == null) 
+            return;
 
         //Global settings
         PickupPushPull_Module.Instance.EntryPushPullSpeed = EntryPushPullSpeed.Value * 50;

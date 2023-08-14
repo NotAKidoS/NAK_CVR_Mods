@@ -5,6 +5,7 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using NAK.PickupPushPull.InputModules.Info;
 using System.Reflection;
+using ABI_RC.Systems.InputManagement;
 using UnityEngine;
 using UnityEngine.Events;
 using Valve.VR;
@@ -13,11 +14,6 @@ namespace NAK.PickupPushPull.InputModules;
 
 public class PickupPushPull_Module : CVRInputModule
 {
-    //Reflection shit
-    private static readonly FieldInfo _grabbedObject = typeof(ControllerRay).GetField("grabbedObject", BindingFlags.NonPublic | BindingFlags.Instance);
-
-    //Global stuff
-    public static PickupPushPull_Module Instance;
     public Vector2 objectRotation = Vector2.zero;
 
     //Global settings
@@ -31,7 +27,7 @@ public class PickupPushPull_Module : CVRInputModule
     //VR settings
     public BindingOptionsVR.BindHand VR_RotateHand = BindingOptionsVR.BindHand.LeftHand;
     public BindingOptionsVR.BindingOptions VR_RotateBind = BindingOptionsVR.BindingOptions.ButtonATouch;
-    private SteamVR_Action_Boolean VR_RotateBind_Boolean;
+    public SteamVR_Action_Boolean VR_RotateBind_Boolean;
 
     //Local stuff
     private ControllerRay desktopControllerRay;
@@ -49,7 +45,6 @@ public class PickupPushPull_Module : CVRInputModule
     public new void Start()
     {
         _inputManager = CVRInputManager.Instance;
-        Instance = this;
         base.Start();
 
         //Get desktop controller ray
@@ -175,9 +170,10 @@ public class PickupPushPull_Module : CVRInputModule
 
     private void DoSteamVRInput()
     {
-        CVRPickupObject leftObject = (CVRPickupObject)_grabbedObject.GetValue(PlayerSetup.Instance.leftRay);
-        CVRPickupObject rightObject = (CVRPickupObject)_grabbedObject.GetValue(PlayerSetup.Instance.rightRay);
-        if (leftObject == null && rightObject == null) return;
+        CVRPickupObject leftObject = PlayerSetup.Instance.leftRay.grabbedObject;
+        CVRPickupObject rightObject = PlayerSetup.Instance.rightRay.grabbedObject;
+        if (leftObject == null && rightObject == null) 
+            return;
 
         bool canRotate = (leftObject != null && leftObject.gripType == CVRPickupObject.GripType.Free) ||
                        (rightObject != null && rightObject.gripType == CVRPickupObject.GripType.Free);
@@ -191,10 +187,7 @@ public class PickupPushPull_Module : CVRInputModule
             objectRotation.y += EntryRotationSpeed * rawLookVector.y * -1;
 
             _inputManager.lookVector = Vector2.zero;
-            return;
         }
-
-        CVRInputManager.Instance.objectPushPull += CVRInputManager.Instance.floatDirection * EntryPushPullSpeed * Time.deltaTime;
     }
 
 }
