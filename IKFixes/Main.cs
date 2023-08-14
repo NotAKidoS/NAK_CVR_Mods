@@ -42,7 +42,7 @@ public class IKFixes : MelonMod
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));
     }
 
-    void ApplyPatches(Type type)
+    private void ApplyPatches(Type type)
     {
         try
         {

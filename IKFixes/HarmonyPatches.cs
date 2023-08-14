@@ -12,11 +12,11 @@ namespace NAK.IKFixes.HarmonyPatches;
 
 internal static class BodySystemPatches
 {
-    static float _ikSimulatedRootAngle = 0f;
+    private static float _ikSimulatedRootAngle = 0f;
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.SetupOffsets))]
-    static void Postfix_BodySystem_SetupOffsets(List<TrackingPoint> trackingPoints)
+    private static void Postfix_BodySystem_SetupOffsets(List<TrackingPoint> trackingPoints)
     {
         foreach (TrackingPoint trackingPoint in trackingPoints)
         {
@@ -68,7 +68,7 @@ internal static class BodySystemPatches
         }
     }
 
-    static void SetArmWeight(IKSolverVR.Arm arm, float weight)
+    private static void SetArmWeight(IKSolverVR.Arm arm, float weight)
     {
         arm.positionWeight = weight;
         arm.rotationWeight = weight;
@@ -78,14 +78,16 @@ internal static class BodySystemPatches
         // why is there no "usingElbowTracker" flag like knees? where is the consistancy???
         arm.bendGoalWeight = arm.bendGoal != null ? weight : 0f;
     }
-    static void SetLegWeight(IKSolverVR.Leg leg, float weight)
+
+    private static void SetLegWeight(IKSolverVR.Leg leg, float weight)
     {
         leg.positionWeight = weight;
         leg.rotationWeight = weight;
         // fixes knees bending to tracker if feet disabled (running anim)
         leg.bendGoalWeight = leg.usingKneeTracker ? weight : 0f;
     }
-    static void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
+
+    private static void SetPelvisWeight(IKSolverVR.Spine spine, float weight)
     {
         // looks better when hips are disabled while running
         spine.pelvisPositionWeight = weight;
@@ -94,7 +96,7 @@ internal static class BodySystemPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.Update))]
-    static bool Prefix_BodySystem_Update(ref BodySystem __instance)
+    private static bool Prefix_BodySystem_Update(ref BodySystem __instance)
     {
         if (IKSystem.vrik != null)
         {
@@ -190,14 +192,14 @@ internal static class BodySystemPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.AssignRemainingTrackers))]
-    static bool Prefix_BodySystem_AssignRemainingTrackers()
+    private static bool Prefix_BodySystem_AssignRemainingTrackers()
     {
         return IKFixes.EntryAssignRemainingTrackers.Value;
     }
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.MuscleUpdate))]
-    static void Prefix_BodySystem_MuscleUpdate()
+    private static void Prefix_BodySystem_MuscleUpdate()
     {
         if (BodySystem.isCalibrating)
         {
@@ -231,7 +233,7 @@ internal static class BodySystemPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.Calibrate))]
-    static void Postfix_BodySystem_Calibrate()
+    private static void Postfix_BodySystem_Calibrate()
     {
         IKSystem.Instance.applyOriginalHipPosition = false;
         IKSystem.Instance.applyOriginalHipRotation = false;
@@ -252,7 +254,7 @@ internal static class IKSystemPatches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeAvatar))]
-    static void Prefix_IKSystem_InitializeAvatar(ref IKSystem __instance)
+    private static void Prefix_IKSystem_InitializeAvatar(ref IKSystem __instance)
     {
         __instance.applyOriginalHipPosition = true;
         __instance.applyOriginalHipRotation = true;
@@ -260,7 +262,7 @@ internal static class IKSystemPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeHalfBodyIK))]
-    static void Prefix_IKSystem_InitializeHalfBodyIK(IKSystem __instance)
+    private static void Prefix_IKSystem_InitializeHalfBodyIK(IKSystem __instance)
     {
         if (IKSystem._vrik != null)
         {
@@ -284,7 +286,7 @@ internal static class IKSystemPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeHalfBodyIK))]
-    static void Postfix_IKSystem_InitializeHalfBodyIK(ref IKSystem __instance)
+    private static void Postfix_IKSystem_InitializeHalfBodyIK(ref IKSystem __instance)
     {
         if (!IKFixes.EntryUseIKPose.Value) return;
 
@@ -305,7 +307,7 @@ internal static class IKSystemPatches
         IKSystem.vrik.solver.Initiate(IKSystem.vrik.transform);
     }
 
-    static readonly float[] IKPoseMuscles = new float[]
+    private static readonly float[] IKPoseMuscles = new float[]
     {
             0.00133321f,
             8.195831E-06f,
@@ -417,7 +419,7 @@ internal static class VRIKPatches
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.Stretching))]
-    static void Postfix_IKSolverVR_Leg_Stretching(ref IKSolverVR.Leg __instance)
+    private static void Postfix_IKSolverVR_Leg_Stretching(ref IKSolverVR.Leg __instance)
     {
         // I am patching here because Stretching() is always called
         // and i am not doing a transpiler to place it on the second line
@@ -430,7 +432,7 @@ internal static class VRIKPatches
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.ApplyOffsets))]
-    static bool Prefix_IKSolverVR_Leg_ApplyOffsets(ref IKSolverVR.Leg __instance)
+    private static bool Prefix_IKSolverVR_Leg_ApplyOffsets(ref IKSolverVR.Leg __instance)
     {
         if (__instance.usingKneeTracker)
         {
@@ -465,13 +467,13 @@ internal static class VRIKPatches
 internal static class PlayerSetupPatches
 {
     // Last Movement Parent Info
-    static CVRMovementParent lastMovementParent;
-    static Vector3 lastMovementPosition;
-    static Quaternion lastMovementRotation;
+    private static CVRMovementParent lastMovementParent;
+    private static Vector3 lastMovementPosition;
+    private static Quaternion lastMovementRotation;
 
     [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ResetIk))]
-    static bool Prefix_PlayerSetup_ResetIk()
+    private static bool Prefix_PlayerSetup_ResetIk()
     {
         if (IKSystem.vrik == null) return false;
 
