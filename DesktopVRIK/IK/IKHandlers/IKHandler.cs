@@ -89,7 +89,7 @@ internal abstract class IKHandler
     protected virtual void Update_HeadWeight()
     {
         // There is no Head tracking setting
-        _solver.spine.rotationWeight = _solver.leftArm.positionWeight =
+        _solver.spine.rotationWeight = _solver.spine.positionWeight =
             GetTargetWeight(BodySystem.TrackingEnabled, _solver.spine.headTarget != null);
     }
 
