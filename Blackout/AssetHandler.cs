@@ -12,16 +12,15 @@ namespace NAK.Blackout;
 
 */
 
-
-static class AssetsHandler
+internal static class AssetsHandler
 {
-    static readonly List<string> ms_assets = new List<string>()
+    private static readonly List<string> ms_assets = new List<string>()
     {
         "blackout_controller.asset"
     };
 
-    static Dictionary<string, AssetBundle> ms_loadedAssets = new Dictionary<string, AssetBundle>();
-    static Dictionary<string, GameObject> ms_loadedObjects = new Dictionary<string, GameObject>();
+    private static Dictionary<string, AssetBundle> ms_loadedAssets = new Dictionary<string, AssetBundle>();
+    private static Dictionary<string, GameObject> ms_loadedObjects = new Dictionary<string, GameObject>();
 
     public static void Load()
     {

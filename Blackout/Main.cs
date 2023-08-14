@@ -72,7 +72,7 @@ public class Blackout : MelonMod
         MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
     }
 
-    System.Collections.IEnumerator WaitForLocalPlayer()
+    private System.Collections.IEnumerator WaitForLocalPlayer()
     {
         //load blackout_controller.asset
         AssetsHandler.Load();

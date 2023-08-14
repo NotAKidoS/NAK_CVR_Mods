@@ -121,7 +121,7 @@ public class BlackoutController : MonoBehaviour
     }
 
     // Initialize the BlackoutInstance object.
-    void Start()
+    private void Start()
     {
         Instance = this;
 
@@ -146,7 +146,7 @@ public class BlackoutController : MonoBehaviour
     }
 
     //Automatic State Change
-    void Update()
+    private void Update()
     {
         //get the current position of the player's head
         Vector3 curHeadPos = activeModeCam.transform.position;
@@ -191,13 +191,13 @@ public class BlackoutController : MonoBehaviour
         ChangeBlackoutState(BlackoutState.Awake);
     }
 
-    void OnPreRender(Camera cam)
+    private void OnPreRender(Camera cam)
     {
         if (cam == activeModeCam) return;
         blackoutAnimator.transform.localScale = Vector3.zero;
     }
 
-    void OnPostRender(Camera cam)
+    private void OnPostRender(Camera cam)
     {
         blackoutAnimator.transform.localScale = Vector3.one;
     }
