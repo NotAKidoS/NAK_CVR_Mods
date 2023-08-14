@@ -30,7 +30,7 @@ namespace NAK.CVRGizmos
             typeof(CVRGizmos_CapsuleCollider),
         };
 
-        void Start()
+        private void Start()
         {
             CVRGizmoManager.Instance = this;
             managed = new MonoBehaviour[GizmoTypes.Count()];

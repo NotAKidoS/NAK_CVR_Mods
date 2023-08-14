@@ -22,7 +22,7 @@ public class CVRGizmos : MelonMod
         MelonLoader.MelonCoroutines.Start(WaitForLocalPlayer());
     }
 
-    IEnumerator WaitForLocalPlayer()
+    private IEnumerator WaitForLocalPlayer()
     {
         while (PlayerSetup.Instance == null)
             yield return null;
