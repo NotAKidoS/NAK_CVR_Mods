@@ -7,8 +7,8 @@ namespace NAK.BadAnimatorFix;
 public static class BadAnimatorFixManager
 {
     private static List<BadAnimatorFixer> _animatorFixers = new List<BadAnimatorFixer>();
+    private static readonly float _checkInterval = 5f;
     private static int _currentIndex = 0;
-    private static float _checkInterval = 5f;
 
     public static void Add(BadAnimatorFixer bad)
     {
@@ -24,7 +24,7 @@ public static class BadAnimatorFixManager
 
     public static void OnPlayerLoaded()
     {
-        ToggleJob(BadAnimatorFix.EntryEnabled.Value);
+        SchedulerSystem.AddJob(new SchedulerSystem.Job(CheckNextAnimator), 0f, _checkInterval, -1);
     }
 
     public static void OnSceneInitialized(string sceneName)
@@ -37,31 +37,19 @@ public static class BadAnimatorFixManager
         {
             // Ignore objects that have our "fix", this shouldn't be needed but eh
             if (!animator.TryGetComponent<BadAnimatorFixer>(out _))
-            {
                 animator.gameObject.AddComponent<BadAnimatorFixer>();
-            }
         }
     }
 
-    public static void ToggleJob(bool enable)
+    private static void CheckNextAnimator()
     {
-        var job = SchedulerSystem.Instance.activeJobs.FirstOrDefault(pair => pair.Job.Method.Name == nameof(CheckNextAnimator)).Job;
-        if (enable && job == null)
-        {
-            SchedulerSystem.AddJob(new SchedulerSystem.Job(CheckNextAnimator), 0f, _checkInterval, -1);
-        }
-        else if (!enable && job != null)
-        {
-            SchedulerSystem.RemoveJob(job);
-        }
-    }
+        if (!BadAnimatorFix.EntryEnabled.Value)
+            return;
 
-    static void CheckNextAnimator()
-    {
-        if (_animatorFixers.Count == 0) return;
+        if (_animatorFixers.Count == 0) 
+            return;
+
         _currentIndex = (_currentIndex + 1) % _animatorFixers.Count;
-
-        BadAnimatorFixer currentAnimatorFix = _animatorFixers[_currentIndex];
-        currentAnimatorFix.AttemptRewindAnimator();
+        _animatorFixers[_currentIndex].AttemptRewindAnimator();
     }
 }

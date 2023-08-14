@@ -27,7 +27,6 @@ public class BadAnimatorFix : MelonMod
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
-        EntryEnabled.OnEntryValueChanged.Subscribe(OnEntryEnabledChanged);
         ApplyPatches(typeof(HarmonyPatches.AnimatorPatches));
     }
 
@@ -37,11 +36,6 @@ public class BadAnimatorFix : MelonMod
 
         if (buildIndex < 0) // -1 is custom world: 0 to 3 is game login, init, hq
             BadAnimatorFixManager.OnSceneInitialized(sceneName);
-    }
-
-    private void OnEntryEnabledChanged(bool newValue, bool oldValue)
-    {
-        BadAnimatorFixManager.ToggleJob(newValue);
     }
 
     private void ApplyPatches(Type type)

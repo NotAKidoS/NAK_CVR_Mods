@@ -1,12 +1,12 @@
 {
   "_id": 152,
   "name": "BadAnimatorFix",
-  "modversion": "1.0.2",
+  "modversion": "1.0.3",
   "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "This mod occasionally rewinds animation states that have loop enabled.\n\nUnity seems to have a weird quirk where *sometimes* animations with loop cause performance issues after running for a long time.\nYou'll only start to notice this after a few hours to a few days of idling.\n\nIf you don't happen to be AFK for long periods of time, you probably don't need this mod. This issue seems to be primarily caused by one-two frame animation clips meant for toggles with loop needlessly enabled.",
+  "description": "This mod periodically rewinds looping animation states.\nIt resolves issues with locomotion animations freezing after extended AFK periods.\nIf you aren't AFK frequently, this mod might not be essential for you.",
   "searchtags": [
     "bad",
     "fix",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r17/BadAnimatorFix.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r18/BadAnimatorFix.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix/",
-  "changelog": "- Fixes for 2023r171.\n- Removed speculative menu fix option. It is no longer needed as menu clips no longer loop.",
+  "changelog": "- No longer rewinds states without loop specifically enabled.\n- Removed performance improvement claim, which has seemingly been fixed in 2021.\n- Fixed not being able to disable mod with the Enabled button.",
   "embedcolor": "#e25352"
 }

@@ -25,7 +25,7 @@ public class BadAnimatorFixer : MonoBehaviour
                 // Skip if mid-transition
                 if (transitionInfo.fullPathHash != 0) continue;
                 // Skip if anim doesn't loop, or hasn't looped enough
-                if (stateInfo.normalizedTime < StateLimit) continue;
+                if (!stateInfo.loop || stateInfo.normalizedTime < StateLimit) continue;
                 // Rewind state, with 10f as buffer, to account for reasonable use of ExitTime
                 float offset = 10f + (stateInfo.normalizedTime % 1f);
                 animator.Play(stateInfo.fullPathHash, layerIndex, offset);
