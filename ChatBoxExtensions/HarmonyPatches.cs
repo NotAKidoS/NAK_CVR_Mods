@@ -1,4 +1,4 @@
-﻿using ABI_RC.Core.Savior;
+﻿using ABI_RC.Systems.InputManagement;
 using HarmonyLib;
 
 namespace NAK.ChatBoxExtensions.HarmonyPatches;
@@ -9,6 +9,6 @@ public class CVRInputManagerPatches
     [HarmonyPatch(typeof(CVRInputManager), nameof(CVRInputManager.Start))]
     static void Postfix_CVRInputManager_Start(ref CVRInputManager __instance)
     {
-        ChatBoxExtensions.InputModule = __instance.gameObject.AddComponent<InputModules.InputModuleChatBoxExtensions>();
+        __instance.AddInputModule(ChatBoxExtensions.InputModule);
     }
 }

@@ -6,7 +6,7 @@ namespace NAK.ChatBoxExtensions;
 public class ChatBoxExtensions : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-    internal static InputModuleChatBoxExtensions InputModule;
+    internal static InputModuleChatBoxExtensions InputModule = new();
 
     public override void OnInitializeMelon()
     {

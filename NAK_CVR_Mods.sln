@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzCurls", "EzCurls\EzCurls.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlternateIKSystem", "AlternateIKSystem\AlternateIKSystem.csproj", "{CAB05E13-B529-4CDA-A2B5-B62E122408F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBoxExtensions", "ChatBoxExtensions\ChatBoxExtensions.csproj", "{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -141,6 +143,10 @@ Global
 		{CAB05E13-B529-4CDA-A2B5-B62E122408F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAB05E13-B529-4CDA-A2B5-B62E122408F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAB05E13-B529-4CDA-A2B5-B62E122408F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

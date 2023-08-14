@@ -8,8 +8,8 @@ public static class Commands
 
     internal static void InitializeCommandHandlers()
     {
-        Kafe.ChatBox.API.OnMessageSent += (source, msg, notification, displayMsg) => HandleSentCommand(msg, notification, displayMsg);
-        Kafe.ChatBox.API.OnMessageReceived += (source, sender, msg, notification, displayMsg) => HandleReceivedCommand(sender, msg, notification, displayMsg);
+        Kafe.ChatBox.API.OnMessageSent += msg => HandleSentCommand(msg.Message, msg.TriggerNotification, msg.DisplayOnChatBox);
+        Kafe.ChatBox.API.OnMessageReceived += msg => HandleReceivedCommand(msg.SenderGuid, msg.Message, msg.TriggerNotification, msg.DisplayOnChatBox);
     }
 
     internal static void RegisterCommand(string prefix, Action<string, bool, bool> onCommandSent = null, Action<string, string, bool, bool> onCommandReceived = null)
