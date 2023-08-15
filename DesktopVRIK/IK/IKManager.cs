@@ -182,10 +182,6 @@ public class IKManager : MonoBehaviour
 
         IKCalibrator.SetupHeadIKTarget(_vrik);
 
-        // TEMP: Fix for head IK breaking once exiting an emote
-        if (_vrik.TryGetComponent(out LookAtIK lookAtIk))
-            lookAtIk.fixTransforms = false;
-
         InitializeIkGeneral();
 
         _ikHandler.OnInitializeIk();
