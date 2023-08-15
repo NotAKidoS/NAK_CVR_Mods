@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.2.4",
+  "modversion": "4.2.5",
   "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r17/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r18/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
-  "changelog": "- Fixed an issue where tracking status would update a frame late.\n- Fixed an error with getting muscle traits on start (i was lazy).",
+  "changelog": "- Added a tempfix for LookAtIK causing issues after exiting an emote.",
   "embedcolor": "#9b59b6"
 }
