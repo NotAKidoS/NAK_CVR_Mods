@@ -17,7 +17,7 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r18/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r19/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
   "changelog": "- Potential fix for PlayerSetup.ResetIk not running in Halfbody.",
   "embedcolor": "#9b59b6"
