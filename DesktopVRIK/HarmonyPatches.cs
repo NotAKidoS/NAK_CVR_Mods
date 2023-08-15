@@ -106,6 +106,7 @@ internal class PlayerSetupPatches
     {
         try
         {
+            __runOriginal = true;
             if (IKManager.Instance == null)
                 return;
 
