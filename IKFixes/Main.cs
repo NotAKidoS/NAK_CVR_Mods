@@ -36,7 +36,6 @@ public class IKFixes : MelonMod
 
     public override void OnInitializeMelon()
     {
-        ApplyPatches(typeof(HarmonyPatches.VRIKPatches));
         ApplyPatches(typeof(HarmonyPatches.BodySystemPatches));
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.IKSystemPatches));

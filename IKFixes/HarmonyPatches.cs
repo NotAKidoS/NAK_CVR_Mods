@@ -12,7 +12,7 @@ namespace NAK.IKFixes.HarmonyPatches;
 
 internal static class BodySystemPatches
 {
-    private static float _ikSimulatedRootAngle = 0f;
+    private static float _ikSimulatedRootAngle;
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.SetupOffsets))]
@@ -40,8 +40,6 @@ internal static class BodySystemPatches
                 case TrackingPoint.TrackingRole.RightElbow:
                     parent = IKSystem.vrik.references.rightForearm;
                     offsetDistance = -0.15f;
-                    break;
-                default:
                     break;
             }
 
@@ -165,7 +163,7 @@ internal static class BodySystemPatches
                 IKSystem.vrik.solver.rightLeg.bendToTargetWeight = IKFixes.EntryBendToTargetWeight.Value;
         }
         
-        int count = IKSystem.Instance.AllTrackingPoints.FindAll((TrackingPoint m) => m.isActive && m.isValid && m.suggestedRole > TrackingPoint.TrackingRole.Invalid).Count;
+        int count = IKSystem.Instance.AllTrackingPoints.FindAll(m => m.isActive && m.isValid && m.suggestedRole > TrackingPoint.TrackingRole.Invalid).Count;
 
         // fixes having all tracking points disabled forcing calibration
         if (count == 0)
@@ -258,30 +256,6 @@ internal static class IKSystemPatches
     {
         __instance.applyOriginalHipPosition = true;
         __instance.applyOriginalHipRotation = true;
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.InitializeHalfBodyIK))]
-    private static void Prefix_IKSystem_InitializeHalfBodyIK(IKSystem __instance)
-    {
-        if (IKSystem._vrik != null)
-        {
-            UnityAction onPostSolverUpdate = null;
-            onPostSolverUpdate = () =>
-            {
-                if (!IKFixes.EntryNetIKPass.Value) return;
-
-                Transform hips = __instance.animator.GetBoneTransform(HumanBodyBones.Hips);
-                __instance._referenceRootPosition = hips.position;
-                __instance._referenceRootRotation = hips.rotation;
-                __instance._poseHandler.GetHumanPose(ref __instance.humanPose);
-                __instance._poseHandler.SetHumanPose(ref __instance.humanPose);
-                hips.position = __instance._referenceRootPosition;
-                hips.rotation = __instance._referenceRootRotation;
-            };
-
-            IKSystem._vrik.onPostSolverUpdate.AddListener(onPostSolverUpdate);
-        }
     }
 
     [HarmonyPostfix]
@@ -405,63 +379,6 @@ internal static class IKSystemPatches
             0.8138595f,
             0.8110138f
      };
-}
-
-internal static class VRIKPatches
-{
-    /**
-        Leg solver uses virtual bone calf and foot, plus world tracked knee position for normal maths.
-        This breaks as you playspace up, because calf and foot position aren't offset yet in solve order.
-    **/
-
-    // Add ApplyBendGoal(); to the second line of RootMotionNew.FinalIK.IKSolverVR.Leg.Solve(bool)
-    // https://github.com/knah/VRCMods/tree/b6c4198fb8e06174ea511fe1f8a3257dfef2fdd2 IKTweaks
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.Stretching))]
-    private static void Postfix_IKSolverVR_Leg_Stretching(ref IKSolverVR.Leg __instance)
-    {
-        // I am patching here because Stretching() is always called
-        // and i am not doing a transpiler to place it on the second line
-        if (__instance.usingKneeTracker)
-            __instance.ApplyBendGoal();
-    }
-
-    // IKTweaks original method does not do this?
-    // idk i prefer it, upper leg rotates weird otherwise
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(IKSolverVR.Leg), nameof(IKSolverVR.Leg.ApplyOffsets))]
-    private static bool Prefix_IKSolverVR_Leg_ApplyOffsets(ref IKSolverVR.Leg __instance)
-    {
-        if (__instance.usingKneeTracker)
-        {
-            // Apply position and rotation offsets
-            __instance.ApplyPositionOffset(__instance.footPositionOffset, 1f);
-            __instance.ApplyRotationOffset(__instance.footRotationOffset, 1f);
-
-            // Calculate new foot position and rotation
-            Quaternion footQuaternion = Quaternion.FromToRotation(__instance.footPosition - __instance.position, __instance.footPosition + __instance.heelPositionOffset - __instance.position);
-            __instance.footPosition = __instance.position + footQuaternion * (__instance.footPosition - __instance.position);
-            __instance.footRotation = footQuaternion * __instance.footRotation;
-
-            float angle = 0f;
-            if (__instance.bendGoal != null && __instance.bendGoalWeight > 0f)
-            {
-                Vector3 crossProduct = Vector3.Cross(__instance.bendGoal.position - __instance.thigh.solverPosition, __instance.position - __instance.thigh.solverPosition);
-                Vector3 rotatedPoint = Quaternion.Inverse(Quaternion.LookRotation(__instance.bendNormal, __instance.thigh.solverPosition - __instance.foot.solverPosition)) * crossProduct;
-                angle = Mathf.Atan2(rotatedPoint.x, rotatedPoint.z) * Mathf.Rad2Deg * __instance.bendGoalWeight;
-            }
-
-            // Adjust bend normal and thigh rotation for knee tracker
-            // Knee tracker should take priority over swivelOffset
-            __instance.bendNormal = Quaternion.AngleAxis(angle, __instance.thigh.solverPosition - __instance.lastBone.solverPosition) * __instance.bendNormal;
-            __instance.thigh.solverRotation = Quaternion.AngleAxis(-angle, __instance.thigh.solverRotation * __instance.thigh.axis) * __instance.thigh.solverRotation;
-            return false;
-        }
-
-        return true;
-    }
 }
 
 internal static class PlayerSetupPatches
