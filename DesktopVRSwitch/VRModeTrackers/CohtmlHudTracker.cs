@@ -24,5 +24,7 @@ public class CohtmlHudTracker : VRModeTracker
         // This handles rotation and position
         CVRTools.ConfigureHudAffinity();
         CohtmlHud.Instance.gameObject.transform.localScale = new Vector3(1.2f, 1f, 1.2f);
+        
+        CohtmlHud.Instance.markMenuAsReady();
     }
 }
