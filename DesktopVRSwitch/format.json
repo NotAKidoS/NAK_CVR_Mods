@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Allows you to switch between Desktop and VR with a keybind.\n**Press Control + F6 to switch.**\n\nWhile this mod is a nice convenience feature to have access to, not every ChilloutVR system or mod is built to support it. I cannot possibly cover every edge case or mitigate issues with every mod. **Use at your own discretion.**",
+  "description": "Allows you to switch between Desktop and VR with a keybind.\n**Press Control + F6 to switch or optionally through BTKUI.**\n\nWhile this mod is a nice convenience feature to have access to, not every ChilloutVR system or mod is built to support it. I cannot possibly cover every edge case or mitigate issues with every mod. **Use at your own discretion.**",
   "searchtags": [
     "desktop",
     "vr",
@@ -14,7 +14,7 @@
     "restart"
   ],
   "requirements": [
-    "None"
+    "BTKUILib"
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r20/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch/",
