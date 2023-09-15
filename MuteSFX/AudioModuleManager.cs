@@ -28,23 +28,24 @@ public static class AudioModuleManager
         foreach (string clipName in clipNames)
         {
             string clipPath = Path.Combine(path, clipName);
-            if (!File.Exists(clipPath))
+            
+            if (File.Exists(clipPath)) 
+                continue;
+            
+            byte[] clipData;
+            string resourceName = "MuteSFX.SFX." + clipName;
+            
+            using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
             {
-                byte[] clipData = null;
-                string resourceName = "MuteSFX.SFX." + clipName;
-                using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
-                {
-                    clipData = new byte[stream.Length];
-                    stream.Read(clipData, 0, clipData.Length);
-                }
-
-                using (FileStream fileStream = new FileStream(clipPath, FileMode.CreateNew))
-                {
-                    fileStream.Write(clipData, 0, clipData.Length);
-                }
-
-                MuteSFX.Logger.Msg("Placed missing sfx in audio folder: " + clipName);
+                if (stream == null) continue;
+                clipData = new byte[stream.Length];
+                stream.Read(clipData, 0, clipData.Length);
             }
+
+            using (FileStream fileStream = new FileStream(clipPath, FileMode.CreateNew))
+                fileStream.Write(clipData, 0, clipData.Length);
+
+            MuteSFX.Logger.Msg("Placed missing sfx in audio folder: " + clipName);
         }
     }
 

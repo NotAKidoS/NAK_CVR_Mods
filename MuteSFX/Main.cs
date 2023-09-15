@@ -1,7 +1,5 @@
-﻿using ABI_RC.Core.Base;
-using MelonLoader;
-using System.Reflection;
-using HarmonyLib;
+﻿using MelonLoader;
+using ABI_RC.Systems.GameEventSystem;
 
 namespace NAK.MuteSFX;
 
@@ -10,12 +8,12 @@ public class MuteSFX : MelonMod
     #region Mod Settings
 
     internal static MelonLogger.Instance Logger;
-    internal const string SettingsCategory = nameof(MuteSFX);
+    private const string SettingsCategory = nameof(MuteSFX);
 
-    public static readonly MelonPreferences_Category Category =
+    private static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(SettingsCategory);
 
-    public static readonly MelonPreferences_Entry<bool> EntryEnabled =
+    private static readonly MelonPreferences_Entry<bool> EntryEnabled =
         Category.CreateEntry("Enabled", true, description: "Toggle MuteSFX entirely.");
 
     #endregion
@@ -26,10 +24,8 @@ public class MuteSFX : MelonMod
     {
         Logger = LoggerInstance;
 
-        HarmonyInstance.Patch(
-            typeof(AudioManagement).GetMethod(nameof(AudioManagement.SetMicrophoneActive)),
-            postfix: new HarmonyMethod(typeof(MuteSFX).GetMethod(nameof(OnSetMicrophoneActive_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
-        );
+        CVRGameEventSystem.Microphone.OnMute.AddListener(() => { OnMicrophoneStatusChanged(false); });
+        CVRGameEventSystem.Microphone.OnUnmute.AddListener(() => { OnMicrophoneStatusChanged(true); });
 
         AudioModuleManager.SetupDefaultAudioClips();
     }
@@ -38,18 +34,10 @@ public class MuteSFX : MelonMod
 
     #region Patched Methods
 
-    private static void OnSetMicrophoneActive_Postfix(bool active)
+    private static void OnMicrophoneStatusChanged(bool active)
     {
-        try
-        {
-            if (EntryEnabled.Value)
-                AudioModuleManager.PlayAudioModule(active ? AudioModuleManager.sfx_unmute : AudioModuleManager.sfx_mute);
-        }
-        catch (Exception e)
-        {
-            Logger.Error($"Error during the patched method {nameof(OnSetMicrophoneActive_Postfix)}");
-            Logger.Error(e);
-        }
+        if (EntryEnabled.Value)
+            AudioModuleManager.PlayAudioModule(active ? AudioModuleManager.sfx_unmute : AudioModuleManager.sfx_mute);
     }
     
     #endregion

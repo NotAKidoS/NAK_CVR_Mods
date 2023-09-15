@@ -1,7 +1,7 @@
 {
   "_id": 172,
   "name": "MuteSFX",
-  "modversion": "1.0.1",
+  "modversion": "1.0.2",
   "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r14/MuteSFX.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MuteSFX/",
-  "changelog": "- Fixes for 2023r171.",
+  "changelog": "- Fixed Push to Talk spamming SFX. [https://github.com/NotAKidOnSteam/NAK_CVR_Mods/issues/29](#29)",
   "embedcolor": "#92e492"
 }
