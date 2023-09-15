@@ -3,7 +3,6 @@ using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.TrackingModules;
-using cohtml;
 using cohtml.Net;
 using HarmonyLib;
 using NAK.DesktopVRSwitch.Patches;
@@ -103,7 +102,7 @@ internal class CVRPickupObjectPatches
                 return;
 
             Transform vrOrigin = __instance.gripOrigin;
-            Transform desktopOrigin = vrOrigin?.Find("[Desktop]");
+            Transform desktopOrigin = vrOrigin != null ? vrOrigin.Find("[Desktop]") : null;
             if (vrOrigin != null && desktopOrigin != null)
             {
                 CVRPickupObjectTracker tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
@@ -122,9 +121,12 @@ internal class CVRPickupObjectPatches
 internal class CohtmlUISystemPatches
 {
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.RegisterGamepad))]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.RegisterGamepad), typeof(uint), typeof(string), typeof(uint), typeof(uint), typeof(IntPtr))]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.RegisterGamepad), typeof(uint), typeof(string), typeof(uint), typeof(uint))]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadState), typeof(cohtml.GamepadState))]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadState), typeof(uint), typeof(float[]), typeof(float[]))]
     [HarmonyPatch(typeof(UISystem), nameof(UISystem.UnregisterGamepad))]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadState))]
+    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadStateExtended))]
     private static bool Prefix_UISystem_FuckOff()
     {
         /**
@@ -153,7 +155,9 @@ internal class SteamVRBehaviourPatches
         
         // If we don't switch fast enough, SteamVR will force close.
         // World Transition might cause issues. Might need to override.
-        VRModeSwitchManager.Instance?.AttemptSwitch();
+        if (VRModeSwitchManager.Instance != null)
+            VRModeSwitchManager.Instance.AttemptSwitch();
+        
         return false;
     }
 }

@@ -59,7 +59,7 @@ public class MovementSystemTracker : VRModeTracker
         DesktopVRSwitch.Logger.Msg("Resetting MovementSystem mobility and applying stored position and rotation.");
 
         MovementSystem.Instance.rotationPivot = Utils.GetPlayerCameraObject(intoVR).transform;
-        MovementSystem.Instance.TeleportToPosRot(preSwitchWorldPosition, preSwitchWorldRotation, false);
+        MovementSystem.Instance.TeleportToPosRot(preSwitchWorldPosition, preSwitchWorldRotation);
 
         if (!intoVR)
             MovementSystem.Instance.UpdateColliderCenter(MovementSystem.Instance.transform.position);
@@ -67,7 +67,5 @@ public class MovementSystemTracker : VRModeTracker
         MovementSystem.Instance.ChangeCrouch(false);
         MovementSystem.Instance.ChangeProne(false);
         MovementSystem.Instance.SetImmobilized(false);
-
-        yield break;
     }
 }

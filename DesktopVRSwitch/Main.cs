@@ -37,10 +37,11 @@ public class DesktopVRSwitch : MelonMod
 
     public override void OnUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.F6) && Input.GetKey(KeyCode.LeftControl))
-        {
-            VRModeSwitchManager.Instance?.AttemptSwitch();
-        }
+        if (!Input.GetKeyDown(KeyCode.F6) || !Input.GetKey(KeyCode.LeftControl)) 
+            return;
+        
+        if (VRModeSwitchManager.Instance != null)
+            VRModeSwitchManager.Instance.AttemptSwitch();
     }
 
     private static void RegisterVRModeTrackers()

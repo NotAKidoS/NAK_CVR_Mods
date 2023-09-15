@@ -6,7 +6,7 @@ public static class ModSettings
 {
     internal const string SettingsCategory = nameof(DesktopVRSwitch);
 
-    public static readonly MelonPreferences_Category Category =
+    private static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(SettingsCategory);
     
     public static readonly MelonPreferences_Entry<bool> EntryEnterCalibrationOnSwitch =

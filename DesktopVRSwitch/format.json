@@ -1,23 +1,23 @@
 {
   "_id": 103,
   "name": "DesktopVRSwitch",
-  "modversion": "4.4.0",
-  "gameversion": "2022r170p1",
+  "modversion": "4.4.1",
+  "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Allows you to switch between Desktop and VR with a keybind.\n**Press Control + F6 to switch.**\n\nWhile this mod is a nice convienence feature to have access to, not every ChilloutVR system or mod is built to support it. I cannot possibly cover every edge case or mitigate issues with every mod. **Use at your own discretion.**",
+  "description": "Allows you to switch between Desktop and VR with a keybind.\n**Press Control + F6 to switch.**\n\nWhile this mod is a nice convenience feature to have access to, not every ChilloutVR system or mod is built to support it. I cannot possibly cover every edge case or mitigate issues with every mod. **Use at your own discretion.**",
   "searchtags": [
     "desktop",
     "vr",
     "switch",
-    "hotswap"
+    "restart"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r12/DesktopVRSwitch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r20/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch/",
-  "changelog": "- Fixed issue with Zoom gamerule being ignored if first joined in VR.\n- Fixed issue with post processing settings not being updated.\n- Fixed conflict with Third Person.\n- Fixed conflict with DesktopVRIK.\n- Potentially fixed rare Cohtml crash regarding Gamepad registering on switch.\n- Potentially fixed eye tracking not being handled on switch.\n- Fixed a bunch of QualitySettings that SteamVR would override not being reset on switch to Desktop.\n- Potentially fixed issue where entering VR after restarting SteamVR resulted in low renderscale.\n- Fixed issue with CVRPickupObject patch breaking other mods.\n- Reworked how SteamVR is initialized & deinitialized.\n- Hijacked world transition system for switch transition.\n- Added option to automatically switch to Desktop when closing SteamVR.",
+  "changelog": "- Fixes for 2023r171.",
   "embedcolor": "3498db"
 }

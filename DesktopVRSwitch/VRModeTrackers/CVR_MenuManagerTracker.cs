@@ -29,7 +29,6 @@ public class CVR_MenuManagerTracker : VRModeTracker
         DesktopVRSwitch.Logger.Msg("Updating CVR_Menu_Data core data.");
 
         CVR_MenuManager.Instance.coreData.core.inVr = args.IsUsingVr;
-        CVR_MenuManager.Instance.quickMenu.transform.localPosition = Vector3.zero;
-        CVR_MenuManager.Instance.quickMenu.transform.localRotation = Quaternion.identity;
+        CVR_MenuManager.Instance.quickMenu.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
 }

@@ -64,7 +64,7 @@ public class IKSystemTracker : VRModeTracker
 
     private void SetupSteamVRTrackingModule(bool enableVR)
     {
-        var openVRModule = IKSystem.Instance._trackingModules.OfType<SteamVRTrackingModule>().FirstOrDefault();
+        SteamVRTrackingModule openVRModule = IKSystem.Instance._trackingModules.OfType<SteamVRTrackingModule>().FirstOrDefault();
 
         if (openVRModule != null)
         {
@@ -75,8 +75,7 @@ public class IKSystemTracker : VRModeTracker
         }
         else if (enableVR)
         {
-            var newVRModule = new SteamVRTrackingModule();
-            IKSystem.Instance.AddTrackingModule(newVRModule);
+            IKSystem.Instance.AddTrackingModule(new SteamVRTrackingModule());
         }
     }
 }

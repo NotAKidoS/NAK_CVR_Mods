@@ -18,7 +18,7 @@ internal static class XRHandler
         if (XRGeneralSettings.Instance.Manager.activeLoader != null)
             XRGeneralSettings.Instance.Manager.StartSubsystems();
         else
-            StopXR();
+            yield return StopXR();
 
         yield return null;
     }

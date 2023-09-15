@@ -21,10 +21,14 @@ public class CohtmlHudTracker : VRModeTracker
         DesktopVRSwitch.Logger.Msg("Configuring new hud affinity for CohtmlHud.");
 
         CohtmlHud.Instance.gameObject.transform.parent = Utils.GetPlayerCameraObject(args.IsUsingVr).transform;
+        
         // This handles rotation and position
         CVRTools.ConfigureHudAffinity();
         CohtmlHud.Instance.gameObject.transform.localScale = new Vector3(1.2f, 1f, 1.2f);
         
-        CohtmlHud.Instance.markMenuAsReady();
+        // required to set menu vr mode (why is it offset in js?)
+        CohtmlHud.uiCoreGameData.isVr = args.IsUsingVr;
+        if (CohtmlHud.Instance._isReady)
+            CohtmlHud.Instance.hudView.View.TriggerEvent("updateCoreGameVars", CohtmlHud.uiCoreGameData);
     }
 }

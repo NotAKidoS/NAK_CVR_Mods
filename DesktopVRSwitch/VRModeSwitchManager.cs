@@ -43,7 +43,7 @@ public class VRModeSwitchManager : MonoBehaviour
 
     #region Public Methods
 
-    public static bool IsInXR() => XRGeneralSettings.Instance.Manager.activeLoader != null;
+    private static bool IsInXR() => XRGeneralSettings.Instance.Manager.activeLoader != null;
     
     public void AttemptSwitch() => StartCoroutine(StartSwitchInternal());
     
@@ -56,10 +56,12 @@ public class VRModeSwitchManager : MonoBehaviour
         if (SwitchInProgress) 
             yield break;
         
+        bool useWorldTransition = UseWorldTransition;
         SwitchInProgress = true;
+        
         yield return null;
     
-        if (UseWorldTransition)
+        if (useWorldTransition)
             yield return StartCoroutine(StartTransition());
 
         bool isUsingVr = IsInXR();
@@ -68,7 +70,7 @@ public class VRModeSwitchManager : MonoBehaviour
 
         yield return StartCoroutine(XRAndReloadAvatar(!isUsingVr));
 
-        if (UseWorldTransition)
+        if (useWorldTransition)
             yield return StartCoroutine(ContinueTransition());
 
         SwitchInProgress = false;
@@ -145,7 +147,7 @@ public class VRModeSwitchManager : MonoBehaviour
     {
         try
         {
-            var playerCamera = Utils.GetPlayerCameraObject(isUsingVr).GetComponent<Camera>();
+            Camera playerCamera = Utils.GetPlayerCameraObject(isUsingVr).GetComponent<Camera>();
             switchEvent?.Invoke(this, new VRModeEventArgs(isUsingVr, playerCamera));
         }
         catch (Exception e)

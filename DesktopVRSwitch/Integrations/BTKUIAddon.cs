@@ -1,7 +1,6 @@
 ﻿using BTKUILib;
 using BTKUILib.UIObjects;
 using System.Runtime.CompilerServices;
-using ABI_RC.Core.Base;
 
 namespace NAK.DesktopVRSwitch.Integrations;
 
@@ -55,10 +54,10 @@ public static class BTKUIAddon
         category.AddToggle(entry.DisplayName, entry.Description, entry.Value).OnValueUpdated += b => entry.Value = b;
     }
 
-    private static void AddMelonSlider(ref Page page, MelonLoader.MelonPreferences_Entry<float> entry, float min, float max, int decimalPlaces = 2)
-    {
-        page.AddSlider(entry.DisplayName, entry.Description, entry.Value, min, max, decimalPlaces).OnValueUpdated += f => entry.Value = f;
-    }
+    // private static void AddMelonSlider(ref Page page, MelonLoader.MelonPreferences_Entry<float> entry, float min, float max, int decimalPlaces = 2)
+    // {
+    //     page.AddSlider(entry.DisplayName, entry.Description, entry.Value, min, max, decimalPlaces).OnValueUpdated += f => entry.Value = f;
+    // }
 
     #endregion
 }

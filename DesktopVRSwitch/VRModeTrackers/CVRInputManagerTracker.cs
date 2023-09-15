@@ -1,5 +1,4 @@
-﻿using ABI_RC.Core.Savior;
-using ABI_RC.Systems.InputManagement;
+﻿using ABI_RC.Systems.InputManagement;
 using ABI_RC.Systems.InputManagement.InputModules;
 
 namespace NAK.DesktopVRSwitch.VRModeTrackers;

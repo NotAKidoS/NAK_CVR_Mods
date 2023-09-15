@@ -10,21 +10,21 @@ internal class VRModeSwitchDebugger : MonoBehaviour
 
     private void OnEnable()
     {
-        if (_switchCoroutine == null)
-        {
-            _switchCoroutine = StartCoroutine(SwitchLoop());
-            _sleep = new WaitForSeconds(2f);
-        }
+        if (_switchCoroutine != null)
+            return;
+        
+        _switchCoroutine = StartCoroutine(SwitchLoop());
+        _sleep = new WaitForSeconds(2f);
     }
 
     private void OnDisable()
     {
-        if (_switchCoroutine != null)
-        {
-            StopCoroutine(_switchCoroutine);
-            _switchCoroutine = null;
-            _sleep = null;
-        }
+        if (_switchCoroutine == null) 
+            return;
+        
+        StopCoroutine(_switchCoroutine);
+        _switchCoroutine = null;
+        _sleep = null;
     }
 
     private IEnumerator SwitchLoop()
