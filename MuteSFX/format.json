@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r14/MuteSFX.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r20/MuteSFX.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MuteSFX/",
-  "changelog": "- Fixed Push to Talk spamming SFX. [https://github.com/NotAKidOnSteam/NAK_CVR_Mods/issues/29](#29)",
+  "changelog": "- Fixed Push to Talk spamming SFX.",
   "embedcolor": "#92e492"
 }
