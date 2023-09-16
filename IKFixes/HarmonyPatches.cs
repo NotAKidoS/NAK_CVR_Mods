@@ -253,6 +253,11 @@ internal static class BodySystemPatches
             IKSystem.vrik.solver.rightLeg.bendGoalWeight = 1f;
         }
     }
+    
+    internal static void OffsetSimulatedRootAngle(float deltaRotation)
+    {
+        _ikSimulatedRootAngle = Mathf.Repeat(_ikSimulatedRootAngle + deltaRotation, 360f);
+    }
 }
 
 internal static class IKSystemPatches
@@ -295,7 +300,10 @@ internal static class PlayerSetupPatches
 
         // Prevent targeting previous movement parent
         if (lastMovementParent == currentParent || lastMovementParent == null)
+        {
             IKSystem.vrik.solver.AddPlatformMotion(deltaPosition, deltaRotation, currentPosition);
+            BodySystemPatches.OffsetSimulatedRootAngle(deltaRotation.eulerAngles.y);
+        }
         
         lastMovementParent = currentParent;
         lastMovementPosition = currentPosition;

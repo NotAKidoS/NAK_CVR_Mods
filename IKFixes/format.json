@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "A few small fixes and configuration options to IK. Major ones are listed below:\n\n**FBT** - Fixes root rotation animation bleeding, chest tracking, locomotion animations, and bend goal offsets.\n\n**Halfbody** - Fixes footsteps while on a Movement Parent & feet always pointing in head direction.",
+  "description": "A few small fixes and configuration options to IK. Major ones are listed below:\n\n**FBT** - Fixes root rotation animation bleeding, chest tracking, locomotion animations, chair seated direction, and bend goal offsets.\n\n**Halfbody** - Fixes footsteps while on a Movement Parent & feet always pointing in head direction.",
   "searchtags": [
     "knee",
     "ik",
@@ -17,7 +17,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r8/IKFixes.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r20/IKFixes.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes/",
   "changelog": "- Updates for 2023r171\n- Removed unneeded settings (IKPose & NetIKPass).\n- Fixed halfbody fake root angle option.\n- Added Reset Settings UIExpansionKit button.",
   "embedcolor": "f46e49"
