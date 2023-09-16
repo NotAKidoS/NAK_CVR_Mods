@@ -1,4 +1,5 @@
-﻿using ABI.CCK.Components;
+﻿using ABI_RC.Core.InteractionSystem;
+using ABI.CCK.Components;
 using ABI_RC.Core.Player;
 using ABI_RC.Systems.IK;
 using ABI_RC.Systems.IK.SubSystems;
@@ -191,7 +192,8 @@ internal static class BodySystemPatches
         if (BodySystem.enableRightElbowTracking) num++;
 
         __instance._fbtAvailable = (count >= num);
-
+        CVR_MenuManager.Instance.coreData.core.fullBodyActive = __instance._fbtAvailable = (count >= num && num != 0);
+    
         return false;
     }
 
