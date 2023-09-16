@@ -1,2 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk"/>
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <Reference Include="UIExpansionKit">
+            <HintPath>$(MsBuildThisFileDirectory)\..\.ManagedLibs\UIExpansionKit.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+    </ItemGroup>
+    
+</Project>
