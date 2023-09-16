@@ -67,5 +67,7 @@ public class MovementSystemTracker : VRModeTracker
         MovementSystem.Instance.ChangeCrouch(false);
         MovementSystem.Instance.ChangeProne(false);
         MovementSystem.Instance.SetImmobilized(false);
+        MovementSystem.Instance.independentHeadTurn = false;
+        MovementSystem.Instance.independentHeadToggle = false;
     }
 }
