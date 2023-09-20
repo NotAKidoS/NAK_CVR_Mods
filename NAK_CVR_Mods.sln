@@ -43,11 +43,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FOVAdjustment", "FOVAdjustm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MuteSFX", "MuteSFX\MuteSFX.csproj", "{77D222FC-4AEC-4672-A87A-B860B4C39E17}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EzCurls", "EzCurls\EzCurls.csproj", "{7EF74A8D-0421-4B6D-809E-40F9C2DFC7F8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlternateIKSystem", "AlternateIKSystem\AlternateIKSystem.csproj", "{CAB05E13-B529-4CDA-A2B5-B62E122408F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBoxExtensions", "ChatBoxExtensions\ChatBoxExtensions.csproj", "{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzCurls", "EzCurls\EzCurls.csproj", "{9D39E900-8F38-485B-8B67-9F75D8FF2C5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzGrab", "EzGrab\EzGrab.csproj", "{8CBF5378-A4AE-4594-9A13-0066E5D3FE81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckMLA", "FuckMLA\FuckMLA.csproj", "{41A84C81-E9FD-471D-9A68-4823C9F67CD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -135,10 +139,6 @@ Global
 		{77D222FC-4AEC-4672-A87A-B860B4C39E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77D222FC-4AEC-4672-A87A-B860B4C39E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77D222FC-4AEC-4672-A87A-B860B4C39E17}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7EF74A8D-0421-4B6D-809E-40F9C2DFC7F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7EF74A8D-0421-4B6D-809E-40F9C2DFC7F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7EF74A8D-0421-4B6D-809E-40F9C2DFC7F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7EF74A8D-0421-4B6D-809E-40F9C2DFC7F8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CAB05E13-B529-4CDA-A2B5-B62E122408F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CAB05E13-B529-4CDA-A2B5-B62E122408F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAB05E13-B529-4CDA-A2B5-B62E122408F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -147,6 +147,18 @@ Global
 		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D39E900-8F38-485B-8B67-9F75D8FF2C5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D39E900-8F38-485B-8B67-9F75D8FF2C5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D39E900-8F38-485B-8B67-9F75D8FF2C5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D39E900-8F38-485B-8B67-9F75D8FF2C5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CBF5378-A4AE-4594-9A13-0066E5D3FE81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CBF5378-A4AE-4594-9A13-0066E5D3FE81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CBF5378-A4AE-4594-9A13-0066E5D3FE81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CBF5378-A4AE-4594-9A13-0066E5D3FE81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41A84C81-E9FD-471D-9A68-4823C9F67CD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41A84C81-E9FD-471D-9A68-4823C9F67CD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41A84C81-E9FD-471D-9A68-4823C9F67CD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41A84C81-E9FD-471D-9A68-4823C9F67CD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

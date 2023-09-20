@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "EzCurls",
+  "modversion": "1.0.0",
+  "gameversion": "2022r170p1",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "A mod that should hopefully make finger curls more predictable.",
+  "searchtags": [
+    "aas",
+    "sync",
+    "naked",
+    "buffer"
+  ],
+  "requirements": [
+    "UIExpansionKit"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/EzCurls.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/EzCurls/",
+  "changelog": "- Initial CVRMG release",
+  "embedcolor": "7d7d7d"
+}
