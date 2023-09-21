@@ -16,22 +16,26 @@ public static class ModNetworkDebugger
         if (AvatarScaleManager.Instance == null)
             return;
 
-        float currentHeight = AvatarScaleManager.Instance.GetHeight();
+        float currentHeight;
         const float step = 0.1f;
 
         if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            currentHeight += step;
-            AvatarScaleMod.Logger.Msg($"Networking height: {currentHeight}");
+            currentHeight = AvatarScaleManager.Instance.GetHeight();
+            AvatarScaleManager.Instance.SetHeight(currentHeight + step);
+            currentHeight = AvatarScaleManager.Instance.GetHeight();
+            
             ModNetwork.SendNetworkHeight(currentHeight);
-            AvatarScaleManager.Instance.SetHeight(currentHeight);
+            AvatarScaleMod.Logger.Msg($"Networking height: {currentHeight}");
         }
         else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            currentHeight -= step;
-            AvatarScaleMod.Logger.Msg($"Networking height: {currentHeight}");
+            currentHeight = AvatarScaleManager.Instance.GetHeight();
+            AvatarScaleManager.Instance.SetHeight(currentHeight - step);
+            currentHeight = AvatarScaleManager.Instance.GetHeight();
+            
             ModNetwork.SendNetworkHeight(currentHeight);
-            AvatarScaleManager.Instance.SetHeight(currentHeight);
+            AvatarScaleMod.Logger.Msg($"Networking height: {currentHeight}");
         }
         else if (Input.GetKeyDown(KeyCode.Backspace))
         {

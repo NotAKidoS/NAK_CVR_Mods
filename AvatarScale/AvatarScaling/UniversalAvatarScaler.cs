@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core;
 using ABI_RC.Core.Player;
+using ABI.CCK.Components;
 using NAK.AvatarScaleMod.ScaledComponents;
 using UnityEngine;
 using UnityEngine.Animations;
@@ -22,6 +23,12 @@ public class UniversalAvatarScaler : MonoBehaviour
 
     #region Variables
 
+    internal bool requestedInitial;
+    
+    [NonSerialized]
+    internal string ownerId;
+
+    private Transform _avatarTransform;
     private CVRAnimatorManager _animatorManager;
 
     private float _initialHeight;
@@ -33,52 +40,106 @@ public class UniversalAvatarScaler : MonoBehaviour
     private bool _isLocalAvatar;
     private bool _heightWasUpdated;
 
+    private bool _isAvatarInstantiated;
+    
     #endregion
 
     #region Unity Methods
-
-    private async void Start()
-    {
-        await FindComponentsOfTypeAsync(scalableComponentTypes);
-    }
 
     private void LateUpdate()
     {
         ScaleAvatarRoot(); // override animation-based scaling
     }
 
+    private void OnDestroy()
+    {
+        ClearComponentLists();
+        if (!_isLocalAvatar) AvatarScaleManager.Instance.RemoveNetworkHeightScaler(ownerId);
+    }
+
     #endregion
 
     #region Public Methods
 
-    public void Initialize(float initialHeight, Vector3 initialScale)
+    public void Initialize(string playerId = null)
     {
-        _initialHeight = _targetHeight = initialHeight;
-        _initialScale = initialScale;
-        _scaleFactor = 1f;
-
+        ownerId = playerId;
+        
         _isLocalAvatar = gameObject.layer == 8;
         
         _animatorManager = _isLocalAvatar
             ? GetComponentInParent<PlayerSetup>().animatorManager
             : GetComponentInParent<PuppetMaster>()._animatorManager;
-
+        
         _heightWasUpdated = false;
+        _isAvatarInstantiated = false;
     }
 
-    public void SetHeight(float height)
+    public async void OnAvatarInstantiated(GameObject avatarObject, float initialHeight, Vector3 initialScale)
     {
-        _targetHeight = Mathf.Clamp(height, MinHeight, MaxHeight);
+        if (avatarObject == null)
+        {
+            AvatarScaleMod.Logger.Error("Avatar was somehow null?????");
+            return;
+        }
+        AvatarScaleMod.Logger.Msg($"Avatar Object : {_avatarTransform} : {_avatarTransform == null}");
+        
+        if (_isAvatarInstantiated) return;
+        _isAvatarInstantiated = true;
+        
+        // if we don't have a queued height update, apply initial scaling
+        if (!_heightWasUpdated) 
+            _targetHeight = initialHeight;
+        
+        _initialHeight = initialHeight;
+        _initialScale = initialScale;
         _scaleFactor = _targetHeight / _initialHeight;
+        
+        _avatarTransform = avatarObject.transform;
+        await FindComponentsOfTypeAsync(scalableComponentTypes);
+
+        ApplyScaling(); // apply queued scaling if avatar was loading
+    }
+
+    public void OnAvatarDestroyed(bool shouldPersist = false)
+    {
+        if (!_isAvatarInstantiated) return;
+        _isAvatarInstantiated = false;
+        
+        AvatarScaleMod.Logger.Msg($"Destroying Avatar Object : {_avatarTransform} : {_avatarTransform == null}");
+        
+        _avatarTransform = null;
+        _heightWasUpdated = shouldPersist;
+        ClearComponentLists();
+    }
+
+    public void SetTargetHeight(float height)
+    {
+        if (Math.Abs(height - _targetHeight) < float.Epsilon)
+            return;
+        
+        _targetHeight = Mathf.Clamp(height, MinHeight, MaxHeight);
+        
         _heightWasUpdated = true;
+        if (!_isAvatarInstantiated) 
+            return;
+        
+        _scaleFactor = _targetHeight / _initialHeight;
         ApplyScaling();
     }
     
     public void ResetHeight()
     {
+        if (Math.Abs(_initialHeight - _targetHeight) < float.Epsilon)
+            return;
+        
         _targetHeight = _initialHeight;
-        _scaleFactor = 1f;
+        
         _heightWasUpdated = true;
+        if (!_isAvatarInstantiated) 
+            return;
+        
+        _scaleFactor = 1f;
         ApplyScaling();
     }
 
@@ -87,13 +148,21 @@ public class UniversalAvatarScaler : MonoBehaviour
         return _targetHeight;
     }
 
+    public bool IsValid()
+    {
+        return _isAvatarInstantiated;
+    }
+
     #endregion
 
     #region Private Methods
 
     private void ScaleAvatarRoot()
     {
-        transform.localScale = _initialScale * _scaleFactor;
+        if (_avatarTransform == null)
+            return;
+        
+        _avatarTransform.localScale = _initialScale * _scaleFactor;
     }
     
     private void UpdateAnimatorParameter()
@@ -109,8 +178,9 @@ public class UniversalAvatarScaler : MonoBehaviour
 
     private void ApplyScaling()
     {
-        if (!_heightWasUpdated)
+        if (_avatarTransform == null)
             return;
+        
         _heightWasUpdated = false;
         
         ScaleAvatarRoot();
@@ -138,10 +208,19 @@ public class UniversalAvatarScaler : MonoBehaviour
     private readonly List<ScaledPositionConstraint> _scaledPositionConstraints = new List<ScaledPositionConstraint>();
     private readonly List<ScaledScaleConstraint> _scaledScaleConstraints = new List<ScaledScaleConstraint>();
 
+    private void ClearComponentLists()
+    {
+        _scaledLights.Clear();
+        _scaledAudioSources.Clear();
+        _scaledParentConstraints.Clear();
+        _scaledPositionConstraints.Clear();
+        _scaledScaleConstraints.Clear();
+    }
+    
     private async Task FindComponentsOfTypeAsync(Type[] types)
     {
         var tasks = new List<Task>();
-        var components = GetComponentsInChildren<Component>(true);
+        var components = _avatarTransform.gameObject.GetComponentsInChildren<Component>(true);
 
         foreach (Component component in components)
         {

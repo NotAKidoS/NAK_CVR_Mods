@@ -1,4 +1,5 @@
 ﻿using MelonLoader;
+using NAK.AvatarScaleMod.AvatarScaling;
 
 namespace NAK.AvatarScaleMod;
 
@@ -8,12 +9,12 @@ internal static class ModSettings
 {
     public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(AvatarScaleMod));
+
+    public static MelonPreferences_Entry<bool> PersistantHeight;
     
     // AvatarScaleTool supported scaling settings
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
         Category.CreateEntry("AvatarScaleTool Scaling", true, description: "Should there be persistant avatar scaling? This only works properly across supported avatars.");
-    public static readonly MelonPreferences_Entry<bool> EntryPersistAnyways =
-        Category.CreateEntry("Persist From Unsupported", true, description: "Should avatar scale persist even from unsupported avatars?");
     
     // Universal scaling settings (Mod Network, requires others to have mod)
     public static readonly MelonPreferences_Entry<bool> EntryUniversalScaling =
@@ -37,7 +38,6 @@ internal static class ModSettings
     {
         EntryEnabled.OnEntryValueChanged.Subscribe(OnEntryEnabledChanged);
         EntryUseScaleGesture.OnEntryValueChanged.Subscribe(OnEntryUseScaleGestureChanged);
-        EntryPersistAnyways.OnEntryValueChanged.Subscribe(OnEntryPersistAnywaysChanged);
         EntryUniversalScaling.OnEntryValueChanged.Subscribe(OnEntryUniversalScalingChanged);
         EntryScaleConstraints.OnEntryValueChanged.Subscribe(OnEntryScaleConstraintsChanged);
     }
@@ -52,10 +52,7 @@ internal static class ModSettings
         //AvatarScaleGesture.GestureEnabled = newValue;
     }
 
-    private static void OnEntryPersistAnywaysChanged(bool oldValue, bool newValue)
-    {
 
-    }
 
     private static void OnEntryUniversalScalingChanged(bool oldValue, bool newValue)
     {
@@ -69,7 +66,15 @@ internal static class ModSettings
     
     public static void InitializeModSettings()
     {
+        PersistantHeight = Category.CreateEntry("Persistant Height", false, description: "Should the avatar height persist between avatar switches?");
+        PersistantHeight.OnEntryValueChanged.Subscribe(OnPersistantHeightChanged);
+        
         //AvatarScaleManager.UseUniversalScaling = EntryEnabled.Value;
         //AvatarScaleGesture.GestureEnabled = EntryUseScaleGesture.Value;
+    }
+    
+    private static void OnPersistantHeightChanged(bool oldValue, bool newValue)
+    {
+        AvatarScaleManager.Instance.Setting_PersistantHeight = newValue;
     }
 }

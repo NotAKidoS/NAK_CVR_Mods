@@ -8,38 +8,53 @@ using Object = UnityEngine.Object;
 namespace NAK.AvatarScaleMod.HarmonyPatches;
 
 internal class PlayerSetupPatches
-{
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
-    private static void Postfix_PlayerSetup_Start()
-    {
-        try
-        {
-            GameObject scaleManager = new(nameof(AvatarScaleManager), typeof(AvatarScaleManager));
-            Object.DontDestroyOnLoad(scaleManager);
-        }
-        catch (Exception e)
-        {
-            AvatarScaleMod.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_Start)}");
-            AvatarScaleMod.Logger.Error(e);
-        }
-    }
-
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatar))]
-    private static void Postfix_PlayerSetup_SetupAvatar(ref PlayerSetup __instance)
-    {
-        try
-        {
-            AvatarScaleManager.Instance.OnAvatarInstantiated(__instance);
-        }
-        catch (Exception e)
-        {
-            AvatarScaleMod.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_SetupAvatar)}");
-            AvatarScaleMod.Logger.Error(e);
-        }
-    }
-}
+ {
+     [HarmonyPostfix]
+     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
+     private static void Postfix_PlayerSetup_Start()
+     {
+         try
+         {
+             GameObject scaleManager = new (nameof(AvatarScaleManager), typeof(AvatarScaleManager));
+             Object.DontDestroyOnLoad(scaleManager);
+         }
+         catch (Exception e)
+         {
+             AvatarScaleMod.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_Start)}");
+             AvatarScaleMod.Logger.Error(e);
+         }
+     }
+     
+     [HarmonyPostfix]
+     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatar))]
+     private static void Postfix_PlayerSetup_SetupAvatar(ref PlayerSetup __instance)
+     {
+         try
+         {
+             AvatarScaleManager.Instance.OnAvatarInstantiated(__instance);
+         }
+         catch (Exception e)
+         {
+             AvatarScaleMod.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_SetupAvatar)}");
+             AvatarScaleMod.Logger.Error(e);
+         }
+     }
+     
+     [HarmonyPostfix]
+     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ClearAvatar))]
+     private static void Postfix_PlayerSetup_ClearAvatar(ref PlayerSetup __instance)
+     {
+         try
+         {
+             AvatarScaleManager.Instance.OnAvatarDestroyed(__instance);
+         }
+         catch (Exception e)
+         {
+             AvatarScaleMod.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_ClearAvatar)}");
+             AvatarScaleMod.Logger.Error(e);
+         }
+     }
+ }
 
 internal class PuppetMasterPatches
 {
@@ -55,6 +70,22 @@ internal class PuppetMasterPatches
         {
             AvatarScaleMod.Logger.Error(
                 $"Error during the patched method {nameof(Postfix_PuppetMaster_AvatarInstantiated)}");
+            AvatarScaleMod.Logger.Error(e);
+        }
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(PuppetMaster), nameof(PuppetMaster.AvatarDestroyed))]
+    private static void Postfix_PuppetMaster_AvatarDestroyed(ref PuppetMaster __instance)
+    {
+        try
+        {
+            AvatarScaleManager.Instance.OnNetworkAvatarDestroyed(__instance);
+        }
+        catch (Exception e)
+        {
+            AvatarScaleMod.Logger.Error(
+                $"Error during the patched method {nameof(Postfix_PuppetMaster_AvatarDestroyed)}");
             AvatarScaleMod.Logger.Error(e);
         }
     }

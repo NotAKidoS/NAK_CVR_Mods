@@ -1,9 +1,14 @@
-﻿using ABI_RC.Systems.ModNetwork;
+﻿using ABI_RC.Core.Networking;
+using ABI_RC.Systems.ModNetwork;
+using DarkRift;
 using MelonLoader;
 using NAK.AvatarScaleMod.AvatarScaling;
 using UnityEngine;
 
 namespace NAK.AvatarScaleMod.Networking;
+
+// overcomplicated, but functional
+// a
 
 public static class ModNetwork
 {
@@ -14,19 +19,37 @@ public static class ModNetwork
     private const float ReceiveRateLimit = 0.2f;
     private const int MaxWarnings = 2;
     private const float TimeoutDuration = 10f;
+    
+    private class QueuedMessage
+    {
+        public MessageType Type { get; set; }
+        public float Height { get; set; }
+        public string TargetPlayer { get; set; }
+        public string Sender { get; set; }
+    }
 
     #endregion
 
     #region Private State
 
-    private static float? OutboundQueue;
+    private static readonly Dictionary<string, QueuedMessage> OutboundQueue = new();
     private static float LastSentTime;
 
-    private static readonly Dictionary<string, float> InboundQueue = new Dictionary<string, float>();
-    private static readonly Dictionary<string, float> LastReceivedTimes = new Dictionary<string, float>();
+    private static readonly Dictionary<string, QueuedMessage> InboundQueue = new();
+    private static readonly Dictionary<string, float> LastReceivedTimes = new();
 
-    private static readonly Dictionary<string, int> UserWarnings = new Dictionary<string, int>();
-    private static readonly Dictionary<string, float> UserTimeouts = new Dictionary<string, float>();
+    private static readonly Dictionary<string, int> UserWarnings = new();
+    private static readonly Dictionary<string, float> UserTimeouts = new();
+
+    #endregion
+
+    #region Enums
+
+    private enum MessageType : byte
+    {
+        SyncHeight = 0, // just send height
+        RequestHeight = 1 // send height, request height back
+    }
 
     #endregion
 
@@ -36,26 +59,63 @@ public static class ModNetwork
     {
         ModNetworkManager.Subscribe(ModId, OnMessageReceived);
     }
-    
+
     internal static void Update()
     {
         ProcessOutboundQueue();
         ProcessInboundQueue();
     }
 
-    private static void SendMessageToAll(float height)
+    private static void SendMessage(MessageType messageType, float height, string playerId = null)
     {
-        using ModNetworkMessage modMsg = new ModNetworkMessage(ModId);
-        modMsg.Write(height);
-        modMsg.Send();
-        //MelonLogger.Msg($"Sending height: {height}");
+        if (!IsConnectedToGameNetwork())
+            return;
+
+        if (!string.IsNullOrEmpty(playerId))
+        {
+            // to specific user
+            using ModNetworkMessage modMsg = new(ModId, playerId);
+            modMsg.Write((byte)messageType);
+            modMsg.Write(height);
+            modMsg.Send();
+        }
+        else
+        {
+            // to all users
+            using ModNetworkMessage modMsg = new(ModId);
+            modMsg.Write((byte)messageType);
+            modMsg.Write(height);
+            modMsg.Send();
+        }
+
+        var typeDesc = messageType == MessageType.SyncHeight ? "height" : "height request";
+        MelonLogger.Msg($"Sending {typeDesc}: {height}");
     }
 
     private static void OnMessageReceived(ModNetworkMessage msg)
     {
+        msg.Read(out byte msgTypeRaw);
         msg.Read(out float receivedHeight);
-        ProcessReceivedHeight(msg.Sender, receivedHeight);
-        //MelonLogger.Msg($"Received height from {msg.Sender}: {receivedHeight}");
+
+        if (!Enum.IsDefined(typeof(MessageType), msgTypeRaw))
+            return;
+
+        // User is in timeout
+        if (UserTimeouts.TryGetValue(msg.Sender, out var timeoutEnd) && Time.time < timeoutEnd)
+            return;
+
+        if (IsRateLimited(msg.Sender))
+            return;
+
+        QueuedMessage inboundMessage = new()
+        {
+            Type = (MessageType)msgTypeRaw,
+            Height = receivedHeight,
+            Sender = msg.Sender
+        };
+
+        InboundQueue[msg.Sender] = inboundMessage;
+        MelonLogger.Msg($"Received message from {msg.Sender}: {receivedHeight}");
     }
 
     #endregion
@@ -64,7 +124,14 @@ public static class ModNetwork
 
     public static void SendNetworkHeight(float newHeight)
     {
-        OutboundQueue = newHeight;
+        OutboundQueue["global"] = new QueuedMessage { Type = MessageType.SyncHeight, Height = newHeight };
+    }
+
+    public static void RequestHeightSync()
+    {
+        var myCurrentHeight = AvatarScaleManager.Instance.GetHeight();
+        if (myCurrentHeight > 0)
+            OutboundQueue["global"] = new QueuedMessage { Type = MessageType.RequestHeight, Height = myCurrentHeight };
     }
 
     #endregion
@@ -73,32 +140,27 @@ public static class ModNetwork
 
     private static void ProcessOutboundQueue()
     {
-        if (!OutboundQueue.HasValue) 
+        if (OutboundQueue.Count == 0 || Time.time - LastSentTime < SendRateLimit)
             return;
 
-        if (!(Time.time - LastSentTime >= SendRateLimit))
-            return;
+        foreach (QueuedMessage message in OutboundQueue.Values)
+            SendMessage(message.Type, message.Height, message.TargetPlayer);
 
-        SendMessageToAll(OutboundQueue.Value);
+        OutboundQueue.Clear();
         LastSentTime = Time.time;
-        OutboundQueue = null;
     }
 
     #endregion
 
     #region Inbound Height Queue
 
-    private static void ProcessReceivedHeight(string userId, float receivedHeight)
+    private static bool IsRateLimited(string userId)
     {
-        // User is in timeout
-        if (UserTimeouts.TryGetValue(userId, out float timeoutEnd) && Time.time < timeoutEnd)
-            return;
-
         // Rate-limit checking
-        if (LastReceivedTimes.TryGetValue(userId, out float lastReceivedTime) &&
+        if (LastReceivedTimes.TryGetValue(userId, out var lastReceivedTime) &&
             Time.time - lastReceivedTime < ReceiveRateLimit)
         {
-            if (UserWarnings.TryGetValue(userId, out int warnings))
+            if (UserWarnings.TryGetValue(userId, out var warnings))
             {
                 warnings++;
                 UserWarnings[userId] = warnings;
@@ -107,33 +169,62 @@ public static class ModNetwork
                 {
                     UserTimeouts[userId] = Time.time + TimeoutDuration;
                     MelonLogger.Msg($"User is sending height updates too fast! Applying 10s timeout... : {userId}");
-                    return;
+                    return true;
                 }
             }
             else
             {
                 UserWarnings[userId] = 1;
             }
-        }
-        else
-        {
-            LastReceivedTimes[userId] = Time.time;
-            UserWarnings.Remove(userId); // Reset warnings
-            // MelonLogger.Msg($"Clearing timeout from user : {userId}");
+
+            return true;
         }
 
-        InboundQueue[userId] = receivedHeight;
+        LastReceivedTimes[userId] = Time.time;
+        UserWarnings.Remove(userId); // Reset warnings
+        // MelonLogger.Msg($"Clearing timeout from user : {userId}");
+        return false;
     }
 
     private static void ProcessInboundQueue()
     {
-        foreach (var (userId, height) in InboundQueue)
-        {
-            MelonLogger.Msg($"Applying inbound queued height {height} from : {userId}");
-            AvatarScaleManager.Instance.OnNetworkHeightUpdateReceived(userId, height);
-        }
+        foreach (QueuedMessage message in InboundQueue.Values)
+            switch (message.Type)
+            {
+                case MessageType.RequestHeight:
+                {
+                    var myCurrentHeight = AvatarScaleManager.Instance.GetHeight();
+                    if (myCurrentHeight > 0)
+                        OutboundQueue[message.Sender] = new QueuedMessage
+                        {
+                            Type = MessageType.SyncHeight,
+                            Height = myCurrentHeight,
+                            TargetPlayer = message.Sender
+                        };
+
+                    AvatarScaleManager.Instance.OnNetworkHeightUpdateReceived(message.Sender, message.Height);
+                    break;
+                }
+                case MessageType.SyncHeight:
+                    AvatarScaleManager.Instance.OnNetworkHeightUpdateReceived(message.Sender, message.Height);
+                    break;
+                default:
+                    AvatarScaleMod.Logger.Error($"Invalid message type received from: {message.Sender}");
+                    break;
+            }
 
         InboundQueue.Clear();
+    }
+
+    #endregion
+
+    #region Private Methods
+
+    private static bool IsConnectedToGameNetwork()
+    {
+        return NetworkManager.Instance != null
+               && NetworkManager.Instance.GameNetwork != null
+               && NetworkManager.Instance.GameNetwork.ConnectionState == ConnectionState.Connected;
     }
 
     #endregion

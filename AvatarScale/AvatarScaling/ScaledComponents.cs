@@ -122,7 +122,7 @@ public class ScaledScaleConstraint
     public void Scale(float scaleFactor)
     {
         Component.scaleAtRest = InitialScaleAtRest * scaleFactor;
-        Component.scaleOffset = InitialScaleOffset * scaleFactor;
+        // Component.scaleOffset = InitialScaleOffset * scaleFactor;
     }
 
     public void Reset()
