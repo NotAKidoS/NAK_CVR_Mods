@@ -48,12 +48,15 @@ internal abstract class IKHandler
     {
         Vector3 currentPosition = currentParent._referencePoint.position;
         Quaternion currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
-
-        Vector3 deltaPosition = currentPosition - _movementPosition;
-        Quaternion deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
-
-        if (_movementParent == currentParent)
+        
+        if (_movementParent != null && _movementParent == currentParent)
         {
+            Vector3 deltaPosition = currentPosition - _movementPosition;
+            Quaternion deltaRotation = Quaternion.identity;
+        
+            if (currentParent.orientationMode == CVRMovementParent.OrientationMode.RotateWithParent)
+                deltaRotation = Quaternion.Inverse(_movementRotation) * currentRotation;
+            
             _solver.AddPlatformMotion(deltaPosition, deltaRotation, platformPivot);
             _ikSimulatedRootAngle = Mathf.Repeat(_ikSimulatedRootAngle + deltaRotation.eulerAngles.y, 360f);
         }

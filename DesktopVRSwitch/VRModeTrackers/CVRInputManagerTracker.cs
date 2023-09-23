@@ -1,5 +1,7 @@
-﻿using ABI_RC.Systems.InputManagement;
+﻿using ABI_RC.Core;
+using ABI_RC.Systems.InputManagement;
 using ABI_RC.Systems.InputManagement.InputModules;
+using ABI_RC.Systems.InputManagement.XR.Modules;
 
 namespace NAK.DesktopVRSwitch.VRModeTrackers;
 
@@ -24,6 +26,16 @@ public class CVRInputManagerTracker : VRModeTracker
         // IM CRYING
         //CVRInputManager.Instance.reload = true;
 
+        // set to null so input manager doesnt attempt to access it
+        if (CVRInputManager._moduleXR._leftModule != null)
+            if (CVRInputManager._moduleXR._leftModule is CVRXRModule_SteamVR leftModule) leftModule._steamVr = null;
+        
+        if (CVRInputManager._moduleXR._rightModule != null)
+            if (CVRInputManager._moduleXR._rightModule is CVRXRModule_SteamVR rightModule) rightModule._steamVr = null;
+        
+        // TODO: MOVE THIS TO DIFFERENT TRACKER
+        RootLogic.Instance.ToggleMouse(args.IsUsingVr);
+        
         //just in case
         CVRInputManager.Instance.textInputFocused = false;
         //sometimes head can get stuck, so just in case

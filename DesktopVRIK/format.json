@@ -1,8 +1,8 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.2.5",
-  "gameversion": "2023r171",
+  "modversion": "4.2.6",
+  "gameversion": "2023r172",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r19/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
-  "changelog": "- Potential fix for PlayerSetup.ResetIk not running in Halfbody.",
+  "changelog": "- Movement Parent IK handling now respects new orientation mode.",
   "embedcolor": "#9b59b6"
 }

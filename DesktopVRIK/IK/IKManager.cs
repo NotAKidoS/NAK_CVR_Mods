@@ -26,7 +26,6 @@ public class IKManager : MonoBehaviour
     // Player Info
     internal Transform _desktopCamera;
     internal Transform _vrCamera;
-    private bool _isEmotePlaying;
 
     // Avatar Info
     private Animator _animator;
