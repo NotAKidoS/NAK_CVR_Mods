@@ -1,8 +1,8 @@
 {
   "_id": 142,
   "name": "IKFixes",
-  "modversion": "1.0.7",
-  "gameversion": "2023r171",
+  "modversion": "1.0.8",
+  "gameversion": "2023r172",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r20/IKFixes.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/IKFixes.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes/",
-  "changelog": "- Updates for 2023r171\n- Removed unneeded settings (IKPose & NetIKPass).\n- Fixed halfbody fake root angle option.\n- Added Reset Settings UIExpansionKit button.",
+  "changelog": "- Updates for 2023r172\n- Removed unneeded settings (IKPose & NetIKPass).\n- Fixed halfbody fake root angle option.\n- Added Reset Settings UIExpansionKit button.\n- Fixed issue with MelonPref identifiers containing illegal characters.",
   "embedcolor": "f46e49"
 }

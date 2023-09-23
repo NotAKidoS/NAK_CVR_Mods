@@ -64,7 +64,7 @@ public static class ScaleReconizer
             return;
         
         // Store initial modifier so we can get difference later
-        _initialModifier = modifier;
+        _initialModifier = Mathf.Max(modifier, 0.01f); // no zero
         _initialTargetHeight = AvatarScaleManager.Instance.GetHeight();
     }
 
@@ -72,6 +72,8 @@ public static class ScaleReconizer
     {
         if (!Enabled)
             return;
+
+        modifier = Mathf.Max(modifier, 0.01f); // no zero
 
         // Allow user to release triggers to reset "world grip"
         if (RequireTriggers && !AreBothTriggersDown())
