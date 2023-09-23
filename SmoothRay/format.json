@@ -1,8 +1,8 @@
 {
   "_id": 162,
   "name": "SmoothRay",
-  "modversion": "1.0.2",
-  "gameversion": "2023r171",
+  "modversion": "1.0.3",
+  "gameversion": "2023r172",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/SmoothRay.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/SmoothRay.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SmoothRay/",
-  "changelog": "- Fixes for 2023r171.\n- Prevented from initializing when launching with OpenXR.",
+  "changelog": "- Fixes for 2023r172. Literally just recompiled.",
   "embedcolor": "#dc8105"
 }

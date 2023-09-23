@@ -26,7 +26,6 @@ using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Savior;
 using MelonLoader;
 using UnityEngine;
-using UnityEngine.Events;
 using Valve.VR;
 
 namespace NAK.SmoothRay;
@@ -67,7 +66,7 @@ public class SmoothRayer : MonoBehaviour
         // TrackedControllerFix support - OpenVR
         if (TryGetComponent(out _trackedObject))
         {
-            _newPosesAction = SteamVR_Events.NewPosesAppliedAction(new UnityAction(OnAppliedPoses));
+            _newPosesAction = SteamVR_Events.NewPosesAppliedAction(OnAppliedPoses);
             UpdatePosesAction(true);
         }
 
@@ -79,8 +78,9 @@ public class SmoothRayer : MonoBehaviour
 
     private void OnEnable()
     {
-        _smoothedPosition = transform.localPosition;
-        _smoothedRotation = transform.localRotation;
+        Transform controller = transform;
+        _smoothedPosition = controller.localPosition;
+        _smoothedRotation = controller.localRotation;
 
         // desktopvrswitch support, start handles this for normal use
         UpdateTransformUpdatedEvent(true);
@@ -89,8 +89,9 @@ public class SmoothRayer : MonoBehaviour
 
     private void OnDisable()
     {
-        _smoothedPosition = transform.localPosition;
-        _smoothedRotation = transform.localRotation;
+        Transform controller = transform;
+        _smoothedPosition = controller.localPosition;
+        _smoothedRotation = controller.localRotation;
 
         // desktopvrswitch support, normal use wont run this
         UpdateTransformUpdatedEvent(false);
@@ -115,7 +116,7 @@ public class SmoothRayer : MonoBehaviour
         if (enable && CheckVR.Instance.forceOpenXr)
             return;
 
-        if (_behaviourPose == null) 
+        if (_behaviourPose == null)
             return;
 
         if (enable)
@@ -134,20 +135,26 @@ public class SmoothRayer : MonoBehaviour
         _rotationSmoothingValue = Math.Max(20f - Mathf.Clamp(SmoothRay.EntryRotationSmoothing.Value, 0f, 20f), 0.1f);
     }
 
-    private void OnAppliedPoses() => SmoothTransform();
+    private void OnAppliedPoses()
+    {
+        SmoothTransform();
+    }
 
-    private void OnTransformUpdated(SteamVR_Behaviour_Pose pose, SteamVR_Input_Sources inputSource) => SmoothTransform();
+    private void OnTransformUpdated(SteamVR_Behaviour_Pose pose, SteamVR_Input_Sources inputSource)
+    {
+        SmoothTransform();
+    }
 
     private void SmoothTransform()
     {
+        Transform controller = transform;
         if (_isEnabled && ray.lineRenderer != null && ray.lineRenderer.enabled)
         {
-            if (_menuOnly && (!ray.uiActive || (ray.hitTransform != ViewManager.Instance.transform && ray.hitTransform != CVR_MenuManager.Instance.quickMenu.transform)))
-            {
+            if (_menuOnly && (!ray.uiActive || (ray.hitTransform != ViewManager.Instance.transform &&
+                                                ray.hitTransform != CVR_MenuManager.Instance.quickMenu.transform)))
                 return;
-            }
 
-            var angDiff = Quaternion.Angle(_smoothedRotation, transform.localRotation);
+            var angDiff = Quaternion.Angle(_smoothedRotation, controller.localRotation);
             _angleVelocitySnap = Mathf.Min(_angleVelocitySnap + angDiff, 90f);
 
             var snapMulti = Mathf.Clamp(_angleVelocitySnap / _smallMovementThresholdAngle, 0.1f, 2.5f);
@@ -157,20 +164,22 @@ public class SmoothRayer : MonoBehaviour
 
             if (_positionSmoothingValue < 20f)
             {
-                _smoothedPosition = Vector3.Lerp(_smoothedPosition, transform.localPosition, _positionSmoothingValue * Time.deltaTime * snapMulti);
-                transform.localPosition = _smoothedPosition;
+                _smoothedPosition = Vector3.Lerp(_smoothedPosition, controller.localPosition,
+                    _positionSmoothingValue * Time.deltaTime * snapMulti);
+                controller.localPosition = _smoothedPosition;
             }
 
             if (_rotationSmoothingValue < 20f)
             {
-                _smoothedRotation = Quaternion.Lerp(_smoothedRotation, transform.localRotation, _rotationSmoothingValue * Time.deltaTime * snapMulti);
-                transform.localRotation = _smoothedRotation;
+                _smoothedRotation = Quaternion.Lerp(_smoothedRotation, controller.localRotation,
+                    _rotationSmoothingValue * Time.deltaTime * snapMulti);
+                controller.localRotation = _smoothedRotation;
             }
         }
         else
         {
-            _smoothedPosition = transform.localPosition;
-            _smoothedRotation = transform.localRotation;
+            _smoothedPosition = controller.localPosition;
+            _smoothedRotation = controller.localRotation;
         }
     }
 
