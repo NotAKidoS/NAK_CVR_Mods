@@ -27,6 +27,6 @@ using System.Reflection;
 namespace NAK.DesktopVRSwitch.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.4.1";
+    public const string Version = "4.4.2";
     public const string Author = "NotAKidoS";
 }
