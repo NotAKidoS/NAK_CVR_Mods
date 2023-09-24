@@ -82,10 +82,7 @@ public class AvatarScaleManager : MonoBehaviour
         _localAvatarScaler.OnAvatarInstantiated(playerSetup._avatar, playerSetup._initialAvatarHeight,
             playerSetup.initialScale);
 
-        if (Setting_PersistantHeight)
-            SetHeight(_lastTargetHeight);
-        else if (_lastTargetHeight > 0)
-            SetHeight(playerSetup._initialAvatarHeight);
+        SetHeight(Setting_PersistantHeight ? _lastTargetHeight : -1f);
     }
 
     public void OnAvatarDestroyed(PlayerSetup playerSetup)

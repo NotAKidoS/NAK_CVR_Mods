@@ -32,6 +32,7 @@ public class LocalScaler : BaseScaler
         _targetHeight = initialHeight;
         _scaleFactor = 1f;
         
+        _isHeightAdjustedFromInitial = false;
         _legacyAnimationScale = Vector3.zero;
     }
     
