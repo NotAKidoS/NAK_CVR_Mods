@@ -25,13 +25,6 @@ public class CVRInputManagerTracker : VRModeTracker
         
         // IM CRYING
         //CVRInputManager.Instance.reload = true;
-
-        // set to null so input manager doesnt attempt to access it
-        if (CVRInputManager._moduleXR._leftModule != null)
-            if (CVRInputManager._moduleXR._leftModule is CVRXRModule_SteamVR leftModule) leftModule._steamVr = null;
-        
-        if (CVRInputManager._moduleXR._rightModule != null)
-            if (CVRInputManager._moduleXR._rightModule is CVRXRModule_SteamVR rightModule) rightModule._steamVr = null;
         
         // TODO: MOVE THIS TO DIFFERENT TRACKER
         RootLogic.Instance.ToggleMouse(args.IsUsingVr);
@@ -50,7 +43,18 @@ public class CVRInputManagerTracker : VRModeTracker
         
         //add input module if you started in desktop
         if (CVRInputManager._moduleXR == null)
+        {
             CVRInputManager.Instance.AddInputModule(CVRInputManager._moduleXR = new CVRInputModule_XR());
+        }
+        else
+        {
+            // set to null so input manager doesnt attempt to access it
+            
+            if (CVRInputManager._moduleXR._leftModule != null)
+                if (CVRInputManager._moduleXR._leftModule is CVRXRModule_SteamVR leftModule) leftModule._steamVr = null;
+            if (CVRInputManager._moduleXR._rightModule != null)
+                if (CVRInputManager._moduleXR._rightModule is CVRXRModule_SteamVR rightModule) rightModule._steamVr = null;
+        }
 
         //enable xr input or whatnot
         CVRInputManager._moduleXR.InputEnabled = args.IsUsingVr;

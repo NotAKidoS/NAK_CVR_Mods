@@ -35,6 +35,7 @@ internal static class XRHandler
         // Remove SteamVR behaviour & render
         UnityEngine.Object.DestroyImmediate(SteamVR_Behaviour.instance.gameObject);
         SteamVR.enabled = false; // disposes SteamVR
+        Patches.SteamVRNullReferencePatch.DestroySteamVRInstancesImmediate();
 
         // Disable UnityXR
         XRGeneralSettings.Instance.Manager.StopSubsystems();

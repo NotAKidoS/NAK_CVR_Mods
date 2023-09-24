@@ -26,9 +26,6 @@ public class DesktopVRSwitch : MelonMod
         // post processing fixes
         ApplyPatches(typeof(HarmonyPatches.CVRWorldPatches));
         
-        // fuck you
-        ApplyPatches(typeof(HarmonyPatches.CohtmlUISystemPatches));
-
         // prevent steamvr behaviour from closing game
         ApplyPatches(typeof(HarmonyPatches.SteamVRBehaviourPatches));
         

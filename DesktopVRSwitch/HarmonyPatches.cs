@@ -118,32 +118,6 @@ internal class CVRPickupObjectPatches
     }
 }
 
-internal class CohtmlUISystemPatches
-{
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.RegisterGamepad), typeof(uint), typeof(string), typeof(uint), typeof(uint), typeof(IntPtr))]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.RegisterGamepad), typeof(uint), typeof(string), typeof(uint), typeof(uint))]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadState), typeof(cohtml.GamepadState))]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadState), typeof(uint), typeof(float[]), typeof(float[]))]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UnregisterGamepad))]
-    [HarmonyPatch(typeof(UISystem), nameof(UISystem.UpdateGamepadStateExtended))]
-    private static bool Prefix_UISystem_FuckOff()
-    {
-        /**
-            GameFace Version 1.34.0.4 – released 10 Nov 2022
-            Fixed a crash when registering and unregistering gamepads
-            Fix	Fixed setting a gamepad object when creating GamepadEvent from JavaScript
-            Fix	Fixed a crash when unregistering a gamepad twice
-            Fix	Fixed a GamepadEvent related crash during garbage collector tracing
-
-            it is not fixed you fucking piece of shit
-        **/
-
-        // dont
-        return false;
-    }
-}
-
 internal class SteamVRBehaviourPatches
 {
     [HarmonyPrefix]
