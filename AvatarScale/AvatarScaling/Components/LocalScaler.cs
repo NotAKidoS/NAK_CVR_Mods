@@ -63,7 +63,13 @@ public class LocalScaler : BaseScaler
     private bool CheckForAnimationScaleChange()
     {
         if (_avatarTransform == null) return false;
+        
+        //scale matches last recorded animation scale
         if (_avatarTransform.localScale == _legacyAnimationScale) 
+            return false;
+        
+        // avatar may not have scale animation, check if it isn't equal to targetScale
+        if (_avatarTransform.localScale == _targetScale)
             return false;
         
         // scale was likely reset or not initiated

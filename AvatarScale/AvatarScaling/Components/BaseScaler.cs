@@ -65,8 +65,7 @@ public class BaseScaler : MonoBehaviour
         if (Math.Abs(height - _targetHeight) < float.Epsilon)
             return;
         
-        if (height < float.Epsilon 
-            || Math.Abs(height - _initialHeight) < float.Epsilon)
+        if (height < float.Epsilon)
         {
             ResetHeight();
             return;
