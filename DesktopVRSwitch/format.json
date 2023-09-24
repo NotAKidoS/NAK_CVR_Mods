@@ -1,7 +1,7 @@
 {
   "_id": 103,
   "name": "DesktopVRSwitch",
-  "modversion": "4.4.1",
+  "modversion": "4.4.2",
   "gameversion": "2023r172",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -16,7 +16,7 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r20/DesktopVRSwitch.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/DesktopVRSwitch.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch/",
   "changelog": "- Fixes for 2023r172.\n- Mouse is now force unlocked once entering VR mode as QOL.",
   "embedcolor": "3498db"
