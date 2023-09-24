@@ -1,6 +1,9 @@
 ﻿using ABI_RC.Core.Savior;
 using MelonLoader;
 using System.Reflection;
+using ABI_RC.Systems.InputManagement;
+using ABI_RC.Systems.InputManagement.InputModules;
+using UnityEngine;
 
 namespace NAK.EzCurls;
 
@@ -47,12 +50,33 @@ public class EzCurls : MelonMod
     public static readonly MelonPreferences_Entry<float> EntryCurlSmoothingFactor =
         Category.CreateEntry("CurlSmoothingFactor", 0.5f,
             description: "The multiplier for curl smoothing.");
+    
+    // Curve control settings
+    public static readonly MelonPreferences_Entry<bool> EntryUseCurveControl =
+        Category.CreateEntry("UseCurveControl", false,
+            description: "Enable curve control mode to make the midrange of the curl more dense.");
+    
+    public static readonly MelonPreferences_Entry<bool> EntryUseTunedCurveControl =
+        Category.CreateEntry("UseTunedCurveControl", false,
+            description: "Enables a pre-tuned curve.");
+
+    public static readonly MelonPreferences_Entry<float> EntryCurveMin =
+        Category.CreateEntry("CurveMin", 0.0f,
+            description: "The minimum value of the density curve.");
+
+    public static readonly MelonPreferences_Entry<float> EntryCurveMiddle =
+        Category.CreateEntry("CurveMiddle", 0.5f,
+            description: "The middle value of the density curve.");
+
+    public static readonly MelonPreferences_Entry<float> EntryCurveMax =
+        Category.CreateEntry("CurveMax", 1.0f,
+            description: "The maximum value of the density curve.");
 
     public override void OnInitializeMelon()
     {
         HarmonyInstance.Patch(
-            typeof(InputModuleSteamVR).GetMethod(nameof(InputModuleSteamVR.Start)),
-            prefix: new HarmonyLib.HarmonyMethod(typeof(EzCurls).GetMethod(nameof(OnInputModuleSteamVRStart_Prefix), BindingFlags.NonPublic | BindingFlags.Static))
+            typeof(CVRInputModule_XR).GetMethod(nameof(CVRInputModule_XR.ModuleAdded)),
+            postfix: new HarmonyLib.HarmonyMethod(typeof(EzCurls).GetMethod(nameof(OnCVRInputModule_XRModuleAdded_Postfix), BindingFlags.NonPublic | BindingFlags.Static))
         );
 
         foreach (MelonPreferences_Entry setting in Category.Entries)
@@ -76,10 +100,19 @@ public class EzCurls : MelonMod
         InputModuleCurlAdjuster.Instance.DontSmoothExtremes = EntryDontSmoothExtremes.Value;
         InputModuleCurlAdjuster.Instance.CurlSimilarityThreshold = EntryCurlSimilarityThreshold.Value;
         InputModuleCurlAdjuster.Instance.CurlSmoothingFactor = EntryCurlSmoothingFactor.Value;
+        
+        // curve control
+        InputModuleCurlAdjuster.Instance.UseCurveControl = EntryUseCurveControl.Value;
+        InputModuleCurlAdjuster.Instance.UseTunedCurveControl = EntryUseTunedCurveControl.Value;
+        InputModuleCurlAdjuster.Instance.DensityCurve = new AnimationCurve(
+            new Keyframe(0, EntryCurveMin.Value),
+            new Keyframe(0.5f, EntryCurveMiddle.Value),
+            new Keyframe(1, EntryCurveMax.Value)
+        );
     }
 
-    private static void OnInputModuleSteamVRStart_Prefix(ref InputModuleSteamVR __instance)
+    private static void OnCVRInputModule_XRModuleAdded_Postfix()
     {
-        __instance.gameObject.AddComponent<InputModuleCurlAdjuster>();
+        CVRInputManager.Instance.AddInputModule(new InputModuleCurlAdjuster());
     }
 }

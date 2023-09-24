@@ -1,5 +1,5 @@
-﻿using ABI_RC.Core.Savior;
-using ABI_RC.Systems.IK.SubSystems;
+﻿using ABI_RC.Systems.InputManagement;
+using UnityEngine;
 
 namespace NAK.EzCurls;
 
@@ -20,15 +20,27 @@ internal class InputModuleCurlAdjuster : CVRInputModule
     public float CurlSimilarityThreshold = 0.5f;
     public float CurlSmoothingFactor = 0.4f;
 
-    public new void Start()
+    // Curve control
+    public bool UseCurveControl = false;
+    public AnimationCurve DensityCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+    
+    // Tuned Curve control
+    public bool UseTunedCurveControl = false;
+    private readonly AnimationCurve TunedDensityCurve = new AnimationCurve(
+        new Keyframe(0, 0),          // Start at (0, 0)
+        new Keyframe(0.5f, 0.5f),   // Normal behavior up to (0.3, 0.3)
+        new Keyframe(0.85f, 0.6f),   // Only 0.1f movement from 0.5 to 0.9
+        new Keyframe(1, 1)          // Normal behavior from 0.9 to 1
+    );
+    
+    public override void ModuleAdded()
     {
         Instance = this;
-        base.Start();
+        base.ModuleAdded();
         EzCurls.OnSettingsChanged();
     }
 
     public override void UpdateInput() => DoCurlAdjustments();
-    public override void UpdateImportantInput() => DoCurlAdjustments();
 
     private void DoCurlAdjustments()
     {
@@ -82,6 +94,20 @@ internal class InputModuleCurlAdjuster : CVRInputModule
             SnapCurls(ref _inputManager.fingerCurlRightMiddle);
             SnapCurls(ref _inputManager.fingerCurlRightRing);
             SnapCurls(ref _inputManager.fingerCurlRightPinky);
+        }
+        
+        
+        if (UseCurveControl)
+        {
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlLeftIndex);
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlLeftMiddle);
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlLeftRing);
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlLeftPinky);
+
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlRightIndex);
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlRightMiddle);
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlRightRing);
+            AdjustCurlUsingCurve(ref _inputManager.fingerCurlRightPinky);
         }
     }
 
@@ -157,5 +183,16 @@ internal class InputModuleCurlAdjuster : CVRInputModule
         // Compute the distance from the center (0.5) and square it
         float dist = curlValue - 0.5f;
         return 1.0f - 4 * dist * dist;
+    }
+    
+    // middle of curve is more "dense"
+    private void AdjustCurlUsingCurve(ref float fingerCurl)
+    {
+        if (UseTunedCurveControl)
+        {
+            fingerCurl = TunedDensityCurve.Evaluate(fingerCurl);
+            return;
+        }
+        fingerCurl = DensityCurve.Evaluate(fingerCurl);
     }
 }
