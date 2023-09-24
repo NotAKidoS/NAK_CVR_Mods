@@ -19,6 +19,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/IKFixes.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes/",
-  "changelog": "- Updates for 2023r172\n- Removed unneeded settings (IKPose & NetIKPass).\n- Fixed halfbody fake root angle option.\n- Added Reset Settings UIExpansionKit button.\n- Fixed issue with MelonPref identifiers containing illegal characters.",
+  "changelog": "- Updates for 2023r172\n- Removed unneeded settings (IKPose & NetIKPass).\n- Fixed halfbody fake root angle option.\n- Added Reset Settings UIExpansionKit button.\n- Fixed issue with MelonPref identifiers containing illegal characters.\n- Movement Parent IK handling now respects new orientation mode.",
   "embedcolor": "f46e49"
 }

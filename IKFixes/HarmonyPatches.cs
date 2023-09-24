@@ -296,13 +296,15 @@ internal static class PlayerSetupPatches
         currentPosition.y = IKSystem.vrik.transform.position.y; // set pivot to floor
         Quaternion currentRotation = Quaternion.Euler(0f, currentParent.transform.rotation.eulerAngles.y, 0f);
 
-        // Convert to delta position (how much changed since last frame)
-        Vector3 deltaPosition = currentPosition - lastMovementPosition;
-        Quaternion deltaRotation = Quaternion.Inverse(lastMovementRotation) * currentRotation;
-
         // Prevent targeting previous movement parent
-        if (lastMovementParent == currentParent || lastMovementParent == null)
+        if (lastMovementParent != null && lastMovementParent == currentParent)
         {
+            Vector3 deltaPosition = currentPosition - lastMovementPosition;
+            Quaternion deltaRotation = Quaternion.identity;
+            
+            if (currentParent.orientationMode == CVRMovementParent.OrientationMode.RotateWithParent)
+                deltaRotation = Quaternion.Inverse(lastMovementRotation) * currentRotation;
+            
             IKSystem.vrik.solver.AddPlatformMotion(deltaPosition, deltaRotation, currentPosition);
             BodySystemPatches.OffsetSimulatedRootAngle(deltaRotation.eulerAngles.y);
         }
