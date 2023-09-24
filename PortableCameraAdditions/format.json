@@ -1,12 +1,12 @@
 {
   "_id": 123,
   "name": "PortableCameraAdditions",
-  "modversion": "1.0.3",
-  "gameversion": "2023r171",
+  "modversion": "1.0.4",
+  "gameversion": "2023r172",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Adds a few basic settings to the Portable Camera.\n\nExpert settings for Near Clip & Far Clip.\nExpert settings for Orthographic & Orthographic Size.\nBy default, Near Clip & Far Clip are copied on world load.\nF11 to fullscreen on Desktop.",
+  "description": "Adds a few basic settings to the Portable Camera.\n\nExpert settings for Near Clip & Far Clip.\nExpert settings for Orthographic & Orthographic Size.\nBy default, Near Clip & Far Clip are copied on world load.",
   "searchtags": [
     "camera",
     "settings",
@@ -18,8 +18,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/PortableCameraAdditions.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/PortableCameraAdditions.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions/",
-  "changelog": "Fixes for 2023r171.",
+  "changelog": "- Removed F11 bind to fullscreen Portable Camera.\nIt is now a native bind with 2023r172.",
   "embedcolor": "#ffd96a"
 }
