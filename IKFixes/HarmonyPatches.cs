@@ -173,13 +173,6 @@ internal static class BodySystemPatches
         
         int count = IKSystem.Instance.AllTrackingPoints.FindAll(m => m.isActive && m.isValid && m.suggestedRole > TrackingPoint.TrackingRole.Invalid).Count;
 
-        // fixes having all tracking points disabled forcing calibration
-        if (count == 0)
-        {
-            __instance._fbtAvailable = false;
-            return false;
-        }
-
         // solid body count block
         int num = 0;
         if (BodySystem.enableLeftFootTracking) num++;
@@ -190,10 +183,15 @@ internal static class BodySystemPatches
         if (BodySystem.enableChestTracking) num++;
         if (BodySystem.enableLeftElbowTracking) num++;
         if (BodySystem.enableRightElbowTracking) num++;
-
-        __instance._fbtAvailable = (count >= num);
-        CVR_MenuManager.Instance.coreData.core.fullBodyActive = __instance._fbtAvailable = (count >= num && num != 0);
-    
+        
+        // fixes having all tracking points disabled forcing calibration
+        if (num == 0 || count == 0)
+        {
+            CVR_MenuManager.Instance.coreData.core.fullBodyActive = __instance._fbtAvailable = false;
+            return false;
+        }
+        
+        CVR_MenuManager.Instance.coreData.core.fullBodyActive = __instance._fbtAvailable = (count >= num);
         return false;
     }
 
