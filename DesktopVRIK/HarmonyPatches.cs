@@ -37,19 +37,19 @@ internal class PlayerSetupPatches
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatar))]
-    private static void Postfix_PlayerSetup_SetupAvatar(GameObject inAvatar)
+    [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.SetupAvatarDesktop))]
+    private static void Postfix_PlayerSetup_SetupAvatarDesktop(ref PlayerSetup __instance)
     {
         if (!ModSettings.EntryEnabled.Value)
             return;
 
         try
         {
-            IKManager.Instance?.OnAvatarInitialized(inAvatar);
+            IKManager.Instance?.OnAvatarInitialized(__instance._avatar);
         }
         catch (Exception e)
         {
-            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_SetupAvatar)}");
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Postfix_PlayerSetup_SetupAvatarDesktop)}");
             DesktopVRIK.Logger.Error(e);
         }
     }
