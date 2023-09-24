@@ -1,5 +1,6 @@
 ﻿using MelonLoader;
 using NAK.AvatarScaleMod.AvatarScaling;
+using NAK.AvatarScaleMod.Networking;
 
 namespace NAK.AvatarScaleMod;
 
@@ -7,10 +8,15 @@ namespace NAK.AvatarScaleMod;
 
 internal static class ModSettings
 {
+    internal const string SettingsCategory = nameof(AvatarScaleMod);
+    
     public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(AvatarScaleMod));
 
     public static MelonPreferences_Entry<bool> PersistantHeight;
+    
+    public static MelonPreferences_Entry<bool> Debug_NetworkInbound;
+    public static MelonPreferences_Entry<bool> Debug_NetworkOutbound;
     
     // AvatarScaleTool supported scaling settings
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
@@ -69,6 +75,11 @@ internal static class ModSettings
         PersistantHeight = Category.CreateEntry("Persistant Height", false, description: "Should the avatar height persist between avatar switches?");
         PersistantHeight.OnEntryValueChanged.Subscribe(OnPersistantHeightChanged);
         
+        Debug_NetworkInbound = Category.CreateEntry("Debug Inbound", false, description: "Log inbound Mod Network height updates.");
+        Debug_NetworkInbound.OnEntryValueChanged.Subscribe(OnDebugNetworkChanged);
+        Debug_NetworkOutbound = Category.CreateEntry("Debug Outbound", false, description: "Log outbound Mod Network height updates.");
+        Debug_NetworkOutbound.OnEntryValueChanged.Subscribe(OnDebugNetworkChanged);
+        
         //AvatarScaleManager.UseUniversalScaling = EntryEnabled.Value;
         //AvatarScaleGesture.GestureEnabled = EntryUseScaleGesture.Value;
     }
@@ -76,5 +87,11 @@ internal static class ModSettings
     private static void OnPersistantHeightChanged(bool oldValue, bool newValue)
     {
         AvatarScaleManager.Instance.Setting_PersistantHeight = newValue;
+    }
+
+    private static void OnDebugNetworkChanged(bool oldValue, bool newValue)
+    {
+        ModNetwork.Debug_NetworkInbound = Debug_NetworkInbound.Value;
+        ModNetwork.Debug_NetworkOutbound = Debug_NetworkOutbound.Value;
     }
 }

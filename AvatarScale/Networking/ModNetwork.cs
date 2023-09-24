@@ -12,6 +12,9 @@ namespace NAK.AvatarScaleMod.Networking;
 
 public static class ModNetwork
 {
+    public static bool Debug_NetworkInbound = false;
+    public static bool Debug_NetworkOutbound = false;
+    
     #region Constants
 
     private const string ModId = "MelonMod.NAK.AvatarScaleMod";
@@ -87,9 +90,6 @@ public static class ModNetwork
             modMsg.Write(height);
             modMsg.Send();
         }
-
-        var typeDesc = messageType == MessageType.SyncHeight ? "height" : "height request";
-        MelonLogger.Msg($"Sending {typeDesc}: {height}");
     }
 
     private static void OnMessageReceived(ModNetworkMessage msg)
@@ -115,7 +115,6 @@ public static class ModNetwork
         };
 
         InboundQueue[msg.Sender] = inboundMessage;
-        MelonLogger.Msg($"Received message from {msg.Sender}: {receivedHeight}");
     }
 
     #endregion
@@ -129,7 +128,7 @@ public static class ModNetwork
 
     public static void RequestHeightSync()
     {
-        var myCurrentHeight = AvatarScaleManager.Instance.GetHeight();
+        var myCurrentHeight = AvatarScaleManager.Instance.GetHeightForNetwork();
         if (myCurrentHeight > 0)
             OutboundQueue["global"] = new QueuedMessage { Type = MessageType.RequestHeight, Height = myCurrentHeight };
     }
@@ -144,7 +143,13 @@ public static class ModNetwork
             return;
 
         foreach (QueuedMessage message in OutboundQueue.Values)
+        {
             SendMessage(message.Type, message.Height, message.TargetPlayer);
+            
+            if (Debug_NetworkOutbound)
+                AvatarScaleMod.Logger.Msg(
+                    $"Sending message {message.Type.ToString()} to {(string.IsNullOrEmpty(message.TargetPlayer) ? "ALL" : message.TargetPlayer)}: {message.Height}");
+        }
 
         OutboundQueue.Clear();
         LastSentTime = Time.time;
@@ -168,7 +173,7 @@ public static class ModNetwork
                 if (warnings >= MaxWarnings)
                 {
                     UserTimeouts[userId] = Time.time + TimeoutDuration;
-                    MelonLogger.Msg($"User is sending height updates too fast! Applying 10s timeout... : {userId}");
+                    AvatarScaleMod.Logger.Warning($"User is sending height updates too fast! Applying 10s timeout... : {userId}");
                     return true;
                 }
             }
@@ -182,23 +187,23 @@ public static class ModNetwork
 
         LastReceivedTimes[userId] = Time.time;
         UserWarnings.Remove(userId); // Reset warnings
-        // MelonLogger.Msg($"Clearing timeout from user : {userId}");
         return false;
     }
 
     private static void ProcessInboundQueue()
     {
         foreach (QueuedMessage message in InboundQueue.Values)
+        {
             switch (message.Type)
             {
                 case MessageType.RequestHeight:
                 {
-                    var myCurrentHeight = AvatarScaleManager.Instance.GetHeight();
-                    if (myCurrentHeight > 0)
+                    var myNetworkHeight = AvatarScaleManager.Instance.GetHeightForNetwork();
+                    if (myNetworkHeight > 0)
                         OutboundQueue[message.Sender] = new QueuedMessage
                         {
                             Type = MessageType.SyncHeight,
-                            Height = myCurrentHeight,
+                            Height = myNetworkHeight,
                             TargetPlayer = message.Sender
                         };
 
@@ -212,6 +217,10 @@ public static class ModNetwork
                     AvatarScaleMod.Logger.Error($"Invalid message type received from: {message.Sender}");
                     break;
             }
+            
+            if (Debug_NetworkInbound)
+                AvatarScaleMod.Logger.Msg($"Received message {message.Type.ToString()} from {message.Sender}: {message.Height}");
+        }
 
         InboundQueue.Clear();
     }

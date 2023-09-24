@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Core.IO;
 using ABI_RC.Core.Player;
-using ABI_RC.Core.Player.AvatarTracking;
 using ABI_RC.Systems.GameEventSystem;
+using NAK.AvatarScaleMod.Components;
 using NAK.AvatarScaleMod.Networking;
 using UnityEngine;
 
@@ -9,12 +9,19 @@ namespace NAK.AvatarScaleMod.AvatarScaling;
 
 public class AvatarScaleManager : MonoBehaviour
 {
+    // Universal Scaling Limits
+    public const float MinHeight = 0.1f;
+    public const float MaxHeight = 10f;
+    
     public static AvatarScaleManager Instance;
-
-    public bool Setting_PersistantHeight = false;
-
-    private Dictionary<string, UniversalAvatarScaler> _networkedScalers;
-    private UniversalAvatarScaler _localAvatarScaler;
+    
+    private LocalScaler _localAvatarScaler;
+    private Dictionary<string, NetworkScaler> _networkedScalers;
+    
+    public bool Setting_UniversalScaling = true;
+    public bool Setting_PersistantHeight;
+    private float _lastTargetHeight = -1;
+    
 
     #region Unity Methods
 
@@ -27,7 +34,7 @@ public class AvatarScaleManager : MonoBehaviour
         }
 
         Instance = this;
-        _networkedScalers = new Dictionary<string, UniversalAvatarScaler>();
+        _networkedScalers = new Dictionary<string, NetworkScaler>();
     }
 
     private void Start()
@@ -44,13 +51,19 @@ public class AvatarScaleManager : MonoBehaviour
 
     #endregion
 
-    #region Game Events
+    #region Events
 
     public void OnInstanceConnected(string instanceId)
     {
         SchedulerSystem.AddJob(ModNetwork.RequestHeightSync, 2f, 1f, 1);
     }
 
+    public void OnSettingsChanged()
+    {
+        Setting_UniversalScaling = ModSettings.EntryUniversalScaling.Value;
+        SetHeight(Setting_UniversalScaling ? _lastTargetHeight : -1);
+    }
+    
     #endregion
 
     #region Local Methods
@@ -62,24 +75,23 @@ public class AvatarScaleManager : MonoBehaviour
 
         if (_localAvatarScaler == null)
         {
-            _localAvatarScaler = playerSetup.gameObject.AddComponent<UniversalAvatarScaler>();
+            _localAvatarScaler = playerSetup.gameObject.AddComponent<LocalScaler>();
             _localAvatarScaler.Initialize();
         }
 
         _localAvatarScaler.OnAvatarInstantiated(playerSetup._avatar, playerSetup._initialAvatarHeight,
             playerSetup.initialScale);
-        
-        if (Setting_PersistantHeight && _localAvatarScaler.IsValid())
-            SchedulerSystem.AddJob(() => { ModNetwork.SendNetworkHeight(_localAvatarScaler.GetHeight()); }, 0.5f, 0f, 1);
+
+        if (Setting_PersistantHeight)
+            SetHeight(_lastTargetHeight);
+        else if (_lastTargetHeight > 0)
+            SetHeight(playerSetup._initialAvatarHeight);
     }
 
     public void OnAvatarDestroyed(PlayerSetup playerSetup)
     {
         if (_localAvatarScaler != null)
-            _localAvatarScaler.OnAvatarDestroyed(Setting_PersistantHeight);
-        
-        if (Setting_PersistantHeight && _localAvatarScaler.IsValid())
-            SchedulerSystem.AddJob(() => { ModNetwork.SendNetworkHeight(_localAvatarScaler.GetHeight()); }, 0.5f, 0f, 1);
+            _localAvatarScaler.OnAvatarDestroyed();
     }
 
     public void SetHeight(float targetHeight)
@@ -87,6 +99,8 @@ public class AvatarScaleManager : MonoBehaviour
         if (_localAvatarScaler == null)
             return;
 
+        _lastTargetHeight = targetHeight;
+        
         _localAvatarScaler.SetTargetHeight(targetHeight);
         ModNetwork.SendNetworkHeight(targetHeight);
 
@@ -98,11 +112,42 @@ public class AvatarScaleManager : MonoBehaviour
     {
         if (_localAvatarScaler != null)
             _localAvatarScaler.ResetHeight();
+        ModNetwork.SendNetworkHeight(-1f);
     }
 
     public float GetHeight()
     {
-        return _localAvatarScaler != null ? _localAvatarScaler.GetHeight() : -1f;
+        if (_localAvatarScaler == null)
+            return -1f;
+        
+        return _localAvatarScaler.GetHeight();
+    }
+    
+    public float GetHeightForNetwork()
+    {
+        if (_localAvatarScaler == null)
+            return -1f;
+        
+        if (!_localAvatarScaler.IsHeightAdjustedFromInitial())
+            return -1f;
+
+        return _localAvatarScaler.GetHeight();
+    }
+
+    public float GetInitialHeight()
+    {
+        if (_localAvatarScaler == null)
+            return -1f;
+
+        return _localAvatarScaler.GetInitialHeight();
+    }
+
+    public bool IsHeightAdjustedFromInitial()
+    {
+        if (_localAvatarScaler == null)
+            return false;
+
+        return _localAvatarScaler.IsHeightAdjustedFromInitial();
     }
 
     #endregion
@@ -111,8 +156,10 @@ public class AvatarScaleManager : MonoBehaviour
 
     public float GetNetworkHeight(string playerId)
     {
-        if (_networkedScalers.TryGetValue(playerId, out UniversalAvatarScaler scaler))
+        if (_networkedScalers.TryGetValue(playerId, out NetworkScaler scaler))
             return scaler.GetHeight();
+        
+        //doesn't have mod, get from player avatar directly
         return -1f;
     }
 
@@ -121,7 +168,7 @@ public class AvatarScaleManager : MonoBehaviour
 
     internal void OnNetworkHeightUpdateReceived(string playerId, float targetHeight)
     {
-        if (_networkedScalers.TryGetValue(playerId, out UniversalAvatarScaler scaler))
+        if (_networkedScalers.TryGetValue(playerId, out NetworkScaler scaler))
             scaler.SetTargetHeight(targetHeight);
         else
             SetupHeightScalerForNetwork(playerId, targetHeight);
@@ -130,7 +177,7 @@ public class AvatarScaleManager : MonoBehaviour
     internal void OnNetworkAvatarInstantiated(PuppetMaster puppetMaster)
     {
         var playerId = puppetMaster._playerDescriptor.ownerId;
-        if (_networkedScalers.TryGetValue(playerId, out UniversalAvatarScaler scaler))
+        if (_networkedScalers.TryGetValue(playerId, out NetworkScaler scaler))
             scaler.OnAvatarInstantiated(puppetMaster.avatarObject, puppetMaster._initialAvatarHeight,
                 puppetMaster.initialAvatarScale);
     }
@@ -142,7 +189,7 @@ public class AvatarScaleManager : MonoBehaviour
             return;
 
         var playerId = puppetMaster._playerDescriptor.ownerId;
-        if (_networkedScalers.TryGetValue(playerId, out UniversalAvatarScaler scaler))
+        if (_networkedScalers.TryGetValue(playerId, out NetworkScaler scaler))
             scaler.OnAvatarDestroyed();
     }
 
@@ -181,7 +228,7 @@ public class AvatarScaleManager : MonoBehaviour
         if (_networkedScalers.ContainsKey(playerId))
             _networkedScalers.Remove(playerId); // ??
 
-        UniversalAvatarScaler scaler = puppetMaster.gameObject.AddComponent<UniversalAvatarScaler>();
+        NetworkScaler scaler = puppetMaster.gameObject.AddComponent<NetworkScaler>();
         scaler.Initialize(playerId);
 
         scaler.OnAvatarInstantiated(puppetMaster.avatarObject, puppetMaster._initialAvatarHeight,

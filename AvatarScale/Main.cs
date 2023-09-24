@@ -1,4 +1,5 @@
 ﻿using MelonLoader;
+using NAK.AvatarScaleMod.InputHandling;
 using NAK.AvatarScaleMod.Networking;
 
 namespace NAK.AvatarScaleMod;
@@ -15,6 +16,8 @@ public class AvatarScaleMod : MelonMod
         ApplyPatches(typeof(HarmonyPatches.PuppetMasterPatches));
         ApplyPatches(typeof(HarmonyPatches.GesturePlaneTestPatches));
         
+        InitializeIntegration("BTKUILib", Integrations.BTKUIAddon.Initialize);
+        
         ModNetwork.Subscribe();
         ModSettings.InitializeModSettings();
     }
@@ -22,7 +25,16 @@ public class AvatarScaleMod : MelonMod
     public override void OnUpdate()
     {
         ModNetwork.Update();
-        ModNetworkDebugger.DoDebugInput();
+        DebugKeybinds.DoDebugInput();
+    }
+    
+    private static void InitializeIntegration(string modName, Action integrationAction)
+    {
+        if (RegisteredMelons.All(it => it.Info.Name != modName))
+            return;
+
+        Logger.Msg($"Initializing {modName} integration.");
+        integrationAction.Invoke();
     }
 
     private void ApplyPatches(Type type)
