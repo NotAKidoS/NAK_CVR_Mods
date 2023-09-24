@@ -109,14 +109,14 @@ public class VRModeSwitchManager : MonoBehaviour
     {
         if (WorldTransitionSystem.Instance == null) yield break;
         WorldTransitionSystem.Instance.StartTransition();
-        yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
+        yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength + 0.25f);
     }
 
     private IEnumerator ContinueTransition()
     {
         if (WorldTransitionSystem.Instance == null) yield break;
         WorldTransitionSystem.Instance.ContinueTransition();
-        yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength);
+        yield return new WaitForSeconds(WorldTransitionSystem.Instance.CurrentInLength + 0.25f);
     }
 
     #endregion
