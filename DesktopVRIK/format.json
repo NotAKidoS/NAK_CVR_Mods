@@ -19,6 +19,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
-  "changelog": "- Movement Parent IK handling now respects new orientation mode.",
+  "changelog": "- Movement Parent IK handling now respects new orientation mode.\n- Changed avatar initialization patch location to resolve a potential mod conflict.",
   "embedcolor": "#9b59b6"
 }
