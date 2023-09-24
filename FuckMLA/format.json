@@ -1,23 +1,22 @@
 {
   "_id": -1,
-  "name": "EzCurls",
+  "name": "FuckMLA",
   "modversion": "1.0.0",
-  "gameversion": "2022r170p1",
+  "gameversion": "2023r172",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "A mod that should hopefully make finger curls more predictable.",
+  "description": "A simple mod that does three basic things:\n\n- Destroys MOUSELOCKALPHA, the script that locks your mouse on startup.\n- Forces mouse to be initially unlocked when launching the game in VR.\n- Fixes mouse rotating player when cursor is unlocked.",
   "searchtags": [
-    "aas",
-    "sync",
-    "naked",
-    "buffer"
+    "mouse",
+    "lock",
+    "no",
+    "bad"
   ],
   "requirements": [
-    "UIExpansionKit"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/EzCurls.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/EzCurls/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/FuckMLA.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMLA/",
   "changelog": "- Initial CVRMG release",
-  "embedcolor": "7d7d7d"
+  "embedcolor": "#ffc800"
 }
