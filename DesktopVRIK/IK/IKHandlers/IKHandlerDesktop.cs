@@ -29,8 +29,7 @@ internal class IKHandlerDesktop : IKHandler
     public override void UpdateWeights()
     {
         // Reset avatar local position
-        _vrik.transform.localPosition = Vector3.zero;
-        _vrik.transform.localRotation = Quaternion.identity;
+        _vrik.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
 
         base.UpdateWeights();
     }
@@ -48,12 +47,15 @@ internal class IKHandlerDesktop : IKHandler
 
     private void OnPreSolverUpdateDesktop()
     {
+        // Reset avatar local position
+        _vrik.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        
         _solver.plantFeet = ModSettings.EntryPlantFeet.Value;
 
         // Emulate old VRChat hip movement
         if (ModSettings.EntryBodyLeanWeight.Value > 0)
         {
-            float weightedAngle = ModSettings.EntryProneThrusting.Value ? 1f : ModSettings.EntryBodyLeanWeight.Value * _solver.locomotion.weight;
+            float weightedAngle =  ModSettings.EntryBodyLeanWeight.Value * (ModSettings.EntryProneThrusting.Value ? 1f: _solver.locomotion.weight);
             float angle = IKManager.Instance._desktopCamera.localEulerAngles.x;
             angle = angle > 180 ? angle - 360 : angle;
             Quaternion rotation = Quaternion.AngleAxis(angle * weightedAngle, _vrik.transform.right);
