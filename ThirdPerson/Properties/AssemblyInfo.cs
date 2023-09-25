@@ -27,6 +27,6 @@ using System.Reflection;
 namespace NAK.ThirdPerson.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.4";
+    public const string Version = "1.0.5";
     public const string Author = "Davi & NotAKidoS";
 }

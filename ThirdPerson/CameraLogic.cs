@@ -16,9 +16,9 @@ internal static class CameraLogic
 {
     private static float _dist;
     private static float _scale = 1f;
-    private static Camera _ourCam;
+    private static Camera _thirdpersonCam;
     private static Camera _desktopCam;
-    private static int _desktopCamMask;
+    private static int _storedCamMask;
     private static CameraFovClone _cameraFovClone;
 
     internal static CameraLocation CurrentLocation = CameraLocation.Default;
@@ -38,8 +38,9 @@ internal static class CameraLogic
         set
         {
             _state = value;
-            _desktopCam.cullingMask = _state ? 0 : _desktopCamMask;
-            _ourCam.gameObject.SetActive(_state);
+            if (_state) _storedCamMask = _desktopCam.cullingMask;
+            _desktopCam.cullingMask = _state ? 0 : _storedCamMask;
+            _thirdpersonCam.gameObject.SetActive(_state);
         }
     }
 
@@ -51,46 +52,61 @@ internal static class CameraLogic
     {
         yield return new WaitUntil(() => PlayerSetup.Instance);
 
-        _ourCam = new GameObject("ThirdPersonCameraObj", typeof(Camera)).GetComponent<Camera>();
+        _thirdpersonCam = new GameObject("ThirdPersonCameraObj", typeof(Camera)).GetComponent<Camera>();
 
-        _cameraFovClone = _ourCam.gameObject.AddComponent<CameraFovClone>();
+        _cameraFovClone = _thirdpersonCam.gameObject.AddComponent<CameraFovClone>();
 
         _desktopCam = PlayerSetup.Instance.desktopCamera.GetComponent<Camera>();
-        _desktopCamMask = _desktopCam.cullingMask;
         _cameraFovClone.targetCamera = _desktopCam;
 
-        _ourCam.transform.SetParent(_desktopCam.transform);
+        _thirdpersonCam.transform.SetParent(_desktopCam.transform);
 
         RelocateCam(CameraLocation.Default);
 
-        _ourCam.gameObject.SetActive(false);
+        _thirdpersonCam.gameObject.SetActive(false);
 
         ThirdPerson.Logger.Msg("Finished setting up third person camera.");
     }
 
+    internal static void ResetPlayerCamValues()
+    {
+        Camera activePlayerCam = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
+        if (activePlayerCam == null) 
+            return;
+        
+        ThirdPerson.Logger.Msg("Resetting active camera culling mask.");
+        
+        // CopyRefCamValues does not reset to default before copying! Game issue, SetDefaultCamValues is fine.
+        activePlayerCam.cullingMask = MetaPort.Instance.defaultCameraMask;
+    }
+
     internal static void CopyPlayerCamValues()
     {
-        Camera ourCamComponent = _ourCam.GetComponent<Camera>();
-        Camera playerCamComponent = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
-        if (ourCamComponent == null || playerCamComponent == null) return;
+        Camera ourCamComponent = _thirdpersonCam.GetComponent<Camera>();
+        Camera activePlayerCam = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
+        if (ourCamComponent == null || activePlayerCam == null) 
+            return;
+        
         ThirdPerson.Logger.Msg("Copying active camera settings & components.");
-
+        
         // Copy basic settings
-        ourCamComponent.farClipPlane = playerCamComponent.farClipPlane;
-        ourCamComponent.nearClipPlane = playerCamComponent.nearClipPlane;
-        ourCamComponent.depthTextureMode = playerCamComponent.depthTextureMode;
+        ourCamComponent.farClipPlane = activePlayerCam.farClipPlane;
+        ourCamComponent.nearClipPlane = activePlayerCam.nearClipPlane;
+        ourCamComponent.depthTextureMode = activePlayerCam.depthTextureMode;
 
-        // We cant copy this because we set it to 0
-        ourCamComponent.cullingMask &= -32769;
-        ourCamComponent.cullingMask |= 256;
-        ourCamComponent.cullingMask |= 512;
-        ourCamComponent.cullingMask |= 32;
-        ourCamComponent.cullingMask &= -4097;
-        ourCamComponent.cullingMask |= 1024;
-        ourCamComponent.cullingMask |= 8192;
+        // Copy and store the active camera mask
+        var cullingMask= _storedCamMask = activePlayerCam.cullingMask;
+        cullingMask &= -32769;
+        cullingMask |= 256;
+        cullingMask |= 512;
+        cullingMask |= 32;
+        cullingMask &= -4097;
+        cullingMask |= 1024;
+        cullingMask |= 8192;
+        ourCamComponent.cullingMask = cullingMask;
 
         // Copy post processing if added
-        PostProcessLayer ppLayerPlayerCam = playerCamComponent.GetComponent<PostProcessLayer>();
+        PostProcessLayer ppLayerPlayerCam = activePlayerCam.GetComponent<PostProcessLayer>();
         PostProcessLayer ppLayerThirdPerson = ourCamComponent.AddComponentIfMissing<PostProcessLayer>();
         if (ppLayerPlayerCam != null && ppLayerThirdPerson != null)
         {
@@ -108,7 +124,7 @@ internal static class CameraLogic
         }
 
         // Copy Aura camera settings
-        AuraCamera auraPlayerCam = playerCamComponent.GetComponent<AuraCamera>();
+        AuraCamera auraPlayerCam = activePlayerCam.GetComponent<AuraCamera>();
         AuraCamera auraThirdPerson = ourCamComponent.AddComponentIfMissing<AuraCamera>();
         if (auraPlayerCam != null && auraThirdPerson != null)
         {
@@ -121,7 +137,7 @@ internal static class CameraLogic
         }
 
         // Copy Flare layer settings
-        FlareLayer flarePlayerCam = playerCamComponent.GetComponent<FlareLayer>();
+        FlareLayer flarePlayerCam = activePlayerCam.GetComponent<FlareLayer>();
         FlareLayer flareThirdPerson = ourCamComponent.AddComponentIfMissing<FlareLayer>();
         if (flarePlayerCam != null && flareThirdPerson != null)
         {
@@ -133,7 +149,7 @@ internal static class CameraLogic
         }
 
         // Copy Azure Fog Scattering settings
-        AzureFogScattering azureFogPlayerCam = playerCamComponent.GetComponent<AzureFogScattering>();
+        AzureFogScattering azureFogPlayerCam = activePlayerCam.GetComponent<AzureFogScattering>();
         AzureFogScattering azureFogThirdPerson = ourCamComponent.AddComponentIfMissing<AzureFogScattering>();
         if (azureFogPlayerCam != null && azureFogThirdPerson != null)
         {
@@ -145,7 +161,7 @@ internal static class CameraLogic
         }
 
         // Copy Beautify settings
-        Beautify beautifyPlayerCam = playerCamComponent.GetComponent<Beautify>();
+        Beautify beautifyPlayerCam = activePlayerCam.GetComponent<Beautify>();
         Beautify beautifyThirdPerson = ourCamComponent.AddComponentIfMissing<Beautify>();
         if (beautifyPlayerCam != null && beautifyThirdPerson != null)
         {
@@ -160,29 +176,29 @@ internal static class CameraLogic
 
     internal static void RelocateCam(CameraLocation location, bool resetDist = false)
     {
-        _ourCam.transform.rotation = _desktopCam.transform.rotation;
+        _thirdpersonCam.transform.rotation = _desktopCam.transform.rotation;
         if (resetDist) ResetDist();
         switch (location)
         {
             case CameraLocation.FrontView:
-                _ourCam.transform.localPosition = new Vector3(0, 0.015f, 1f - _dist) * _scale;
-                _ourCam.transform.localRotation = new Quaternion(0, 180, 0, 0);
+                _thirdpersonCam.transform.localPosition = new Vector3(0, 0.015f, 1f - _dist) * _scale;
+                _thirdpersonCam.transform.localRotation = new Quaternion(0, 180, 0, 0);
                 CurrentLocation = CameraLocation.FrontView;
                 break;
             case CameraLocation.RightSide:
-                _ourCam.transform.localPosition = new Vector3(0.3f, 0.015f, -1.5f + _dist) * _scale;
-                _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                _thirdpersonCam.transform.localPosition = new Vector3(0.3f, 0.015f, -1.5f + _dist) * _scale;
+                _thirdpersonCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.RightSide;
                 break;
             case CameraLocation.LeftSide:
-                _ourCam.transform.localPosition = new Vector3(-0.3f, 0.015f, -1.5f + _dist) * _scale;
-                _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                _thirdpersonCam.transform.localPosition = new Vector3(-0.3f, 0.015f, -1.5f + _dist) * _scale;
+                _thirdpersonCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.LeftSide;
                 break;
             case CameraLocation.Default:
             default:
-                _ourCam.transform.localPosition = new Vector3(0, 0.015f, -1.5f + _dist) * _scale;
-                _ourCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                _thirdpersonCam.transform.localPosition = new Vector3(0, 0.015f, -1.5f + _dist) * _scale;
+                _thirdpersonCam.transform.localRotation = new Quaternion(0, 0, 0, 0);
                 CurrentLocation = CameraLocation.Default;
                 break;
         }

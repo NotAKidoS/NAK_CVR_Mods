@@ -22,13 +22,14 @@ public class ThirdPerson : MelonMod
         if (!Input.GetKey(KeyCode.LeftControl))
         {
             // Prevents scrolling while in Menus or UnityExplorer
-            if (State && Cursor.lockState == CursorLockMode.Locked)
-            {
-                float scroll = Input.GetAxis("Mouse ScrollWheel");
-                if (scroll != 0f) ScrollDist(Mathf.Sign(scroll));
-            }
+            if (!State || Cursor.lockState != CursorLockMode.Locked) 
+                return;
+            
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            if (scroll != 0f) ScrollDist(Mathf.Sign(scroll));
             return;
         }
+        
         if (Input.GetKeyDown(KeyCode.T)) State = !State;
         if (!State || !Input.GetKeyDown(KeyCode.Y)) return;
         RelocateCam((CameraLocation)(((int)CurrentLocation + (Input.GetKey(KeyCode.LeftShift) ? -1 : 1) + Enum.GetValues(typeof(CameraLocation)).Length) % Enum.GetValues(typeof(CameraLocation)).Length), true);
