@@ -1,7 +1,7 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.2.6",
+  "modversion": "4.2.7",
   "gameversion": "2023r172",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/DesktopVRIK.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r22/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
-  "changelog": "- Movement Parent IK handling now respects new orientation mode.\n- Changed avatar initialization patch location to resolve a potential mod conflict.",
+  "changelog": "- Fixed Prone Thrusting option ignoring set Body Leaning weight.\n- Potential fix for avatars feet randomly targeting far away while stutter-stepping.",
   "embedcolor": "#9b59b6"
 }

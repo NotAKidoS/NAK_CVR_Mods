@@ -107,13 +107,14 @@ internal class PlayerSetupPatches
         try
         {
             __runOriginal = true;
-            if (IKManager.Instance == null)
+            if (IKManager.Instance == null || !IKManager.Instance.IsAvatarInitialized())
                 return;
 
             CVRMovementParent currentParent = __instance._movementSystem._currentParent;
-            __runOriginal = (currentParent != null && currentParent._referencePoint != null)
-                ? IKManager.Instance.OnPlayerHandleMovementParent(currentParent)
-                : IKManager.Instance.OnPlayerTeleported();
+            if (currentParent != null && currentParent._referencePoint != null)
+                IKManager.Instance.OnPlayerHandleMovementParent(currentParent);
+            else
+                IKManager.Instance.OnPlayerTeleported();
         }
         catch (Exception e)
         {

@@ -61,10 +61,7 @@ public class IKManager : MonoBehaviour
 
     private void Update()
     {
-        if (_ikHandler == null)
-            return;
-
-        _ikHandler.UpdateWeights();
+        _ikHandler?.UpdateWeights();
     }
 
     #endregion
@@ -214,6 +211,11 @@ public class IKManager : MonoBehaviour
 
     #region Public Methods
 
+    public bool IsAvatarInitialized()
+    {
+        return _isAvatarInitialized;
+    }
+    
     public Vector3 GetPlayerPosition()
     {
         if (!MetaPort.Instance.isUsingVr)

@@ -115,14 +115,10 @@ internal class IKHandlerDesktop : IKHandler
 
     private void ResetSolverIfNeeded()
     {
-        if (_wasTrackingLocomotion == BodySystem.TrackingLocomotionEnabled)
-            return;
-
+        if (_wasTrackingLocomotion == BodySystem.TrackingLocomotionEnabled) return;
         _wasTrackingLocomotion = BodySystem.TrackingLocomotionEnabled;
-        if (ModSettings.EntryResetFootstepsOnIdle.Value)
-            VRIKUtils.ResetToInitialFootsteps(_vrik, _locomotionData, _scaleDifference);
 
-        _solver.Reset();
+        Reset();
     }
 
     #endregion

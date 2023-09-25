@@ -142,6 +142,7 @@ internal abstract class IKHandler
     public virtual void Reset()
     {
         _ikSimulatedRootAngle = _vrik.transform.eulerAngles.y;
+        
         if(ModSettings.EntryResetFootstepsOnIdle.Value)
             VRIKUtils.ResetToInitialFootsteps(_vrik, _locomotionData, _scaleDifference);
 
