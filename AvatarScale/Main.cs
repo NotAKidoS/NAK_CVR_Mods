@@ -19,7 +19,7 @@ public class AvatarScaleMod : MelonMod
         InitializeIntegration("BTKUILib", Integrations.BTKUIAddon.Initialize);
         
         ModNetwork.Subscribe();
-        ModSettings.InitializeModSettings();
+        ModSettings.Initialize();
     }
 
     public override void OnUpdate()

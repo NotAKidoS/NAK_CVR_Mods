@@ -17,11 +17,23 @@ public class AvatarScaleManager : MonoBehaviour
     
     private LocalScaler _localAvatarScaler;
     private Dictionary<string, NetworkScaler> _networkedScalers;
-    
-    public bool Setting_UniversalScaling = true;
+
+    private bool _settingUniversalScaling;
+    public bool Setting_UniversalScaling
+    {
+        get => _settingUniversalScaling;
+        set
+        {
+            if (value != _settingUniversalScaling && value == false)
+                SetHeight(-1f);
+            
+            _settingUniversalScaling = value;
+        }
+    }
+
     public bool Setting_PersistantHeight;
     private float _lastTargetHeight = -1;
-    
+
 
     #region Unity Methods
 
@@ -39,6 +51,8 @@ public class AvatarScaleManager : MonoBehaviour
 
     private void Start()
     {
+        _settingUniversalScaling = ModSettings.EntryUseUniversalScaling.Value;
+        
         CVRGameEventSystem.Instance.OnConnected.AddListener(OnInstanceConnected);
         //SchedulerSystem.AddJob(new SchedulerSystem.Job(ForceHeightUpdate), 0f, 10f, -1);
     }
@@ -56,12 +70,6 @@ public class AvatarScaleManager : MonoBehaviour
     public void OnInstanceConnected(string instanceId)
     {
         SchedulerSystem.AddJob(ModNetwork.RequestHeightSync, 2f, 1f, 1);
-    }
-
-    public void OnSettingsChanged()
-    {
-        Setting_UniversalScaling = ModSettings.EntryUniversalScaling.Value;
-        SetHeight(Setting_UniversalScaling ? _lastTargetHeight : -1);
     }
     
     #endregion
@@ -81,6 +89,9 @@ public class AvatarScaleManager : MonoBehaviour
 
         _localAvatarScaler.OnAvatarInstantiated(playerSetup._avatar, playerSetup._initialAvatarHeight,
             playerSetup.initialScale);
+        
+        if (!_settingUniversalScaling)
+            return;
 
         SetHeight(Setting_PersistantHeight ? _lastTargetHeight : -1f);
     }
@@ -93,9 +104,12 @@ public class AvatarScaleManager : MonoBehaviour
 
     public void SetHeight(float targetHeight)
     {
+        if (!_settingUniversalScaling)
+            return;
+        
         if (_localAvatarScaler == null)
             return;
-
+        
         _lastTargetHeight = targetHeight;
         
         _localAvatarScaler.SetTargetHeight(targetHeight);
@@ -107,6 +121,9 @@ public class AvatarScaleManager : MonoBehaviour
 
     public void ResetHeight()
     {
+        if (!_settingUniversalScaling)
+            return;
+        
         if (_localAvatarScaler != null)
             _localAvatarScaler.ResetHeight();
         ModNetwork.SendNetworkHeight(-1f);
@@ -122,6 +139,9 @@ public class AvatarScaleManager : MonoBehaviour
     
     public float GetHeightForNetwork()
     {
+        if (!_settingUniversalScaling)
+            return -1f;
+        
         if (_localAvatarScaler == null)
             return -1f;
         
