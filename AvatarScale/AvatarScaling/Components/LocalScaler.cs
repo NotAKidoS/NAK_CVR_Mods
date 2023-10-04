@@ -1,4 +1,6 @@
 ﻿using ABI_RC.Core.Player;
+using ABI_RC.Core.UI;
+using ABI.CCK.Components;
 using NAK.AvatarScaleMod.AvatarScaling;
 using UnityEngine;
 
@@ -16,7 +18,7 @@ public class LocalScaler : BaseScaler
         _isAvatarInstantiated = false;
         _isHeightAdjustedFromInitial = false;
     }
-
+    
     #endregion
 
     #region Overrides
@@ -25,7 +27,7 @@ public class LocalScaler : BaseScaler
     {
         if (avatarObject == null)
             return;
-        
+
         base.OnAvatarInstantiated(avatarObject, initialHeight, initialScale);
         await FindComponentsOfTypeAsync(scalableComponentTypes);
         
@@ -83,6 +85,7 @@ public class LocalScaler : BaseScaler
         _legacyAnimationScale = _avatarTransform.localScale;
         
         AvatarScaleMod.Logger.Msg("AnimationClip-based avatar scaling detected. Disabling Universal Scaling.");
+        CohtmlHud.Instance.ViewDropTextImmediate("(Local) AvatarScaleMod", "Avatar Scale Changed!", "Universal Scaling is now disabled in favor of built-in avatar scaling.");
         AvatarScaleManager.Instance.ResetHeight(); // disable mod, user used a scale slider
         return true;
     }

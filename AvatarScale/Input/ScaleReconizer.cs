@@ -32,7 +32,8 @@ public static class ScaleReconizer
             secondGesture = CVRGestureStep.Gesture.Fist,
             startDistance = 1f,
             endDistance = 0.25f,
-            direction = CVRGestureStep.GestureDirection.MovingIn
+            direction = CVRGestureStep.GestureDirection.MovingIn,
+            needsToBeInView = true,
         });
         gesture.onStart.AddListener(OnScaleStart);
         gesture.onStay.AddListener(OnScaleStay);
@@ -50,7 +51,8 @@ public static class ScaleReconizer
             secondGesture = CVRGestureStep.Gesture.Fist,
             startDistance = 0.25f,
             endDistance = 1f,
-            direction = CVRGestureStep.GestureDirection.MovingOut
+            direction = CVRGestureStep.GestureDirection.MovingOut,
+            needsToBeInView = true,
         });
         gesture.onStart.AddListener(OnScaleStart);
         gesture.onStay.AddListener(OnScaleStay);

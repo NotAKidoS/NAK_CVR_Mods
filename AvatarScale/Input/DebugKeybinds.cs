@@ -3,35 +3,41 @@ using UnityEngine;
 
 namespace NAK.AvatarScaleMod.InputHandling;
 
-public static class DebugKeybinds
+internal static class DebugKeybinds
 {
-    public static void DoDebugInput()
+    private const float Step = 0.1f;
+
+    internal static void DoDebugInput()
     {
         if (AvatarScaleManager.Instance == null)
             return;
 
-        float currentHeight;
-        const float step = 0.1f;
-
         if (Input.GetKeyDown(KeyCode.Equals) || Input.GetKeyDown(KeyCode.KeypadPlus))
         {
-            currentHeight = AvatarScaleManager.Instance.GetHeight() + step;
-            AvatarScaleManager.Instance.SetHeight(currentHeight);
-            
-            AvatarScaleMod.Logger.Msg($"Setting height: {currentHeight}");
+            AdjustHeight(Step);
         }
         else if (Input.GetKeyDown(KeyCode.Minus) || Input.GetKeyDown(KeyCode.KeypadMinus))
         {
-            currentHeight = AvatarScaleManager.Instance.GetHeight() - step;
-            AvatarScaleManager.Instance.SetHeight(currentHeight);
-            
-            AvatarScaleMod.Logger.Msg($"Setting height: {currentHeight}");
+            AdjustHeight(-Step);
         }
         else if (Input.GetKeyDown(KeyCode.Backspace))
         {
-            AvatarScaleManager.Instance.ResetHeight();
-            
-            AvatarScaleMod.Logger.Msg($"Resetting height.");
+            ResetHeight();
         }
+    }
+
+    private static void AdjustHeight(float adjustment)
+    {
+        float currentHeight = AvatarScaleManager.Instance.GetHeight() + adjustment;
+        currentHeight = Mathf.Max(0f, currentHeight);
+        AvatarScaleManager.Instance.SetHeight(currentHeight);
+
+        AvatarScaleMod.Logger.Msg($"[Debug] Setting height: {currentHeight}");
+    }
+
+    private static void ResetHeight()
+    {
+        AvatarScaleManager.Instance.ResetHeight();
+        AvatarScaleMod.Logger.Msg("[Debug] Resetting height.");
     }
 }

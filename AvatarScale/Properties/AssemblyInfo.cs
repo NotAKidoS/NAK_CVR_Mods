@@ -20,6 +20,7 @@ using System.Reflection;
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
+[assembly: MelonOptionalDependencies("Action Menu")]
 [assembly: MelonColor(255, 241, 200, 82)]
 [assembly: MelonAuthorColor(255, 114, 17, 25)]
 [assembly: HarmonyDontPatchAll]

@@ -62,7 +62,8 @@ public class BaseScaler : MonoBehaviour
 
     public void SetTargetHeight(float height)
     {
-        if (Math.Abs(height - _targetHeight) < float.Epsilon)
+        if (_isHeightAdjustedFromInitial 
+            && Math.Abs(height - _targetHeight) < float.Epsilon)
             return;
         
         if (height < float.Epsilon)
@@ -70,7 +71,7 @@ public class BaseScaler : MonoBehaviour
             ResetHeight();
             return;
         }
-        
+
         if (!_isHeightAdjustedFromInitial)
             _legacyAnimationScale = Vector3.zero;
         

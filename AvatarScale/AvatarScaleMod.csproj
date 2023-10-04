@@ -20,7 +20,10 @@
 
   <ItemGroup>
     <EmbeddedResource Include="resources\menu.js" />
-    <EmbeddedResource Include="resources\nak_menu.css" />
+    <None Remove="resources\Icon_AvatarHeightConfig.png" />
+    <EmbeddedResource Include="resources\ASM_Icon_AvatarHeightConfig.png" />
+    <None Remove="resources\ASM_Icon_AvatarHeightCopy.png" />
+    <EmbeddedResource Include="resources\ASM_Icon_AvatarHeightCopy.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,9 +31,10 @@
       <HintPath>$(MsBuildThisFileDirectory)\..\.ManagedLibs\BTKUILib.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="ActionMenu">
+      <HintPath>$(MsBuildThisFileDirectory)\..\.ManagedLibs\ActionMenu.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
-
-
-
 
 </Project>

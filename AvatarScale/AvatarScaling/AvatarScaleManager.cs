@@ -1,5 +1,7 @@
 ﻿using ABI_RC.Core.IO;
 using ABI_RC.Core.Player;
+using ABI_RC.Core.Player.AvatarTracking;
+using ABI_RC.Core.UI;
 using ABI_RC.Systems.GameEventSystem;
 using NAK.AvatarScaleMod.Components;
 using NAK.AvatarScaleMod.Networking;
@@ -25,7 +27,7 @@ public class AvatarScaleManager : MonoBehaviour
         set
         {
             if (value != _settingUniversalScaling && value == false)
-                SetHeight(-1f);
+                ResetHeight();
             
             _settingUniversalScaling = value;
         }
@@ -54,13 +56,11 @@ public class AvatarScaleManager : MonoBehaviour
         _settingUniversalScaling = ModSettings.EntryUseUniversalScaling.Value;
         
         CVRGameEventSystem.Instance.OnConnected.AddListener(OnInstanceConnected);
-        //SchedulerSystem.AddJob(new SchedulerSystem.Job(ForceHeightUpdate), 0f, 10f, -1);
     }
 
     private void OnDestroy()
     {
         CVRGameEventSystem.Instance.OnConnected.RemoveListener(OnInstanceConnected);
-        //SchedulerSystem.RemoveJob(new SchedulerSystem.Job(ForceHeightUpdate));
     }
 
     #endregion
@@ -121,18 +121,25 @@ public class AvatarScaleManager : MonoBehaviour
 
     public void ResetHeight()
     {
-        if (!_settingUniversalScaling)
+        if (_localAvatarScaler == null)
             return;
+
+        if (!_localAvatarScaler.IsHeightAdjustedFromInitial())
+            return;
+
+        CohtmlHud.Instance.ViewDropTextImmediate("(Local) AvatarScaleMod", "Avatar Scale Reset!",
+            "Universal Scaling is now disabled.");
         
-        if (_localAvatarScaler != null)
-            _localAvatarScaler.ResetHeight();
-        ModNetwork.SendNetworkHeight(-1f);
+        SetHeight(-1f);
     }
 
     public float GetHeight()
     {
         if (_localAvatarScaler == null)
-            return -1f;
+            return PlayerAvatarPoint.defaultAvatarHeight;
+
+        if (!_localAvatarScaler.IsHeightAdjustedFromInitial())
+            return PlayerSetup.Instance.GetAvatarHeight();
         
         return _localAvatarScaler.GetHeight();
     }
@@ -161,10 +168,7 @@ public class AvatarScaleManager : MonoBehaviour
 
     public bool IsHeightAdjustedFromInitial()
     {
-        if (_localAvatarScaler == null)
-            return false;
-
-        return _localAvatarScaler.IsHeightAdjustedFromInitial();
+        return _localAvatarScaler != null && _localAvatarScaler.IsHeightAdjustedFromInitial();
     }
 
     #endregion
@@ -174,9 +178,14 @@ public class AvatarScaleManager : MonoBehaviour
     public float GetNetworkHeight(string playerId)
     {
         if (_networkedScalers.TryGetValue(playerId, out NetworkScaler scaler))
-            return scaler.GetHeight();
+            if (scaler.IsHeightAdjustedFromInitial()) return scaler.GetHeight();
         
-        //doesn't have mod, get from player avatar directly
+        //doesn't have mod or has no custom height, get from player avatar directly
+        CVRPlayerEntity playerEntity = CVRPlayerManager.Instance.NetworkPlayers.Find((players) => players.Uuid == playerId);
+        if (playerEntity != null && playerEntity.PuppetMaster != null)
+            return playerEntity.PuppetMaster.GetAvatarHeight();
+        
+        // player is invalid???
         return -1f;
     }
 

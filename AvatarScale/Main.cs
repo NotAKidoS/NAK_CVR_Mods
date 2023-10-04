@@ -11,15 +11,15 @@ public class AvatarScaleMod : MelonMod
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
+        
+        ModNetwork.Subscribe();
+        ModSettings.Initialize();
 
         ApplyPatches(typeof(HarmonyPatches.PlayerSetupPatches));
         ApplyPatches(typeof(HarmonyPatches.PuppetMasterPatches));
         ApplyPatches(typeof(HarmonyPatches.GesturePlaneTestPatches));
         
-        InitializeIntegration("BTKUILib", Integrations.BTKUIAddon.Initialize);
-        
-        ModNetwork.Subscribe();
-        ModSettings.Initialize();
+        InitializeIntegration("BTKUILib", Integrations.BtkUiAddon.Initialize);
     }
 
     public override void OnUpdate()

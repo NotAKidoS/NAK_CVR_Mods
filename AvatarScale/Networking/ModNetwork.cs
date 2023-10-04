@@ -14,6 +14,8 @@ public static class ModNetwork
 {
     public static bool Debug_NetworkInbound = false;
     public static bool Debug_NetworkOutbound = false;
+
+    private static bool _isSubscribedToModNetwork;
     
     #region Constants
 
@@ -60,11 +62,15 @@ public static class ModNetwork
 
     internal static void Subscribe()
     {
+        _isSubscribedToModNetwork = true;
         ModNetworkManager.Subscribe(ModId, OnMessageReceived);
     }
 
     internal static void Update()
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         ProcessOutboundQueue();
         ProcessInboundQueue();
     }
@@ -74,6 +80,9 @@ public static class ModNetwork
         if (!IsConnectedToGameNetwork())
             return;
 
+        if (!Enum.IsDefined(typeof(MessageType), messageType))
+            return;
+        
         if (!string.IsNullOrEmpty(playerId))
         {
             // to specific user
@@ -129,8 +138,7 @@ public static class ModNetwork
     public static void RequestHeightSync()
     {
         var myCurrentHeight = AvatarScaleManager.Instance.GetHeightForNetwork();
-        if (myCurrentHeight > 0)
-            OutboundQueue["global"] = new QueuedMessage { Type = MessageType.RequestHeight, Height = myCurrentHeight };
+        OutboundQueue["global"] = new QueuedMessage { Type = MessageType.RequestHeight, Height = myCurrentHeight };
     }
 
     #endregion
@@ -199,13 +207,12 @@ public static class ModNetwork
                 case MessageType.RequestHeight:
                 {
                     var myNetworkHeight = AvatarScaleManager.Instance.GetHeightForNetwork();
-                    if (myNetworkHeight > 0)
-                        OutboundQueue[message.Sender] = new QueuedMessage
-                        {
-                            Type = MessageType.SyncHeight,
-                            Height = myNetworkHeight,
-                            TargetPlayer = message.Sender
-                        };
+                    OutboundQueue[message.Sender] = new QueuedMessage
+                    {
+                        Type = MessageType.SyncHeight,
+                        Height = myNetworkHeight,
+                        TargetPlayer = message.Sender
+                    };
 
                     AvatarScaleManager.Instance.OnNetworkHeightUpdateReceived(message.Sender, message.Height);
                     break;

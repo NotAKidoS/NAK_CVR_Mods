@@ -9,10 +9,11 @@ namespace NAK.AvatarScaleMod;
 internal static class ModSettings
 {
     // Constants
-    internal const string SettingsCategory = nameof(AvatarScaleMod);
+    internal const string ModName = nameof(AvatarScaleMod);
+    internal const string SettingsCategory = "Avatar Scale Mod";
 
     public static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(SettingsCategory);
+        MelonPreferences.CreateCategory(ModName);
     
     public static readonly MelonPreferences_Entry<bool> EntryUseUniversalScaling =
         Category.CreateEntry("use_universal_scaling", true, display_name: "Use Universal Scaling", description: "Enable or disable universal scaling.");
