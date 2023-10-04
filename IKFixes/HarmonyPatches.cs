@@ -34,6 +34,10 @@ internal static class BodySystemPatches
                     parent = IKSystem.vrik.references.rightCalf;
                     offsetDistance = 0.15f;
                     break;
+                case TrackingPoint.TrackingRole.Chest:
+                    parent = IKSystem.vrik.references.chest;
+                    offsetDistance = 0.5f;
+                    break;
                 case TrackingPoint.TrackingRole.LeftElbow:
                     parent = IKSystem.vrik.references.leftForearm;
                     offsetDistance = -0.15f;
