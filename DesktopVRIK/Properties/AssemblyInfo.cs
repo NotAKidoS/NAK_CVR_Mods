@@ -28,6 +28,6 @@ using System.Reflection;
 namespace NAK.DesktopVRIK.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "4.2.7";
+    public const string Version = "4.2.9";
     public const string Author = "NotAKidoS";
 }

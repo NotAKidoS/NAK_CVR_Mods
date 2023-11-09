@@ -107,10 +107,11 @@ internal class IKHandlerDesktop : IKHandler
         bool isProne = MovementSystem.Instance.prone;
         bool isFlying = MovementSystem.Instance.flying;
         bool isSitting = MovementSystem.Instance.sitting;
+        bool isSwimming = MovementSystem.Instance.GetSubmerged();
         bool isStanding = PlayerSetup.Instance.avatarUpright >=
                           Mathf.Max(PlayerSetup.Instance.avatarProneLimit, PlayerSetup.Instance.avatarCrouchLimit);
         
-        return !(isMoving || isCrouching || isProne || isFlying || isSitting || !isGrounded || !isStanding);
+        return !(isMoving || isCrouching || isProne || isFlying || isSwimming || isSitting || !isGrounded || !isStanding);
     }
 
     private void ResetSolverIfNeeded()

@@ -1,5 +1,6 @@
 ﻿using ABI.CCK.Components;
 using ABI_RC.Core.Player;
+using ABI_RC.Systems.IK;
 using HarmonyLib;
 using NAK.DesktopVRIK.IK;
 using UnityEngine;
@@ -101,6 +102,26 @@ internal class PlayerSetupPatches
     }
 
     [HarmonyPrefix]
+    [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.OffsetMovementParent))]
+    private static void Prefix_IKSystem_OffsetMovementParent(CVRMovementParent currentParent, ref IKSystem __instance, ref bool __runOriginal)
+    {
+        try
+        {
+            __runOriginal = true;
+            if (IKManager.Instance == null || !IKManager.Instance.IsAvatarInitialized())
+                return;
+
+            if (currentParent != null && currentParent._referencePoint != null)
+                __runOriginal = IKManager.Instance.OnPlayerHandleMovementParent(currentParent);
+        }
+        catch (Exception e)
+        {
+            DesktopVRIK.Logger.Error($"Error during the patched method {nameof(Prefix_IKSystem_OffsetMovementParent)}");
+            DesktopVRIK.Logger.Error(e);
+        }
+    }
+    
+    [HarmonyPrefix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.ResetIk))]
     private static void Prefix_PlayerSetup_ResetIk(ref PlayerSetup __instance, ref bool __runOriginal)
     {
@@ -112,9 +133,9 @@ internal class PlayerSetupPatches
 
             CVRMovementParent currentParent = __instance._movementSystem._currentParent;
             if (currentParent != null && currentParent._referencePoint != null)
-                IKManager.Instance.OnPlayerHandleMovementParent(currentParent);
+                __runOriginal = IKManager.Instance.OnPlayerHandleMovementParent(currentParent);
             else
-                IKManager.Instance.OnPlayerTeleported();
+                __runOriginal = IKManager.Instance.OnPlayerTeleported();
         }
         catch (Exception e)
         {

@@ -40,11 +40,4 @@ public static class ModSettings
 
     public static readonly MelonPreferences_Entry<bool> EntryProneThrusting =
         Category.CreateEntry("Prone Thrusting", false, description: "Allows Body Lean Weight to take effect while crouched or prone.");
-
-    public static readonly MelonPreferences_Entry<bool> EntryNetIKPass =
-        Category.CreateEntry("Network IK Pass", true, description: "Should NetIK pass be applied? This fixes a bunch of small rotation errors after VRIK is run.");
-
-    public static readonly MelonPreferences_Entry<bool> EntryIntegrationAMT =
-        Category.CreateEntry("AMT Integration", true, description: "Relies on AvatarMotionTweaker to handle VRIK Locomotion weights if available.");
-
 }

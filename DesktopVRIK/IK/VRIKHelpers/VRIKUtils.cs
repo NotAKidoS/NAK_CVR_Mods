@@ -39,9 +39,9 @@ public static class VRIKUtils
 
         // hack, use parent transform instead as setting feet position moves root (root.parent), but does not work for VR
         var footsteps = vrik.solver.locomotion.footsteps;
-        footsteps[0].Reset(rootWorldRot, root.TransformPoint(locomotionData.InitialFootPosLeft * scaleModifier),
+        footsteps[0].Reset(rootWorldRot, root.TransformPoint(locomotionData.InitialFootPosLeft),
             rootWorldRot * locomotionData.InitialFootRotLeft);
-        footsteps[1].Reset(rootWorldRot, root.TransformPoint(locomotionData.InitialFootPosRight * scaleModifier),
+        footsteps[1].Reset(rootWorldRot, root.TransformPoint(locomotionData.InitialFootPosRight),
             rootWorldRot * locomotionData.InitialFootRotRight);
     }
 

@@ -1,8 +1,8 @@
 {
   "_id": 117,
   "name": "DesktopVRIK",
-  "modversion": "4.2.7",
-  "gameversion": "2023r172",
+  "modversion": "4.2.9",
+  "gameversion": "2023r173",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -19,6 +19,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r22/DesktopVRIK.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
-  "changelog": "- Fixed Prone Thrusting option ignoring set Body Leaning weight.\n- Potential fix for avatars feet randomly targeting far away while stutter-stepping.",
+  "changelog": "- Fixes for 2023r173.\n- Fixed ResetFootstepsOnIdle not working as intended.\n- Added swimming pitch control.\n- Added active body offset.",
   "embedcolor": "#9b59b6"
 }

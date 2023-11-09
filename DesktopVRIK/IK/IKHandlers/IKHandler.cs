@@ -1,4 +1,5 @@
-﻿using ABI.CCK.Components;
+﻿using ABI_RC.Core.InteractionSystem;
+using ABI.CCK.Components;
 using ABI_RC.Systems.IK.SubSystems;
 using NAK.DesktopVRIK.IK.VRIKHelpers;
 using RootMotion.FinalIK;
@@ -143,10 +144,10 @@ internal abstract class IKHandler
     {
         _ikSimulatedRootAngle = _vrik.transform.eulerAngles.y;
         
+        _solver.Reset();
+        
         if(ModSettings.EntryResetFootstepsOnIdle.Value)
             VRIKUtils.ResetToInitialFootsteps(_vrik, _locomotionData, _scaleDifference);
-
-        _solver.Reset();
     }
     
     #endregion

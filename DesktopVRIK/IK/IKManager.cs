@@ -2,6 +2,7 @@
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.IK.SubSystems;
+using ABI_RC.Systems.MovementSystem;
 using NAK.DesktopVRIK.IK.IKHandlers;
 using NAK.DesktopVRIK.IK.VRIKHelpers;
 using RootMotion.FinalIK;
@@ -29,7 +30,7 @@ public class IKManager : MonoBehaviour
 
     // Avatar Info
     private Animator _animator;
-    private Transform _hipTransform;
+    internal Transform _hipTransform;
 
     // Animator Info
     private int _animLocomotionLayer = -1;
@@ -38,9 +39,9 @@ public class IKManager : MonoBehaviour
     private const string _ikposeLayerName = "IKPose";
 
     // Pose Info
-    private HumanPoseHandler _humanPoseHandler;
-    private HumanPose _humanPose;
-    private HumanPose _humanPoseInitial;
+    internal HumanPoseHandler _humanPoseHandler;
+    internal HumanPose _humanPose;
+    internal HumanPose _humanPoseInitial;
 
     #endregion
 
@@ -127,6 +128,8 @@ public class IKManager : MonoBehaviour
         if (_ikHandler == null)
             return false;
 
+        DesktopVRIK.Logger.Msg(scaleDifference);
+        
         _ikHandler.OnPlayerScaled(scaleDifference);
         return true;
     }
@@ -204,6 +207,7 @@ public class IKManager : MonoBehaviour
 
         VRIKUtils.ApplyScaleToVRIK(_vrik, _ikHandler._locomotionData, 1f);
         _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateGeneral);
+        _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateDesktopSwimming);
         _vrik.onPostSolverUpdate.AddListener(OnPostSolverUpdateGeneral);
     }
 
@@ -240,6 +244,35 @@ public class IKManager : MonoBehaviour
 
     #region VRIK Solver Events General
 
+    private void OnPreSolverUpdateDesktopSwimming()
+    {
+        if (_solver.IKPositionWeight < 0.9f)
+            return;
+        
+        Vector3 headPosition = _animator.GetBoneTransform(HumanBodyBones.Head).position;
+        
+        // rotate hips around head bone to simulate diving
+        if (MovementSystem.Instance._playerIsSubmerged)
+        {
+            const float maxAngleForward = 85f; 
+            const float maxAngleBackward = -85f;
+            
+            float lookAngle = _desktopCamera.localEulerAngles.x;
+            if (lookAngle > 180) lookAngle -= 360;
+            
+            lookAngle = Mathf.Clamp(lookAngle, maxAngleBackward, maxAngleForward);
+            float multiplier = Mathf.Lerp(0f, 1f, (MovementSystem.Instance.movementVector.magnitude - 0.5f) * 2f); // blend in when moving w/ sprint
+            multiplier *= (-1f * MovementSystem.Instance.GetDepth()); // blend out when at surface
+
+            _solver.IKPositionWeight = 1f - (-1f * multiplier); // disable IK completely when fast swimming (only applicable to DesktopVRIK)
+            _hipTransform.RotateAround(headPosition, _animator.transform.right, lookAngle * multiplier);
+        }
+        
+        // offset avatar hips so head bone is centered on avatar root
+        // this fixes animations becoming scrunched up once VRIK solves!
+         _hipTransform.position -= (headPosition - _animator.transform.position) with { y = 0f };
+    }
+    
     private void OnPreSolverUpdateGeneral()
     {
         if (_solver.IKPositionWeight < 0.9f)
