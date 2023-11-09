@@ -2,8 +2,8 @@
   {
     "_id": 16,
     "name": "ThirdPerson",
-    "modversion": "1.0.5",
-    "gameversion": "2023r171",
+    "modversion": "1.0.6",
+    "gameversion": "2023r173",
     "loaderversion": "0.6.1",
     "modtype": "Mod",
     "author": "Davi & NotAKidoS",
@@ -14,9 +14,9 @@
       "third person"
     ],
     "requirements": [],
-    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/ThirdPerson.dll",
+    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r22/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Fixed game issue where player camera culling mask was not being first reset when loading into a world with a custom reference camera specified.\n- Fixed not updating stored culling mask on world join or ThirdPerson toggle.\n\nThese changes should fix the Portable Camera not displaying anything once loading into a world while in Third Person.",
+    "changelog": "- Fixed not updating stored culling mask on world join or ThirdPerson toggle.\n- Switched to using CVRTools.CopyToDestCam when copying camera settings.",
     "embedcolor": "#F61961"
   }
 ]

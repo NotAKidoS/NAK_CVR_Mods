@@ -6,6 +6,7 @@ using Aura2API;
 using BeautifyEffect;
 using System.Collections;
 using System.Reflection;
+using ABI_RC.Core;
 using UnityEngine;
 using UnityEngine.AzureSky;
 using UnityEngine.Rendering.PostProcessing;
@@ -68,110 +69,16 @@ internal static class CameraLogic
         ThirdPerson.Logger.Msg("Finished setting up third person camera.");
     }
 
-    internal static void ResetPlayerCamValues()
-    {
-        Camera activePlayerCam = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
-        if (activePlayerCam == null) 
-            return;
-        
-        ThirdPerson.Logger.Msg("Resetting active camera culling mask.");
-        
-        // CopyRefCamValues does not reset to default before copying! Game issue, SetDefaultCamValues is fine.
-        activePlayerCam.cullingMask = MetaPort.Instance.defaultCameraMask;
-    }
-
     internal static void CopyPlayerCamValues()
     {
-        Camera ourCamComponent = _thirdpersonCam.GetComponent<Camera>();
+        Camera ourCamComponent = _thirdpersonCam;
         Camera activePlayerCam = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
         if (ourCamComponent == null || activePlayerCam == null) 
             return;
         
         ThirdPerson.Logger.Msg("Copying active camera settings & components.");
         
-        // Copy basic settings
-        ourCamComponent.farClipPlane = activePlayerCam.farClipPlane;
-        ourCamComponent.nearClipPlane = activePlayerCam.nearClipPlane;
-        ourCamComponent.depthTextureMode = activePlayerCam.depthTextureMode;
-
-        // Copy and store the active camera mask
-        var cullingMask= _storedCamMask = activePlayerCam.cullingMask;
-        cullingMask &= -32769;
-        cullingMask |= 256;
-        cullingMask |= 512;
-        cullingMask |= 32;
-        cullingMask &= -4097;
-        cullingMask |= 1024;
-        cullingMask |= 8192;
-        ourCamComponent.cullingMask = cullingMask;
-
-        // Copy post processing if added
-        PostProcessLayer ppLayerPlayerCam = activePlayerCam.GetComponent<PostProcessLayer>();
-        PostProcessLayer ppLayerThirdPerson = ourCamComponent.AddComponentIfMissing<PostProcessLayer>();
-        if (ppLayerPlayerCam != null && ppLayerThirdPerson != null)
-        {
-            ppLayerThirdPerson.enabled = ppLayerPlayerCam.enabled;
-            ppLayerThirdPerson.volumeLayer = ppLayerPlayerCam.volumeLayer;
-            // Copy these via reflection, otherwise post processing will error
-            if (!_setupPostProcessing)
-            {
-                _setupPostProcessing = true;
-                PostProcessResources resources = (PostProcessResources)_ppResourcesFieldInfo.GetValue(ppLayerPlayerCam);
-                PostProcessResources oldResources = (PostProcessResources)_ppOldResourcesFieldInfo.GetValue(ppLayerPlayerCam);
-                _ppResourcesFieldInfo.SetValue(ppLayerThirdPerson, resources);
-                _ppResourcesFieldInfo.SetValue(ppLayerThirdPerson, oldResources);
-            }
-        }
-
-        // Copy Aura camera settings
-        AuraCamera auraPlayerCam = activePlayerCam.GetComponent<AuraCamera>();
-        AuraCamera auraThirdPerson = ourCamComponent.AddComponentIfMissing<AuraCamera>();
-        if (auraPlayerCam != null && auraThirdPerson != null)
-        {
-            auraThirdPerson.enabled = auraPlayerCam.enabled;
-            auraThirdPerson.frustumSettings = auraPlayerCam.frustumSettings;
-        }
-        else
-        {
-            auraThirdPerson.enabled = false;
-        }
-
-        // Copy Flare layer settings
-        FlareLayer flarePlayerCam = activePlayerCam.GetComponent<FlareLayer>();
-        FlareLayer flareThirdPerson = ourCamComponent.AddComponentIfMissing<FlareLayer>();
-        if (flarePlayerCam != null && flareThirdPerson != null)
-        {
-            flareThirdPerson.enabled = flarePlayerCam.enabled;
-        }
-        else
-        {
-            flareThirdPerson.enabled = false;
-        }
-
-        // Copy Azure Fog Scattering settings
-        AzureFogScattering azureFogPlayerCam = activePlayerCam.GetComponent<AzureFogScattering>();
-        AzureFogScattering azureFogThirdPerson = ourCamComponent.AddComponentIfMissing<AzureFogScattering>();
-        if (azureFogPlayerCam != null && azureFogThirdPerson != null)
-        {
-            azureFogThirdPerson.fogScatteringMaterial = azureFogPlayerCam.fogScatteringMaterial;
-        }
-        else
-        {
-            UnityEngine.Object.Destroy(ourCamComponent.GetComponent<AzureFogScattering>());
-        }
-
-        // Copy Beautify settings
-        Beautify beautifyPlayerCam = activePlayerCam.GetComponent<Beautify>();
-        Beautify beautifyThirdPerson = ourCamComponent.AddComponentIfMissing<Beautify>();
-        if (beautifyPlayerCam != null && beautifyThirdPerson != null)
-        {
-            beautifyThirdPerson.quality = beautifyPlayerCam.quality;
-            beautifyThirdPerson.profile = beautifyPlayerCam.profile;
-        }
-        else
-        {
-            UnityEngine.Object.Destroy(ourCamComponent.gameObject.GetComponent<Beautify>());
-        }
+        CVRTools.CopyToDestCam(_thirdpersonCam, activePlayerCam);
     }
 
     internal static void RelocateCam(CameraLocation location, bool resetDist = false)

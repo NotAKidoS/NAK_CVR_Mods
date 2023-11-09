@@ -17,7 +17,6 @@ internal static class Patches
          );
         harmony.Patch(
             typeof(CVRWorld).GetMethod(nameof(CVRWorld.CopyRefCamValues), BindingFlags.NonPublic | BindingFlags.Instance),
-            prefix: typeof(Patches).GetMethod(nameof(OnPreWorldStart), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod(),
             postfix: typeof(Patches).GetMethod(nameof(OnPostWorldStart), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
          );
         harmony.Patch(
@@ -31,7 +30,6 @@ internal static class Patches
     }
 
     //Copy camera settings & postprocessing components
-    private static void OnPreWorldStart() => ResetPlayerCamValues();
     private static void OnPostWorldStart() => CopyPlayerCamValues();
     //Adjust camera distance with height as modifier
     private static void OnScaleAdjusted(float height) => AdjustScale(height);
