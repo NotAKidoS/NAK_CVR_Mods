@@ -2,7 +2,7 @@
   {
     "_id": 16,
     "name": "ThirdPerson",
-    "modversion": "1.0.6",
+    "modversion": "1.0.7",
     "gameversion": "2023r173",
     "loaderversion": "0.6.1",
     "modtype": "Mod",
@@ -14,9 +14,9 @@
       "third person"
     ],
     "requirements": [],
-    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r22/ThirdPerson.dll",
+    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r23/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Fixed not updating stored culling mask on world join or ThirdPerson toggle.\n- Switched to using CVRTools.CopyToDestCam when copying camera settings.",
+    "changelog": "- Added restriction to worlds with Zoom disabled.",
     "embedcolor": "#F61961"
   }
 ]
