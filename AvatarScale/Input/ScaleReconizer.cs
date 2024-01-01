@@ -92,7 +92,7 @@ public static class ScaleReconizer
         float heightAdjustmentFactor = (modifierRatio > 1) ? 1 + (modifierRatio - 1) : 1 - (1 - modifierRatio);
 
         // Apply the adjustment to the target height
-        AvatarScaleManager.Instance.SetHeight(_initialTargetHeight * heightAdjustmentFactor);
+        AvatarScaleManager.Instance.SetTargetHeight(_initialTargetHeight * heightAdjustmentFactor);
     }
 
     private static void OnScaleEnd(float modifier, Transform transform1, Transform transform2)

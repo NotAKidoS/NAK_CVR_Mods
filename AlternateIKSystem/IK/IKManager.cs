@@ -16,7 +16,6 @@ public class IKManager : MonoBehaviour
     #region Variables
 
     public BodyControl BodyControl = new BodyControl();
-    public WeightManipulatorManager WeightManipulator = new WeightManipulatorManager();
 
     public static VRIK vrik => _vrik;
     private static VRIK _vrik;
@@ -86,9 +85,6 @@ public class IKManager : MonoBehaviour
         _rightHandTarget = _rightController.Find("RightHandTarget");
         _rightHandRotations = _rightHandTarget.Find("RightHandRotations");
 
-        WeightManipulator.AddOverride(new TrackingControlManipulator());
-        WeightManipulator.AddOverride(new DeviceControlManipulator());
-
         BodyControl.Start();
     }
 
@@ -98,9 +94,6 @@ public class IKManager : MonoBehaviour
             return;
 
         BodyControl.Update();
-
-        if (vrik.solver != null)
-            WeightManipulator.UpdateWeights(vrik.solver);
 
         _ikHandler?.UpdateWeights();
     }

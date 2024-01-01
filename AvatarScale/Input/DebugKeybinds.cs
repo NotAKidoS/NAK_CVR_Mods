@@ -30,14 +30,14 @@ internal static class DebugKeybinds
     {
         float currentHeight = AvatarScaleManager.Instance.GetHeight() + adjustment;
         currentHeight = Mathf.Max(0f, currentHeight);
-        AvatarScaleManager.Instance.SetHeight(currentHeight);
+        AvatarScaleManager.Instance.SetTargetHeight(currentHeight);
 
         AvatarScaleMod.Logger.Msg($"[Debug] Setting height: {currentHeight}");
     }
 
     private static void ResetHeight()
     {
-        AvatarScaleManager.Instance.ResetHeight();
+        AvatarScaleManager.Instance.ResetTargetHeight();
         AvatarScaleMod.Logger.Msg("[Debug] Resetting height.");
     }
 }

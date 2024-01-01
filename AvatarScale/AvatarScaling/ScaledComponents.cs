@@ -48,7 +48,6 @@ public class ScaledLight
     public void Reset()
     {
         Component.range = InitialRange;
-
     }
 }
 

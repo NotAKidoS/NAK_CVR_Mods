@@ -16,15 +16,6 @@ internal class IKHandlerDesktop : IKHandler
 
     public override void OnInitializeIk()
     {
-        // Default tracking for Desktop
-        DeviceControlManipulator.shouldTrackHead = true;
-        DeviceControlManipulator.shouldTrackLeftArm = false;
-        DeviceControlManipulator.shouldTrackRightArm = false;
-        DeviceControlManipulator.shouldTrackLeftLeg = false;
-        DeviceControlManipulator.shouldTrackRightLeg = false;
-        DeviceControlManipulator.shouldTrackPelvis = false;
-        DeviceControlManipulator.shouldTrackLocomotion = true;
-
         _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateDesktop);
     }
 

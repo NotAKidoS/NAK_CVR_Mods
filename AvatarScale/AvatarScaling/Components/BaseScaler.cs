@@ -1,5 +1,5 @@
-﻿using ABI_RC.Core;
-using ABI_RC.Core.Player;
+﻿using System.Diagnostics;
+using ABI_RC.Core;
 using NAK.AvatarScaleMod.AvatarScaling;
 using NAK.AvatarScaleMod.ScaledComponents;
 using UnityEngine;
@@ -12,143 +12,201 @@ public class BaseScaler : MonoBehaviour
 {
     #region Constants
 
-    public const string ScaleFactorParameterName = "ScaleFactor";
-    public const string ScaleFactorParameterNameLocal = "#ScaleFactor";
+    protected const string ScaleFactorParameterName = "ScaleFactor";
+    protected const string ScaleFactorParameterNameLocal = "#" + ScaleFactorParameterName;
 
     #endregion
 
+    #region Events
+
+    // OnAnimatedHeightChanged
+    public delegate void AnimatedHeightChangedDelegate(BaseScaler scaler);
+    public event AnimatedHeightChangedDelegate OnAnimatedHeightChanged;
+    
+    // OnAnimatedHeightOverride
+    public delegate void AnimatedHeightOverrideDelegate(BaseScaler scaler);
+    public event AnimatedHeightOverrideDelegate OnAnimatedHeightOverride;
+    
+    // OnTargetHeightChanged
+    public delegate void TargetHeightChangedDelegate(BaseScaler scaler);
+    public event TargetHeightChangedDelegate OnTargetHeightChanged;
+    
+    // OnHeightReset
+    public delegate void HeightResetDelegate(BaseScaler scaler);
+    public event HeightResetDelegate OnTargetHeightReset;
+    
+    // ------------------------------------------------
+    
+    protected void InvokeAnimatedHeightChanged()
+        => OnAnimatedHeightChanged?.Invoke(this);
+    
+    protected void InvokeAnimatedHeightOverride()
+        => OnAnimatedHeightOverride?.Invoke(this);
+    
+    protected void InvokeTargetHeightChanged()
+        => OnTargetHeightChanged?.Invoke(this);
+
+    protected void InvokeTargetHeightReset()
+        => OnTargetHeightReset?.Invoke(this);
+
+    #endregion
+    
     #region Variables
     
-    internal bool _isAvatarInstantiated;
-    internal bool _isHeightAdjustedFromInitial;
-    internal bool _heightNeedsUpdate;
+    // Height update requested
+    public bool heightNeedsUpdate { get; internal set; }
+
+    // Config variables
+    public bool avatarIsHidden { get; set; }
+    public bool useTargetHeight { get; set; }
+    public bool overrideAnimationHeight { get; set; }
     
+    // State variables
+    internal bool _isAvatarInstantiated;
+    internal bool _shouldForceHeight => useTargetHeight || avatarIsHidden; // universal or hidden avatar
+
+    // Avatar info
     internal Transform _avatarTransform;
     internal CVRAnimatorManager _animatorManager;
-
+    
+    // Initial scaling
     internal float _initialHeight;
     internal Vector3 _initialScale;
 
+    // Forced scaling (Universal & Hidden Avatar)
     internal float _targetHeight = -1;
     internal Vector3 _targetScale = Vector3.one;
     internal float _scaleFactor = 1f;
-    
-    // detection for animation clip-based scaling
-    internal Vector3 _legacyAnimationScale;
-    
-    #endregion
-    
-    #region Public Methods
 
+    // AnimationClip-based scaling (Local Avatar)
+    internal float _animatedHeight;
+    internal Vector3 _animatedScale;
+    internal float _animatedScaleFactor = 1f;
+
+    #endregion
+
+    #region Avatar Events
+    
     public virtual void OnAvatarInstantiated(GameObject avatarObject, float initialHeight, Vector3 initialScale)
     {
         if (_isAvatarInstantiated) return;
         _isAvatarInstantiated = true;
         
-        _initialHeight = Mathf.Clamp(initialHeight, 0.01f, 100f);
-        _initialScale = initialScale;
+        _initialHeight = _animatedHeight = Mathf.Clamp(initialHeight, 0.01f, 100f);
+        _initialScale = _animatedScale = initialScale;
+        _animatedScaleFactor = 1f;
+        
+        if (!_shouldForceHeight) // not universal or hidden avatar
+        {
+            _targetHeight = _initialHeight;
+            _targetScale = _initialScale;
+            _scaleFactor = 1f;
+        }
+        
         _avatarTransform = avatarObject.transform;
+        
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+        
+        FindComponentsOfType(scalableComponentTypes);
+        
+        stopwatch.Stop();
+        if (ModSettings.Debug_ComponentSearchTime.Value)
+            AvatarScaleMod.Logger.Msg($"({typeof(LocalScaler)}) Component search time for {avatarObject}: {stopwatch.ElapsedMilliseconds}ms");        
     }
 
     public void OnAvatarDestroyed()
     {
         if (!_isAvatarInstantiated) return;
         _isAvatarInstantiated = false;
-        
+
         _avatarTransform = null;
-        _heightNeedsUpdate = false;
+        heightNeedsUpdate = false;
         ClearComponentLists();
     }
 
+    #endregion
+
+    #region Public Methods
+    
+    public float GetInitialHeight() => _initialHeight;
+    public float GetTargetHeight() => _targetHeight;
+    public float GetAnimatedHeight() => _animatedHeight;
+    public bool IsForcingHeight() => _shouldForceHeight;
+    
     public void SetTargetHeight(float height)
     {
-        if (_isHeightAdjustedFromInitial 
-            && Math.Abs(height - _targetHeight) < float.Epsilon)
-            return;
-        
         if (height < float.Epsilon)
         {
-            ResetHeight();
+            ResetTargetHeight();
             return;
         }
-
-        if (!_isHeightAdjustedFromInitial)
-            _legacyAnimationScale = Vector3.zero;
-        
-        _isHeightAdjustedFromInitial = true;
         
         _targetHeight = Mathf.Clamp(height, AvatarScaleManager.MinHeight, AvatarScaleManager.MaxHeight);
-        _heightNeedsUpdate = true;
-
-        UpdateScaleIfInstantiated();
-    }
-
-    public void ResetHeight()
-    {
-        if (!_isHeightAdjustedFromInitial) return;
-        _isHeightAdjustedFromInitial = false;
-
-        if (Math.Abs(_initialHeight - _targetHeight) < float.Epsilon)
-            return;
-
-        _legacyAnimationScale = Vector3.zero;
+        _scaleFactor = Mathf.Max(_targetHeight / _initialHeight, 0.01f); //safety
+        _targetScale = _initialScale * _scaleFactor;
         
-        _targetHeight = _initialHeight;
-        _heightNeedsUpdate = true;
-
-        UpdateScaleIfInstantiated();
+        InvokeTargetHeightChanged();
     }
 
-    public float GetHeight() => _targetHeight;
-    public float GetInitialHeight() => _initialHeight;
-    public bool IsHeightAdjustedFromInitial() => _isHeightAdjustedFromInitial;
+    public void ResetTargetHeight()
+    {
+        // if (Math.Abs(_initialHeight - _targetHeight) < float.Epsilon)
+        //     return; // no need to change, is close enough
+        
+        useTargetHeight = false;
+        
+        _targetHeight = _animatedHeight;
+        _targetScale = _animatedScale;
+        _scaleFactor = _animatedScaleFactor;
+        
+        InvokeTargetHeightReset();
+    }
+
+    public bool ApplyTargetHeight()
+    {
+        if (!_isAvatarInstantiated || _initialHeight == 0)
+            return false;
+
+        if (_avatarTransform == null)
+            return false;
+        
+        heightNeedsUpdate = false;
+        
+        ScaleAvatarRoot();
+        UpdateAnimatorParameter();
+        ApplyComponentScaling();
+        return true;
+    }
 
     #endregion
-    
+
     #region Private Methods
 
-    internal void ScaleAvatarRoot()
+    private void ScaleAvatarRoot()
     {
         if (_avatarTransform == null) return;
         _avatarTransform.localScale = _targetScale;
     }
-    
-    internal virtual void UpdateAnimatorParameter()
+
+    protected virtual void UpdateAnimatorParameter()
     {
         // empty
     }
-    
-    internal void UpdateScaleIfInstantiated()
-    {
-        if (!_isAvatarInstantiated || _initialHeight == 0) 
-            return;
-        
-        if (_avatarTransform == null) 
-            return;
-
-        _scaleFactor = Mathf.Max(_targetHeight / _initialHeight, 0.01f); //safety
-        
-        _heightNeedsUpdate = false;
-        _targetScale = _initialScale * _scaleFactor;
-
-        ScaleAvatarRoot();
-        UpdateAnimatorParameter();
-        ApplyComponentScaling();
-    }
 
     #endregion
-    
-    #region Unity Methods
+
+    #region Unity Events
 
     public virtual void LateUpdate()
     {
-        if (!_isHeightAdjustedFromInitial)
-            return;
+        if (!_isAvatarInstantiated)
+            return; // no avatar
         
-        if (!_isAvatarInstantiated) 
-            return;
-        
-        ScaleAvatarRoot(); // override animationclip-based scaling
+        if (!_shouldForceHeight)
+            return; // not universal scaling or hidden avatar
+
+        ScaleAvatarRoot();
     }
 
     internal virtual void OnDestroy()
@@ -169,13 +227,13 @@ public class BaseScaler : MonoBehaviour
         typeof(PositionConstraint),
         typeof(ScaleConstraint)
     };
-    
-    private readonly List<ScaledLight> _scaledLights = new List<ScaledLight>();
-    private readonly List<ScaledAudioSource> _scaledAudioSources = new List<ScaledAudioSource>();
-    private readonly List<ScaledParentConstraint> _scaledParentConstraints = new List<ScaledParentConstraint>();
-    private readonly List<ScaledPositionConstraint> _scaledPositionConstraints = new List<ScaledPositionConstraint>();
-    private readonly List<ScaledScaleConstraint> _scaledScaleConstraints = new List<ScaledScaleConstraint>();
-    
+
+    private readonly List<ScaledLight> _scaledLights = new();
+    private readonly List<ScaledAudioSource> _scaledAudioSources = new();
+    private readonly List<ScaledParentConstraint> _scaledParentConstraints = new();
+    private readonly List<ScaledPositionConstraint> _scaledPositionConstraints = new();
+    private readonly List<ScaledScaleConstraint> _scaledScaleConstraints = new();
+
     private void ClearComponentLists()
     {
         _scaledLights.Clear();
@@ -184,10 +242,9 @@ public class BaseScaler : MonoBehaviour
         _scaledPositionConstraints.Clear();
         _scaledScaleConstraints.Clear();
     }
-    
-    internal async Task FindComponentsOfTypeAsync(Type[] types)
+
+    internal void FindComponentsOfType(Type[] types)
     {
-        var tasks = new List<Task>();
         var components = _avatarTransform.gameObject.GetComponentsInChildren<Component>(true);
 
         foreach (Component component in components)
@@ -195,19 +252,12 @@ public class BaseScaler : MonoBehaviour
             if (this == null) break;
             if (component == null) continue;
 
-            tasks.Add(Task.Run(() =>
-            {
-                Type componentType = component.GetType();
-                if (types.Contains(componentType))
-                {
-                    AddScaledComponent(componentType, component);
-                }
-            }));
+            Type componentType = component.GetType();
+            if (types.Contains(componentType))
+                AddScaledComponent(componentType, component);
         }
-
-        await Task.WhenAll(tasks);
     }
-
+    
     private void AddScaledComponent(Type type, Component component)
     {
         switch (type)
@@ -229,7 +279,7 @@ public class BaseScaler : MonoBehaviour
                 break;
         }
     }
-    
+
     private void ApplyComponentScaling()
     {
         // UpdateLightScales(); // might break dps
@@ -273,6 +323,6 @@ public class BaseScaler : MonoBehaviour
         foreach (ScaledScaleConstraint scaleConstraint in _scaledScaleConstraints)
             scaleConstraint.Scale(_scaleFactor);
     }
-    
+
     #endregion
 }

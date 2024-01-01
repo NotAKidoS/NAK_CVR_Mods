@@ -21,7 +21,7 @@ public static class ModSettings
             "Determines if VRIK uses humanoid toes for IK solving, which can cause feet to idle behind the avatar.");
 
     public static readonly MelonPreferences_Entry<bool> EntryPlantFeet =
-        Category.CreateEntry("Enforce Plant Feet", true,
+        Category.CreateEntry("Enforce Plant Feet", false    ,
             description: "Forces VRIK Plant Feet enabled to prevent hovering when stopping movement.");
 
     public static readonly MelonPreferences_Entry<bool> EntryResetFootstepsOnIdle =

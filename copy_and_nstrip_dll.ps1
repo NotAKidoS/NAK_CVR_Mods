@@ -9,7 +9,7 @@ $cvrExecutable = "ChilloutVR.exe"
 $cvrDefaultPath = "E:\temp\CVR_Experimental"
 
 # Array with the dlls to strip
-$dllsToStrip = @('Assembly-CSharp.dll','Assembly-CSharp-firstpass.dll','AVProVideo.Runtime.dll', 'Unity.TextMeshPro.dll', 'MagicaCloth.dll')
+$dllsToStrip = @('Assembly-CSharp.dll','Assembly-CSharp-firstpass.dll','AVProVideo.Runtime.dll', 'Unity.TextMeshPro.dll', 'MagicaCloth.dll', 'Unity.Services.Vivox.dll')
 
 # Array with the mods to grab
 $modNames = @("BTKUILib", "BTKSAImmersiveHud", "ActionMenu", "MenuScalePatch", "ChatBox", "ml_prm")

@@ -1,32 +1,34 @@
 ﻿using ABI_RC.Systems.UI;
-using NAK.DesktopVRSwitch.VRModeTrackers;
 using System.Collections;
+using ABI_RC.Core.EventSystem;
+using ABI_RC.Core.IO;
+using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
+using ABI_RC.Core.UI;
+using ABI_RC.Systems.GameEventSystem;
+using ABI_RC.Systems.InputManagement;
+using ABI_RC.Systems.VRModeSwitch;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Management;
 
 namespace NAK.DesktopVRSwitch;
 
-public class VRModeSwitchManager : MonoBehaviour
+ public class VRModeSwitchManager : MonoBehaviour
 {
-    #region Static
-
     public static VRModeSwitchManager Instance { get; private set; }
-    
-    public static void RegisterVRModeTracker(VRModeTracker observer) => observer.TrackerInit();
-    public static void UnregisterVRModeTracker(VRModeTracker observer) => observer.TrackerDestroy();
-    
-    #endregion
 
     #region Variables
 
     // Settings
+    public bool DesktopVRSwitchEnabled;
     public bool UseWorldTransition = true;
     public bool ReloadLocalAvatar = true;
-    
+
     public bool SwitchInProgress { get; private set; }
 
     #endregion
-    
+
     #region Unity Methods
 
     private void Awake()
@@ -36,73 +38,125 @@ public class VRModeSwitchManager : MonoBehaviour
             DestroyImmediate(this);
             return;
         }
+
         Instance = this;
+
+        DesktopVRSwitchEnabled = MetaPort.Instance.settings.GetSettingsBool("ExperimentalDesktopVRSwitch");
+        MetaPort.Instance.settings.settingBoolChanged.AddListener(OnSettingsBoolChanged);
+    }
+
+    private void Update()
+    {
+        if (!DesktopVRSwitchEnabled)
+            return;
+        
+        if (SwitchInProgress)
+            return;
+
+        if (CVRInputManager.Instance.switchMode)
+            AttemptSwitch();
     }
 
     #endregion
 
     #region Public Methods
 
-    private static bool IsInXR() => XRGeneralSettings.Instance.Manager.activeLoader != null;
-    
-    public void AttemptSwitch() => StartCoroutine(StartSwitchInternal());
-    
+    public void AttemptSwitch()
+    {
+        if (SwitchInProgress)
+            return;
+
+        // dont allow switching during world transfer, itll explode violently
+        if (CVRObjectLoader.Instance.IsLoadingWorldToJoin())
+            return;
+        
+        StartCoroutine(StartSwitchInternal());
+    }
+
     #endregion
-    
+
     #region Private Methods
+    
+    private void OnSettingsBoolChanged(string settingName, bool val)
+    {
+        if (settingName == "ExperimentalDesktopVRSwitch")
+            DesktopVRSwitchEnabled = val;
+    }
 
     private IEnumerator StartSwitchInternal()
     {
-        if (SwitchInProgress) 
+        if (SwitchInProgress)
             yield break;
-        
+
+        NotifyOnPreSwitch();
+
         bool useWorldTransition = UseWorldTransition;
         SwitchInProgress = true;
-        
+
         yield return null;
-    
+
         if (useWorldTransition)
             yield return StartCoroutine(StartTransition());
 
-        bool isUsingVr = IsInXR();
+        var wasInXr = IsInXR();
 
-        InvokeOnPreSwitch(isUsingVr);
+        InvokeOnPreSwitch(!wasInXr);
 
-        yield return StartCoroutine(XRAndReloadAvatar(!isUsingVr));
+        // Note: this assumes that wasInXr has been correctly set earlier in your method.
+        Task xrTask = wasInXr ? XRHandler.StopXR() : XRHandler.StartXR();
+
+        // Wait for the task to complete. This makes the coroutine wait here until the above thread is done.
+        yield return new WaitUntil(() => xrTask.IsCompleted || xrTask.IsFaulted);
+
+        // Check task status, handle any fault that occurred during the execution of the task.
+        if (xrTask.IsFaulted)
+        {
+            // Log and/or handle exceptions that occurred within the task.
+            Exception innerException = xrTask.Exception.InnerException; // The Exception that caused the Task to enter the faulted state
+            MelonLoader.MelonLogger.Error("Encountered an error while executing the XR task: " + innerException.Message);
+            // Handle the exception appropriately.
+        }
+
+        if (wasInXr != IsInXR())
+        {
+            ReloadAvatar();
+            InvokeOnPostSwitch(!wasInXr);
+        }
+        else
+        {
+            NotifyOnFailedSwitch();
+            InvokeOnFailedSwitch(!wasInXr);
+        }
 
         if (useWorldTransition)
             yield return StartCoroutine(ContinueTransition());
 
         SwitchInProgress = false;
     }
-    
-    private IEnumerator XRAndReloadAvatar(bool start)
-    {
-        yield return StartCoroutine(start ? XRHandler.StartXR() : XRHandler.StopXR());
 
-        bool isUsingVr = IsInXR();
-        if (isUsingVr == start)
-        {
-            ReloadAvatar();
-            InvokeOnPostSwitch(start);
-        }
-        else
-        {
-            InvokeOnFailedSwitch(start);
-        }
-    }
-    
     private void ReloadAvatar()
     {
-        if (!ReloadLocalAvatar) 
+        if (!ReloadLocalAvatar)
             return;
-        
-        Utils.ClearLocalAvatar();
-        Utils.ReloadLocalAvatar();
+
+        // TODO: Is there a better way to reload only locally?
+        PlayerSetup.Instance.ClearAvatar();
+        AssetManagement.Instance.LoadLocalAvatar(MetaPort.Instance.currentAvatarGuid);
     }
 
-    #endregion
+    private bool IsInXR()
+    {
+        return XRGeneralSettings.Instance.Manager.activeLoader != null;
+    }
+
+    private UnityEngine.Camera GetPlayerCamera(bool isVr)
+    {
+        return (isVr ? PlayerSetup.Instance.vrCamera : PlayerSetup.Instance.desktopCamera)
+            .GetComponent<UnityEngine.Camera>();
+    }
     
+    #endregion
+
     #region Transition Coroutines
 
     private IEnumerator StartTransition()
@@ -123,38 +177,46 @@ public class VRModeSwitchManager : MonoBehaviour
 
     #region Event Handling
 
-    public class VRModeEventArgs : EventArgs
+    private void InvokeOnPreSwitch(bool isUsingVr)
     {
-        public bool IsUsingVr { get; }
-        public Camera PlayerCamera { get; }
+        UnityEngine.Camera playerCamera = GetPlayerCamera(isUsingVr);
 
-        public VRModeEventArgs(bool isUsingVr, Camera playerCamera)
-        {
-            IsUsingVr = isUsingVr;
-            PlayerCamera = playerCamera;
-        }
+        ABI_RC.Systems.VRModeSwitch.VRModeSwitchManager.OnPreSwitchInternal?.Invoke(isUsingVr, playerCamera);
+        CVRGameEventSystem.VRModeSwitch.OnPreSwitch?.Invoke(isUsingVr, playerCamera);
     }
-    
-    public static event EventHandler<VRModeEventArgs> OnPreVRModeSwitch;
-    public static event EventHandler<VRModeEventArgs> OnPostVRModeSwitch;
-    public static event EventHandler<VRModeEventArgs> OnFailVRModeSwitch;
 
-    private void InvokeOnPreSwitch(bool isUsingVr) => SafeInvokeUnityEvent(OnPreVRModeSwitch, isUsingVr);
-    private void InvokeOnPostSwitch(bool isUsingVr) => SafeInvokeUnityEvent(OnPostVRModeSwitch, isUsingVr);
-    private void InvokeOnFailedSwitch(bool isUsingVr) => SafeInvokeUnityEvent(OnFailVRModeSwitch, isUsingVr);
-
-    private void SafeInvokeUnityEvent(EventHandler<VRModeEventArgs> switchEvent, bool isUsingVr)
+    private void InvokeOnPostSwitch(bool isUsingVr)
     {
-        try
-        {
-            Camera playerCamera = Utils.GetPlayerCameraObject(isUsingVr).GetComponent<Camera>();
-            switchEvent?.Invoke(this, new VRModeEventArgs(isUsingVr, playerCamera));
-        }
-        catch (Exception e)
-        {
-            DesktopVRSwitch.Logger.Error($"Error in event handler: {e}");
-        }
+        UnityEngine.Camera playerCamera = GetPlayerCamera(isUsingVr);
+
+        ABI_RC.Systems.VRModeSwitch.VRModeSwitchManager.OnPostSwitchInternal?.Invoke(isUsingVr, playerCamera);
+        CVRGameEventSystem.VRModeSwitch.OnPostSwitch?.Invoke(isUsingVr, playerCamera);
     }
-    
+
+    private void InvokeOnFailedSwitch(bool isUsingVr)
+    {
+        UnityEngine.Camera playerCamera = GetPlayerCamera(isUsingVr);
+
+        ABI_RC.Systems.VRModeSwitch.VRModeSwitchManager.OnFailedSwitchInternal?.Invoke(isUsingVr, playerCamera);
+        CVRGameEventSystem.VRModeSwitch.OnFailedSwitch?.Invoke(isUsingVr, playerCamera);
+    }
+
+    #endregion
+
+    #region Notifications
+
+    private void NotifyOnPreSwitch()
+    {
+        CohtmlHud.Instance.ViewDropTextImmediate("(Local) Client",
+            "VR Mode Switch", "Switching to " + (IsInXR() ? "Desktop" : "VR") + " Mode");
+    }
+
+    private void NotifyOnFailedSwitch()
+    {
+        // TODO: Can we get reason it failed?
+        CohtmlHud.Instance.ViewDropTextImmediate("(Local) Client",
+            "VR Mode Switch", "Switch failed");
+    }
+
     #endregion
 }

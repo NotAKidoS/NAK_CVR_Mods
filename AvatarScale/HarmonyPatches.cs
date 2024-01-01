@@ -46,6 +46,7 @@ internal class PlayerSetupPatches
      {
          try
          {
+             if (__instance == null) return; // this is called when the game is closed
              AvatarScaleManager.Instance.OnAvatarDestroyed(__instance);
          }
          catch (Exception e)
@@ -80,6 +81,7 @@ internal class PuppetMasterPatches
     {
         try
         {
+            if (__instance == null) return; // this is called when the game is closed
             AvatarScaleManager.Instance.OnNetworkAvatarDestroyed(__instance);
         }
         catch (Exception e)

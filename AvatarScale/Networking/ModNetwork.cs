@@ -1,7 +1,6 @@
 ﻿using ABI_RC.Core.Networking;
 using ABI_RC.Systems.ModNetwork;
 using DarkRift;
-using MelonLoader;
 using NAK.AvatarScaleMod.AvatarScaling;
 using UnityEngine;
 
@@ -32,7 +31,7 @@ public static class ModNetwork
         public string TargetPlayer { get; set; }
         public string Sender { get; set; }
     }
-
+    
     #endregion
 
     #region Private State
@@ -62,10 +61,15 @@ public static class ModNetwork
 
     internal static void Subscribe()
     {
-        _isSubscribedToModNetwork = true;
         ModNetworkManager.Subscribe(ModId, OnMessageReceived);
+        
+        _isSubscribedToModNetwork = ModNetworkManager.IsSubscribed(ModId);
+        if (!_isSubscribedToModNetwork)
+            AvatarScaleMod.Logger.Error("Failed to subscribe to Mod Network! This is a critical error! Please report this to the mod author! (NAK) (ModNetwork.cs) (Subscribe) (Line 150) (AvatarScaleMod) (AvatarScale) (MelonLoader) (MelonLoader.Mods) (MelonLoader.Mods.MelonMod) (MelonLoader.MelonMod) (MelonLoader.MelonMod.MelonBaseMod) (MelonLoader.MelonMod.MelonMod) (MelonLoader.MelonMod.MelonModBase) (MelonLoader.MelonMod.MelonModBase`1) (MelonLoader.MelonMod.MelonModBase`1[[NAK.AvatarScaleMod.AvatarScaling.AvatarScaleMod, NAK.AvatarScaleMod, Version=123");
+        
+        AvatarScaleEvents.OnLocalAvatarHeightChanged.AddListener(scaler => SendNetworkHeight(scaler.GetTargetHeight()));
     }
-
+    
     internal static void Update()
     {
         if (!_isSubscribedToModNetwork)
@@ -241,6 +245,38 @@ public static class ModNetwork
         return NetworkManager.Instance != null
                && NetworkManager.Instance.GameNetwork != null
                && NetworkManager.Instance.GameNetwork.ConnectionState == ConnectionState.Connected;
+    }
+
+    #endregion
+
+    #region Messages
+
+    private class AvatarHeightMessage
+    {
+        public float Height { get; set; }
+        public bool IsUniversal { get; set; }
+    }
+
+    private static void AddAvatarHeightMessageConverter()
+    {
+        ModNetworkMessage.AddConverter(Reader, Writer);
+        return;
+
+        AvatarHeightMessage Reader(ModNetworkMessage msg)
+        {
+            AvatarHeightMessage avatarHeightMessage = new();
+            msg.Read(out float height);
+            avatarHeightMessage.Height = height;
+            msg.Read(out bool isUniversal);
+            avatarHeightMessage.IsUniversal = isUniversal;
+            return avatarHeightMessage;
+        }
+
+        void Writer(ModNetworkMessage msg, AvatarHeightMessage value)
+        {
+            msg.Write(value.Height);
+            msg.Write(value.IsUniversal);
+        }
     }
 
     #endregion

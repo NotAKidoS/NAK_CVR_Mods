@@ -1,137 +1,26 @@
-﻿using ABI.CCK.Components;
-using ABI_RC.Core.Savior;
-using ABI_RC.Core.Util.Object_Behaviour;
-using ABI_RC.Systems.IK;
-using ABI_RC.Systems.IK.TrackingModules;
-using cohtml.Net;
+﻿using ABI_RC.Core;
+using ABI_RC.Systems.InputManagement;
 using HarmonyLib;
-using NAK.DesktopVRSwitch.Patches;
-using NAK.DesktopVRSwitch.VRModeTrackers;
-using UnityEngine;
-using Valve.VR;
+using NativeVRModeSwitchManager = ABI_RC.Systems.VRModeSwitch.VRModeSwitchManager;
 
 namespace NAK.DesktopVRSwitch.HarmonyPatches;
 
-internal class CheckVRPatches
+internal class CVRInputManagerPatches
 {
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CheckVR), nameof(CheckVR.Awake))]
-    private static void Postfix_CheckVR_Start(ref CheckVR __instance)
+    [HarmonyPatch(typeof(CVRInputManager), "OnPostVRModeSwitch")]
+    private static void Postfix_CVRInputManager_OnPostVRModeSwitch(bool inVr, UnityEngine.Camera playerCamera)
     {
-        try
-        {
-            __instance.gameObject.AddComponent<VRModeSwitchManager>();
-        }
-        catch (Exception e)
-        {
-            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_CheckVR_Start)}");
-            DesktopVRSwitch.Logger.Error(e);
-        }
+        RootLogic.Instance.ToggleMouse(inVr);
     }
 }
 
-internal class IKSystemPatches
-{
-    [HarmonyPostfix] //lazy fix so device indices can change properly
-    [HarmonyPatch(typeof(SteamVRTrackingModule), nameof(SteamVRTrackingModule.ModuleDestroy))]
-    private static void Postfix_SteamVRTrackingModule_ModuleDestroy(ref SteamVRTrackingModule __instance)
-    {
-        try
-        {
-            foreach (TrackingPoint t in __instance.TrackingPoints)
-            {
-                UnityEngine.Object.Destroy(t.referenceGameObject);
-            }
-
-            __instance.TrackingPoints.Clear();
-        }
-        catch (Exception e)
-        {
-            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_SteamVRTrackingModule_ModuleDestroy)}");
-            DesktopVRSwitch.Logger.Error(e);
-        }
-    }
-}
-
-internal class CVRWorldPatches
-{
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.SetDefaultCamValues))]
-    [HarmonyPatch(typeof(CVRWorld), nameof(CVRWorld.CopyRefCamValues))]
-    private static void Postfix_CVRWorld_HandleCamValues()
-    {
-        try
-        {
-            ReferenceCameraPatch.OnWorldLoad();
-        }
-        catch (Exception e)
-        {
-            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_CVRWorld_HandleCamValues)}");
-            DesktopVRSwitch.Logger.Error(e);
-        }
-    }
-}
-
-internal class CameraFacingObjectPatches
-{
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(CameraFacingObject), nameof(CameraFacingObject.Start))]
-    private static void Postfix_CameraFacingObject_Start(ref CameraFacingObject __instance)
-    {
-        try
-        {
-            __instance.gameObject.AddComponent<CameraFacingObjectTracker>();
-        }
-        catch (Exception e)
-        {
-            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Postfix_CameraFacingObject_Start)}");
-            DesktopVRSwitch.Logger.Error(e);
-        }
-    }
-}
-
-internal class CVRPickupObjectPatches
+internal class VRModeSwitchManagerPatches
 {
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(CVRPickupObject), nameof(CVRPickupObject.Start))]
-    private static void Prefix_CVRPickupObject_Start(ref CVRPickupObject __instance)
+    [HarmonyPatch(typeof(NativeVRModeSwitchManager), "StartSwitchInternal")]
+    private static void Postfix_CVRInputManager_OnPostVRModeSwitch()
     {
-        try
-        {
-            if (__instance.gripType == CVRPickupObject.GripType.Free)
-                return;
-
-            Transform vrOrigin = __instance.gripOrigin;
-            Transform desktopOrigin = vrOrigin != null ? vrOrigin.Find("[Desktop]") : null;
-            if (vrOrigin != null && desktopOrigin != null)
-            {
-                CVRPickupObjectTracker tracker = __instance.gameObject.AddComponent<CVRPickupObjectTracker>();
-                tracker._pickupObject = __instance;
-                tracker._storedGripOrigin = (!MetaPort.Instance.isUsingVr ? vrOrigin : desktopOrigin);
-            }
-        }
-        catch (Exception e)
-        {
-            DesktopVRSwitch.Logger.Error($"Error during the patched method {nameof(Prefix_CVRPickupObject_Start)}");
-            DesktopVRSwitch.Logger.Error(e);
-        }
-    }
-}
-
-internal class SteamVRBehaviourPatches
-{
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(SteamVR_Behaviour), nameof(SteamVR_Behaviour.OnQuit))]
-    private static bool Prefix_SteamVR_Behaviour_OnQuit()
-    {
-        if (!ModSettings.EntrySwitchToDesktopOnExit.Value) 
-            return true;
-        
-        // If we don't switch fast enough, SteamVR will force close.
-        // World Transition might cause issues. Might need to override.
-        if (VRModeSwitchManager.Instance != null)
-            VRModeSwitchManager.Instance.AttemptSwitch();
-        
-        return false;
+        CVRInputManager.Instance.inputEnabled = false;
     }
 }

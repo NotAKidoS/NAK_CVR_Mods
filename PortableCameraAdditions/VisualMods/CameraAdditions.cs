@@ -7,12 +7,12 @@ public class CameraAdditions
 {
     public static CameraAdditions Instance;
 
-    public Camera referenceCamera;
-    public bool orthographicMode;
+    private Camera referenceCamera;
+    private bool orthographicMode;
 
     //Should I move these to MelonPrefs?
-    public bool CopyWorldNearClip = true;
-    public bool CopyWorldFarClip = true;
+    private bool CopyWorldNearClip = true;
+    private bool CopyWorldFarClip = true;
 
     private PortableCameraSetting setting_NearClip;
     private PortableCameraSetting setting_FarClip;
@@ -118,29 +118,25 @@ public class CameraAdditions
         OnUpdateOptionsDisplay();
     }
 
-    public void OnWorldLoaded(Camera playerCamera)
+    public void OnWorldLoaded(Camera refCamera)
     {
         orthographicMode = false;
-        referenceCamera = playerCamera;
-        if (referenceCamera != null)
-        {
-            if (CopyWorldNearClip)
-            {
-                setting_NearClip.Set(referenceCamera.nearClipPlane);
-            }
-            if (CopyWorldFarClip)
-            {
-                setting_FarClip.Set(referenceCamera.farClipPlane);
-            }
-        }
+        referenceCamera = refCamera;
+        if (referenceCamera == null) 
+            return;
+        
+        if (CopyWorldNearClip)
+            setting_NearClip.Set(referenceCamera.nearClipPlane);
+        
+        if (CopyWorldFarClip)
+            setting_FarClip.Set(referenceCamera.farClipPlane);
     }
 
     public void OnUpdateOptionsDisplay(bool expertMode = true)
     {
         if (!expertMode)
-        {
             return;
-        }
+        
         setting_NearClip.settingsObject.SetActive(!orthographicMode);
         setting_FarClip.settingsObject.SetActive(!orthographicMode);
         setting_OrthographicSize.settingsObject.SetActive(orthographicMode);
@@ -148,12 +144,11 @@ public class CameraAdditions
         setting_OrthographicFarClip.settingsObject.SetActive(orthographicMode);
     }
 
-    public void UpdateOrthographicMode()
+    private void UpdateOrthographicMode()
     {
         if (PortableCamera.Instance != null)
-        {
             PortableCamera.Instance.cameraComponent.orthographic = orthographicMode;
-        }
+        
         if (orthographicMode)
         {
             UpdateCameraSettingFloat("OrthographicNearClip", setting_OrthographicNearClip.Slider.value);
@@ -164,10 +159,11 @@ public class CameraAdditions
             UpdateCameraSettingFloat("NearClip", setting_NearClip.Slider.value);
             UpdateCameraSettingFloat("FarClip", setting_FarClip.Slider.value);
         }
+        
         OnUpdateOptionsDisplay();
     }
 
-    public void UpdateCameraSettingBool(string setting, bool value)
+    private void UpdateCameraSettingBool(string setting, bool value)
     {
         if (referenceCamera != null)
         {
@@ -193,7 +189,7 @@ public class CameraAdditions
         }
     }
 
-    public void UpdateCameraSettingFloat(string setting, float value)
+    private void UpdateCameraSettingFloat(string setting, float value)
     {
         if (PortableCamera.Instance != null)
         {

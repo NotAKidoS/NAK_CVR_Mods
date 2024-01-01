@@ -1,11 +1,13 @@
-﻿using ABI.CCK.Components;
+﻿using System.Reflection;
 using ABI_RC.Core.AudioEffects;
 using ABI_RC.Core.Networking;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util;
+using ABI_RC.Systems.InputManagement.InputModules;
+using ABI.CCK.Components;
 using DarkRift;
+using HarmonyLib;
 using MelonLoader;
-using System.Reflection;
 using UnityEngine;
 
 namespace NAK.PropUndoButton;
@@ -14,16 +16,17 @@ namespace NAK.PropUndoButton;
 
 public class PropUndoButton : MelonMod
 {
-    public static readonly MelonPreferences_Category Category = 
+    public static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(PropUndoButton));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
         Category.CreateEntry("Enabled", true, description: "Toggle Undo Prop Button.");
 
     public static readonly MelonPreferences_Entry<bool> EntryUseSFX =
-        Category.CreateEntry("Use SFX", true, description: "Toggle audio queues for prop spawn, undo, redo, and warning.");
-    
-    internal static List<DeletedProp> deletedProps = new List<DeletedProp>();
+        Category.CreateEntry("Use SFX", true,
+            description: "Toggle audio queues for prop spawn, undo, redo, and warning.");
+
+    internal static List<DeletedProp> deletedProps = new();
 
     // audio clip names, InterfaceAudio adds "PropUndo_" prefix
     private const string sfx_spawn = "PropUndo_sfx_spawn";
@@ -39,27 +42,33 @@ public class PropUndoButton : MelonMod
     {
         HarmonyInstance.Patch( // delete my props in reverse order for redo
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeleteMyProps)),
-            prefix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteMyProps), BindingFlags.NonPublic | BindingFlags.Static))
+            new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteMyProps),
+                BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // delete all props in reverse order for redo
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeleteAllProps)),
-            prefix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteAllProps), BindingFlags.NonPublic | BindingFlags.Static))
+            new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteAllProps),
+                BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // prop spawn sfx
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.SpawnProp)),
-            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnSpawnProp), BindingFlags.NonPublic | BindingFlags.Static))
+            postfix: new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnSpawnProp),
+                BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // prop delete sfx, log for possible redo
-            typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeletePropByInstanceId)),
-            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeletePropByInstanceId), BindingFlags.NonPublic | BindingFlags.Static))
+            typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeleteMyPropByInstanceIdOverNetwork)),
+            postfix: new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeletePropByInstanceId),
+                BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // desktop input patch so we don't run in menus/gui
-            typeof(InputModuleMouseKeyboard).GetMethod(nameof(InputModuleMouseKeyboard.UpdateInput)),
-            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnUpdateInput), BindingFlags.NonPublic | BindingFlags.Static))
+            typeof(CVRInputModule_Keyboard).GetMethod(nameof(CVRInputModule_Keyboard.UpdateInput)),
+            postfix: new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnUpdateInput),
+                BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // clear redo list on world change
             typeof(CVRWorld).GetMethod(nameof(CVRWorld.ConfigureWorld)),
-            postfix: new HarmonyLib.HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnWorldLoad), BindingFlags.NonPublic | BindingFlags.Static))
+            postfix: new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnWorldLoad),
+                BindingFlags.NonPublic | BindingFlags.Static))
         );
 
         SetupDefaultAudioClips();
@@ -68,7 +77,7 @@ public class PropUndoButton : MelonMod
     private void SetupDefaultAudioClips()
     {
         // PropUndo and audio folders do not exist, create them if dont exist yet
-        string path = Application.streamingAssetsPath + "/Cohtml/UIResources/GameUI/mods/PropUndo/audio/";
+        var path = Application.streamingAssetsPath + "/Cohtml/UIResources/GameUI/mods/PropUndo/audio/";
         if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
@@ -77,14 +86,14 @@ public class PropUndoButton : MelonMod
 
         // copy embedded resources to this folder if they do not exist
         string[] clipNames = { "sfx_spawn.wav", "sfx_undo.wav", "sfx_redo.wav", "sfx_warn.wav", "sfx_deny.wav" };
-        foreach (string clipName in clipNames)
+        foreach (var clipName in clipNames)
         {
-            string clipPath = Path.Combine(path, clipName);
+            var clipPath = Path.Combine(path, clipName);
             if (!File.Exists(clipPath))
             {
                 // read the clip data from embedded resources
                 byte[] clipData = null;
-                string resourceName = "PropUndoButton.SFX." + clipName;
+                var resourceName = "PropUndoButton.SFX." + clipName;
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
                 {
                     clipData = new byte[stream.Length];
@@ -92,7 +101,7 @@ public class PropUndoButton : MelonMod
                 }
 
                 // write the clip data to the file
-                using (FileStream fileStream = new FileStream(clipPath, FileMode.CreateNew))
+                using (FileStream fileStream = new(clipPath, FileMode.CreateNew))
                 {
                     fileStream.Write(clipData, 0, clipData.Length);
                 }
@@ -102,7 +111,10 @@ public class PropUndoButton : MelonMod
         }
     }
 
-    private static void OnWorldLoad() => deletedProps.Clear();
+    private static void OnWorldLoad()
+    {
+        deletedProps.Clear();
+    }
 
     private static void OnUpdateInput()
     {
@@ -111,13 +123,8 @@ public class PropUndoButton : MelonMod
         if (Input.GetKey(KeyCode.LeftControl))
         {
             if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Z))
-            {
                 RedoProp();
-            }
-            else if (Input.GetKeyDown(KeyCode.Z))
-            {
-                UndoProp();
-            }
+            else if (Input.GetKeyDown(KeyCode.Z)) UndoProp();
         }
     }
 
@@ -138,7 +145,7 @@ public class PropUndoButton : MelonMod
     {
         if (!EntryEnabled.Value || string.IsNullOrEmpty(instanceId)) return;
 
-        var propData = GetPropByInstanceIdAndOwnerId(instanceId);
+        CVRSyncHelper.PropData propData = GetPropByInstanceIdAndOwnerId(instanceId);
         if (propData == null) return;
 
         AddDeletedProp(propData);
@@ -150,7 +157,7 @@ public class PropUndoButton : MelonMod
         if (deletedProps.Count >= redoHistoryLimit)
             deletedProps.RemoveAt(0);
 
-        DeletedProp deletedProp = new DeletedProp(propData);
+        DeletedProp deletedProp = new(propData);
         deletedProps.Add(deletedProp);
     }
 
@@ -159,7 +166,7 @@ public class PropUndoButton : MelonMod
     {
         if (!EntryEnabled.Value) return true;
 
-        List<CVRSyncHelper.PropData> propsList = GetAllPropsByOwnerId();
+        var propsList = GetAllPropsByOwnerId();
 
         if (propsList.Count == 0)
         {
@@ -167,7 +174,7 @@ public class PropUndoButton : MelonMod
             return false;
         }
 
-        for (int i = propsList.Count - 1; i >= 0; i--)
+        for (var i = propsList.Count - 1; i >= 0; i--)
         {
             CVRSyncHelper.PropData propData = propsList[i];
             SafeDeleteProp(propData);
@@ -181,17 +188,17 @@ public class PropUndoButton : MelonMod
     {
         if (!EntryEnabled.Value) return true;
 
-        CVRSyncHelper.PropData[] propsList = CVRSyncHelper.Props.ToArray();
+        var propsList = CVRSyncHelper.Props.ToArray();
         if (propsList.Length == 0)
         {
             PlayAudioModule(sfx_warn);
             return false;
         }
 
-        for (int i = propsList.Length - 1; i >= 0; i--)
+        for (var i = propsList.Length - 1; i >= 0; i--)
         {
             CVRSyncHelper.PropData propData = propsList[i];
-            DeleteProp(propData);
+            SafeDeleteProp(propData);
         }
 
         return false;
@@ -199,7 +206,7 @@ public class PropUndoButton : MelonMod
 
     private static void UndoProp()
     {
-        var propData = GetLatestPropByOwnerId();
+        CVRSyncHelper.PropData propData = GetLatestPropByOwnerId();
         if (propData == null)
         {
             PlayAudioModule(sfx_warn);
@@ -211,7 +218,7 @@ public class PropUndoButton : MelonMod
 
     public static void RedoProp()
     {
-        int index = deletedProps.Count - 1;
+        var index = deletedProps.Count - 1;
         if (index < 0)
         {
             PlayAudioModule(sfx_warn);
@@ -265,74 +272,44 @@ public class PropUndoButton : MelonMod
 
     public static void PlayAudioModule(string module)
     {
-        if (EntryUseSFX.Value)
-        {
-            InterfaceAudio.PlayModule(module);
-        }
-    }
-
-    private static void DeleteProp(CVRSyncHelper.PropData propData)
-    {
-        if (propData.Spawnable != null)
-        {
-            propData.Spawnable.Delete();
-        }
-        else
-        {
-            if (propData.Wrapper != null)
-                UnityEngine.Object.DestroyImmediate(propData.Wrapper);
-            propData.Recycle();
-        }
+        if (EntryUseSFX.Value) InterfaceAudio.PlayModule(module);
     }
 
     private static void SafeDeleteProp(CVRSyncHelper.PropData propData)
     {
-        //fixes getting props stuck in limbo state if spawn & delete fast
-        if (propData.Spawnable == null && propData.Wrapper != null)
+        if (propData.Spawnable == null)
         {
-            UnityEngine.Object.DestroyImmediate(propData.Wrapper);
+            // network delete prop manually, then delete prop data
+            CVRSyncHelper.DeleteMyPropByInstanceIdOverNetwork(propData.InstanceId);
             propData.Recycle();
-        }
-        else if (propData.Spawnable != null)
-        {
-            propData.Spawnable.Delete();
-        }
-        else
-        {
-            PlayAudioModule(sfx_deny);
+            return;
         }
 
-        //if an undo attempt is made right after spawning a prop, the 
-        //spawnable & wrapper will both be null, so the delete request
-        //will be ignored- same with Delete All button in Menu now
-
-        //so the bug causing props to get stuck is due to the propData
-        //being wiped before the prop spawnable & wrapper were created
-
-        //i am unsure if i should attempt an undo of second in line prop,
-        //just in case some issue happens and causes the mod to lock up here.
-        //It should be fine though, as reloading world should clear propData...?
+        // delete prop, prop data, and network delete prop
+        propData.Spawnable.Delete();
     }
 
     private static bool IsPropSpawnAllowed()
     {
         return MetaPort.Instance.worldAllowProps
-            && MetaPort.Instance.settings.GetSettingsBool("ContentFilterPropsEnabled", false)
-            && NetworkManager.Instance.GameNetwork.ConnectionState == ConnectionState.Connected;
+               && MetaPort.Instance.settings.GetSettingsBool("ContentFilterPropsEnabled")
+               && NetworkManager.Instance.GameNetwork.ConnectionState == ConnectionState.Connected;
     }
 
-    public static bool IsAtPropLimit(int limit = 20)
+    public static bool IsAtPropLimit(int limit = 21)
     {
         return GetAllPropsByOwnerId().Count >= limit;
     }
 
     private static CVRSyncHelper.PropData GetPropByInstanceIdAndOwnerId(string instanceId)
     {
-        return CVRSyncHelper.Props.Find(propData => propData.InstanceId == instanceId && propData.SpawnedBy == MetaPort.Instance.ownerId);
+        return CVRSyncHelper.Props.Find(propData =>
+            propData.InstanceId == instanceId && propData.SpawnedBy == MetaPort.Instance.ownerId);
     }
 
     private static CVRSyncHelper.PropData GetLatestPropByOwnerId()
     {
+        // return last prop spawned by owner in CVRSyncHelper.MySpawnedPropInstanceIds
         return CVRSyncHelper.Props.LastOrDefault(propData => propData.SpawnedBy == MetaPort.Instance.ownerId);
     }
 
@@ -350,15 +327,24 @@ public class PropUndoButton : MelonMod
 
         public DeletedProp(CVRSyncHelper.PropData propData)
         {
-            // Offset spawn height so game can account for it later
-            Transform spawnable = propData.Spawnable.transform;
-            Vector3 position = spawnable.position;
-            position.y -= propData.Spawnable.spawnHeight;
+            if (propData.Spawnable == null)
+            {
+                // use original spawn position and rotation / last known position and rotation
+                position = new Vector3(propData.PositionX, propData.PositionY, propData.PositionZ);
+                rotation = new Vector3(propData.RotationX, propData.RotationY, propData.RotationZ);
+            }
+            else
+            {
+                Transform spawnableTransform = propData.Spawnable.transform;
+                position = spawnableTransform.position;
+                rotation = spawnableTransform.rotation.eulerAngles;
 
-            this.propGuid = propData.ObjectId;
-            this.position = position;
-            this.rotation = spawnable.rotation.eulerAngles;
-            this.timeDeleted = Time.time;
+                // Offset spawn height so game can account for it later
+                position.y -= propData.Spawnable.spawnHeight;
+            }
+
+            propGuid = propData.ObjectId;
+            timeDeleted = Time.time;
         }
     }
 }

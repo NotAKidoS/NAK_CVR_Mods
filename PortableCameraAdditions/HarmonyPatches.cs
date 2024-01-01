@@ -11,15 +11,15 @@ internal class PortableCameraPatches
     private static void Postfix_PortableCamera_Start(ref PortableCamera __instance)
     {
         //run mod.Setup() instead of registering full mod with icon
-        VisualMods.CameraAdditions mainMod = new VisualMods.CameraAdditions();
+        VisualMods.CameraAdditions mainMod = new ();
         mainMod.Setup(__instance);
     }
 
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PortableCamera), nameof(PortableCamera.OnWorldLoaded))]
-    private static void Postfix_PortableCamera_OnWorldLoaded(Camera worldCamera)
+    private static void Postfix_PortableCamera_OnWorldLoaded(Camera refCamera)
     {
-        VisualMods.CameraAdditions.Instance?.OnWorldLoaded(worldCamera);
+        VisualMods.CameraAdditions.Instance?.OnWorldLoaded(refCamera);
     }
 
     [HarmonyPostfix]

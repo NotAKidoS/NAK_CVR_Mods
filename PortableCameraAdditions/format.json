@@ -1,8 +1,8 @@
 {
   "_id": 123,
   "name": "PortableCameraAdditions",
-  "modversion": "1.0.4",
-  "gameversion": "2023r172",
+  "modversion": "1.0.5",
+  "gameversion": "2023r173",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -18,8 +18,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/PortableCameraAdditions.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r22/PortableCameraAdditions.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions/",
-  "changelog": "- Removed F11 bind to fullscreen Portable Camera.\nIt is now a native bind with 2023r172.",
+  "changelog": "- Fixes for 2023r173.",
   "embedcolor": "#ffd96a"
 }

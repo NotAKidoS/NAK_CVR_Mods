@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.Player;
+﻿using System.Diagnostics;
+using ABI_RC.Core.Player;
 using NAK.AvatarScaleMod.AvatarScaling;
 using UnityEngine;
 
@@ -16,28 +17,34 @@ public class NetworkScaler : BaseScaler
         
         _animatorManager = GetComponentInParent<PuppetMaster>().animatorManager;
         
-        _heightNeedsUpdate = false;
+        heightNeedsUpdate = false;
         _isAvatarInstantiated = false;
-        _isHeightAdjustedFromInitial = false;
     }
 
     #endregion
 
     #region Overrides
 
-    public override async void OnAvatarInstantiated(GameObject avatarObject, float initialHeight, Vector3 initialScale)
+    public override void OnAvatarInstantiated(GameObject avatarObject, float initialHeight, Vector3 initialScale)
     {
         if (avatarObject == null)
             return;
         
         base.OnAvatarInstantiated(avatarObject, initialHeight, initialScale);
-        await FindComponentsOfTypeAsync(scalableComponentTypes);
+        
+        Stopwatch stopwatch = new();
+        stopwatch.Start();
+        FindComponentsOfType(scalableComponentTypes);
+        stopwatch.Stop();
+        if (ModSettings.Debug_ComponentSearchTime.Value)
+            AvatarScaleMod.Logger.Msg($"({typeof(NetworkScaler)}) Component search time for {avatarObject}: {stopwatch.ElapsedMilliseconds}ms");
 
-        if (_isHeightAdjustedFromInitial && _heightNeedsUpdate)
-            UpdateScaleIfInstantiated();
+        // TODO: why did i do this? height is never set prior to this method being called
+        // if (_isHeightAdjustedFromInitial && heightNeedsUpdate) 
+        //     UpdateScaleIfInstantiated();
     }
-    
-    internal override void UpdateAnimatorParameter()
+
+    protected override void UpdateAnimatorParameter()
     {
         _animatorManager?.SetAnimatorParameter(ScaleFactorParameterNameLocal, _scaleFactor);
     }

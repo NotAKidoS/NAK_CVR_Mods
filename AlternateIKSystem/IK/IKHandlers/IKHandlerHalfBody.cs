@@ -16,15 +16,6 @@ internal class IKHandlerHalfBody : IKHandler
 
     public override void OnInitializeIk()
     {
-        // Default tracking for HalfBody
-        DeviceControlManipulator.shouldTrackHead = true;
-        DeviceControlManipulator.shouldTrackLeftArm = true;
-        DeviceControlManipulator.shouldTrackRightArm = true;
-        DeviceControlManipulator.shouldTrackLeftLeg = false;
-        DeviceControlManipulator.shouldTrackRightLeg = false;
-        DeviceControlManipulator.shouldTrackPelvis = false;
-        DeviceControlManipulator.shouldTrackLocomotion = true;
-
         _vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdateHalfBody);
     }
 

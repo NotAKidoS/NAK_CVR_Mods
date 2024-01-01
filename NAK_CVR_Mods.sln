@@ -51,9 +51,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzCurls", "EzCurls\EzCurls.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzGrab", "EzGrab\EzGrab.csproj", "{8CBF5378-A4AE-4594-9A13-0066E5D3FE81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckMLA", "FuckMLA\FuckMLA.csproj", "{41A84C81-E9FD-471D-9A68-4823C9F67CD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckVivox", "FuckVivox\FuckVivox.csproj", "{41A84C81-E9FD-471D-9A68-4823C9F67CD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FixedDeltaTimeHack", "FixedDeltaTimeHack\FixedDeltaTimeHack.csproj", "{4845010F-B76C-4D6C-97E1-7D9C468BAD93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LateInitComponentHelperHack", "LateInitComponentHelperHack\LateInitComponentHelperHack.csproj", "{4845010F-B76C-4D6C-97E1-7D9C468BAD93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
