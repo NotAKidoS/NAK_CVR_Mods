@@ -26,10 +26,10 @@ internal class CVRInputModule_XRPatches
         bool leftInput = _gestureToggleButton.GetLastStateDown(SteamVR_Input_Sources.LeftHand);
         bool rightInput = _gestureToggleButton.GetLastStateDown(SteamVR_Input_Sources.RightHand);
 
-        if (leftInput && __instance._leftModule.Type == EXRControllerType.Index || __instance._inputManager.oneHanded)
+        if (leftInput && __instance._leftModule.Type == eXRControllerType.Index || __instance._inputManager.oneHanded)
             return;
 
-        if (rightInput && __instance._rightModule.Type == EXRControllerType.Index || __instance._inputManager.oneHanded)
+        if (rightInput && __instance._rightModule.Type == eXRControllerType.Index || __instance._inputManager.oneHanded)
             return;
 
         if (leftInput || rightInput)
