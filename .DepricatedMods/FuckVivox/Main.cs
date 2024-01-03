@@ -11,10 +11,19 @@ public class FuckVivox : MelonMod
     {
         Logger = LoggerInstance;
         ApplyPatches(typeof(HarmonyPatches.VivoxServiceInternalPatches));
+
+        WindowFocusManager.OnFocusStateChanged += OnFocusChanged;
     }
 
+    private void OnFocusChanged(bool value)
+    {
+        Logger.Msg("WindowFocusManager.OnFocusStateChanged " + value);
+    }
+    
     public override void OnUpdate()
     {
+        WindowFocusManager.CheckWindowFocusedState();
+        
         if (UnityEngine.Input.GetKeyDown(UnityEngine.KeyCode.F11))
             VivoxHelpers.PleaseReLoginThankYou();
     }

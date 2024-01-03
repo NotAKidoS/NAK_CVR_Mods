@@ -33,11 +33,11 @@ internal static class DebugKeybinds
         AvatarScaleManager.Instance.SetTargetHeight(currentHeight);
 
         AvatarScaleMod.Logger.Msg($"[Debug] Setting height: {currentHeight}");
-    }
+    }   
 
     private static void ResetHeight()
     {
-        AvatarScaleManager.Instance.ResetTargetHeight();
+        AvatarScaleManager.Instance.Setting_UniversalScaling = false;
         AvatarScaleMod.Logger.Msg("[Debug] Resetting height.");
     }
 }

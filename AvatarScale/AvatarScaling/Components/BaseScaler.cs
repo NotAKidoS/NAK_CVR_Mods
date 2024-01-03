@@ -52,18 +52,52 @@ public class BaseScaler : MonoBehaviour
     #endregion
     
     #region Variables
-    
-    // Height update requested
-    public bool heightNeedsUpdate { get; internal set; }
+
+    private float _targetHeight;
+    public float TargetHeight
+    {
+        get => _targetHeight;
+        set
+        {
+            if (value < float.Epsilon)
+            {
+                // reset to animated height
+                _targetHeight = _animatedHeight;
+                _targetScale = _animatedScale;
+                _scaleFactor = _animatedScaleFactor;
+                _targetHeightChanged = true;
+                return;
+            }
+            
+            _targetHeight = Mathf.Clamp(value, AvatarScaleManager.MinHeight, AvatarScaleManager.MaxHeight);
+            _scaleFactor = Mathf.Max(_targetHeight / _initialHeight, 0.01f); //safety
+            _targetScale = _initialScale * _scaleFactor;
+            _targetHeightChanged = true;
+        }
+    }
+
+    protected bool _useTargetHeight;
+    public bool UseTargetHeight
+    {
+        get => _useTargetHeight;
+        set
+        {
+            if (_useTargetHeight == value)
+                return;
+            
+            _useTargetHeight = value;
+            _targetHeightChanged = true;
+        }
+    }
 
     // Config variables
     public bool avatarIsHidden { get; set; }
-    public bool useTargetHeight { get; set; }
     public bool overrideAnimationHeight { get; set; }
     
     // State variables
     internal bool _isAvatarInstantiated;
-    internal bool _shouldForceHeight => useTargetHeight || avatarIsHidden; // universal or hidden avatar
+    private bool _shouldForceHeight => _useTargetHeight || avatarIsHidden;
+    private bool _targetHeightChanged;
 
     // Avatar info
     internal Transform _avatarTransform;
@@ -74,7 +108,6 @@ public class BaseScaler : MonoBehaviour
     internal Vector3 _initialScale;
 
     // Forced scaling (Universal & Hidden Avatar)
-    internal float _targetHeight = -1;
     internal Vector3 _targetScale = Vector3.one;
     internal float _scaleFactor = 1f;
 
@@ -121,7 +154,6 @@ public class BaseScaler : MonoBehaviour
         _isAvatarInstantiated = false;
 
         _avatarTransform = null;
-        heightNeedsUpdate = false;
         ClearComponentLists();
     }
 
@@ -133,36 +165,11 @@ public class BaseScaler : MonoBehaviour
     public float GetTargetHeight() => _targetHeight;
     public float GetAnimatedHeight() => _animatedHeight;
     public bool IsForcingHeight() => _shouldForceHeight;
+
+    #endregion
+
+    #region Private Methods
     
-    public void SetTargetHeight(float height)
-    {
-        if (height < float.Epsilon)
-        {
-            ResetTargetHeight();
-            return;
-        }
-        
-        _targetHeight = Mathf.Clamp(height, AvatarScaleManager.MinHeight, AvatarScaleManager.MaxHeight);
-        _scaleFactor = Mathf.Max(_targetHeight / _initialHeight, 0.01f); //safety
-        _targetScale = _initialScale * _scaleFactor;
-        
-        InvokeTargetHeightChanged();
-    }
-
-    public void ResetTargetHeight()
-    {
-        // if (Math.Abs(_initialHeight - _targetHeight) < float.Epsilon)
-        //     return; // no need to change, is close enough
-        
-        useTargetHeight = false;
-        
-        _targetHeight = _animatedHeight;
-        _targetScale = _animatedScale;
-        _scaleFactor = _animatedScaleFactor;
-        
-        InvokeTargetHeightReset();
-    }
-
     public bool ApplyTargetHeight()
     {
         if (!_isAvatarInstantiated || _initialHeight == 0)
@@ -171,17 +178,29 @@ public class BaseScaler : MonoBehaviour
         if (_avatarTransform == null)
             return false;
         
-        heightNeedsUpdate = false;
-        
         ScaleAvatarRoot();
         UpdateAnimatorParameter();
         ApplyComponentScaling();
         return true;
     }
+    
+    protected void ResetTargetHeight()
+    {
+        if (!_isAvatarInstantiated)
+            return;
 
-    #endregion
-
-    #region Private Methods
+        if (_avatarTransform == null)
+            return;
+        
+        _targetHeight = _initialHeight;
+        _targetScale = _initialScale;
+        _scaleFactor = 1f;
+        _targetHeightChanged = true;
+        
+        ScaleAvatarRoot();
+        UpdateAnimatorParameter();
+        ApplyComponentScaling();
+    }
 
     private void ScaleAvatarRoot()
     {
@@ -203,10 +222,17 @@ public class BaseScaler : MonoBehaviour
         if (!_isAvatarInstantiated)
             return; // no avatar
         
-        if (!_shouldForceHeight)
-            return; // not universal scaling or hidden avatar
+        if (!_targetHeightChanged 
+            && _useTargetHeight)
+            ScaleAvatarRoot();
 
-        ScaleAvatarRoot();
+        if (!_targetHeightChanged) 
+            return;
+        
+        if (_useTargetHeight)
+            ApplyTargetHeight();
+        else
+            ResetTargetHeight();
     }
 
     internal virtual void OnDestroy()

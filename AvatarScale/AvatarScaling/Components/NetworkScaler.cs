@@ -17,7 +17,6 @@ public class NetworkScaler : BaseScaler
         
         _animatorManager = GetComponentInParent<PuppetMaster>().animatorManager;
         
-        heightNeedsUpdate = false;
         _isAvatarInstantiated = false;
     }
 

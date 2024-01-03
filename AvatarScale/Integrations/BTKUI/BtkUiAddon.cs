@@ -88,7 +88,7 @@ namespace NAK.AvatarScaleMod.Integrations
                 TimeSpan timeDifference = DateTime.Now - lastTime;
                 if (timeDifference.TotalSeconds <= 0.5)
                 {
-                    AvatarScaleManager.Instance.ResetTargetHeight();
+                    AvatarScaleManager.Instance.Setting_UniversalScaling = false;
                     return;
                 }
             }

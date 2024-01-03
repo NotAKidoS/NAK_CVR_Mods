@@ -43,16 +43,25 @@ public class AvatarScaleManager : MonoBehaviour
         set
         {
             if (value != _settingUniversalScaling && value == false)
-                ResetTargetHeight();
+                _localAvatarScaler.UseTargetHeight = false;
             
             _settingUniversalScaling = value;
-            SetTargetHeight(_lastTargetHeight); // immediate height update
+            _localAvatarScaler.UseTargetHeight = true;
         }
     }
 
     public bool Setting_AnimationClipScalingOverride;
     public bool Setting_PersistentHeight;
-    private float _lastTargetHeight = -1;
+    private float _lastTargetHeight = -1f;
+    public float LastTargetHeight
+    {
+        get => _lastTargetHeight;
+        set
+        {
+            _lastTargetHeight = value;
+            ModSettings.EntryHiddenAvatarHeight.Value = _lastTargetHeight;
+        }
+    }
 
     #endregion
     
@@ -122,21 +131,6 @@ public class AvatarScaleManager : MonoBehaviour
         while (enabled)
         {
             yield return _heightUpdateYield;
-            
-            // update local scaler
-            if (_localAvatarScaler != null && _localAvatarScaler.heightNeedsUpdate)
-            {
-                if (_localAvatarScaler.ApplyTargetHeight())
-                    AvatarScaleEvents.OnLocalAvatarHeightChanged.Invoke(_localAvatarScaler);
-            }
-
-            // update networked scalers (probably a better way to do this)
-            foreach (var netScaler in _networkedScalers)
-            {
-                if (!netScaler.Value.heightNeedsUpdate) continue;
-                if (netScaler.Value.ApplyTargetHeight())
-                    AvatarScaleEvents.OnRemoteAvatarHeightChanged.Invoke(netScaler.Key, netScaler.Value);
-            }
         }
         
         // ReSharper disable once IteratorNeverReturns
@@ -179,31 +173,11 @@ public class AvatarScaleManager : MonoBehaviour
     public void SetTargetHeight(float targetHeight)
     {
         _lastTargetHeight = targetHeight; // save for persistent height
-        ModSettings.EntryHiddenAvatarHeight.Value = targetHeight; // save for restart
-
-        if (!_settingUniversalScaling)
-            return;
         
         if (_localAvatarScaler == null)
             return;
         
-        _localAvatarScaler.SetTargetHeight(_lastTargetHeight);
-        _localAvatarScaler.heightNeedsUpdate = true; // only local scaler forces update
-    }
-    
-    public void ResetTargetHeight()
-    {
-        if (_localAvatarScaler == null)
-            return;
-
-        if (!_localAvatarScaler.IsForcingHeight())
-            return;
-
-        // TODO: doesnt work when hitting Reset on slider in BTK UI (is it on main thread?)
-        CohtmlHud.Instance.ViewDropTextImmediate("(Local) AvatarScaleMod", "Avatar Scale Reset!",
-            "Universal Scaling is now disabled.");
-        
-        SetTargetHeight(-1f);
+        _localAvatarScaler.TargetHeight = _lastTargetHeight;
     }
 
     public float GetHeight()
@@ -285,7 +259,7 @@ public class AvatarScaleManager : MonoBehaviour
     internal void OnNetworkHeightUpdateReceived(string playerId, float targetHeight)
     {
         if (_networkedScalers.TryGetValue(playerId, out NetworkScaler scaler))
-            scaler.SetTargetHeight(targetHeight);
+            scaler.TargetHeight = targetHeight;
         else
             SetupHeightScalerForNetwork(playerId, targetHeight);
     }
@@ -352,7 +326,7 @@ public class AvatarScaleManager : MonoBehaviour
 
         _networkedScalers[playerId] = scaler;
 
-        scaler.SetTargetHeight(targetHeight); // set initial height
+        scaler.TargetHeight = targetHeight;
     }
 
     #endregion

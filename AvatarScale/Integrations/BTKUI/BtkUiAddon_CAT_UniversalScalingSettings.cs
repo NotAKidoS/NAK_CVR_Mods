@@ -67,7 +67,7 @@ namespace NAK.AvatarScaleMod.Integrations
 
         private static void OnAvatarHeightSliderReset()
         {
-            AvatarScaleManager.Instance.ResetTargetHeight();
+            AvatarScaleManager.Instance.Setting_UniversalScaling = false;
         }
 
         #endregion

@@ -12,8 +12,6 @@ public class LocalScaler : BaseScaler
     public void Initialize()
     {
         _animatorManager = GetComponentInParent<PlayerSetup>().animatorManager;
-        
-        heightNeedsUpdate = false;
         _isAvatarInstantiated = false;
     }
     
@@ -78,7 +76,7 @@ public class LocalScaler : BaseScaler
         InvokeAnimatedHeightChanged();
         
         if (overrideAnimationHeight 
-            || !useTargetHeight)
+            || !_useTargetHeight)
             return false; // user has disabled animation height override or is not using universal scaling
         
         // animation scale changed and now will override universal scaling

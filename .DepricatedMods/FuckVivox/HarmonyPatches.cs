@@ -6,6 +6,8 @@ using FuckMLA;
 using HarmonyLib;
 using UnityEngine;
 using Unity.Services.Vivox;
+using ABI_RC.Core.Player;
+using ABI_RC.Core;
 
 namespace NAK.FuckVivox.HarmonyPatches;
 
@@ -95,5 +97,46 @@ internal class VivoxServiceInternalPatches
         
         FuckVivox.Logger.Warning($"Active Channel already contains key! :: + {channelSession.Channel.Name}");
         __runOriginal = false;
+    }
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(InputManager), nameof(InputManager.OnApplicationFocus))]
+    private static void Prefix_InputManager_OnApplicationFocus(bool hasFocus)
+    {
+        FuckVivox.Logger.Msg("OnApplicationFocus: " + hasFocus); 
+    }
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(RootLogic), nameof(RootLogic.CursorLock))]
+    private static void Prefix_RootLogic_CursorLock(bool value)
+    {
+        FuckVivox.Logger.Msg("CursorLock:" + value);
+    }
+
+    private static bool _isFocused = false;
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(InputManager), nameof(InputManager.LateUpdate))]
+    private static void Prefix_InputManager_LateUpdate()
+    {
+        
+        
+        if (Application.isFocused == _isFocused)
+            return;
+
+        _isFocused = Application.isFocused;
+        FuckVivox.Logger.Msg("Application.isFocused Updated!: " + _isFocused); 
+    }
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(InputManager), nameof(InputManager.Start))]
+    private static void Prefix_InputManager_Start()
+    {
+        Application.focusChanged += Test;
+    }
+
+    private static void Test(bool value)
+    {
+        FuckVivox.Logger.Msg("Application.focusChanged! " + value);
     }
 }
