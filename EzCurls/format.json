@@ -2,21 +2,21 @@
   "_id": -1,
   "name": "EzCurls",
   "modversion": "1.0.0",
-  "gameversion": "2022r170p1",
+  "gameversion": "2023r173",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "A mod that should hopefully make finger curls more predictable.",
+  "description": "A mod that allows you to tune your finger curls to your liking. Supposedly can help with VR sign language, as raw finger curls are not that great for quick and precise gestures.\n\nThe settings are not too coherent, it is mostly a bunch of things thrown at the wall, but it works for me. I hope it works for you too.",
   "searchtags": [
-    "aas",
-    "sync",
-    "naked",
-    "buffer"
+    "curls",
+    "fingers",
+    "index",
+    "knuckles"
   ],
   "requirements": [
     "UIExpansionKit"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/EzCurls.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r24/EzCurls.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/EzCurls/",
   "changelog": "- Initial CVRMG release",
   "embedcolor": "7d7d7d"

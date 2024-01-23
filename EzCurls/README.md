@@ -1,6 +1,8 @@
 # EzCurls
  
-A mod that should hopefully make finger curls more predictable.
+A mod that allows you to tune your finger curls to your liking. Supposedly can help with VR sign language, as raw finger curls are not that great for quick and precise gestures.
+
+The settings are not too coherent, it is mostly a bunch of things thrown at the wall, but it works for me. I hope it works for you too.
 
 ---
 
