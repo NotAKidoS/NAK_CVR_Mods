@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ABI_RC.Core;
 using ABI.CCK.Components;
 using UnityEngine;
@@ -44,7 +45,12 @@ public static class ShadowCloneHelper
     
     private static void ProcessRenderers(IEnumerable<Renderer> renderers, Transform root, Transform headBone)
     {
+        Stopwatch sw = Stopwatch.StartNew();
+        
         IReadOnlyDictionary<Transform, FPRExclusion> exclusions = CollectTransformToExclusionMap(root, headBone);
+        
+        // log current time
+        ShadowCloneMod.Logger.Msg($"CollectTransformToExclusionMap in {sw.ElapsedMilliseconds}ms");
         
         foreach (Renderer renderer in renderers)
         {
@@ -59,6 +65,11 @@ public static class ShadowCloneHelper
             ITransformHider hider = TransformHiderManager.CreateTransformHider(renderer, exclusions);
             if (hider != null) TransformHiderManager.Instance.AddTransformHider(hider);
         }
+        
+        sw.Stop();
+        
+        // log current time
+        ShadowCloneMod.Logger.Msg($"ProcessRenderers in {sw.ElapsedMilliseconds}ms");
     }
     
     #endregion

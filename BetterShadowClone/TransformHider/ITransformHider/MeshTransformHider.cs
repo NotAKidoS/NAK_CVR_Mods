@@ -16,9 +16,6 @@ public class MeshTransformHider : ITransformHider, IFPRExclusionTask
     private readonly MeshRenderer _mainMesh;
     private bool _enabledState;
     
-    // exclusion
-    private readonly FPRExclusion _exclusion;
-    
     #region ITransformHider Methods
     
     public bool IsActive { get; set; } = true; // default hide, but FPRExclusion can override
@@ -36,9 +33,8 @@ public class MeshTransformHider : ITransformHider, IFPRExclusionTask
             Dispose();
             return;
         }
-        
-        _exclusion = exclusion;
-        _exclusion.relatedTasks.Add(this);
+
+        exclusion.relatedTasks.Add(this);
         
         _mainMesh = renderer;
         

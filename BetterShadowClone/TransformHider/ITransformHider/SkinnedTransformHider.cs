@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -38,6 +39,8 @@ public class SkinnedTransformHider : ITransformHider
     
     public SkinnedTransformHider(SkinnedMeshRenderer renderer, IReadOnlyDictionary<Transform, FPRExclusion> exclusions)
     {
+        Stopwatch sw = Stopwatch.StartNew();
+        
         _mainMesh = renderer;
         
         if (_mainMesh == null
@@ -52,36 +55,35 @@ public class SkinnedTransformHider : ITransformHider
         _rootBone = _mainMesh.rootBone;
         _rootBone ??= _mainMesh.transform; // fallback to transform if no root bone
         
-        // subtask creation
+        // log current time
+        ShadowCloneMod.Logger.Msg($"SkinnedTransformHider part 1 in {sw.ElapsedMilliseconds}ms");
         
-        var bones = renderer.bones;
-        List<FPRExclusion> fprExclusions = new();
-            
-        foreach (Transform bone in bones)
-        {
-            if (bone == null) 
-                continue; // thanks AdvancedSafety for preventing null ref for so long...
-            
-            if (!exclusions.TryGetValue(bone, out FPRExclusion exclusion)) 
-                continue;
-            
-            fprExclusions.Add(exclusion);
-        }
+        SubTask.FindExclusionVertList(renderer, exclusions);
 
-        List<int> exclusionVerts;
-        foreach (FPRExclusion exclusion in fprExclusions)
+        foreach (var exclusion in exclusions)
         {
-            exclusionVerts = SubTask.FindExclusionVertList(renderer, exclusion);
-            if (exclusionVerts.Count == 0) 
-                continue;
+            FPRExclusion fprExclusion = exclusion.Value;
+            if (fprExclusion.affectedVertexIndices.Count == 0)
+                continue; // no affected verts
             
-            SubTask subTask = new(this, exclusion, exclusionVerts);
+            SubTask subTask = new(this, fprExclusion, fprExclusion.affectedVertexIndices);
             _subTasks.Add(subTask);
-            exclusion.relatedTasks.Add(subTask);
+            fprExclusion.relatedTasks.Add(subTask);
+            fprExclusion.affectedVertexIndices.Clear(); // clear list for next SkinnedTransformHider
         }
         
-        if (_subTasks.Count == 0) 
+        // log current time
+        ShadowCloneMod.Logger.Msg($"SkinnedTransformHider part 3 in {sw.ElapsedMilliseconds}ms");
+
+        if (_subTasks.Count == 0)
+        {
             Dispose(); // had the bones, but not the weights :?
+            ShadowCloneMod.Logger.Warning("SkinnedTransformHider No valid exclusions found!");
+        }
+        
+        sw.Stop();
+        
+        ShadowCloneMod.Logger.Msg($"SkinnedTransformHider created in {sw.ElapsedMilliseconds}ms");
     }
     
     public bool Process()
@@ -176,14 +178,11 @@ public class SkinnedTransformHider : ITransformHider
         private readonly int _vertexCount;
         private readonly ComputeBuffer _computeBuffer;
         private readonly int _threadGroups;
-        
-        private readonly FPRExclusion _exclusion;
-        
+
         public SubTask(SkinnedTransformHider parent, FPRExclusion exclusion, List<int> exclusionVerts)
         {
             _parent = parent;
-            _exclusion = exclusion;
-            _shrinkBone = _exclusion.target;
+            _shrinkBone = exclusion.target;
         
             _vertexCount = exclusionVerts.Count;
             _computeBuffer = new ComputeBuffer(_vertexCount, sizeof(int));
@@ -211,28 +210,40 @@ public class SkinnedTransformHider : ITransformHider
 
         #region Private Methods
         
-        public static List<int> FindExclusionVertList(SkinnedMeshRenderer renderer, FPRExclusion exclusion) 
+        public static void FindExclusionVertList(SkinnedMeshRenderer renderer, IReadOnlyDictionary<Transform, FPRExclusion> exclusions) 
         {
             var boneWeights = renderer.sharedMesh.boneWeights;
-            var bones = exclusion.affectedChildren;
         
             HashSet<int> weights = new();
             for (int i = 0; i < renderer.bones.Length; i++)
-                if (bones.Contains(renderer.bones[i])) weights.Add(i);
+            {
+                // if bone == any key in exclusions, add to weights
+                if (!exclusions.TryGetValue(renderer.bones[i], out FPRExclusion _)) 
+                    continue;
+                
+                weights.Add(i);
+            }
 
-            List<int> headVertices = new();
             for (int i = 0; i < boneWeights.Length; i++) 
             {
                 BoneWeight weight = boneWeights[i];
+                
+                Transform bone = null;
                 const float minWeightThreshold = 0.2f;
-                if (weights.Contains(weight.boneIndex0) && weight.weight0 > minWeightThreshold
-                    || weights.Contains(weight.boneIndex1) && weight.weight1 > minWeightThreshold
-                    || weights.Contains(weight.boneIndex2) && weight.weight2 > minWeightThreshold
-                    || weights.Contains(weight.boneIndex3) && weight.weight3 > minWeightThreshold)
-                    headVertices.Add(i);
+                if (weights.Contains(weight.boneIndex0) && weight.weight0 > minWeightThreshold)
+                    bone = renderer.bones[weight.boneIndex0];
+                else if (weights.Contains(weight.boneIndex1) && weight.weight1 > minWeightThreshold)
+                    bone = renderer.bones[weight.boneIndex1];
+                else if (weights.Contains(weight.boneIndex2) && weight.weight2 > minWeightThreshold)
+                    bone = renderer.bones[weight.boneIndex2];
+                else if (weights.Contains(weight.boneIndex3) && weight.weight3 > minWeightThreshold)
+                    bone = renderer.bones[weight.boneIndex3];
+
+                if (bone == null) continue; // no bone found
+                
+                // add vertex to exclusion list
+                exclusions[bone].affectedVertexIndices.Add(i);
             }
-        
-            return headVertices;
         }
         
         #endregion

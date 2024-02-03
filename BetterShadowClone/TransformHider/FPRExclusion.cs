@@ -10,6 +10,8 @@ public class FPRExclusion : MonoBehaviour
 {
     public Transform target;
 
+    internal readonly List<int> affectedVertexIndices = new();
+    
     internal readonly List<Transform> affectedChildren = new();
     internal readonly List<IFPRExclusionTask> relatedTasks = new();
 
