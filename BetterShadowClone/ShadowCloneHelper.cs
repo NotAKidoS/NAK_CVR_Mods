@@ -43,7 +43,7 @@ public static class ShadowCloneHelper
     
     private static void ProcessRenderers(IEnumerable<Renderer> renderers, Transform root, Transform headBone)
     {
-        var exclusions = CollectExclusions2(root, headBone);
+        IReadOnlyDictionary<Transform, FPRExclusion> exclusions = CollectTransformToExclusionMap(root, headBone);
         
         foreach (Renderer renderer in renderers)
         {
@@ -55,7 +55,8 @@ public static class ShadowCloneHelper
                 if (clone != null) ShadowCloneManager.Instance.AddShadowClone(clone);
             }
             
-            TransformHiderManager.CreateTransformHider(renderer, exclusions);
+            ITransformHider hider = TransformHiderManager.CreateTransformHider(renderer, exclusions);
+            if (hider != null) TransformHiderManager.Instance.AddTransformHider(hider);
         }
     }
     
@@ -63,7 +64,7 @@ public static class ShadowCloneHelper
     
     #region FPR Exclusion Processing
     
-    private static Dictionary<Transform, FPRExclusion> CollectExclusions2(Transform root, Transform headBone)
+    private static Dictionary<Transform, FPRExclusion> CollectTransformToExclusionMap(Component root, Transform headBone)
     {
         // add an fpr exclusion to the head bone
         headBone.gameObject.AddComponent<FPRExclusion>().target = headBone;
@@ -72,7 +73,7 @@ public static class ShadowCloneHelper
         var fprExclusions = root.GetComponentsInChildren<FPRExclusion>(true).ToList();
 
         // get all valid exclusion targets, and destroy invalid exclusions
-        Dictionary<Transform, FPRExclusion> exclusionTargetRoots = new();
+        Dictionary<Transform, FPRExclusion> exclusionTargets = new();
         for (int i = fprExclusions.Count - 1; i >= 0; i--)
         {
             FPRExclusion exclusion = fprExclusions[i];
@@ -82,7 +83,7 @@ public static class ShadowCloneHelper
                 continue;
             }
             
-            exclusionTargetRoots.Add(exclusion.target, exclusion);
+            exclusionTargets.Add(exclusion.target, exclusion);
         }
 
         // process each FPRExclusion (recursive)
@@ -91,14 +92,15 @@ public static class ShadowCloneHelper
         
         // log totals
         ShadowCloneMod.Logger.Msg($"Exclusions: {fprExclusions.Count}");
-        return exclusionTargetRoots;
+        return exclusionTargets;
 
         void ProcessExclusion(FPRExclusion exclusion, Transform transform)
         {
-            if (exclusionTargetRoots.ContainsKey(transform)
-                && exclusionTargetRoots[transform] != exclusion) return; // found other exclusion root
+            if (exclusionTargets.ContainsKey(transform)
+                && exclusionTargets[transform] != exclusion) return; // found other exclusion root
             
             exclusion.affectedChildren.Add(transform); // associate with the exclusion
+            exclusionTargets.Add(transform, exclusion); // add to the list (yes theres duplicates)
             
             foreach (Transform child in transform)
                 ProcessExclusion(exclusion, child); // process children

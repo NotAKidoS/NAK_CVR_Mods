@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using ABI_RC.Core.Player;
-using ABI_RC.Core.Savior;
-using ABI_RC.Systems.Camera;
+﻿using ABI_RC.Core.Player;
 using MagicaCloth;
 using UnityEngine;
 
@@ -190,47 +187,17 @@ public class TransformHiderManager : MonoBehaviour
     internal static bool IsLegacyFPRExcluded(Component renderer)
         => renderer.gameObject.name.Contains("[FPR]");
     
-    internal static ITransformHider CreateTransformHider(Component renderer, Transform bone)
+    internal static ITransformHider CreateTransformHider(Component renderer, IReadOnlyDictionary<Transform, FPRExclusion> exclusions)
     {
         if (IsLegacyFPRExcluded(renderer))
             return null;
         
         return renderer switch
         {
-            //SkinnedMeshRenderer skinnedMeshRenderer => new SkinnedTransformHider(skinnedMeshRenderer, bone),
-            MeshRenderer meshRenderer => new MeshTransformHider(meshRenderer),
+            SkinnedMeshRenderer skinnedMeshRenderer => new SkinnedTransformHider(skinnedMeshRenderer, exclusions),
+            MeshRenderer meshRenderer => new MeshTransformHider(meshRenderer, exclusions),
             _ => null
         };
-    }
-    
-    internal static void CreateTransformHider(Component renderer, Dictionary<Transform, FPRExclusion> exclusions)
-    {
-        if (IsLegacyFPRExcluded(renderer))
-            return;
-
-        if (renderer is SkinnedMeshRenderer skinnedMeshRenderer)
-        {
-            // get all bones for renderer
-            var bones = skinnedMeshRenderer.bones;
-            List<FPRExclusion> fprExclusions = new();
-            
-            // check if any bones are excluded
-            foreach (Transform bone in bones)
-            {
-                if (!exclusions.TryGetValue(bone, out FPRExclusion exclusion)) 
-                    continue;
-                
-                fprExclusions.Add(exclusion);
-            }
-
-            foreach (FPRExclusion exclusion in fprExclusions)
-            {
-                ITransformHider hider = new SkinnedTransformHider(skinnedMeshRenderer, exclusion);
-                Instance.AddTransformHider(hider);
-            }
-        }
-
-        return;
     }
 
     #endregion

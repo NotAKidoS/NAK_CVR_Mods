@@ -4,7 +4,7 @@ using UnityEngine.Rendering;
 
 namespace NAK.BetterShadowClone;
 
-public class MeshTransformHider : ITransformHider
+public class MeshTransformHider : ITransformHider, IFPRExclusionTask
 {
     // lame 2 frame init stuff
     private const int FrameInitCount = 0;
@@ -23,8 +23,19 @@ public class MeshTransformHider : ITransformHider
     // anything player can touch is suspect to death
     public bool IsValid => _mainMesh != null && !_markedForDeath;
 
-    public MeshTransformHider(MeshRenderer renderer)
+    public MeshTransformHider(MeshRenderer renderer, IReadOnlyDictionary<Transform, FPRExclusion> exclusions)
     {
+        Transform rootBone = renderer.transform;
+        
+        // if no key found, dispose
+        if (!exclusions.TryGetValue(rootBone, out FPRExclusion exclusion))
+        {
+            Dispose();
+            return;
+        }
+        
+        exclusion.relatedTasks.Add(this);
+        
         _mainMesh = renderer;
         
         if (_mainMesh == null

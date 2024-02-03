@@ -13,7 +13,7 @@ public class FPRExclusion : MonoBehaviour
     internal List<Transform> affectedChildren = new();
     
     [NonSerialized]
-    internal ITransformHider[] relevantHiders;
+    internal readonly List<IFPRExclusionTask> relatedTasks = new();
 
     private void OnEnable()
         => SetFPRState(true);
@@ -23,8 +23,13 @@ public class FPRExclusion : MonoBehaviour
     
     private void SetFPRState(bool state)
     {
-        if (relevantHiders == null) return; // no hiders to set
-        foreach (ITransformHider hider in relevantHiders)
-            hider.IsActive = state;
+        if (relatedTasks == null) return; // no hiders to set
+        foreach (IFPRExclusionTask task in relatedTasks)
+            task.IsActive = state;
     }
+}
+
+public interface IFPRExclusionTask
+{
+    public bool IsActive { get; set; }
 }
