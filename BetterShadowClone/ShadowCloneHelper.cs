@@ -100,7 +100,7 @@ public static class ShadowCloneHelper
                 && exclusionTargets[transform] != exclusion) return; // found other exclusion root
             
             exclusion.affectedChildren.Add(transform); // associate with the exclusion
-            exclusionTargets.Add(transform, exclusion); // add to the list (yes theres duplicates)
+            exclusionTargets.TryAdd(transform, exclusion); // add to the dictionary (yes its wasteful)
             
             foreach (Transform child in transform)
                 ProcessExclusion(exclusion, child); // process children
