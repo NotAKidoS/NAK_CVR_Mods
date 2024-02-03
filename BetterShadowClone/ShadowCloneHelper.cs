@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ABI_RC.Core;
+using ABI.CCK.Components;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Object = UnityEngine.Object;
@@ -69,6 +70,14 @@ public static class ShadowCloneHelper
         // add an fpr exclusion to the head bone
         headBone.gameObject.AddComponent<FPRExclusion>().target = headBone;
         
+        // add an FPRExclusion for all target entries on CVRAvatar (Experimental feature)
+        CVRAvatar avatar = root.GetComponent<CVRAvatar>();
+        if (avatar != null)
+        {
+            foreach (CVRAvatarFPREntry fprEntry in avatar.fprSettingsList.Where(fprEntry => fprEntry.transform != null))
+                fprEntry.transform.gameObject.AddComponent<FPRExclusion>().target = fprEntry.transform;
+        }
+        
         // get all FPRExclusions
         var fprExclusions = root.GetComponentsInChildren<FPRExclusion>(true).ToList();
 
@@ -83,7 +92,8 @@ public static class ShadowCloneHelper
                 continue;
             }
             
-            exclusionTargets.Add(exclusion.target, exclusion);
+            // first to add wins
+            exclusionTargets.TryAdd(exclusion.target, exclusion);
         }
 
         // process each FPRExclusion (recursive)

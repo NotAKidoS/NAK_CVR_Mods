@@ -118,14 +118,12 @@ public class SkinnedShadowClone : IShadowClone
         {
             // Cleanup instanced Mesh & Materials
             GameObject shadowMeshObject = _shadowMesh.gameObject;
-            UnityEngine.Object.Destroy(_shadowMeshFilter.sharedMesh);
+            UnityEngine.Object.Destroy(_shadowMeshFilter.mesh);
             UnityEngine.Object.Destroy(_shadowMeshFilter);
-
-            if (!_hasShadowMaterials)
-            {
-                var materials = _shadowMesh.sharedMaterials;
-                foreach (Material mat in materials) UnityEngine.Object.Destroy(mat);
-            }
+            
+            // explain why this works
+            if (_hasShadowMaterials) _shadowMesh.sharedMaterials = _mainMesh.sharedMaterials;
+            foreach (Material mat in _shadowMesh.sharedMaterials) UnityEngine.Object.Destroy(mat);
             
             UnityEngine.Object.Destroy(_shadowMesh);
             UnityEngine.Object.Destroy(shadowMeshObject);
