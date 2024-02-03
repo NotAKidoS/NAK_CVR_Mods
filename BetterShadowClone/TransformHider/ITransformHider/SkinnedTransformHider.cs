@@ -75,7 +75,7 @@ public class SkinnedTransformHider : ITransformHider
             if (exclusionVerts.Count == 0) 
                 continue;
             
-            SubTask subTask = new(this, exclusion.target, exclusionVerts);
+            SubTask subTask = new(this, exclusion, exclusionVerts);
             _subTasks.Add(subTask);
             exclusion.relatedTasks.Add(subTask);
         }
@@ -116,14 +116,15 @@ public class SkinnedTransformHider : ITransformHider
     public bool PostProcess()
         => false; // not needed
 
-    public void HideTransform()
+    public void HideTransform(bool forced = false)
     {
         _mainMesh.forceRenderingOff = false;
         
         _graphicsBuffer = _mainMesh.GetVertexBuffer();
         
         foreach (SubTask subTask in _subTasks)
-            if (subTask.IsActive && subTask.IsValid) subTask.Dispatch();
+            if ((forced || subTask.IsActive) && subTask.IsValid) 
+                subTask.Dispatch();
 
         _graphicsBuffer.Release();
     }
@@ -169,17 +170,20 @@ public class SkinnedTransformHider : ITransformHider
     {
         public bool IsActive { get; set; } = true;
         public bool IsValid => _computeBuffer != null; // TODO: cleanup dead tasks
-
+        
         private readonly SkinnedTransformHider _parent;
         private readonly Transform _shrinkBone;
         private readonly int _vertexCount;
         private readonly ComputeBuffer _computeBuffer;
         private readonly int _threadGroups;
         
-        public SubTask(SkinnedTransformHider parent, Transform shrinkBone, List<int> exclusionVerts)
+        private readonly FPRExclusion _exclusion;
+        
+        public SubTask(SkinnedTransformHider parent, FPRExclusion exclusion, List<int> exclusionVerts)
         {
             _parent = parent;
-            _shrinkBone = shrinkBone;
+            _exclusion = exclusion;
+            _shrinkBone = _exclusion.target;
         
             _vertexCount = exclusionVerts.Count;
             _computeBuffer = new ComputeBuffer(_vertexCount, sizeof(int));

@@ -6,6 +6,6 @@ public interface ITransformHider : IDisposable
     bool IsValid { get; }
     bool Process();
     bool PostProcess();
-    void HideTransform();
+    void HideTransform(bool forced = false);
     void ShowTransform();
 }

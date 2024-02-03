@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core.Player;
+using ABI_RC.Systems.VRModeSwitch;
 using MagicaCloth;
 using UnityEngine;
 
@@ -32,6 +33,7 @@ public class TransformHiderManager : MonoBehaviour
     
     // Settings
     internal static bool s_DebugHeadHide;
+    internal static bool s_DisallowFprExclusions = true;
     
     // Implementation
     private bool _hasRenderedThisFrame;
@@ -58,7 +60,10 @@ public class TransformHiderManager : MonoBehaviour
         
         UpdatePlayerCameras();
         
+        s_DisallowFprExclusions = ModSettings.EntryDontRespectFPR.Value;
         s_DebugHeadHide = ModSettings.EntryDebugHeadHide.Value;
+        
+        VRModeSwitchEvents.OnCompletedVRModeSwitch.AddListener(OnVRModeSwitchCompleted);
     }
 
     private void OnEnable()
@@ -72,7 +77,13 @@ public class TransformHiderManager : MonoBehaviour
         Camera.onPreRender -= MyOnPreRender;
         Camera.onPostRender -= MyOnPostRender;
     }
-    
+
+    private void OnDestroy()
+    {
+        VRModeSwitchEvents.OnCompletedVRModeSwitch.RemoveListener(OnVRModeSwitchCompleted);
+        OnAvatarCleared();
+    }
+
     #endregion
     
     #region Transform Hider Managment
@@ -113,7 +124,7 @@ public class TransformHiderManager : MonoBehaviour
         
             if (!hider.Process()) continue; // not ready yet or disabled
 
-            if (hider.IsActive) hider.HideTransform();
+            hider.HideTransform(s_DisallowFprExclusions);
         }
         
         _stopWatch.Stop();
@@ -136,7 +147,7 @@ public class TransformHiderManager : MonoBehaviour
         
             if (!hider.PostProcess()) continue; // does not need post processing
 
-            if (hider.IsActive) hider.ShowTransform();
+            hider.ShowTransform();
         }
     }
 
@@ -153,10 +164,8 @@ public class TransformHiderManager : MonoBehaviour
         s_TransformHider.Clear();
     }
 
-    private void OnVRModeSwitchCompleted(bool _, Camera __)
-    {
-        UpdatePlayerCameras();
-    }
+    private void OnVRModeSwitchCompleted(bool _)
+        => UpdatePlayerCameras();
 
     #endregion
 

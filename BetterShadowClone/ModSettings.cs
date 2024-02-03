@@ -24,6 +24,10 @@ public static class ModSettings
         Category.CreateEntry("Copy Material to Shadow", true,
             description: "Should the shadow clone copy the material from the original mesh? Note: This can have a slight performance hit.");
     
+    internal static readonly MelonPreferences_Entry<bool> EntryDontRespectFPR =
+        Category.CreateEntry("Dont Respect FPR", false,
+            description: "Should the transform hider not respect FPR?");
+    
     internal static readonly MelonPreferences_Entry<bool> EntryDebugHeadHide =
         Category.CreateEntry("Debug Head Hide", false,
             description: "Should head be hidden for first render?");
@@ -39,6 +43,7 @@ public static class ModSettings
 
     private static void OnSettingsChanged(object oldValue = null, object newValue = null)
     {
+        TransformHiderManager.s_DisallowFprExclusions = EntryDontRespectFPR.Value;
         TransformHiderManager.s_DebugHeadHide = EntryDebugHeadHide.Value;
         ShadowCloneManager.s_CopyMaterialsToShadow = EntryCopyMaterialToShadow.Value;
     }

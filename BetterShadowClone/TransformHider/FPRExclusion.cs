@@ -10,9 +10,7 @@ public class FPRExclusion : MonoBehaviour
 {
     public Transform target;
 
-    internal List<Transform> affectedChildren = new();
-    
-    [NonSerialized]
+    internal readonly List<Transform> affectedChildren = new();
     internal readonly List<IFPRExclusionTask> relatedTasks = new();
 
     private void OnEnable()
