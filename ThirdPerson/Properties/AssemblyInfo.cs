@@ -1,6 +1,7 @@
 ﻿using MelonLoader;
 using NAK.ThirdPerson.Properties;
 using System.Reflection;
+using CurvedUI;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
@@ -23,6 +24,7 @@ using System.Reflection;
 [assembly: MelonColor(255, 246, 25, 97)]
 [assembly: MelonAuthorColor(255, 158, 21, 32)]
 [assembly: HarmonyDontPatchAll]
+[assembly: MelonOptionalDependencies("BetterShadowClone")]
 
 namespace NAK.ThirdPerson.Properties;
 internal static class AssemblyInfoParams
