@@ -1,8 +1,8 @@
 {
   "_id": 147,
   "name": "PropUndoButton",
-  "modversion": "1.0.1",
-  "gameversion": "2022r170p1",
+  "modversion": "1.0.2",
+  "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/PropUndoButton.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r25/PropUndoButton.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndoButton/",
-  "changelog": "- Initial Release\n- Added redo button.\n- Mitigated issue of props getting stuck locally if deleting them before they fully spawn.\n- Lowered SFX volume to match existing UI sounds.",
+  "changelog": "- Recompiled for 2024r175",
   "embedcolor": "#00FFFF"
 }

@@ -70,7 +70,7 @@ internal static class CameraLogic
             return;
         
         ThirdPerson.Logger.Msg("Copying active camera settings & components.");
-        CVRTools.CopyToDestCam(activePlayerCam, _thirdPersonCam);
+        CVRTools.CopyToDestCam(activePlayerCam, _thirdPersonCam, true);
 
         if (!CheckIsRestricted()) 
             return;

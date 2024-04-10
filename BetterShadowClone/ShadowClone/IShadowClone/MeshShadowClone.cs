@@ -28,6 +28,8 @@ public struct MeshShadowClone : IShadowClone
     
     #region IShadowClone Methods
     
+    public void ResetMainMesh(){}
+    
     public bool IsValid => _mainMesh != null && _shadowMesh != null;
     
     public MeshShadowClone(MeshRenderer meshRenderer)
@@ -88,7 +90,9 @@ public struct MeshShadowClone : IShadowClone
 
     public void RenderForShadow()
     {
-        _shadowMesh.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+        _shadowMesh.shadowCastingMode = ShadowCloneManager.s_DebugShowShadow 
+            ? ShadowCastingMode.On : ShadowCastingMode.ShadowsOnly;
+        
         _shadowMesh.forceRenderingOff = !_shouldCastShadows;
         
         // shadow casting needs clone to have original materials (uv discard)

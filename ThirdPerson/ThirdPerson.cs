@@ -14,17 +14,6 @@ public class ThirdPerson : MelonMod
         
         Patches.Apply(HarmonyInstance);
         MelonCoroutines.Start(SetupCamera());
-        
-        InitializeIntegration("BetterShadowClone", Integrations.BSCAddon.Initialize);
-    }
-    
-    private static void InitializeIntegration(string modName, Action integrationAction)
-    {
-        if (RegisteredMelons.All(it => it.Info.Name != modName))
-            return;
-
-        Logger.Msg($"Initializing {modName} integration.");
-        integrationAction.Invoke();
     }
     
     public override void OnUpdate()

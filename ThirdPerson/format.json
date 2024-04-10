@@ -2,8 +2,8 @@
   {
     "_id": 16,
     "name": "ThirdPerson",
-    "modversion": "1.0.7",
-    "gameversion": "2023r173",
+    "modversion": "1.0.8",
+    "gameversion": "2024r175",
     "loaderversion": "0.6.1",
     "modtype": "Mod",
     "author": "Davi & NotAKidoS",
@@ -14,9 +14,9 @@
       "third person"
     ],
     "requirements": [],
-    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r23/ThirdPerson.dll",
+    "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r25/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Added restriction to worlds with Zoom disabled.",
+    "changelog": "- Recompiled to work with 2024r175",
     "embedcolor": "#F61961"
   }
 ]

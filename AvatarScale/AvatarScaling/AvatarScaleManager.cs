@@ -42,16 +42,48 @@ public class AvatarScaleManager : MonoBehaviour
         get => _settingUniversalScaling;
         set
         {
-            if (value != _settingUniversalScaling && value == false)
-                _localAvatarScaler.UseTargetHeight = false;
+            if (_settingUniversalScaling == value)
+                return;
             
             _settingUniversalScaling = value;
-            _localAvatarScaler.UseTargetHeight = true;
+            
+            if (_localAvatarScaler != null)
+                _localAvatarScaler.UseTargetHeight = value;
         }
     }
 
-    public bool Setting_AnimationClipScalingOverride;
-    public bool Setting_PersistentHeight;
+    private bool _settingAnimationClipScalingOverride;
+    public bool Setting_AnimationClipScalingOverride
+    {
+        get => _settingAnimationClipScalingOverride;
+        set
+        {
+            if (_settingAnimationClipScalingOverride == value)
+                return;
+            
+            _settingAnimationClipScalingOverride = value;
+            
+            if (_localAvatarScaler != null)
+                _localAvatarScaler.overrideAnimationHeight = value;
+        }
+    }
+
+    private bool _settingPersistentHeight;
+    public bool Setting_PersistentHeight
+    {
+        get => _settingPersistentHeight;
+        set
+        {
+            if (_settingPersistentHeight == value)
+                return;
+            
+            _settingPersistentHeight = value;
+            
+            // if (_localAvatarScaler != null)
+            //     _localAvatarScaler.persistHeight = value;
+        }
+    }
+    
     private float _lastTargetHeight = -1f;
     public float LastTargetHeight
     {
@@ -128,11 +160,7 @@ public class AvatarScaleManager : MonoBehaviour
     // this is to ensure that the height is also set at correct time during frame, no matter when it is called
     private IEnumerator HeightUpdateCoroutine()
     {
-        while (enabled)
-        {
-            yield return _heightUpdateYield;
-        }
-        
+        while (enabled) yield return _heightUpdateYield;
         // ReSharper disable once IteratorNeverReturns
     }
 

@@ -35,11 +35,14 @@ public class ShadowCloneManager : MonoBehaviour
     
     // Settings
     internal static bool s_CopyMaterialsToShadow = true;
+    internal static bool s_DebugShowShadow = false;
+    internal static bool s_DebugShowInFront = false;
     private static bool s_UseShadowToCullUi;
     private const string ShadowCullUiSettingName = "ExperimentalAvatarOverrenderUI";
     
     // Implementation
     private bool _hasRenderedThisFrame;
+    public static readonly List<FPRExclusion> s_Exclusions = new();
     
     // Shadow Clones
     private readonly List<IShadowClone> s_ShadowClones = new();
@@ -64,15 +67,17 @@ public class ShadowCloneManager : MonoBehaviour
         UpdatePlayerCameras();
         
         s_CopyMaterialsToShadow = ModSettings.EntryCopyMaterialToShadow.Value;
+        s_DebugShowShadow = ModSettings.EntryDebugShowShadow.Value;
+        s_DebugShowInFront = ModSettings.EntryDebugShowInFront.Value;
         s_UseShadowToCullUi = MetaPort.Instance.settings.GetSettingsBool(ShadowCullUiSettingName);
         MetaPort.Instance.settings.settingBoolChanged.AddListener(OnSettingsBoolChanged);
     }
     
     private void OnEnable()
-        => Camera.onPreCull += MyOnPreCull;
+        => Camera.onPreRender += MyOnPreCull;
     
     private void OnDisable()
-        => Camera.onPreCull -= MyOnPreCull;
+        => Camera.onPreRender -= MyOnPreCull;
 
     private void OnDestroy()
     {
@@ -86,12 +91,25 @@ public class ShadowCloneManager : MonoBehaviour
     private void Update()
     {
         _hasRenderedThisFrame = false;
+        
+        for (int i = s_ShadowClones.Count - 1; i >= 0; i--)
+        {
+            IShadowClone clone = s_ShadowClones[i];
+            if (clone is not { IsValid: true })
+            {
+                clone?.Dispose();
+                s_ShadowClones.RemoveAt(i);
+                continue; // invalid or dead
+            }
+            
+            clone.ResetMainMesh();
+        }
     }
     
     private void MyOnPreCull(Camera cam)
     {
-        bool forceRenderForUiCull = s_UseShadowToCullUi && cam == s_UiCamera;
-        if (_hasRenderedThisFrame && !forceRenderForUiCull)
+        //bool forceRenderForUiCull = s_UseShadowToCullUi && cam == s_UiCamera;
+        if (cam != s_MainCamera)
             return;
     
         _hasRenderedThisFrame = true;
@@ -109,17 +127,13 @@ public class ShadowCloneManager : MonoBehaviour
             }
         
             if (!clone.Process()) continue; // not ready yet or disabled
-
-            if (forceRenderForUiCull)
-                clone.RenderForUiCulling(); // last cam to render
-            else
-                clone.RenderForShadow(); // first cam to render
+            
+            clone.RenderForShadow(); // first cam to render
         }
         
         _stopWatch.Stop();
-        if (_debugShadowProcessingTime) Debug.Log($"ShadowCloneManager.MyOnPreCull({forceRenderForUiCull}) took {_stopWatch.ElapsedMilliseconds}ms");
     }
-
+    
     #endregion
 
     #region Game Events
@@ -136,7 +150,12 @@ public class ShadowCloneManager : MonoBehaviour
     private void OnSettingsBoolChanged(string settingName, bool settingValue)
     {
         if (settingName == ShadowCullUiSettingName)
+        {
             s_UseShadowToCullUi = settingValue;
+            s_UiCamera.cullingMask = settingValue // make UI camera not see CVRLayers.PlayerClone
+                ? s_UiCamera.cullingMask | (1 << CVRLayers.PlayerClone)
+                : s_UiCamera.cullingMask & ~(1 << CVRLayers.PlayerClone);
+        }
     }
 
     private void OnVRModeSwitchCompleted(bool _, Camera __)
@@ -152,6 +171,7 @@ public class ShadowCloneManager : MonoBehaviour
     {
         s_MainCamera = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
         s_UiCamera = s_MainCamera.transform.Find("_UICamera").GetComponent<Camera>();
+        
         //s_PortableCamera = PortableCamera.Instance.cameraComponent;
     }
 
@@ -159,11 +179,11 @@ public class ShadowCloneManager : MonoBehaviour
 
     #region Static Helpers
     
-    internal static IShadowClone CreateShadowClone(Renderer renderer)
+    internal static IShadowClone CreateShadowClone(Renderer renderer, FPRExclusion exclusion)
     {
         return renderer switch
         {
-            SkinnedMeshRenderer skinnedMeshRenderer => new SkinnedShadowClone(skinnedMeshRenderer),
+            SkinnedMeshRenderer skinnedMeshRenderer => new SkinnedShadowClone(skinnedMeshRenderer, exclusion),
             MeshRenderer meshRenderer => new MeshShadowClone(meshRenderer),
             _ => null
         };
@@ -175,6 +195,14 @@ public class ShadowCloneManager : MonoBehaviour
         shadowClone.transform.SetParent(meshRenderer.transform, false);
         shadowClone.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         shadowClone.transform.localScale = Vector3.one;
+
+        if (s_DebugShowShadow && s_DebugShowInFront)
+        {
+            float scale = PlayerSetup.Instance.GetPlaySpaceScale();
+            Transform playerTransform = PlayerSetup.Instance.transform;
+            shadowClone.transform.position += playerTransform.forward * scale * 1f;
+            shadowClone.transform.rotation = Quaternion.AngleAxis(180f, playerTransform.up) * shadowClone.transform.rotation;
+        }
         
         MeshRenderer newMesh = shadowClone.AddComponent<MeshRenderer>();
         MeshFilter newMeshFilter = shadowClone.AddComponent<MeshFilter>();
@@ -188,6 +216,9 @@ public class ShadowCloneManager : MonoBehaviour
         newMeshFilter.sharedMesh = meshRenderer.sharedMesh;
         newMesh.sharedMaterials = meshRenderer.sharedMaterials;
 
+        // copy probe anchor
+        newMesh.probeAnchor = meshRenderer.probeAnchor;
+        
         return (newMesh, newMeshFilter);
     }
     
@@ -209,6 +240,9 @@ public class ShadowCloneManager : MonoBehaviour
         // copy mesh and materials
         newMeshFilter.sharedMesh = meshRenderer.GetComponent<MeshFilter>().sharedMesh;
         newMesh.sharedMaterials = meshRenderer.sharedMaterials;
+        
+        // copy probe anchor
+        newMesh.probeAnchor = meshRenderer.probeAnchor;
 
         return (newMesh, newMeshFilter);
     }

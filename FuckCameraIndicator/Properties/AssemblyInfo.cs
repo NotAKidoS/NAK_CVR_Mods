@@ -1,32 +1,29 @@
 ﻿using MelonLoader;
-using NAK.ThirdPerson.Properties;
+using NAK.FuckCameraIndicator.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.ThirdPerson))]
+[assembly: AssemblyTitle(nameof(NAK.FuckCameraIndicator))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.ThirdPerson))]
+[assembly: AssemblyProduct(nameof(NAK.FuckCameraIndicator))]
 
 [assembly: MelonInfo(
-    typeof(NAK.ThirdPerson.ThirdPerson),
-    nameof(NAK.ThirdPerson),
+    typeof(NAK.FuckCameraIndicator.FuckCameraIndicator),
+    nameof(NAK.FuckCameraIndicator),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson"
+    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckCameraIndicator"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
-[assembly: MelonColor(255, 246, 25, 97)]
-[assembly: MelonAuthorColor(255, 158, 21, 32)]
-[assembly: HarmonyDontPatchAll]
 
-namespace NAK.ThirdPerson.Properties;
+namespace NAK.FuckCameraIndicator.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.8";
-    public const string Author = "Davi & NotAKidoS";
+    public const string Version = "1.0.0";
+    public const string Author = "NotAKidoS";
 }

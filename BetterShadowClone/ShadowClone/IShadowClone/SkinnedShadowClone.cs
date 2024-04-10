@@ -8,6 +8,8 @@ public class SkinnedShadowClone : IShadowClone
 {
     private static readonly int s_SourceBufferId = Shader.PropertyToID("_sourceBuffer");
     private static readonly int s_TargetBufferId = Shader.PropertyToID("_targetBuffer");
+    private static readonly int s_HiddenVerticiesId = Shader.PropertyToID("_hiddenVertices");
+    private static readonly int s_HiddenVertexPos = Shader.PropertyToID("_hiddenVertexPos");
     private static readonly int s_SourceBufferLayoutId = Shader.PropertyToID("_sourceBufferLayout");
     private static readonly int s_SourceRootMatrix = Shader.PropertyToID("_rootBoneMatrix");
     
@@ -26,6 +28,7 @@ public class SkinnedShadowClone : IShadowClone
     // clone copying
     private GraphicsBuffer _graphicsBuffer;
     private GraphicsBuffer _targetBuffer;
+    private ComputeBuffer _computeBuffer;
     private int _threadGroups;
     private int _bufferLayout;
     
@@ -39,7 +42,7 @@ public class SkinnedShadowClone : IShadowClone
     // anything player can touch is suspect to death
     public bool IsValid => _mainMesh != null && _shadowMesh != null && _rootBone != null;
     
-    internal SkinnedShadowClone(SkinnedMeshRenderer renderer)
+    internal SkinnedShadowClone(SkinnedMeshRenderer renderer, FPRExclusion exclusion)
     {
         _mainMesh = renderer;
         
@@ -52,11 +55,28 @@ public class SkinnedShadowClone : IShadowClone
             return; // no mesh!
         }
         
+        
+        FindExclusionVertList(_mainMesh, exclusion);
+        
+        if (exclusion.affectedVertexIndices.Count == 0)
+        {
+            Dispose();
+            return; // no affected verts!
+        }
+        
+        _computeBuffer = new ComputeBuffer(_mainMesh.sharedMesh.vertexCount, sizeof(int));
+        _computeBuffer.SetData(exclusion.affectedVertexIndices.ToArray());
+        exclusion.affectedVertexIndices.Clear();
+        
+        
+        
         _shouldCastShadows = _mainMesh.shadowCastingMode != ShadowCastingMode.Off;
-        _mainMesh.shadowCastingMode = ShadowCastingMode.Off; // visual mesh doesn't cast shadows
+        //_mainMesh.shadowCastingMode = ShadowCastingMode.On; // visual mesh doesn't cast shadows
         
         (_shadowMesh, _shadowMeshFilter) = ShadowCloneManager.InstantiateShadowClone(_mainMesh);
-        _shadowMesh.forceRenderingOff = true;
+        _shadowMesh.shadowCastingMode = ShadowCastingMode.Off; // shadow mesh doesn't cast shadows
+        _shadowMesh.forceRenderingOff = false;
+
         
         _rootBone = _mainMesh.rootBone;
         _rootBone ??= _mainMesh.transform; // fallback to transform if no root bone
@@ -133,6 +153,8 @@ public class SkinnedShadowClone : IShadowClone
         _graphicsBuffer = null;
         _targetBuffer?.Dispose();
         _targetBuffer = null;
+        _computeBuffer?.Dispose();
+        _computeBuffer = null;
     }
     
     #endregion
@@ -151,7 +173,7 @@ public class SkinnedShadowClone : IShadowClone
         if (mesh.HasVertexAttribute(VertexAttribute.Tangent)) _bufferLayout += 4;
         _bufferLayout *= 4; // 4 bytes per float
         
-        const float xThreadGroups = 64f;
+        const float xThreadGroups = 32f;
         _threadGroups = Mathf.CeilToInt(mesh.vertexCount / xThreadGroups);
         
         _mainMesh.vertexBufferTarget |= GraphicsBuffer.Target.Raw;
@@ -162,10 +184,66 @@ public class SkinnedShadowClone : IShadowClone
         //Debug.Log($"Initialized! BufferLayout: {_bufferLayout}, GraphicsBuffer: {_graphicsBuffer != null}, TargetBuffer: {_targetBuffer != null}");
     }
 
+    public static void FindExclusionVertList(SkinnedMeshRenderer renderer, FPRExclusion exclusion) 
+    {
+        var boneWeights = renderer.sharedMesh.boneWeights;
+        
+        HashSet<int> weights = new();
+        for (int i = 0; i < renderer.bones.Length; i++)
+        {
+            if (exclusion.affectedChildren.Contains(renderer.bones[i]))
+                weights.Add(i);
+        }
+
+        for (int i = 0; i < boneWeights.Length; i++) 
+        {
+            BoneWeight weight = boneWeights[i];
+            
+            Transform bone = null;
+            const float minWeightThreshold = 0.2f;
+            if (weights.Contains(weight.boneIndex0) && weight.weight0 > minWeightThreshold)
+                bone = renderer.bones[weight.boneIndex0];
+            else if (weights.Contains(weight.boneIndex1) && weight.weight1 > minWeightThreshold)
+                bone = renderer.bones[weight.boneIndex1];
+            else if (weights.Contains(weight.boneIndex2) && weight.weight2 > minWeightThreshold)
+                bone = renderer.bones[weight.boneIndex2];
+            else if (weights.Contains(weight.boneIndex3) && weight.weight3 > minWeightThreshold)
+                bone = renderer.bones[weight.boneIndex3];
+
+            exclusion.affectedVertexIndices.Add(bone != null ? i : -1);
+        }
+    }
+
+    public void ResetMainMesh()
+    {
+        _mainMesh.shadowCastingMode = ShadowCastingMode.On;
+        _mainMesh.forceRenderingOff = false;
+
+        _shadowMesh.transform.position = Vector3.positiveInfinity; // nan 
+    }
+    
     private void ResetShadowClone()
     {
-        _shadowMesh.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-        _shadowMesh.forceRenderingOff = !_shouldCastShadows;
+        if (ShadowCloneManager.s_DebugShowShadow)
+        {
+            _mainMesh.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+            _mainMesh.forceRenderingOff = false;
+            
+            _shadowMesh.shadowCastingMode = ShadowCastingMode.On;
+            _shadowMesh.forceRenderingOff = false;
+            
+            _shadowMesh.transform.localPosition = Vector3.zero;
+        }
+        else
+        {
+            _mainMesh.shadowCastingMode = ShadowCastingMode.On;
+            _mainMesh.forceRenderingOff = false;
+            
+            _shadowMesh.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
+            _shadowMesh.forceRenderingOff = !_shouldCastShadows;
+        }
+        
+        //_shadowMesh.enabled = true;
         
         // shadow casting needs clone to have original materials (uv discard)
         // we also want to respect material swaps... but this is fucking slow :(
@@ -173,12 +251,7 @@ public class SkinnedShadowClone : IShadowClone
         if (!ShadowCloneManager.s_CopyMaterialsToShadow)
             return;
 
-        if (_hasShadowMaterials)
-        {
-            _shadowMesh.sharedMaterials = _mainMesh.sharedMaterials;
-            _hasShadowMaterials = false;
-        }
-        
+        _shadowMesh.sharedMaterials = _mainMesh.sharedMaterials;
         UpdateCloneMaterialProperties();
     }
 
@@ -188,12 +261,10 @@ public class SkinnedShadowClone : IShadowClone
         _shadowMesh.forceRenderingOff = false;
         
         // UI culling needs clone to have write-to-depth shader
-        if (_hasShadowMaterials) return;
         _shadowMesh.sharedMaterials = _shadowMaterials;
-        _hasShadowMaterials = true;
         
         // Not needed- MaterialPropertyBlock applied to renderer in RenderForShadow
-        //UpdateCloneMaterialProperties();
+        UpdateCloneMaterialProperties();
     }
     
     private void RenderShadowClone()
@@ -205,6 +276,10 @@ public class SkinnedShadowClone : IShadowClone
         ShadowCloneHelper.shader.SetMatrix(s_SourceRootMatrix, rootMatrix);
         ShadowCloneHelper.shader.SetBuffer(0, s_SourceBufferId, _graphicsBuffer);
         ShadowCloneHelper.shader.SetBuffer(0, s_TargetBufferId, _targetBuffer);
+        
+        ShadowCloneHelper.shader.SetBuffer(0, s_HiddenVerticiesId, _computeBuffer);
+        ShadowCloneHelper.shader.SetVector(s_HiddenVertexPos, Vector4.positiveInfinity); // temp
+        
         ShadowCloneHelper.shader.SetInt(s_SourceBufferLayoutId, _bufferLayout);
         ShadowCloneHelper.shader.Dispatch(0, _threadGroups, 1, 1);
         _graphicsBuffer.Release();

@@ -23,32 +23,33 @@ public class ObjectSyncBridge : MonoBehaviour
         _physicsGun.OnPreGrabbedObject = o =>
         {
             bool canTakeOwnership = false;
-            
+
+            //
             CVRObjectSync objectSync = o.GetComponentInParent<CVRObjectSync>();
-            if (objectSync != null 
-                && (objectSync.SyncType == 0 // check if physics synced or synced by us
-                    || objectSync.SyncedByMe))
-                canTakeOwnership = true;
-            
+            // if (objectSync != null 
+            //     && (objectSync.SyncType == 0 // check if physics synced or synced by us
+            //         || objectSync.SyncedByMe))
+            //     canTakeOwnership = true;
+            //
             CVRSpawnable spawnable = o.GetComponentInParent<CVRSpawnable>();
-            if (spawnable != null)
-            {
-                CVRSyncHelper.PropData propData = CVRSyncHelper.Props.Find(match => match.InstanceId == spawnable.instanceId);
-                if (propData != null 
-                    && (propData.syncType == 0 // check if physics synced or synced by us
-                        || propData.syncedBy == MetaPort.Instance.ownerId))
-                    canTakeOwnership = true;
-            }
-            
+            // if (spawnable != null)
+            // {
+            //     CVRSyncHelper.PropData propData = CVRSyncHelper.Props.Find(match => match.InstanceId == spawnable.instanceId);
+            //     if (propData != null 
+            //         && (propData.syncType == 0 // check if physics synced or synced by us
+            //             || propData.syncedBy == MetaPort.Instance.ownerId))
+            //         canTakeOwnership = true;
+            // }
+            //
             CVRPickupObject pickup = o.GetComponentInParent<CVRPickupObject>();
-            if (pickup != null
-                && (pickup.grabbedBy == MetaPort.Instance.ownerId // check if already grabbed by us
-                    || pickup.grabbedBy == "" || !pickup.disallowTheft)) // check if not grabbed or allows theft
-                canTakeOwnership = true;
-            
-            if (!canTakeOwnership // if we can't take ownership, don't grab, unless there is no syncing at all (local object)
-                && (objectSync || spawnable || pickup ))
-                return false;
+            // if (pickup != null
+            //     && (pickup.grabbedBy == MetaPort.Instance.ownerId // check if already grabbed by us
+            //         || pickup.grabbedBy == "" || !pickup.disallowTheft)) // check if not grabbed or allows theft
+            //     canTakeOwnership = true;
+            //
+            // if (!canTakeOwnership // if we can't take ownership, don't grab, unless there is no syncing at all (local object)
+            //     && (objectSync || spawnable || pickup ))
+            //     return false;
             
             if (pickup)
             {

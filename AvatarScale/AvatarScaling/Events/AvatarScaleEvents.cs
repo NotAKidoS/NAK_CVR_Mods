@@ -28,11 +28,8 @@ public static class AvatarScaleEvents
     
     #endregion
     
-    
     #region Avatar Scaling Events
     
-
-
     /// <summary>
     /// Invoked when a remote avatar's height changes.
     /// </summary>

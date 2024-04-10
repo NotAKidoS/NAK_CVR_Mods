@@ -39,6 +39,8 @@ public static class ShadowCloneHelper
             return;
         }
         
+        ShadowCloneMod.Logger.Msg($"Found {renderers.Length} renderers. Processing...");
+        
         // create shadow clones
         ProcessRenderers(renderers, avatar.transform, headBone);
     }
@@ -48,6 +50,7 @@ public static class ShadowCloneHelper
         Stopwatch sw = Stopwatch.StartNew();
         
         IReadOnlyDictionary<Transform, FPRExclusion> exclusions = CollectTransformToExclusionMap(root, headBone);
+        var exclusion = headBone.gameObject.GetComponent<FPRExclusion>();
         
         // log current time
         ShadowCloneMod.Logger.Msg($"CollectTransformToExclusionMap in {sw.ElapsedMilliseconds}ms");
@@ -58,12 +61,12 @@ public static class ShadowCloneHelper
 
             if (ModSettings.EntryUseShadowClone.Value)
             {
-                IShadowClone clone = ShadowCloneManager.CreateShadowClone(renderer);
+                IShadowClone clone = ShadowCloneManager.CreateShadowClone(renderer, exclusion);
                 if (clone != null) ShadowCloneManager.Instance.AddShadowClone(clone);
             }
             
-            ITransformHider hider = TransformHiderManager.CreateTransformHider(renderer, exclusions);
-            if (hider != null) TransformHiderManager.Instance.AddTransformHider(hider);
+            // ITransformHider hider = TransformHiderManager.CreateTransformHider(renderer, exclusions);
+            // if (hider != null) TransformHiderManager.Instance.AddTransformHider(hider);
         }
         
         sw.Stop();
@@ -143,9 +146,9 @@ public static class ShadowCloneHelper
         // shadow clone optimizations (always MeshRenderer)
         if (isShadowClone)
         {
-            renderer.receiveShadows = false;
-            renderer.lightProbeUsage = LightProbeUsage.Off;
-            renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
+            // renderer.receiveShadows = false;
+            // renderer.lightProbeUsage = LightProbeUsage.Off;
+            // renderer.reflectionProbeUsage = ReflectionProbeUsage.Off;
             return;
         }
         

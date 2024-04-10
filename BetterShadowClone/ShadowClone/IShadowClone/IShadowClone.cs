@@ -8,4 +8,5 @@ public interface IShadowClone : IDisposable
     bool Process();
     void RenderForShadow();
     void RenderForUiCulling();
+    void ResetMainMesh();
 }

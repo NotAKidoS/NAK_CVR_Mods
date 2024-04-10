@@ -13,6 +13,9 @@ public class LocalScaler : BaseScaler
     {
         _animatorManager = GetComponentInParent<PlayerSetup>().animatorManager;
         _isAvatarInstantiated = false;
+        
+        // listen for events
+        
     }
     
     #endregion
@@ -73,7 +76,6 @@ public class LocalScaler : BaseScaler
         _animatedScaleFactor = scaleDifference.y;
         _animatedHeight = (_initialHeight * _animatedScaleFactor) + _initialHeight;
         _animatedScale = localScale;
-        InvokeAnimatedHeightChanged();
         
         if (overrideAnimationHeight 
             || !_useTargetHeight)

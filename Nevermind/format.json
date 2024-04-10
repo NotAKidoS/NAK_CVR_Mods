@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "Nevermind",
+  "modversion": "1.0.0",
+  "gameversion": "2024r174",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Simple mod that allows you to cancel joining a world in Desktop.",
+  "searchtags": [
+    "never",
+    "mind",
+    "download",
+    "cancel"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r25/Nevermind.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Nevermind/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#b589ec"
+}
