@@ -1,6 +1,6 @@
 {
   "_id": -1,
-  "name": "Stop Closing My Menu On World Load",
+  "name": "StopClosingMyMenuOnWorldLoad",
   "modversion": "1.0.0",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
