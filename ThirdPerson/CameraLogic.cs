@@ -34,7 +34,9 @@ internal static class CameraLogic
         get => _state;
         set
         {
+            if (_state == value) return;
             _state = !CheckIsRestricted() && value;
+            
             if (_state) _storedCamMask = _desktopCam.cullingMask;
             _desktopCam.cullingMask = _state ? 0 : _storedCamMask;
             _uiCam.cullingMask = _state ? _uiCam.cullingMask & ~(1 << CVRLayers.PlayerClone) : _uiCam.cullingMask | (1 << CVRLayers.PlayerClone);
@@ -114,14 +116,7 @@ internal static class CameraLogic
     internal static void ScrollDist(float sign) { _dist += sign * 0.25f; RelocateCam(CurrentLocation); }
     internal static void AdjustScale(float height) { _scale = height; RelocateCam(CurrentLocation); }
     internal static void CheckVRMode() { if (MetaPort.Instance.isUsingVr) State = false; }
+
     private static bool CheckIsRestricted()
-        => !CVRWorld.Instance.enableZoom;
-
-    internal static bool ShouldNotHideHead_ThirdPerson(Camera cam)
-    {
-        if (cam != _desktopCam)
-            return true; // we dont care
-
-        return !State;
-    }
+        => CVRWorld.Instance != null && !CVRWorld.Instance.enableZoom;
 }
