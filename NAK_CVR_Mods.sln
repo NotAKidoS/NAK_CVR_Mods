@@ -37,9 +37,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterShadowClone", "Better
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckCameraIndicator", "FuckCameraIndicator\FuckCameraIndicator.csproj", "{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouAreAClone", "YouAreAClone\YouAreAClone.csproj", "{7778B600-111E-4C8B-AE2B-E9750CECE02A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nevermind", "Nevermind\Nevermind.csproj", "{AC4857DD-F6D9-436D-A3EE-D148A518E642}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowCloneFallback", "ShadowCloneFallback\ShadowCloneFallback.csproj", "{69AF3C10-1BB1-4746-B697-B5A81D78C8D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StopClosingMyMenuOnWorldLoad", "StopClosingMyMenuOnWorldLoad\StopClosingMyMenuOnWorldLoad.csproj", "{9FA83514-13F8-412C-9790-C2B750E0E7E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -115,14 +117,18 @@ Global
 		{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7778B600-111E-4C8B-AE2B-E9750CECE02A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7778B600-111E-4C8B-AE2B-E9750CECE02A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7778B600-111E-4C8B-AE2B-E9750CECE02A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7778B600-111E-4C8B-AE2B-E9750CECE02A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC4857DD-F6D9-436D-A3EE-D148A518E642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC4857DD-F6D9-436D-A3EE-D148A518E642}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC4857DD-F6D9-436D-A3EE-D148A518E642}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AC4857DD-F6D9-436D-A3EE-D148A518E642}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69AF3C10-1BB1-4746-B697-B5A81D78C8D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69AF3C10-1BB1-4746-B697-B5A81D78C8D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69AF3C10-1BB1-4746-B697-B5A81D78C8D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69AF3C10-1BB1-4746-B697-B5A81D78C8D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FA83514-13F8-412C-9790-C2B750E0E7E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FA83514-13F8-412C-9790-C2B750E0E7E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FA83514-13F8-412C-9790-C2B750E0E7E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FA83514-13F8-412C-9790-C2B750E0E7E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

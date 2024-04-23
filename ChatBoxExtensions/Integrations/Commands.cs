@@ -25,7 +25,6 @@ public static class Commands
 
     private class Command
     {
-
         internal string Prefix;
 
         // Command Sent (message)

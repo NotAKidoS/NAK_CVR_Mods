@@ -6,16 +6,17 @@ $cvrManagedDataPath = "\ChilloutVR_Data\Managed"
 
 $cvrPath = $env:CVRPATH
 $cvrExecutable = "ChilloutVR.exe"
-$cvrDefaultPath = "E:\temp\CVR_Experimental"
+$cvrDefaultPath = "C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR"
+# $cvrDefaultPath = "E:\temp\CVR_Experimental"
 
 # Array with the dlls to strip
-$dllsToStrip = @('Assembly-CSharp.dll','Assembly-CSharp-firstpass.dll','AVProVideo.Runtime.dll', 'Unity.TextMeshPro.dll', 'MagicaCloth.dll', 'Unity.Services.Vivox.dll')
+$dllsToStrip = @('Assembly-CSharp.dll','Assembly-CSharp-firstpass.dll','AVProVideo.Runtime.dll', 'Unity.TextMeshPro.dll', 'MagicaCloth.dll', 'MagicaClothV2.dll')
 
 # Array with the mods to grab
-$modNames = @("BTKUILib", "BTKSAImmersiveHud", "ActionMenu", "MenuScalePatch", "ChatBox", "ml_prm")
+$modNames = @("BTKUILib", "BTKSAImmersiveHud", "PortableMirrorMod", "VRBinding")
 
 # Array with dlls to ignore from ManagedLibs
-$cvrManagedLibNamesToIgnore = @("netstandard")
+$cvrManagedLibNamesToIgnore = @("netstandard", "Mono.Cecil", "Unity.Burst.Cecil")
 
 if ($cvrPath -and (Test-Path "$cvrPath\$cvrExecutable")) {
     # Found ChilloutVR.exe in the existing CVRPATH
@@ -56,17 +57,32 @@ Copy-Item $cvrPath$CecilallPath -Destination $managedLibsFolder
 Copy-Item $cvrPath$cvrManagedDataPath"\*" -Destination $managedLibsFolder
 
 
-# Saving XML ready libs for the Build.props file
-$lib_names_xml = "<Project><ItemGroup>"
-$lib_names_xml += '<Reference Include="0Harmony"><HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\0Harmony.dll</HintPath><Private>False</Private></Reference>'
-$lib_names_xml += '<Reference Include="MelonLoader"><HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\MelonLoader.dll</HintPath><Private>False</Private></Reference>'
+# Generate the References.Items.props file, that contains the references to all ManagedData Dlls
+# Define indentation as a variable
+$indent = '    '  # 4 spaces
+
+$lib_names_xml = "<Project>`n${indent}<ItemGroup>`n"
+
+# Manually add references with specific paths and settings
+$lib_names_xml += "${indent}${indent}<Reference Include=`"0Harmony`">`n${indent}${indent}${indent}<HintPath>`$(MsBuildThisFileDirectory)\.ManagedLibs\0Harmony.dll</HintPath>`n${indent}${indent}${indent}<Private>False</Private>`n${indent}${indent}</Reference>`n"
+$lib_names_xml += "${indent}${indent}<Reference Include=`"MelonLoader`">`n${indent}${indent}${indent}<HintPath>`$(MsBuildThisFileDirectory)\.ManagedLibs\MelonLoader.dll</HintPath>`n${indent}${indent}${indent}<Private>False</Private>`n${indent}${indent}</Reference>`n"
+$lib_names_xml += "${indent}${indent}<Reference Include=`"Mono.Cecil`">`n${indent}${indent}${indent}<HintPath>`$(MsBuildThisFileDirectory)\.ManagedLibs\Mono.Cecil.dll</HintPath>`n${indent}${indent}${indent}<Private>False</Private>`n${indent}${indent}</Reference>`n"
+
+# Iterate over files in a specified directory, adding them as references if not in the ignore list
 foreach ($file in Get-ChildItem $cvrPath$cvrManagedDataPath"\*") {
-    if($cvrManagedLibNamesToIgnore -notcontains $file.BaseName) {
-        $lib_names_xml += "<Reference Include=`"$($file.BaseName)`"><HintPath>`$(MsBuildThisFileDirectory)\.ManagedLibs\$($file.BaseName).dll</HintPath><Private>False</Private></Reference>"
+    if ($cvrManagedLibNamesToIgnore -notcontains $file.BaseName) {
+        $lib_names_xml += "${indent}${indent}<Reference Include=`"$($file.BaseName)`">`n${indent}${indent}${indent}<HintPath>`$(MsBuildThisFileDirectory)\.ManagedLibs\$($file.BaseName).dll</HintPath>`n${indent}${indent}${indent}<Private>False</Private>`n${indent}${indent}</Reference>`n"
     }
 }
-$lib_names_xml += "</ItemGroup></Project>"
-$lib_names_xml | Out-File -Encoding UTF8 -FilePath lib_names.xml
+
+# Close the ItemGroup and Project tags with proper formatting
+$lib_names_xml += "${indent}</ItemGroup>`n</Project>"
+
+# Output the constructed XML content to a file with UTF8 encoding
+$lib_names_xml | Out-File -Encoding UTF8 -FilePath "References.Items.props"
+
+Write-Host ""
+Write-Host "Generated References.Items.props file containing the references to all common ManagedLibs"
 
 
 
@@ -147,7 +163,7 @@ else {
 # Loop through each DLL file to strip and call NStrip.exe
 foreach($dllFile in $dllsToStrip) {
     $dllPath = Join-Path -Path $managedLibsFolder -ChildPath $dllFile
-    & $nStripPath -p -n -cg --cg-exclude-events $dllPath $dllPath
+    & $nStripPath -p -n $dllPath $dllPath
 }
 
 Write-Host ""

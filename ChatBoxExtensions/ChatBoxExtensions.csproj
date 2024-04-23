@@ -8,6 +8,9 @@
 
     <!-- Didn't put in the Directory.Build.props because it spams funny warnings... -->
     <ItemGroup>
+        <Reference Include="ECM2">
+          <HintPath>..\.ManagedLibs\ECM2.dll</HintPath>
+        </Reference>
         <Reference Include="ml_prm">
             <HintPath>$(MsBuildThisFileDirectory)\..\.ManagedLibs\ml_prm.dll</HintPath>
             <Private>False</Private>

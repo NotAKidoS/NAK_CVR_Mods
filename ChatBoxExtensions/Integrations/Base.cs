@@ -18,9 +18,9 @@ public class CommandBase
         {
             string partialName = argument.Replace("*", "").Trim();
             if (String.IsNullOrWhiteSpace(partialName)) return false;
-            return AuthManager.username.Contains(partialName);
+            return AuthManager.Username.Contains(partialName);
         }
-        return AuthManager.username == argument;
+        return AuthManager.Username == argument;
     }
 
     internal static void LocalCommandIgnoreOthers(string argument, Action<string[]> callback)

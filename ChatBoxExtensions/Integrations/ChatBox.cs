@@ -39,5 +39,53 @@ internal class ChatBoxCommands : CommandBase
                 API.SendMessage($"You have to ping first, {GetPlayerUsername(sender)}!", false, true, true);
             });
         });
+        
+        Commands.RegisterCommand("sudo",
+        onCommandSent: (message, sound, displayMsg) =>
+        {
+            LocalCommandIgnoreOthers(message, args =>
+            {
+                if (args.Length > 1)
+                {
+                    string command = string.Join(" ", args.Skip(1));
+                    API.SendMessage($"/{command}", false, true, true);
+                }
+            });
+        },
+        onCommandReceived: (sender, message, sound, displayMsg) =>
+        {
+            RemoteCommandListenForAll(message, args =>
+            {
+                if (args.Length > 1)
+                {
+                    string command = string.Join(" ", args.Skip(1));
+                    API.SendMessage($"/{command}", false, true, true);
+                }
+            });
+        });
+        
+        Commands.RegisterCommand("say",
+        onCommandSent: (message, sound, displayMsg) =>
+        {
+            LocalCommandIgnoreOthers(message, args =>
+            {
+                if (args.Length > 0)
+                {
+                    string text = string.Join(" ", args);
+                    API.SendMessage(text, false, true, true);
+                }
+            });
+        },
+        onCommandReceived: (sender, message, sound, displayMsg) =>
+        {
+            RemoteCommandListenForAll(message, args =>
+            {
+                if (args.Length > 0)
+                {
+                    string text = string.Join(" ", args);
+                    API.SendMessage(text, false, true, true);
+                }
+            });
+        });
     }
 }
