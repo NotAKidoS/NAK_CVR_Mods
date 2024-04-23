@@ -1,12 +1,12 @@
 {
   "_id": -1,
-  "name": "Stop Closing My Menus On World Load",
+  "name": "Stop Closing My Menu On World Load",
   "modversion": "1.0.0",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Simple patch that prevents your menus from being closed when a world is loaded.",
+  "description": "Simple patch that prevents your menu from being closed when a world is loaded.\nNicked the patch Kafeijao made for my old MenuScalePatch mod.",
   "searchtags": [
     "menu",
     "close",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r25/StopClosingMyMenusOnWorldLoad.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/StopClosingMyMenusOnWorldLoad/",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r26/StopClosingMyMenuOnWorldLoad.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/StopClosingMyMenuOnWorldLoad/",
   "changelog": "- Initial Release",
   "embedcolor": "#b589ec"
 }

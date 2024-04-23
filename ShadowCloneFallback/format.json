@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "ShadowCloneFallback",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Simple mod that exposes a toggle for the Fallback Shadow Clone implementation.\nBy default, using this mod will enable the less-performant shadow clones. Only use this mod if you for whatever reason have issues with the compute shader clones.",
+  "searchtags": [
+    "shadow",
+    "clone",
+    "compute",
+    "shader"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r26/ShadowCloneFallback.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ShadowCloneFallback/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#7d7e81"
+}
