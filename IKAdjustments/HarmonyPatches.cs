@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Systems.IK;
+using ABI_RC.Systems.IK.SubSystems;
 using HarmonyLib;
 using NAK.IKAdjustments.Systems;
 
@@ -15,7 +16,7 @@ internal static class IKSystemPatches
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(IKSystem), nameof(IKSystem.ResetIkSettings))]
+    [HarmonyPatch(typeof(BodySystem), nameof(BodySystem.ResetCalibration))]
     private static void Postfix_IKSystem_ResetIkSettings()
     {
         IKAdjuster.Instance.ResetAllOffsets();

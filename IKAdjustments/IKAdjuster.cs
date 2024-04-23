@@ -71,9 +71,9 @@ public class IKAdjuster : MonoBehaviour
             return;
 
         isAdjustMode = true;
-        IKSystem.Instance.SetTrackingPointVisibility(true);
+        IKSystem.Instance.TrackingSystem.SetTrackingPointVisibility(true);
         CVR_MenuManager.Instance.ToggleQuickMenu(false);
-        foreach (TrackingPoint tracker in IKSystem.Instance.AllTrackingPoints) tracker.ClearLineTarget();
+        foreach (TrackingPoint tracker in IKSystem.Instance.TrackingSystem.AllTrackingPoints) tracker.ClearLineTarget();
     }
 
     public void ExitAdjustMode()
@@ -82,12 +82,12 @@ public class IKAdjuster : MonoBehaviour
             return;
 
         isAdjustMode = false;
-        IKSystem.Instance.SetTrackingPointVisibility(false);
+        IKSystem.Instance.TrackingSystem.SetTrackingPointVisibility(false);
     }
 
     public void ResetAllOffsets()
     {
-        foreach (TrackingPoint tracker in IKSystem.Instance.AllTrackingPoints)
+        foreach (TrackingPoint tracker in IKSystem.Instance.TrackingSystem.AllTrackingPoints)
         {
             tracker.offsetTransform.SetParent(tracker.displayObject.transform, true);
             tracker.displayObject.transform.localPosition = Vector3.zero;
@@ -117,8 +117,8 @@ public class IKAdjuster : MonoBehaviour
             ? CVRInputManager.Instance.interactLeftValue > 0.9f
             : CVRInputManager.Instance.interactRightValue > 0.9f;
         Transform handTracker = isLeft
-            ? IKSystem.Instance.leftHandTracker.transform
-            : IKSystem.Instance.rightHandTracker.transform;
+            ? IKSystem.Instance.leftController.transform
+            : IKSystem.Instance.rightController.transform;
 
         if (grabState.tracker == null && !grabState.handGrabbed && isGrabbing)
         {
@@ -145,7 +145,7 @@ public class IKAdjuster : MonoBehaviour
             Setting_MaxGrabDistance)
         {
             grabState.tracker =
-                IKSystem.Instance.AllTrackingPoints.Find(tp => tp.referenceTransform == nearestTransform);
+                IKSystem.Instance.TrackingSystem.AllTrackingPoints.Find(tp => tp.referenceTransform == nearestTransform);
             if (grabState.otherGrab.tracker == grabState.tracker) OnRelease(grabState.otherGrab);
             grabState.displayOffset = grabState.tracker.displayObject.transform.position - handTracker.position;
             grabState.displayOffsetRotation = Quaternion.Inverse(handTracker.rotation) *
@@ -194,7 +194,7 @@ public class IKAdjuster : MonoBehaviour
 
     private Transform FindNearestTransform(Transform handTransform)
     {
-        var validTrackingPointTransforms = IKSystem.ValidTrackingPointTransforms;
+        var validTrackingPointTransforms = TrackingSystem.ValidTrackingPointTransforms;
         if (validTrackingPointTransforms == null || validTrackingPointTransforms.Count == 0) return null;
         return validTrackingPointTransforms
             .OrderBy(t => Vector3.Distance(handTransform.position, t.GetChild(0).position)).FirstOrDefault();
