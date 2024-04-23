@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowCloneFallback", "Shad
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StopClosingMyMenuOnWorldLoad", "StopClosingMyMenuOnWorldLoad\StopClosingMyMenuOnWorldLoad.csproj", "{9FA83514-13F8-412C-9790-C2B750E0E7E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchToDesktopOnSteamVRExit", "SwitchToDesktopOnSteamVRExit\SwitchToDesktopOnSteamVRExit.csproj", "{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -129,6 +131,10 @@ Global
 		{9FA83514-13F8-412C-9790-C2B750E0E7E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FA83514-13F8-412C-9790-C2B750E0E7E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FA83514-13F8-412C-9790-C2B750E0E7E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

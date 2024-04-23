@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "SwitchToDesktopOnSteamVRExit",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Simple mod that initiates a VR Switch to Desktop when SteamVR is exited. By default, this is enabled, but can be disabled in the mod settings.",
+  "searchtags": [
+    "steamvr",
+    "vrswitch",
+    "desktopvrswitch",
+    "exit"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r26/SwitchToDesktopOnSteamVRExit.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SwitchToDesktopOnSteamVRExit/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#3498db"
+}
