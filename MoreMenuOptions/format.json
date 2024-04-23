@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "MoreMenuOptions",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Exposes some menu options:\n- Main Menu Scale Modifier\n- Main Menu Distance Modifier\n- Quick Menu World Anchor in VR\n\nBy default, the menu is adjusted to a more comfortable scale, but can be configured in the mod settings.",
+  "searchtags": [
+    "menu",
+    "scale",
+    "distance",
+    "anchor"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r26/MoreMenuOptions.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MoreMenuOptions/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#89b7d9"
+}

@@ -45,6 +45,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StopClosingMyMenuOnWorldLoa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwitchToDesktopOnSteamVRExit", "SwitchToDesktopOnSteamVRExit\SwitchToDesktopOnSteamVRExit.csproj", "{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoreMenuOptions", "MoreMenuOptions\MoreMenuOptions.csproj", "{AB07B31E-A930-4CCC-8E02-F2A4D6C52C8F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -135,6 +137,10 @@ Global
 		{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7F4B840-6FF5-46C4-AAFD-95362D1D666C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB07B31E-A930-4CCC-8E02-F2A4D6C52C8F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB07B31E-A930-4CCC-8E02-F2A4D6C52C8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB07B31E-A930-4CCC-8E02-F2A4D6C52C8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB07B31E-A930-4CCC-8E02-F2A4D6C52C8F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
