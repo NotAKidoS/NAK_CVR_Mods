@@ -18,23 +18,41 @@ public class SwitchToDesktopOnSteamVRExit : MelonMod
     
     public override void OnInitializeMelon()
     {
-        HarmonyInstance.Patch(
-            typeof(SteamVR_Behaviour).GetMethod("OnQuit"),
-            new HarmonyMethod(typeof(SwitchToDesktopOnSteamVRExit).GetMethod(nameof(Prefix_SteamVR_Behaviour_OnQuit),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
+        ApplyPatches(typeof(SteamVRBehaviour_Patches));
     }
     
-    private static bool Prefix_SteamVR_Behaviour_OnQuit()
+    private void ApplyPatches(Type type)
     {
-        if (!EntryEnabled.Value)
-            return true;
-        
-        // If we don't switch fast enough, SteamVR will force close.
-        // World Transition might cause issues. Might need to override.
-        if (VRModeSwitchManager.Instance != null)
-            VRModeSwitchManager.Instance.AttemptSwitch();
-        
-        return false;
+        try
+        {
+            HarmonyInstance.PatchAll(type);
+        }
+        catch (Exception e)
+        {
+            LoggerInstance.Msg($"Failed while patching {type.Name}!");
+            LoggerInstance.Error(e);
+        }
     }
+    
+    #region Patches
+    
+    private static class SteamVRBehaviour_Patches
+    {
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SteamVR_Behaviour), /*nameof(SteamVR_Behaviour.OnQuit)*/ "OnQuit")]
+        private static bool Prefix_SteamVR_Behaviour_OnQuit()
+        {
+            if (!EntryEnabled.Value) 
+                return true;
+        
+            // If we don't switch fast enough, SteamVR will force close.
+            // World Transition might cause issues. Might need to override.
+            if (VRModeSwitchManager.Instance != null)
+                VRModeSwitchManager.Instance.AttemptSwitch();
+        
+            return false;
+        }
+    }
+    
+    #endregion Patches
 }
