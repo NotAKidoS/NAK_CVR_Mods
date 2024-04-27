@@ -15,7 +15,7 @@ public class ShadowCloneFallback : MelonMod
     
     public override void OnInitializeMelon()
     {
-        ShadowCloneUtils.s_UseShaderClones = EntryUseFallbackClones.Value;
+        ShadowCloneUtils.s_UseShaderClones = !EntryUseFallbackClones.Value;
         EntryUseFallbackClones.OnEntryValueChanged.Subscribe(OnEnabledChanged);
     }
     
