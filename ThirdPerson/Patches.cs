@@ -29,7 +29,7 @@ internal static class Patches
             postfix: typeof(Patches).GetMethod(nameof(OnConfigureHudAffinity), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
          );
         harmony.Patch(
-            typeof(TransformHiderManager).GetMethod(nameof(CVRTools.ConfigureHudAffinity), BindingFlags.NonPublic | BindingFlags.Static),
+            typeof(TransformHiderManager).GetMethod(nameof(TransformHiderManager.CheckPlayerCamWithinRange), BindingFlags.NonPublic | BindingFlags.Static),
             prefix: typeof(Patches).GetMethod(nameof(OnCheckPlayerCamWithinRange), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
         );
     }
