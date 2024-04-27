@@ -16,7 +16,7 @@
     "requirements": [],
     "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r26/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Fixed an issue where VR Switching without using ThirdPerson prior would incorrectly set the Desktop camera culling mask to 0\n- Fixed an NRE when checking CVRWorld zoom rule when no CVRWorld instance was found",
+    "changelog": "- Fixed an issue where VR Switching without using ThirdPerson prior would incorrectly set the Desktop camera culling mask to 0\n- Fixed an NRE when checking CVRWorld zoom rule when no CVRWorld instance was found\n- Prevented head hiding from persisting into third person while Avatar Overrender Ui is enabled",
     "embedcolor": "#F61961"
   }
 ]
