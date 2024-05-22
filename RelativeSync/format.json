@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "RelativeSync",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network.",
+  "searchtags": [
+    "relative",
+    "sync",
+    "movement",
+    "chair"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r26/RelativeSync.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/RelativeSync/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#507e64"
+}
