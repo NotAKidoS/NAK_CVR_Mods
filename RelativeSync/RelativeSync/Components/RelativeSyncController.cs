@@ -7,6 +7,9 @@ namespace NAK.RelativeSync.Components;
 public class RelativeSyncController : MonoBehaviour
 {
     private static float MaxMagnitude = 750000000000f;
+    
+    private float _updateInterval = 0.05f;
+    private float _lastUpdate;
 
     private string _userId;
     private PuppetMaster puppetMaster { get; set; }
@@ -41,7 +44,7 @@ public class RelativeSyncController : MonoBehaviour
 
         if (_relativeSyncMarker == null)
             return;
-
+        
         Animator animator = puppetMaster._animator;
         if (animator == null)
             return;
@@ -62,11 +65,9 @@ public class RelativeSyncController : MonoBehaviour
             relativeHipPos = Quaternion.Inverse(worldRootRot) * (hipPos - worldRootPos);
             relativeHipRot = Quaternion.Inverse(worldRootRot) * hipRot;
         }
-
-        // todo: this is fucked and idk why, is technically slightly differing sync rates,
-        // but even reimplementing dynamic tps here didnt fix the jitter
-        float lerp = netIkController.GetLerpSpeed();
-            
+        
+        float lerp = Mathf.Min((Time.time - _lastUpdate) / _updateInterval, 1f);
+        
         Vector3 targetLocalPosition = _relativeSyncData.LocalRootPosition;
         Quaternion targetLocalRotation = Quaternion.Euler(_relativeSyncData.LocalRootRotation);
         Transform targetTransform = _relativeSyncMarker.transform;
@@ -109,9 +110,6 @@ public class RelativeSyncController : MonoBehaviour
             hipTrans.position = transform.position + transform.rotation * relativeHipPos;
             hipTrans.rotation = transform.rotation * relativeHipRot;
         }
-
-        _lastSyncData.LocalRootPosition = targetLocalPosition;
-        _lastSyncData.LocalRootRotation = targetLocalRotation.eulerAngles;
     }
 
     #endregion Unity Events
@@ -142,6 +140,16 @@ public class RelativeSyncController : MonoBehaviour
 
     public void SetRelativePositions(Vector3 position, Vector3 rotation)
     {
+        // calculate update interval
+        float prevUpdate = _lastUpdate;
+        _lastUpdate = Time.time;
+        _updateInterval = _lastUpdate - prevUpdate;
+        
+        // cycle last sync data
+        _lastSyncData.LocalRootPosition = _relativeSyncData.LocalRootPosition;
+        _lastSyncData.LocalRootRotation = _relativeSyncData.LocalRootRotation;
+
+        // set new sync data
         _relativeSyncData.LocalRootPosition = position;
         _relativeSyncData.LocalRootRotation = rotation;
     }
