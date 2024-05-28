@@ -59,3 +59,24 @@ internal static class NetworkRootDataUpdatePatches
         ModNetwork.SendRelativeSyncUpdate(); // Send the relative sync update after the network root data update
     }
 }
+
+internal static class CVRSpawnablePatches
+{
+    private static bool _allowUpdate;
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.Update))]
+    private static bool Prefix_CVRSpawnable_Update()
+    {
+        return _allowUpdate;
+    }
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.FixedUpdate))]
+    private static void Postfix_CVRSpawnable_FixedUpdate(ref CVRSpawnable __instance)
+    {
+        _allowUpdate = true;
+        __instance.Update();
+        _allowUpdate = false;
+    }
+}

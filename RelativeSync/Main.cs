@@ -15,6 +15,7 @@ public class RelativeSyncMod : MelonMod
         ModNetwork.Subscribe();
         
         ApplyPatches(typeof(NetworkRootDataUpdatePatches));
+        ApplyPatches(typeof(CVRSpawnablePatches));
         
         ApplyPatches(typeof(PlayerSetupPatches));
         ApplyPatches(typeof(PuppetMasterPatches));
