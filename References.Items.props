@@ -124,6 +124,10 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\LibVLCSharp.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="LucHeart.CoreOSC">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\LucHeart.CoreOSC.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="MagicaCloth">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\MagicaCloth.dll</HintPath>
             <Private>False</Private>
@@ -134,6 +138,10 @@
         </Reference>
         <Reference Include="MeshBakerCore">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\MeshBakerCore.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Meta.XR.BuildingBlocks">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Meta.XR.BuildingBlocks.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="Mono.Security">
@@ -166,6 +174,14 @@
         </Reference>
         <Reference Include="Oculus.LipSync">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Oculus.LipSync.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Oculus.Platform">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Oculus.Platform.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Oculus.VR">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Oculus.VR.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="Photon3Unity3D">
