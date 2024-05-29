@@ -1,7 +1,7 @@
 {
   "_id": 211,
   "name": "RelativeSync",
-  "modversion": "1.0.1",
+  "modversion": "1.0.2",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r28/RelativeSync.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/RelativeSync/",
-  "changelog": "- Fixed RelativeSyncMarker not generating correct path hash for local player\n  - This fixes relative sync on local avatar movement parents\n- Added Network Debug settings\n- Added experimental settings to fix **local** jitter on movement parents\n  - These options are disabled by default as they have not been heavily tested",
+  "changelog": "- Fixed RelativeSyncMarker not generating correct path hash for local player\n  - This fixes relative sync on local avatar movement parents\n- Fixed initial calculated interpolation interval when assigning a new RelativeSyncMarker for a remote user\n  - Would calculate from time was last on a movement parent, which could lead to seconds long interpolation\n- Added Network Debug settings\n- Added experimental settings to fix **local** jitter on movement parents\n  - These options are disabled by default as they have not been heavily tested",
   "embedcolor": "#507e64"
 }
