@@ -95,17 +95,19 @@ internal static class BetterBetterCharacterControllerPatches
         {
             _noInterpolation = value;
             if (_rigidbody == null) return;
-            _rigidbody.interpolation = value ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
+            _rigidbody.interpolation = value ? RigidbodyInterpolation.None : _initialInterpolation;
         }
     }
     
     private static Rigidbody _rigidbody;
+    private static RigidbodyInterpolation _initialInterpolation;
     
     [HarmonyPostfix]
     [HarmonyPatch(typeof(BetterBetterCharacterController), nameof(BetterBetterCharacterController.Start))]
     private static void Postfix_BetterBetterCharacterController_Update(ref BetterBetterCharacterController __instance)
     {
         _rigidbody = __instance.GetComponent<Rigidbody>();
+        _initialInterpolation = _rigidbody.interpolation;
         NoInterpolation = _noInterpolation; // get initial value as patch runs later than settings init
     }
 }
