@@ -2,6 +2,8 @@
 
 Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network.
 
+https://github.com/NotAKidOnSteam/NAK_CVR_Mods/assets/37721153/ae6c6e4b-7529-42e2-bd2c-afa050849906
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated with or endorsed by ABI. 
