@@ -31,4 +31,33 @@ public static class RelativeSyncManager
         controller.SetRelativePositions(position, rotation);
         controller.SetRelativeSyncMarker(syncMarker);
     }
+    
+    public static void GetRelativeAvatarPositionsFromMarker(
+        Animator avatarAnimator, Transform markerTransform,
+        out Vector3 relativePosition, out Vector3 relativeRotation)
+        // out Vector3 relativeHipPosition, out Vector3 relativeHipRotation)
+    {
+        Transform avatarTransform = avatarAnimator.transform;
+        
+        // because our syncing is retarded, we need to sync relative from the avatar root...
+        Vector3 avatarRootPosition = avatarTransform.position; // PlayerSetup.Instance.GetPlayerPosition()
+        Quaternion avatarRootRotation = avatarTransform.rotation; // PlayerSetup.Instance.GetPlayerRotation()
+        
+        relativePosition = markerTransform.InverseTransformPoint(avatarRootPosition);
+        relativeRotation = (Quaternion.Inverse(markerTransform.rotation) * avatarRootRotation).eulerAngles;
+        
+        // Transform hipTrans = (avatarAnimator.avatar != null && avatarAnimator.isHuman) 
+        //     ? avatarAnimator.GetBoneTransform(HumanBodyBones.Hips) : null;
+        //
+        // if (hipTrans == null)
+        // {
+        //     relativeHipPosition = Vector3.zero;
+        //     relativeHipRotation = Vector3.zero;
+        // }
+        // else
+        // {
+        //     relativeHipPosition = markerTransform.InverseTransformPoint(hipTrans.position);
+        //     relativeHipRotation = (Quaternion.Inverse(markerTransform.rotation) * hipTrans.rotation).eulerAngles;
+        // }
+    }
 }

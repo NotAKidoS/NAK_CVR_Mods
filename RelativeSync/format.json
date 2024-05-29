@@ -1,12 +1,12 @@
 {
-  "_id": -1,
+  "_id": 211,
   "name": "RelativeSync",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network.",
+  "description": "Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network.\n\nProvides some Experimental settings to also fix local jitter on movement parents.",
   "searchtags": [
     "relative",
     "sync",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r27/RelativeSync.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r28/RelativeSync.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/RelativeSync/",
-  "changelog": "- Initial Release",
+  "changelog": "- Fixed RelativeSyncMarker not generating correct path hash for local player movement parents.\n- Added Network Debug settings.\n- Added experimental options that fix **local** jitter on movement parents.",
   "embedcolor": "#507e64"
 }

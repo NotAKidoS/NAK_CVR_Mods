@@ -2,10 +2,12 @@
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Networking.Jobs;
 using ABI_RC.Core.Player;
+using ABI_RC.Systems.Movement;
 using ABI.CCK.Components;
 using HarmonyLib;
 using NAK.RelativeSync.Components;
 using NAK.RelativeSync.Networking;
+using UnityEngine;
 
 namespace NAK.RelativeSync.Patches;
 
@@ -57,5 +59,53 @@ internal static class NetworkRootDataUpdatePatches
     private static void Postfix_NetworkRootDataUpdater_Submit()
     {
         ModNetwork.SendRelativeSyncUpdate(); // Send the relative sync update after the network root data update
+    }
+}
+
+internal static class CVRSpawnablePatches
+{
+    internal static bool UseHack;
+    
+    private static bool _canUpdate;
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.Update))]
+    private static bool Prefix_CVRSpawnable_Update()
+        => !UseHack || _canUpdate;
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.FixedUpdate))]
+    private static void Postfix_CVRSpawnable_FixedUpdate(ref CVRSpawnable __instance)
+    {
+        if (!UseHack) return;
+        
+        _canUpdate = true;
+        __instance.Update();
+        _canUpdate = false;
+    }
+}
+
+internal static class BetterBetterCharacterControllerPatches
+{
+    private static bool _noInterpolation;
+    internal static bool NoInterpolation
+    {
+        get => _noInterpolation;
+        set
+        {
+            _noInterpolation = value;
+            if (_rigidbody == null) return;
+            _rigidbody.interpolation = value ? RigidbodyInterpolation.None : RigidbodyInterpolation.Interpolate;
+        }
+    }
+    
+    private static Rigidbody _rigidbody;
+    
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(BetterBetterCharacterController), nameof(BetterBetterCharacterController.Start))]
+    private static void Postfix_BetterBetterCharacterController_Update(ref BetterBetterCharacterController __instance)
+    {
+        _rigidbody = __instance.GetComponent<Rigidbody>();
+        NoInterpolation = _noInterpolation; // get initial value as patch runs later than settings init
     }
 }

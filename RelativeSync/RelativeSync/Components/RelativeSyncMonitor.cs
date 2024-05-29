@@ -37,8 +37,18 @@ public class RelativeSyncMonitor : MonoBehaviour
         }
 
         _lastRelativeSyncMarker = _relativeSyncMarker;
-            
-        SendCurrentPositionAndRotation();
+        
+        Animator avatarAnimator = PlayerSetup.Instance._animator;
+        if (avatarAnimator == null)
+            return; // i dont care to bother
+        
+        RelativeSyncManager.GetRelativeAvatarPositionsFromMarker(
+            avatarAnimator, _relativeSyncMarker.transform,
+            out Vector3 relativePosition, out Vector3 relativeRotation);
+        
+        ModNetwork.SetLatestRelativeSync(
+            _relativeSyncMarker.pathHash,
+            relativePosition, relativeRotation);
     }
 
     private void CheckForRelativeSyncMarker()
@@ -60,23 +70,10 @@ public class RelativeSyncMonitor : MonoBehaviour
         // none found
         _relativeSyncMarker = null;
     }
-
-    private void SendCurrentPositionAndRotation()
-    {
-        // because our syncing is retarded, we need to sync relative from the avatar root...
-        Transform avatarRoot = PlayerSetup.Instance._avatar.transform;
-        Vector3 avatarRootPosition = avatarRoot.position; // PlayerSetup.Instance.GetPlayerPosition()
-        Quaternion avatarRootRotation = avatarRoot.rotation; // PlayerSetup.Instance.GetPlayerRotation()
-            
-        Transform markerTransform = _relativeSyncMarker.transform;
-        Vector3 localPosition = markerTransform.InverseTransformPoint(avatarRootPosition);
-        Quaternion localRotation = Quaternion.Inverse(markerTransform.rotation) * avatarRootRotation;
-            
-        ModNetwork.SendNetworkPosition(_relativeSyncMarker.pathHash, localPosition, localRotation.eulerAngles);
-    }
-        
+    
     private void SendEmptyPositionAndRotation()
     {
-        ModNetwork.SendNetworkPosition(RelativeSyncManager.NoTarget, Vector3.zero, Vector3.zero);
+        ModNetwork.SetLatestRelativeSync(RelativeSyncManager.NoTarget, 
+            Vector3.zero, Vector3.zero);
     }
 }

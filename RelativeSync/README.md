@@ -4,6 +4,12 @@ Relative sync for Movement Parent & Chairs. Requires both users to have the mod 
 
 https://github.com/NotAKidOnSteam/NAK_CVR_Mods/assets/37721153/ae6c6e4b-7529-42e2-bd2c-afa050849906
 
+## Mod Settings
+- **Debug Network Inbound**: Log network messages received from other players.
+- **Debug Network Outbound**: Log network messages sent to other players.
+- **Exp Spawnable Sync Hack**: Forces CVRSpawnable to update position in FixedUpdate. This can help with local jitter while on a remote synced movement parent.
+- **Exp Disable Interpolation on BBCC**: Disables interpolation on BetterBetterCharacterController. This can help with local jitter while on any movement parent.
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated with or endorsed by ABI. 
