@@ -28,8 +28,8 @@ public static class RelativeSyncManager
         RelativeSyncMarker syncMarker = null;
         if (target != NoTarget) RelativeSyncTransforms.TryGetValue(target, out syncMarker);
         
-        controller.SetRelativePositions(position, rotation);
         controller.SetRelativeSyncMarker(syncMarker);
+        controller.SetRelativePositions(position, rotation);
     }
     
     public static void GetRelativeAvatarPositionsFromMarker(

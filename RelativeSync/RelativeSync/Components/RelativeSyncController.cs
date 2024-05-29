@@ -154,10 +154,10 @@ public class RelativeSyncController : MonoBehaviour
         // set last sync data to current position and rotation so we don't lerp from the last marker
         _lastSyncData.LocalRootPosition = relativePosition;
         _lastSyncData.LocalRootRotation = relativeRotation;
+        _lastUpdate = Time.time; // reset update time
     }
 
-    public void SetRelativePositions(
-        Vector3 position, Vector3 rotation)
+    public void SetRelativePositions(Vector3 position, Vector3 rotation)
     {
         // calculate update interval
         float prevUpdate = _lastUpdate;
