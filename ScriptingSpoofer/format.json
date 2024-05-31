@@ -1,23 +1,23 @@
 {
-  "_id": 147,
-  "name": "PropUndoButton",
-  "modversion": "1.0.2",
-  "gameversion": "2024r175",
+  "_id": -1,
+  "name": "ScriptingSpoofer",
+  "modversion": "1.0.0",
+  "gameversion": "2024r176",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "**CTRL+Z** to undo latest spawned prop. **CTRL+SHIFT+Z** to redo deleted prop.\nIncludes optional SFX for prop spawn, undo, redo, warn, and deny, which can be disabled in settings.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\PropUndo\\audio'.",
+  "description": "Prevents **local** scripts from accessing your Username or UserID by spoofing them with random values each session.",
   "searchtags": [
-    "prop",
-    "undo",
-    "bind",
-    "button"
+    "spoof",
+    "username",
+    "whitelist",
+    "blacklist"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r25/PropUndoButton.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndoButton/",
-  "changelog": "- Recompiled for 2024r175",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r25/ScriptingSpoofer.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ScriptingSpoofer/",
+  "changelog": "- Initial Release",
   "embedcolor": "#00FFFF"
 }

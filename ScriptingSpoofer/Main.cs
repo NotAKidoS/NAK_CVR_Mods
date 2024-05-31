@@ -11,14 +11,14 @@ namespace NAK.ScriptingSpoofer;
 
 public class ScriptingSpoofer : MelonMod
 {
-    public static readonly MelonPreferences_Category Category =
+    private static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(ScriptingSpoofer));
 
-    public static readonly MelonPreferences_Entry<bool> EntryEnabled =
-        Category.CreateEntry("Enabled", true, description: "Toggle scripting spoofer.");
+    private static readonly MelonPreferences_Entry<bool> EntryEnabled =
+        Category.CreateEntry("mod_enabled", true, "Enabled", description: "Toggle scripting spoofer.");
     
-    public static readonly MelonPreferences_Entry<bool> EntryCensorUsername =
-        Category.CreateEntry("Censor Username", true, description: "Censor username. Toggle to randomize username instead.");
+    private static readonly MelonPreferences_Entry<bool> EntryCensorUsername =
+        Category.CreateEntry("censor_username", true, "Censor Username", description: "Censor username. Toggle to randomize username instead.");
 
     private static string spoofedUsername;
     private static string spoofedUserId;
@@ -83,9 +83,9 @@ public class ScriptingSpoofer : MelonMod
     private static class PlayerApiPatches
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LocalPlayerApi), nameof(LocalPlayerApi.Username), MethodType.Getter)]
-        [HarmonyPatch(typeof(PlayerApiBase), nameof(PlayerApiBase.Username), MethodType.Getter)]
-        private static bool GetSpoofedUsername(ref PlayerApiBase __instance, ref string __result)
+        [HarmonyPatch(typeof(LocalPlayerAPI), nameof(LocalPlayerAPI.Username), MethodType.Getter)]
+        [HarmonyPatch(typeof(PlayerAPIBase), nameof(PlayerAPIBase.Username), MethodType.Getter)]
+        private static bool GetSpoofedUsername(ref PlayerAPIBase __instance, ref string __result)
         {
             if (__instance.IsRemote) return true;
             if (!EntryEnabled.Value) return true;
@@ -95,9 +95,9 @@ public class ScriptingSpoofer : MelonMod
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LocalPlayerApi), nameof(LocalPlayerApi.UserID), MethodType.Getter)]
-        [HarmonyPatch(typeof(PlayerApiBase), nameof(PlayerApiBase.UserID), MethodType.Getter)]
-        private static bool GetSpoofedUserId(ref PlayerApiBase __instance, ref string __result)
+        [HarmonyPatch(typeof(LocalPlayerAPI), nameof(LocalPlayerAPI.UserID), MethodType.Getter)]
+        [HarmonyPatch(typeof(PlayerAPIBase), nameof(PlayerAPIBase.UserID), MethodType.Getter)]
+        private static bool GetSpoofedUserId(ref PlayerAPIBase __instance, ref string __result)
         {
             if (__instance.IsRemote) return true;
             if (!EntryEnabled.Value) return true;

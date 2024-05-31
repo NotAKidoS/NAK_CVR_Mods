@@ -76,6 +76,14 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Cohtml.Runtime.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="com.dogu.gamium.engine.unity.runtime">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\com.dogu.gamium.engine.unity.runtime.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="com.dogu.gamium.engine.unity.runtime.protocol">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\com.dogu.gamium.engine.unity.runtime.protocol.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="Crc32.NET">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Crc32.NET.dll</HintPath>
             <Private>False</Private>
