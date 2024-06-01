@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelativeSync", "RelativeSyn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingSpoofer", "ScriptingSpoofer\ScriptingSpoofer.csproj", "{6B4396C7-B451-4FFD-87B6-3ED8377AC308}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaTTS", "LuaTTS\LuaTTS.csproj", "{24A069F4-4D69-4ABD-AA16-77765469245B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,10 @@ Global
 		{6B4396C7-B451-4FFD-87B6-3ED8377AC308}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B4396C7-B451-4FFD-87B6-3ED8377AC308}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B4396C7-B451-4FFD-87B6-3ED8377AC308}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24A069F4-4D69-4ABD-AA16-77765469245B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24A069F4-4D69-4ABD-AA16-77765469245B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24A069F4-4D69-4ABD-AA16-77765469245B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24A069F4-4D69-4ABD-AA16-77765469245B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

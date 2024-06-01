@@ -163,7 +163,7 @@ else {
 # Loop through each DLL file to strip and call NStrip.exe
 foreach($dllFile in $dllsToStrip) {
     $dllPath = Join-Path -Path $managedLibsFolder -ChildPath $dllFile
-    & $nStripPath -p -n $dllPath $dllPath
+    & $nStripPath -p -cg -n $dllPath $dllPath
 }
 
 Write-Host ""
