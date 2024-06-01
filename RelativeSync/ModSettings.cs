@@ -21,11 +21,11 @@ internal static class ModSettings
             "Debug Log Outbound", description: "Log outbound network messages.");
     
     private static readonly MelonPreferences_Entry<bool> ExpSyncedObjectHack =
-        Category.CreateEntry("ExpSyncedObjectHack", false,
+        Category.CreateEntry("ExpSyncedObjectHack", true,
             "Exp Spawnable Sync Fix", description: "Forces CVRSpawnable to update position in FixedUpdate. May help reduce local jitter on synced movement parents.");
     
     private static readonly MelonPreferences_Entry<bool> ExpNoInterpolationOnBBCC =
-        Category.CreateEntry("ExpNoInterpolationOnBBCC", false,
+        Category.CreateEntry("ExpNoInterpolationOnBBCC", true,
             "Exp Disable Interpolation on BBCC", description: "Disable interpolation on Better Better Character Controller. May help reduce local jitter on synced movement parents.");
     
     #endregion Melon Preferences
