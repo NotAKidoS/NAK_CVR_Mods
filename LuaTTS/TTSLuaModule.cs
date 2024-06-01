@@ -6,13 +6,11 @@ using MoonSharp.Interpreter;
 namespace NAK.LuaTTS.Modules;
 
 [PublicAPI] // fak off its used
-public class TTSLuaModule
+public class TTSLuaModule : BaseScriptedStaticWrapper
 {
-    private CVRLuaContext context;
-        
-    internal TTSLuaModule(CVRLuaContext context)
+    public TTSLuaModule(CVRLuaContext context) : base(context)
     {
-        this.context = context; // we don't really need the context for this shit module
+        // yes
     }
 
     internal static object RegisterUserData(Script script, CVRLuaContext context)
@@ -22,46 +20,101 @@ public class TTSLuaModule
     }
 
     // Check if TTS is playing
-    public static bool IsPlaying()
-        => Comms_TTSHandler.Instance.IsPlaying;
+    public bool IsPlaying()
+    {
+        CheckIfCanAccessMethod(nameof(IsPlaying), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        return Comms_TTSHandler.Instance.IsPlaying;
+    }
     
     // Check if TTS is processing a message
-    public static bool IsProcessing()
-        => Comms_TTSHandler.Instance.IsProcessing;
+    public bool IsProcessing()
+    {
+        CheckIfCanAccessMethod(nameof(IsProcessing), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        return Comms_TTSHandler.Instance.IsProcessing;
+    }
     
     // Check if TTS has no modules (only true for proton?)
-    public static bool HasAnyModules()
-        => Comms_TTSHandler._modules.Count > 0;
+    public bool HasAnyModules()
+    {
+        CheckIfCanAccessMethod(nameof(HasAnyModules), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        return Comms_TTSHandler._modules.Count > 0;
+    }
     
     // Get all available TTS modules
-    public static string[] GetAvailableModules()
-        => Comms_TTSHandler._modules.Keys.ToArray();
+    public string[] GetAvailableModules()
+    {
+        CheckIfCanAccessMethod(nameof(GetAvailableModules), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        return Comms_TTSHandler._modules.Keys.ToArray();
+    }
     
     // Get the current TTS module
-    public static string GetCurrentModule()
-        => Comms_TTSHandler.Instance.CurrentModuleId;
+    public string GetCurrentModule()
+    {
+        CheckIfCanAccessMethod(nameof(GetCurrentModule), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        return Comms_TTSHandler.Instance.CurrentModuleId;
+    }
 
     // Set the current TTS module
-    public static void SetCurrentModule(string moduleId)
-        => Comms_TTSHandler.Instance.ChangeModule(moduleId);
+    public void SetCurrentModule(string moduleId)
+    {
+        CheckIfCanAccessMethod(nameof(SetCurrentModule), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+         Comms_TTSHandler.Instance.ChangeModule(moduleId);
+    }
 
     // Process a message for TTS playback
-    public static void ProcessMessage(string message)
-        => Comms_TTSHandler.Instance.ProcessMessage(message);
+    public void ProcessMessage(string message)
+    {
+        CheckIfCanAccessMethod(nameof(ProcessMessage), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        Comms_TTSHandler.Instance.ProcessMessage(message);
+    }
 
     // Cancel any currently playing TTS message
-    public static void CancelMessage()
-        => Comms_TTSHandler.Instance.ProcessMessage(string.Empty); // empty message cancels the current message
+    public void CancelMessage()
+    {
+        CheckIfCanAccessMethod(nameof(CancelMessage), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        Comms_TTSHandler.Instance.ProcessMessage(string.Empty); // empty message cancels the current message
+    }
 
     // Get all available voices for the current module
-    public static string[] GetAvailableVoices()
-        => Comms_TTSHandler.Instance.CurrentModule.Voices.Keys.ToArray();
+    public string[] GetAvailableVoices()
+    {
+        CheckIfCanAccessMethod(nameof(GetAvailableVoices), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        return Comms_TTSHandler.Instance.CurrentModule.Voices.Keys.ToArray();
+    }
 
     // Get the current voice for the module
-    public static string GetCurrentVoice()
-        => Comms_TTSHandler.Instance.CurrentModule.CurrentVoice;
+    public string GetCurrentVoice()
+    {
+        CheckIfCanAccessMethod(nameof(GetCurrentVoice), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        return Comms_TTSHandler.Instance.CurrentModule.CurrentVoice;
+    }
 
     // Set the current voice for the module
-    public static void SetCurrentVoice(string voiceName)
-        => Comms_TTSHandler.Instance.ChangeVoice(voiceName);
+    public void SetCurrentVoice(string voiceName)
+    {
+        CheckIfCanAccessMethod(nameof(SetCurrentVoice), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.LOCAL);
+        
+        Comms_TTSHandler.Instance.ChangeVoice(voiceName);
+    }
 }
