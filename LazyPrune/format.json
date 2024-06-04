@@ -1,7 +1,7 @@
 {
-  "_id": -1,
+  "_id": 214,
   "name": "LazyPrune",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r30/LazyPrune.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r31/LazyPrune.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/LazyPrune/",
-  "changelog": "- Initial Release",
+  "changelog": "- Fixed killtime check, would needlessly check known non-eligible objects for pruning.",
   "embedcolor": "#1c75f1"
 }
