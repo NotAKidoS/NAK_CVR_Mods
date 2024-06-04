@@ -19,6 +19,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r31/LazyPrune.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/LazyPrune/",
-  "changelog": "- Fixed killtime check, would needlessly check known non-eligible objects for pruning.\n- Moved away from using GameEventSystem as it proved unreliable for tracking remote Avatar destruction.",
+  "changelog": "- Fixed killtime check, would needlessly check known non-eligible objects for pruning.\n- Moved away from using GameEventSystem as it proved unreliable for tracking remote Avatar destruction, now patching Object Loader directly as loadedObject is not assigned when object wrappers are enabled.",
   "embedcolor": "#1c75f1"
 }
