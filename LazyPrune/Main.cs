@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.IO;
+using ABI_RC.Core.Networking.API.Responses;
 using ABI_RC.Systems.GameEventSystem;
 using ABI.CCK.Components;
 using HarmonyLib;
@@ -28,30 +30,26 @@ public class LazyPrune : MelonMod
         // listen for world load
         CVRGameEventSystem.World.OnLoad.AddListener(OnWorldLoaded);
         
-        // listen for local avatar load/clear events
+        // listen for local avatar bundle load
         HarmonyInstance.Patch(
-            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.Awake),
+            typeof(CVRObjectLoader).GetMethod(nameof(CVRObjectLoader.InstantiateAvatarFromExistingPrefab),
                 BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
-            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectCreated),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
-        HarmonyInstance.Patch(
-            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.OnDestroy),
-                BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
-            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnInstantiateAvatarFromExistingPrefab),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         
-        // listen for prop load/clear events
+        // listen for prop bundle load
         HarmonyInstance.Patch(
-            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnEnable),
+            typeof(CVRObjectLoader).GetMethod(nameof(CVRObjectLoader.InstantiateSpawnableFromExistingPrefab),
                 BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
-            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectCreated),
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnInstantiateSpawnableFromExistingPrefab),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
+
+        // listen for object destruction
         HarmonyInstance.Patch(
-            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnDestroy),
-                BindingFlags.Public | BindingFlags.Instance), // earliest callback (why is this public?)
+            typeof(CVRObjectLoader).GetMethod(nameof(CVRObjectLoader.CheckForDestruction),
+                BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
@@ -59,6 +57,23 @@ public class LazyPrune : MelonMod
 
     #region Game Events
     
+    // fucking dumb
+    private static void OnInstantiateAvatarFromExistingPrefab(string objectId, string instantiationTarget,
+        GameObject prefabObject,
+        ref CVRObjectLoader.LoadedObject loadedObject, string blockReason, AssetManagement.AvatarTags? avatarTags,
+        bool shouldFilter, bool isBlocked,
+        CompatibilityVersions compatibilityVersion)
+    {
+        OnObjectCreated(ref loadedObject);
+    }
+
+    private static void OnInstantiateSpawnableFromExistingPrefab(string objectId, string instantiationTarget,
+        GameObject prefabObject, CVRObjectLoader.LoadedObject loadedObject, AssetManagement.PropTags propTags,
+        CompatibilityVersions compatibilityVersion)
+    {
+        OnObjectCreated(ref loadedObject);
+    }
+
     private static void OnWorldLoaded(string guid)
     {
         if (_lastLoadedWorld != guid)
@@ -71,7 +86,10 @@ public class LazyPrune : MelonMod
     private static void OnObjectCreated(ref CVRObjectLoader.LoadedObject ___loadedObject)
     {
         if (___loadedObject == null)
+        {
+            Logger.Error("Avatar/Prop created with no backed LoadedObject.");
             return; // uhh
+        }
         
         if (_loadedObjects.ContainsKey(___loadedObject))
         {
@@ -83,19 +101,19 @@ public class LazyPrune : MelonMod
         _loadedObjects.Add(___loadedObject, -1); // mark as ineligible for pruning
     }
     
-    private static void OnObjectDestroyed(ref CVRObjectLoader.LoadedObject ___loadedObject)
+    private static void OnObjectDestroyed(CVRObjectLoader.LoadedObject loadedObject)
     {
-        if (___loadedObject == null)
+        if (loadedObject == null)
         {
-            Logger.Error("Avatar/Prop destroyed with no backed LoadedObject. This is bad.");
+            Logger.Error("Avatar/Prop destroyed with no backed LoadedObject.");
             return; // handled by AttemptPruneObject
         }
         
-        if (___loadedObject.refCount > 2)
-            return; // we added our own ref, so begin death count at 2 (decrements one more after this callback)
+        if (loadedObject.refCount > 1)
+            return; // we added our own ref, so begin death count at 1 (we are the last one)
         
-        if (_loadedObjects.ContainsKey(___loadedObject))
-            _loadedObjects[___loadedObject] = Time.time + OBJECT_CACHE_TIMEOUT * 60f;
+        if (_loadedObjects.ContainsKey(loadedObject))
+            _loadedObjects[loadedObject] = Time.time + OBJECT_CACHE_TIMEOUT * 60f;
     }
     
     #endregion Game Events
