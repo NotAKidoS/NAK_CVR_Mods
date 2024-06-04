@@ -30,28 +30,31 @@ public class LazyPrune : MelonMod
         
         // listen for local avatar load/clear events
         HarmonyInstance.Patch(
-            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.Awake)), // earliest callback
+            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.Awake),
+                BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectCreated),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch(
-            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.OnDestroy)),
+            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.OnDestroy),
+                BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         
         // listen for prop load/clear events
         HarmonyInstance.Patch(
-            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnEnable)), // earliest callback
+            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnEnable),
+                BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectCreated),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch(
-            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnDestroy)),
+            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnDestroy),
+                BindingFlags.Public | BindingFlags.Instance), // earliest callback (why is this public?)
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
-
     }
 
     #region Game Events
@@ -61,6 +64,7 @@ public class LazyPrune : MelonMod
         if (_lastLoadedWorld != guid)
             ForcePrunePendingObjects();
         
+        // did you know worlds can spam OnEnabled :)
         _lastLoadedWorld = guid;
     }
     
