@@ -1,5 +1,8 @@
-﻿using ABI_RC.Core.IO;
+﻿using System.Reflection;
+using ABI_RC.Core.IO;
 using ABI_RC.Systems.GameEventSystem;
+using ABI.CCK.Components;
+using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 
@@ -26,16 +29,29 @@ public class LazyPrune : MelonMod
         CVRGameEventSystem.World.OnLoad.AddListener(OnWorldLoaded);
         
         // listen for local avatar load/clear events
-        CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener((avatar) => OnObjectCreated(avatar.loadedObject));
-        CVRGameEventSystem.Avatar.OnLocalAvatarClear.AddListener((avatar) => OnObjectDestroyed(avatar ? avatar.loadedObject : null));
+        HarmonyInstance.Patch(
+            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.Awake)), // earliest callback
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectCreated),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        HarmonyInstance.Patch(
+            typeof(CVRAvatar).GetMethod(nameof(CVRAvatar.OnDestroy)),
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
         
-        // listen for remote avatar load/clear events
-        CVRGameEventSystem.Avatar.OnRemoteAvatarLoad.AddListener((_, avatar) => OnObjectCreated(avatar.loadedObject));
-        CVRGameEventSystem.Avatar.OnRemoteAvatarClear.AddListener((_, avatar) => OnObjectDestroyed(avatar != null ? avatar.loadedObject : null));
-        
-        // listen for spawnable instantiate/destroy events
-        CVRGameEventSystem.Spawnable.OnInstantiate.AddListener((_, spawnable) => OnObjectCreated(spawnable.loadedObject));
-        CVRGameEventSystem.Spawnable.OnDestroy.AddListener((_, spawnable) => OnObjectDestroyed(spawnable != null ? spawnable.loadedObject : null));
+        // listen for prop load/clear events
+        HarmonyInstance.Patch(
+            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnEnable)), // earliest callback
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectCreated),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        HarmonyInstance.Patch(
+            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnDestroy)),
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+
     }
 
     #region Game Events
@@ -48,31 +64,34 @@ public class LazyPrune : MelonMod
         _lastLoadedWorld = guid;
     }
     
-    private static void OnObjectCreated(CVRObjectLoader.LoadedObject loadedObject)
+    private static void OnObjectCreated(ref CVRObjectLoader.LoadedObject ___loadedObject)
     {
-        if (loadedObject == null)
+        if (___loadedObject == null)
             return; // uhh
         
-        if (_loadedObjects.ContainsKey(loadedObject))
+        if (_loadedObjects.ContainsKey(___loadedObject))
         {
-            _loadedObjects[loadedObject] = -1; // mark as ineligible for pruning
+            _loadedObjects[___loadedObject] = -1; // mark as ineligible for pruning
             return; // already in cache
         }
         
-        loadedObject.refCount++; // increment ref count
-        _loadedObjects.Add(loadedObject, -1); // mark as ineligible for pruning
+        ___loadedObject.refCount++; // increment ref count
+        _loadedObjects.Add(___loadedObject, -1); // mark as ineligible for pruning
     }
     
-    private static void OnObjectDestroyed(CVRObjectLoader.LoadedObject loadedObject)
+    private static void OnObjectDestroyed(ref CVRObjectLoader.LoadedObject ___loadedObject)
     {
-        if (loadedObject == null)
+        if (___loadedObject == null)
+        {
+            Logger.Error("Avatar/Prop destroyed with no backed LoadedObject. This is bad.");
             return; // handled by AttemptPruneObject
+        }
         
-        if (loadedObject.refCount > 2) 
+        if (___loadedObject.refCount > 2)
             return; // we added our own ref, so begin death count at 2 (decrements one more after this callback)
         
-        if (_loadedObjects.ContainsKey(loadedObject))
-            _loadedObjects[loadedObject] = Time.time + OBJECT_CACHE_TIMEOUT * 60f;
+        if (_loadedObjects.ContainsKey(___loadedObject))
+            _loadedObjects[___loadedObject] = Time.time + OBJECT_CACHE_TIMEOUT * 60f;
     }
     
     #endregion Game Events
