@@ -95,7 +95,7 @@ public class LazyPrune : MelonMod
         for (int i = _loadedObjects.Count - 1; i >= 0; i--)
         {
             (CVRObjectLoader.LoadedObject loadedObject, var killTime) = _loadedObjects.ElementAt(i);
-            if (!(killTime < time)) continue;
+            if (!(killTime < time) || killTime < 0) continue;
             AttemptPruneObject(loadedObject); // prune expired objects
             //if (unloaded++ >= MAX_OBJECTS_UNLOADED_AT_ONCE) break; // limit unloads per check
         }
