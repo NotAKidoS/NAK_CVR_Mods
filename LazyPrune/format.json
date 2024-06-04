@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "LazyPrune",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection.\n\nUnused objects are pruned after 3 minutes, or when loading into a different world.",
+  "searchtags": [
+    "cache",
+    "prune",
+    "bundle",
+    "download",
+    "load",
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r30/LazyPrune.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/LazyPrune/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#1c75f1"
+}

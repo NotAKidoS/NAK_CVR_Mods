@@ -53,6 +53,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingSpoofer", "Scripti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaTTS", "LuaTTS\LuaTTS.csproj", "{24A069F4-4D69-4ABD-AA16-77765469245B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPrune", "LazyPrune\LazyPrune.csproj", "{8FA6D481-5801-4E4C-822E-DE561155D22B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +161,10 @@ Global
 		{24A069F4-4D69-4ABD-AA16-77765469245B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24A069F4-4D69-4ABD-AA16-77765469245B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24A069F4-4D69-4ABD-AA16-77765469245B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FA6D481-5801-4E4C-822E-DE561155D22B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FA6D481-5801-4E4C-822E-DE561155D22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FA6D481-5801-4E4C-822E-DE561155D22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FA6D481-5801-4E4C-822E-DE561155D22B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
