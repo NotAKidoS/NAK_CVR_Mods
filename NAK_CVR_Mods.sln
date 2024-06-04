@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaTTS", "LuaTTS\LuaTTS.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPrune", "LazyPrune\LazyPrune.csproj", "{8FA6D481-5801-4E4C-822E-DE561155D22B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReconnectionSystemFix", "ReconnectionSystemFix\ReconnectionSystemFix.csproj", "{05C427DD-1261-4AAD-B316-A551FC126F2C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -165,6 +167,10 @@ Global
 		{8FA6D481-5801-4E4C-822E-DE561155D22B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FA6D481-5801-4E4C-822E-DE561155D22B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FA6D481-5801-4E4C-822E-DE561155D22B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05C427DD-1261-4AAD-B316-A551FC126F2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05C427DD-1261-4AAD-B316-A551FC126F2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05C427DD-1261-4AAD-B316-A551FC126F2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05C427DD-1261-4AAD-B316-A551FC126F2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

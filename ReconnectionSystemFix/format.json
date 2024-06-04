@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "ReconnectionSystemFix",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Prevents recreating and reloading all remote players & avatars during a reconnection event.",
+  "searchtags": [
+    "reload",
+    "rejoin",
+    "fix",
+    "avatar",
+    "download"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r30/ReconnectionSystemFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ReconnectionSystemFix/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#e87d0d"
+}

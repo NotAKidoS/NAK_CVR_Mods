@@ -7,7 +7,7 @@ namespace NAK.LazyPrune;
 
 public class LazyPrune : MelonMod
 {
-    private static MelonLogger.Instance Logger;
+    internal static MelonLogger.Instance Logger;
 
     //private const int MAX_OBJECTS_UNLOADED_AT_ONCE = 5; // just to alleviate hitch on mass destruction
     private const float OBJECT_CACHE_TIMEOUT = 3f; // minutes
