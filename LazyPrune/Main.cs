@@ -33,7 +33,7 @@ public class LazyPrune : MelonMod
         // listen for local avatar bundle load
         HarmonyInstance.Patch(
             typeof(CVRObjectLoader).GetMethod(nameof(CVRObjectLoader.InstantiateAvatarFromExistingPrefab),
-                BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
+                BindingFlags.Public | BindingFlags.Instance), // earliest callback (why the fuck are you public)
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnInstantiateAvatarFromExistingPrefab),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
@@ -49,7 +49,7 @@ public class LazyPrune : MelonMod
         // listen for object destruction
         HarmonyInstance.Patch(
             typeof(CVRObjectLoader).GetMethod(nameof(CVRObjectLoader.CheckForDestruction),
-                BindingFlags.NonPublic | BindingFlags.Instance), // earliest callback
+                BindingFlags.Public | BindingFlags.Instance), // earliest callback
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
