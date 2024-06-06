@@ -1,7 +1,7 @@
 {
   "_id": 214,
   "name": "LazyPrune",
-  "modversion": "1.0.1",
+  "modversion": "1.0.2",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r31/LazyPrune.dll",
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r32/LazyPrune.dll",
   "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/LazyPrune/",
-  "changelog": "- Fixed killtime check, would needlessly check known non-eligible objects for pruning.\n- Moved away from using GameEventSystem as it proved unreliable for tracking remote Avatar destruction, now patching Object Loader directly as loadedObject is not assigned when object wrappers are enabled.",
+  "changelog": "- Fixed killtime check, would needlessly check known non-eligible objects for pruning.\n- Moved away from using GameEventSystem as it proved unreliable for tracking remote Avatar destruction, now patching Object Loader directly as loadedObject is not assigned when object wrappers are enabled.\n- Fixed scheduled prune job being nuked as it was created before scene load.",
   "embedcolor": "#1c75f1"
 }

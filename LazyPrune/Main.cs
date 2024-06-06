@@ -3,7 +3,6 @@ using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.IO;
 using ABI_RC.Core.Networking.API.Responses;
 using ABI_RC.Systems.GameEventSystem;
-using ABI.CCK.Components;
 using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
@@ -12,20 +11,18 @@ namespace NAK.LazyPrune;
 
 public class LazyPrune : MelonMod
 {
-    internal static MelonLogger.Instance Logger;
+    private static MelonLogger.Instance Logger;
 
-    //private const int MAX_OBJECTS_UNLOADED_AT_ONCE = 5; // just to alleviate hitch on mass destruction
-    private const float OBJECT_CACHE_TIMEOUT = 3f; // minutes
+    private const int MAX_OBJECTS_UNLOADED_AT_ONCE = 3; // just to alleviate hitch on mass destruction
+    private const float OBJECT_CACHE_TIMEOUT = 2f; // minutes
     private static readonly Dictionary<CVRObjectLoader.LoadedObject, float> _loadedObjects = new();
 
     private static string _lastLoadedWorld;
+    private static bool _isInitialized;
     
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
-        
-        // every minute, check for objects to prune
-        SchedulerSystem.AddJob(CheckForObjectsToPrune, 1f, 60f, -1);
         
         // listen for world load
         CVRGameEventSystem.World.OnLoad.AddListener(OnWorldLoaded);
@@ -53,11 +50,23 @@ public class LazyPrune : MelonMod
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
+
+        // hook into Unity's low memory warning
+        Application.lowMemory += OnLowMemory;
     }
+
+    #region Application Events
+
+    private static void OnLowMemory()
+    {
+        Logger.Warning("Low memory warning received! Forcing prune of all pending objects.");
+        ForcePrunePendingObjects();
+    }
+
+    #endregion Application Events
 
     #region Game Events
     
-    // fucking dumb
     private static void OnInstantiateAvatarFromExistingPrefab(string objectId, string instantiationTarget,
         GameObject prefabObject,
         ref CVRObjectLoader.LoadedObject loadedObject, string blockReason, AssetManagement.AvatarTags? avatarTags,
@@ -76,10 +85,16 @@ public class LazyPrune : MelonMod
 
     private static void OnWorldLoaded(string guid)
     {
+        if (!_isInitialized)
+        {
+            // every minute, check for objects to prune
+            SchedulerSystem.AddJob(CheckForObjectsToPrune, 1f, 10f, -1);
+            _isInitialized = true;
+        }
+        
         if (_lastLoadedWorld != guid)
             ForcePrunePendingObjects();
         
-        // did you know worlds can spam OnEnabled :)
         _lastLoadedWorld = guid;
     }
     
@@ -88,13 +103,13 @@ public class LazyPrune : MelonMod
         if (___loadedObject == null)
         {
             Logger.Error("Avatar/Prop created with no backed LoadedObject.");
-            return; // uhh
+            return;
         }
         
         if (_loadedObjects.ContainsKey(___loadedObject))
         {
             _loadedObjects[___loadedObject] = -1; // mark as ineligible for pruning
-            return; // already in cache
+            return;
         }
         
         ___loadedObject.refCount++; // increment ref count
@@ -106,11 +121,11 @@ public class LazyPrune : MelonMod
         if (loadedObject == null)
         {
             Logger.Error("Avatar/Prop destroyed with no backed LoadedObject.");
-            return; // handled by AttemptPruneObject
+            return;
         }
         
         if (loadedObject.refCount > 1)
-            return; // we added our own ref, so begin death count at 1 (we are the last one)
+            return; 
         
         if (_loadedObjects.ContainsKey(loadedObject))
             _loadedObjects[loadedObject] = Time.time + OBJECT_CACHE_TIMEOUT * 60f;
@@ -125,20 +140,20 @@ public class LazyPrune : MelonMod
         for (int i = _loadedObjects.Count - 1; i >= 0; i--)
         {
             (CVRObjectLoader.LoadedObject loadedObject, var killTime) = _loadedObjects.ElementAt(i);
-            if (killTime > 0) AttemptPruneObject(loadedObject); // prune all pending objects
+            if (killTime > 0) AttemptPruneObject(loadedObject);
         }
     }
     
     private static void CheckForObjectsToPrune()
     {
-        //int unloaded = 0;
+        int unloaded = 0;
         float time = Time.time;
         for (int i = _loadedObjects.Count - 1; i >= 0; i--)
         {
             (CVRObjectLoader.LoadedObject loadedObject, var killTime) = _loadedObjects.ElementAt(i);
             if (!(killTime < time) || killTime < 0) continue;
-            AttemptPruneObject(loadedObject); // prune expired objects
-            //if (unloaded++ >= MAX_OBJECTS_UNLOADED_AT_ONCE) break; // limit unloads per check
+            AttemptPruneObject(loadedObject);
+            if (unloaded++ >= MAX_OBJECTS_UNLOADED_AT_ONCE) break;
         }
     }
     
@@ -153,15 +168,15 @@ public class LazyPrune : MelonMod
         if (loadedObject.refCount > 1)
         {
             Logger.Error($"Object {loadedObject.prefabName} has ref count {loadedObject.refCount}, expected 1");
-            _loadedObjects[loadedObject] = -1; // mark as ineligible for pruning ???
-            return; // is something somehow holding a reference?
+            _loadedObjects[loadedObject] = -1;
+            return;
         }
         
         Logger.Msg($"Pruning object {loadedObject.prefabName}");
-        _loadedObjects.Remove(loadedObject); // remove from cache
+        _loadedObjects.Remove(loadedObject);
         
-        loadedObject.refCount--; // decrement ref count
-        if (CVRObjectLoader.Instance != null) // provoke destruction
+        loadedObject.refCount--;
+        if (CVRObjectLoader.Instance != null)
             CVRObjectLoader.Instance.CheckForDestruction(loadedObject);
     }
     
