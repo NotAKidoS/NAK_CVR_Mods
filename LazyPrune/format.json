@@ -12,7 +12,7 @@
     "prune",
     "bundle",
     "download",
-    "load",
+    "load"
   ],
   "requirements": [
     "None"
