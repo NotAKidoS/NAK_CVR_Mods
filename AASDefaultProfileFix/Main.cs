@@ -12,13 +12,13 @@ public class AASDefaultProfileFix : MelonMod
     {
         HarmonyInstance.Patch(
             typeof(CVRAdvancedAvatarSettings).GetMethod(nameof(CVRAdvancedAvatarSettings.LoadProfile),
-                BindingFlags.Public | BindingFlags.Instance), // earliest callback (why the fuck are you public)
+                BindingFlags.Public | BindingFlags.Instance),
             prefix: new HarmonyMethod(typeof(AASDefaultProfileFix).GetMethod(nameof(OnAttemptLoadAASProfile),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
     }
 
-    // when default profile is selected the defaultProfileName string is empty
+    // when default profile is selected the defaultProfileName string is emptydepends
     // so it does not load/apply anything- we will fix by forcing LoadDefault when this is detected
     private static bool OnAttemptLoadAASProfile(string profileName, AvatarAnimatorManager animatorManager,
         ref CVRAdvancedAvatarSettings __instance)
