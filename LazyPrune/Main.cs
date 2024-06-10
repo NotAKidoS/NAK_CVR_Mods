@@ -2,6 +2,8 @@
 using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.IO;
 using ABI_RC.Core.Networking.API.Responses;
+using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
 using ABI_RC.Systems.GameEventSystem;
 using HarmonyLib;
 using MelonLoader;
@@ -50,21 +52,37 @@ public class LazyPrune : MelonMod
             prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnObjectDestroyed),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
-
-        // hook into Unity's low memory warning
-        Application.lowMemory += OnLowMemory;
+        
+        // nuke qm debug method as there is a race condition that locks up download queue 
+        HarmonyInstance.Patch(
+            typeof(CVRDownloadManager).GetMethod(nameof(CVRDownloadManager.UpdateUiDownloadStatus),
+                BindingFlags.Public | BindingFlags.Instance),
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnUpdateUiDownloadStatus),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        
+        // another race condition that causes instantiation queue to lock up
+        HarmonyInstance.Patch(
+            typeof(PuppetMaster).GetMethod(nameof(PuppetMaster.AvatarInstantiated),
+                BindingFlags.Public | BindingFlags.Instance),
+            prefix: new HarmonyMethod(typeof(LazyPrune).GetMethod(nameof(OnAvatarInstantiated),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
     }
 
-    #region Application Events
+    #region Game Fixes
+    
+    private static bool OnUpdateUiDownloadStatus() => false;
 
-    private static void OnLowMemory()
+    private static bool OnAvatarInstantiated(ref GameObject ___avatarObject)
     {
-        Logger.Warning("Low memory warning received! Forcing prune of all pending objects.");
-        ForcePrunePendingObjects();
+        if (___avatarObject != null) return true; // instantiate coroutine is try-catch'd, so purposefully throw to have it catch
+        Logger.Warning("Caught null avatar object in PuppetMaster.AvatarInstantiated. Throwing exception so ObjectLoader can catch.");
+        throw new Exception("LazyPrune: PuppetMaster Avatar instantiated with null object!");
     }
 
-    #endregion Application Events
-
+    #endregion Game  Fixes
+    
     #region Game Events
     
     private static void OnInstantiateAvatarFromExistingPrefab(string objectId, string instantiationTarget,
@@ -73,6 +91,12 @@ public class LazyPrune : MelonMod
         bool shouldFilter, bool isBlocked,
         CompatibilityVersions compatibilityVersion)
     {
+        if (prefabObject == MetaPort.Instance.blockedAvatarPrefab)
+        {
+            Logger.Msg($"Blocked avatar prefab is loading. Ignoring...");
+            return;
+        }
+        
         OnObjectCreated(ref loadedObject);
     }
 
@@ -80,6 +104,12 @@ public class LazyPrune : MelonMod
         GameObject prefabObject, CVRObjectLoader.LoadedObject loadedObject, AssetManagement.PropTags propTags,
         CompatibilityVersions compatibilityVersion)
     {
+        if (prefabObject == MetaPort.Instance.blockedSpawnablePrefab)
+        {
+            Logger.Msg($"Blocked spawnable prefab is loading. Ignoring...");
+            return;
+        }
+        
         OnObjectCreated(ref loadedObject);
     }
 
