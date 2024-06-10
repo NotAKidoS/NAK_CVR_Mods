@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "AASDefaultProfileFix",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes the Default AAS profile not being applied when loading into an avatar without a profile selected.\n\nBy default, the game will not apply anything and the avatar will default to the state found within the Controller parameters.",
+  "searchtags": [
+    "aas",
+    "profile",
+    "default",
+    "fix",
+    "meow"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r33/AASDefaultProfileFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASDefaultProfileFix/",
+  "changelog": "- Initial release",
+  "embedcolor": "#1c75f1"
+}
