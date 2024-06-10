@@ -18,6 +18,9 @@ public class RelativeSyncMod : MelonMod
         // Experimental sync hack
         ApplyPatches(typeof(CVRSpawnablePatches));
         
+        // Experimental pickup in chair hack
+        ApplyPatches(typeof(CVRPickupObjectPatches));
+        
         // Experimental no interpolation on Better Better Character Controller
         ApplyPatches(typeof(BetterBetterCharacterControllerPatches));
         

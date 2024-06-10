@@ -28,6 +28,10 @@ internal static class ModSettings
         Category.CreateEntry("ExpNoInterpolationOnBBCC", true,
             "Exp Disable Interpolation on BBCC", description: "Disable interpolation on Better Better Character Controller. May help reduce local jitter on synced movement parents.");
     
+    private static readonly MelonPreferences_Entry<bool> ExpSeatAndPickupsHack =
+        Category.CreateEntry("ExpSeatAndPickupsHack", true,
+            "Exp Seat and Pickups Hack", description: "Forces CVRSeat to update after Character Controller update.");
+    
     #endregion Melon Preferences
     
     internal static void Initialize()
@@ -44,5 +48,6 @@ internal static class ModSettings
         ModNetwork.Debug_NetworkOutbound = DebugLogOutbound.Value;
         Patches.CVRSpawnablePatches.UseHack = ExpSyncedObjectHack.Value;
         Patches.BetterBetterCharacterControllerPatches.NoInterpolation = ExpNoInterpolationOnBBCC.Value;
+        Patches.BetterBetterCharacterControllerPatches.UseSeatAndPickupsHack = ExpSeatAndPickupsHack.Value;
     }
 }
