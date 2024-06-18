@@ -63,7 +63,7 @@ internal static class CVRSpawnablePatches
     [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.Start))]
     private static void Postfix_CVRSpawnable_Start(ref CVRSpawnable __instance)
     {
-        __instance.AddComponentIfMissing<OriginShiftSpawnableReceiver>();
+        //__instance.AddComponentIfMissing<OriginShiftSpawnableReceiver>(); //todo: investigate if this is needed
         
         // test adding to the wrapper of the spawnable
         Transform wrapper = __instance.transform.parent;

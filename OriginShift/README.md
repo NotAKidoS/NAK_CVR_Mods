@@ -21,6 +21,7 @@ Experimental mod that allows world origin to be shifted to prevent floating poin
 
 ## Mod Incompatibilities
 - PlayerRagdollMod will freak out when you ragdoll between chunk boundaries.
+  - Partial conflict with RelativeSyncs experimental Spawnable Sync Fix.
 
 ---
 

@@ -28,7 +28,6 @@ namespace NAK.OriginShift
             _characterController = GetComponent<BetterBetterCharacterController>();
 #endif
             OriginShiftManager.OnPostOriginShifted += OnPostOriginShifted;
-            StartCoroutine(FixedUpdateCoroutine());
         }
 
         private void OnDestroy()
@@ -37,7 +36,7 @@ namespace NAK.OriginShift
             StopAllCoroutines();
         }
         
-        private void LateFixedUpdate()
+        private void Update()
         {
             // in CVR use GetPlayerPosition to account for VR offset
             Vector3 position = PlayerSetup.Instance.GetPlayerPosition();
@@ -73,21 +72,5 @@ namespace NAK.OriginShift
         }
     
         #endregion Origin Shift Events
-        
-        #region LateFixedUpdate Implementation
-        
-        private readonly YieldInstruction _fixedUpdateYield = new WaitForFixedUpdate();
-        
-        private IEnumerator FixedUpdateCoroutine()
-        {
-            while (true)
-            {
-                yield return _fixedUpdateYield;
-                LateFixedUpdate(); // we need to run after all physics (specifically, character controller)
-            }
-            // ReSharper disable once IteratorNeverReturns
-        }
-
-        #endregion LateFixedUpdate Implementation
     }
 }
