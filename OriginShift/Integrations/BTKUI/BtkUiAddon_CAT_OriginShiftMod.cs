@@ -18,10 +18,10 @@ namespace NAK.OriginShiftMod.Integrations
         private static void Setup_OriginShiftModCategory(Page page)
         {
             // dear category
-            _ourCategory = AddMelonCategory(ref page, ModSettings.OSM_SettingsCategory);
+            _ourCategory = page.AddCategory(ModSettings.OSM_SettingsCategory, ModSettings.ModName, true, true, false);
             
             // the button
-            _ourMainButton = _ourCategory.AddButton(string.Empty, string.Empty, string.Empty, ButtonStyle.TextOnly);
+            _ourMainButton = _ourCategory.AddButton(string.Empty, string.Empty, string.Empty, ButtonStyle.TextWithIcon);
             _ourMainButton.OnPress += OnMainButtonClick;
             SetButtonState(OriginShiftManager.OriginShiftState.Inactive); // default state
             

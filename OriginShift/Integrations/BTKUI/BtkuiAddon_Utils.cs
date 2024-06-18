@@ -48,12 +48,6 @@ namespace NAK.OriginShiftMod.Integrations
             return category;
         }
         
-        private static Category AddMelonCategory(ref Page page, string displayName, bool showHeader = true)
-        {
-            Category category = page.AddCategory(displayName, showHeader);
-            return category;
-        }
-        
         #endregion Melon Preference Helpers
 
         #region Icon Utils

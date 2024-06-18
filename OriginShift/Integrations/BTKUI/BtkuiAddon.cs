@@ -22,8 +22,10 @@ namespace NAK.OriginShiftMod.Integrations
         {
             QuickMenuAPI.PrepareIcon(ModSettings.ModName, "OriginShift-Icon-Active",
                 GetIconStream("OriginShift-Icon-Active.png"));
+            
             QuickMenuAPI.PrepareIcon(ModSettings.ModName, "OriginShift-Icon-Inactive",
-                GetIconStream("OriginShift-Icon-Inactive.png"));            
+                GetIconStream("OriginShift-Icon-Inactive.png"));         
+            
             QuickMenuAPI.PrepareIcon(ModSettings.ModName, "OriginShift-Icon-Forced",
                 GetIconStream("OriginShift-Icon-Forced.png"));
         }
