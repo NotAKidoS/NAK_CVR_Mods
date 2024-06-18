@@ -132,10 +132,6 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\LibVLCSharp.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="LucHeart.CoreOSC">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\LucHeart.CoreOSC.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
         <Reference Include="MagicaCloth">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\MagicaCloth.dll</HintPath>
             <Private>False</Private>
@@ -190,22 +186,6 @@
         </Reference>
         <Reference Include="Oculus.VR">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Oculus.VR.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Photon3Unity3D">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Photon3Unity3D.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="PhotonRealtime">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\PhotonRealtime.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="PhotonVoice.API">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\PhotonVoice.API.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="PhotonVoice">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\PhotonVoice.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="PICO.Platform">
@@ -566,10 +546,6 @@
         </Reference>
         <Reference Include="Unity.Services.Core.Threading">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.Services.Core.Threading.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Unity.Services.Vivox">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.Services.Vivox.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="Unity.TextMeshPro">
@@ -934,10 +910,6 @@
         </Reference>
         <Reference Include="Valve.Newtonsoft.Json">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Valve.Newtonsoft.Json.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="websocket-sharp">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\websocket-sharp.dll</HintPath>
             <Private>False</Private>
         </Reference>
     </ItemGroup>

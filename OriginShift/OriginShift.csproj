@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>Sprays</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BTKUILib">
+      <HintPath>..\.ManagedLibs\BTKUILib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\origin-shift-inactive.png" />
+    <EmbeddedResource Include="Resources\OriginShift-Icon-Inactive.png" />
+    <None Remove="Resources\origin-shift-forced.png" />
+    <EmbeddedResource Include="Resources\OriginShift-Icon-Forced.png" />
+    <None Remove="Resources\origin-shift-active.png" />
+    <EmbeddedResource Include="Resources\OriginShift-Icon-Active.png" />
+  </ItemGroup>
+</Project>
