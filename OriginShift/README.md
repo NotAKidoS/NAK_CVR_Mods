@@ -8,6 +8,8 @@ Experimental mod that allows world origin to be shifted to prevent floating poin
 - Light Probe data cannot be shifted (until [unity 2022](https://docs.unity3d.com/2022.3/Documentation/Manual/LightProbes-Moving.html)).
 - Occlusion Culling data cannot be shifted.
   - When using "Forced" mode, occlusion culling is disabled.
+- Only 10k particle positions can be shifted per Particle System. (artificial limit)
+- Only 10k trail positions can be shifted per Trail Renderer. (artificial limit)
 
 ## Known Issues
 - Player position on a Movement Parent may slightly drift when passing a chunk boundary if being moved by a Force Applicator.
