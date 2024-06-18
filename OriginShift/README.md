@@ -11,6 +11,7 @@ Experimental mod that allows world origin to be shifted to prevent floating poin
 - Only 10k trail positions can be shifted per Trail Renderer (artificial limit).
 - Only 10k particle positions can be shifted per Particle System (artificial limit).
   - Potentially can fix by changing Particle System to Custom Simulation Space ? (untested)
+- World Constraints are not shifted.
 
 ## Known Issues
 - Player position on a Movement Parent may slightly drift when passing a chunk boundary if being moved by a Force Applicator (unsure how to fix).

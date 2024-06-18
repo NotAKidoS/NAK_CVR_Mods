@@ -93,6 +93,7 @@ internal static class RCC_SkidmarksManagerPatches
     [HarmonyPatch(typeof(RCC_SkidmarksManager), nameof(RCC_SkidmarksManager.Start))]
     private static void Postfix_RCC_SkidMarkManager_Start(ref RCC_SkidmarksManager __instance)
     {
+        // todo: blacklist from OriginShiftController so there isn't 2x shift in some cases
         __instance.gameObject.AddComponentIfMissing<OriginShiftTransformReceiver>();
     }
 }
