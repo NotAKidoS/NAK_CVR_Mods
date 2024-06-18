@@ -16,6 +16,8 @@ Experimental mod that allows world origin to be shifted to prevent floating poin
 ## Known Issues
 - Mod Network is not yet implemented, so Compatibility Mode is required to play with others.
 - Portable Camera drone mode is not yet offset by the world origin shift.
+- Chunk threshold past 15 units will break Voice Chat with remote players in some cases (without Compatibility Mode).
+  - This is because the voice server dictates who can hear who based on distance from each other and the world origin shift messes with that.
 
 ## Mod Incompatibilities
 - PlayerRagdollMod will freak out when you ragdoll between chunk boundaries.
