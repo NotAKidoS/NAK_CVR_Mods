@@ -63,9 +63,10 @@ internal static class CVRSpawnablePatches
     [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.Start))]
     private static void Postfix_CVRSpawnable_Start(ref CVRSpawnable __instance)
     {
-        Transform wrapper = __instance.transform.parent;
+        __instance.AddComponentIfMissing<OriginShiftSpawnableReceiver>();
         
         // test adding to the wrapper of the spawnable
+        Transform wrapper = __instance.transform.parent;
         wrapper.AddComponentIfMissing<OriginShiftTransformReceiver>();
         wrapper.AddComponentIfMissing<OriginShiftParticleSystemReceiver>();
         wrapper.AddComponentIfMissing<OriginShiftTrailRendererReceiver>();
@@ -215,6 +216,13 @@ internal static class CVRSyncHelperPatches
 
 internal static class CVRObjectSyncPatches
 {
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.Start))]
+    private static void Postfix_CVRObjectSync_Start(ref CVRObjectSync __instance)
+    {
+        __instance.gameObject.AddComponentIfMissing<OriginShiftObjectSyncReceiver>();
+    }
+    
     [HarmonyPrefix] // inbound object sync
     [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.receiveNetworkData))]
     [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.receiveNetworkDataJoin))]
