@@ -17,7 +17,6 @@ public class OriginShiftObjectSyncReceiver : MonoBehaviour
             OriginShiftMod.Logger.Error("OriginShiftObjectSyncReceiver: No CVRObjectSync found on GameObject: " + gameObject.name, this);
             enabled = false;
         }
-        OriginShiftManager.OnOriginShifted += OnOriginShifted;
     }
     
     private void OnEnable()

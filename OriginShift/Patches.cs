@@ -63,7 +63,7 @@ internal static class CVRSpawnablePatches
     [HarmonyPatch(typeof(CVRSpawnable), nameof(CVRSpawnable.Start))]
     private static void Postfix_CVRSpawnable_Start(ref CVRSpawnable __instance)
     {
-        //__instance.AddComponentIfMissing<OriginShiftSpawnableReceiver>(); //todo: investigate if this is needed
+        __instance.AddComponentIfMissing<OriginShiftSpawnableReceiver>(); //todo: investigate if this is needed
         
         // test adding to the wrapper of the spawnable
         Transform wrapper = __instance.transform.parent;
@@ -216,12 +216,12 @@ internal static class CVRSyncHelperPatches
 
 internal static class CVRObjectSyncPatches
 {
-    // [HarmonyPostfix]
-    // [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.Start))]
-    // private static void Postfix_CVRObjectSync_Start(ref CVRObjectSync __instance)
-    // {
-    //     __instance.gameObject.AddComponentIfMissing<OriginShiftObjectSyncReceiver>(); // todo: investigate if this is needed
-    // }
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.Start))]
+    private static void Postfix_CVRObjectSync_Start(ref CVRObjectSync __instance)
+    {
+        __instance.gameObject.AddComponentIfMissing<OriginShiftObjectSyncReceiver>(); // todo: investigate if this is needed
+    }
     
     [HarmonyPrefix] // inbound object sync
     [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.receiveNetworkData))]
@@ -279,6 +279,16 @@ internal static class CVRPortalManagerPatches
         Vector3 direction = Vector3.down;
         if (Physics.Raycast(origin, direction, out RaycastHit hit, 0.5f)) 
             portalTransform.SetParent(hit.transform);
+    }
+}
+
+internal static class CVRPickupObjectPatches
+{
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CVRPickupObject), nameof(CVRPickupObject.Start))]
+    private static void Postfix_CVRPickupObject_Start(ref CVRPickupObject __instance)
+    {
+        __instance.gameObject.AddComponentIfMissing<OriginShiftPickupObjectReceiver>();
     }
 }
 

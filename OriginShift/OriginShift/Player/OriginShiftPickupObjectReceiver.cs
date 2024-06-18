@@ -3,41 +3,40 @@ using UnityEngine;
 
 namespace NAK.OriginShift;
 
-public class OriginShiftSpawnableReceiver : MonoBehaviour
+public class OriginShiftPickupObjectReceiver : MonoBehaviour
 {
-    private CVRSpawnable _spawnable;
+    private CVRPickupObject _pickupObject;
 
     #region Unity Events
 
     private void Start()
     {
-        _spawnable = GetComponent<CVRSpawnable>();
-        if (_spawnable == null)
+        _pickupObject = GetComponent<CVRPickupObject>();
+        if (_pickupObject == null)
         {
-            OriginShiftMod.Logger.Error("OriginShiftSpawnableReceiver: No CVRSpawnable found on GameObject: " + gameObject.name, this);
+            OriginShiftMod.Logger.Error("OriginShiftPickupObjectReceiver requires a CVRPickupObject component!");
             enabled = false;
+            return;
         }
     }
-
+    
     private void OnEnable()
     {
         OriginShiftManager.OnOriginShifted += OnOriginShifted;
     }
-
+    
     private void OnDisable()
     {
         OriginShiftManager.OnOriginShifted -= OnOriginShifted;
     }
-    
-    #endregion Unity Events
 
+    #endregion Unity Events
+    
     #region Origin Shift Events
     
     private void OnOriginShifted(Vector3 shift)
     {
-        _spawnable.futurePosition += shift;
-        _spawnable.currentPosition += shift;
-        _spawnable.pastPosition += shift; // not used by game, just cached ?
+        _pickupObject._respawnHeight += shift.y;
     }
     
     #endregion Origin Shift Events
