@@ -55,19 +55,19 @@ namespace NAK.OriginShiftMod.Integrations
                 case OriginShiftManager.OriginShiftState.Inactive:
                     _ourMainButton.ButtonText = "Inactive";
                     _ourMainButton.ButtonIcon = "OSM_Icon_OriginShiftConfig";
-                    _ourMainButton.ButtonTooltip = "World does not use Origin Shift.";
+                    _ourMainButton.ButtonTooltip = "This world is not using Origin Shift.";
                     _ourMainButton.ButtonIcon = "OriginShift-Icon-Inactive";
                     break;
                 case OriginShiftManager.OriginShiftState.Active:
                     _ourMainButton.ButtonText = "Active";
                     _ourMainButton.ButtonIcon = "OSM_Icon_OriginShiftConfig";
-                    _ourMainButton.ButtonTooltip = "World uses Origin Shift.";
+                    _ourMainButton.ButtonTooltip = "This world is currently using Origin Shift.";
                     _ourMainButton.ButtonIcon = "OriginShift-Icon-Active";
                     break;
                 case OriginShiftManager.OriginShiftState.Forced:
                     _ourMainButton.ButtonText = "Forced";
                     _ourMainButton.ButtonIcon = "OSM_Icon_OriginShiftCopy";
-                    _ourMainButton.ButtonTooltip = "World is forced to use Origin Shift.";
+                    _ourMainButton.ButtonTooltip = "You have forced Origin Shift for this world.";
                     _ourMainButton.ButtonIcon = "OriginShift-Icon-Forced";
                     break;
             }
@@ -112,7 +112,7 @@ namespace NAK.OriginShiftMod.Integrations
             if (value)
             {
                 // lock the toggle
-                _ourToggle.ToggleTooltip = "This setting is locked while Origin Shift is forced in Public instances.";
+                _ourToggle.ToggleTooltip = "This setting is locked while Origin Shift is forced.";
                 _ourToggle.ToggleValue = true;
                 _ourToggle.Disabled = true;
             }
