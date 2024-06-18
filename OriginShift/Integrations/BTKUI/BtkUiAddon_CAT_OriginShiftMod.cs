@@ -32,6 +32,10 @@ namespace NAK.OriginShiftMod.Integrations
             
             // listen for state changes
             OriginShiftManager.OnStateChanged += OnOriginShiftStateChanged;
+            
+            // debug toggle
+            ToggleButton debugToggle = _ourCategory.AddToggle("Debug Overlay", "Displays coordinate & chunk debug information on the Desktop view.", false);
+            debugToggle.OnValueUpdated += OnDebugToggle;
         }
 
         #region Category Actions
@@ -131,5 +135,14 @@ namespace NAK.OriginShiftMod.Integrations
         }
 
         #endregion Toggle Actions
+
+        #region Debug Toggle Actions
+
+        private static void OnDebugToggle(bool value)
+        {
+            OriginShiftManager.Instance.ToggleDebugOverlay(value);
+        }
+
+        #endregion Debug Toggle Actions
     }
 }

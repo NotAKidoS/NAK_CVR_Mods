@@ -231,24 +231,15 @@ public class OriginShiftManager : MonoBehaviour
 
     #endregion Utility Methods
 
-    #region Unity Events
+    #region Debug Methods
 
-#if !UNITY_EDITOR
-    private void Update()
+    public void ToggleDebugOverlay(bool state)
     {
-        if (Input.GetKeyDown(KeyCode.P)) // press p to print chunk
-            OriginShiftMod.Logger.Msg($"Current Chunk: {ChunkOffset}");
-
-        // press o to toggle debug
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            if (TryGetComponent(out DebugTextDisplay debugTextDisplay))
-                Destroy(debugTextDisplay);
-            else
-                gameObject.AddComponent<DebugTextDisplay>();
-        } 
+        if (TryGetComponent(out DebugTextDisplay debugTextDisplay))
+            Destroy(debugTextDisplay);
+        else
+            gameObject.AddComponent<DebugTextDisplay>();
     }
-#endif
 
-    #endregion Unity Events
+    #endregion Debug Methods
 }
