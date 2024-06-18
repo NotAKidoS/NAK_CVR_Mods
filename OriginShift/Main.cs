@@ -6,6 +6,7 @@ using ABI_RC.Systems.Movement;
 using MelonLoader;
 using NAK.OriginShift.Components;
 using NAK.OriginShiftMod.Integrations;
+using OriginShift.Integrations;
 using UnityEngine;
 
 namespace NAK.OriginShift;
@@ -19,12 +20,14 @@ namespace NAK.OriginShift;
 public class OriginShiftMod : MelonMod
 {
     internal static MelonLogger.Instance Logger;
+    internal static HarmonyLib.Harmony HarmonyInst;
 
     #region Melon Mod Overrides
     
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
+        HarmonyInst = HarmonyInstance;
         
         ModSettings.Initialize();
         
@@ -54,22 +57,8 @@ public class OriginShiftMod : MelonMod
         WorldFilter._Base.Add(typeof(OriginShiftTransformReceiver)); // transform
         
         InitializeIntegration("BTKUILib", BtkUiAddon.Initialize);
-    }
-
-    public override void OnUpdate()
-    {
-        if (BetterBetterCharacterController.Instance == null
-            || !BetterBetterCharacterController.Instance.IsFlying()
-            || Input.GetKey(KeyCode.Mouse2)
-            || Cursor.lockState != CursorLockMode.Locked)
-            return;
-
-        BetterBetterCharacterController.Instance.worldFlightSpeedMultiplier = Math.Max(0f,
-            BetterBetterCharacterController.Instance.worldFlightSpeedMultiplier + Input.mouseScrollDelta.y);
-        if (Input.mouseScrollDelta.y != 0f)
-            CohtmlHud.Instance.ViewDropTextImmediate("(Local) ScrollFlight",
-                BetterBetterCharacterController.Instance.worldFlightSpeedMultiplier.ToString(CultureInfo
-                    .InvariantCulture), "Speed multiplier");
+        InitializeIntegration("ThirdPerson", ThirdPersonAddon.Initialize);
+        InitializeIntegration("PlayerRagdollMod", RagdollAddon.Initialize);
     }
     
     #endregion Melon Mod Overrides
