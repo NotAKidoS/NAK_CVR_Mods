@@ -43,6 +43,7 @@ public class OriginShiftMod : MelonMod
         
         ApplyPatches(typeof(Patches.DbJobsAvatarManagerPatches)); // dynamic bones
         ApplyPatches(typeof(Patches.CVRPortalManagerPatches)); // portals
+        ApplyPatches(typeof(Patches.RCC_SkidmarksManagerPatches)); // skidmarks
         
         ApplyPatches(typeof(Patches.PortableCameraPatches)); // camera occlusion culling
         ApplyPatches(typeof(Patches.PathingCameraPatches)); // camera occlusion culling
