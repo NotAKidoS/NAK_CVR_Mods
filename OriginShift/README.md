@@ -14,10 +14,8 @@ Experimental mod that allows world origin to be shifted to prevent floating poin
 - World Constraints are not shifted.
 
 ## Known Issues
-- Player position on a Movement Parent may slightly drift when passing a chunk boundary if being moved by a Force Applicator (unsure how to fix).
 - Mod Network is not yet implemented, so Compatibility Mode is required to play with others.
 - Portable Camera drone mode is not yet offset by the world origin shift.
-- Remote Synced Objects (Spawnables/ObjectSyncs) actively interpolating remote position data will not be offset by the world origin shift.
 
 ## Mod Incompatibilities
 - PlayerRagdollMod will freak out when you ragdoll between chunk boundaries.
