@@ -216,12 +216,12 @@ internal static class CVRSyncHelperPatches
 
 internal static class CVRObjectSyncPatches
 {
-    [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.Start))]
-    private static void Postfix_CVRObjectSync_Start(ref CVRObjectSync __instance)
-    {
-        __instance.gameObject.AddComponentIfMissing<OriginShiftObjectSyncReceiver>();
-    }
+    // [HarmonyPostfix]
+    // [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.Start))]
+    // private static void Postfix_CVRObjectSync_Start(ref CVRObjectSync __instance)
+    // {
+    //     __instance.gameObject.AddComponentIfMissing<OriginShiftObjectSyncReceiver>(); // todo: investigate if this is needed
+    // }
     
     [HarmonyPrefix] // inbound object sync
     [HarmonyPatch(typeof(CVRObjectSync), nameof(CVRObjectSync.receiveNetworkData))]
