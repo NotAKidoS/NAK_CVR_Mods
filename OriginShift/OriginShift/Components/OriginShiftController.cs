@@ -59,7 +59,7 @@ namespace NAK.OriginShift.Components
         private void Start()
         {
             // set threshold (we can not support dynamic threshold change)
-            ORIGIN_SHIFT_THRESHOLD = _shiftThreshold;
+            ORIGIN_SHIFT_THRESHOLD = IsForced ? 1000f : _shiftThreshold;
         
             OriginShiftManager.OnOriginShifted += OnOriginShifted;
             OriginShiftManager.Instance.SetupManager(IsForced);
