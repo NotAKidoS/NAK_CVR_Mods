@@ -20,10 +20,25 @@ Experimental mod that allows world origin to be shifted to prevent floating poin
   - This is because the voice server dictates who can hear who based on distance from each other and the world origin shift messes with that.
 - Teleports past 50k units will not work.
   - BetterBetterCharacterController prevents teleports past 50k units.
+- Magica Cloth.
 
 ## Mod Incompatibilities
 - PlayerRagdollMod will freak out when you ragdoll between chunk boundaries.
-  - Partial conflict with RelativeSyncs experimental Spawnable Sync Fix.
+
+## Provided Components
+- `OriginShiftController` - World script to configure origin shift.
+- `OriginShiftEventReceiver` - Event receiver for OriginShift events.
+- `OriginShiftTransformReceiver` - Shifts the transform of the GameObject it is attached to.
+- `OriginShiftRigidbodyReceiver` - Shifts the rigidbody of the GameObject it is attached to.
+- `OriginShiftTrailRendererReceiver` - Shifts the positions of the Trail Renderer of the GameObject it is attached to.
+- `OriginShiftParticleSystemReceiver` - Shifts the positions of the Particle System of the GameObject it is attached to.
+
+The provided receiver components are automatically added to Props, Players, and Object Syncs.
+
+## Provided Shader Globals
+- `_OriginShiftChunkOffset` - The current amount of chunks offset from the origin.
+- `_OriginShiftChunkThreshold` - The size of a chunk in world units.
+- `_OriginShiftChunkPosition` - The chunk offset multiplied by the chunk threshold.
 
 ---
 
