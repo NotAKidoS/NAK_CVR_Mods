@@ -53,7 +53,7 @@ public class ObjectSyncBridge : MonoBehaviour
             
             if (pickup)
             {
-                pickup.grabbedBy = MetaPort.Instance.ownerId;
+                pickup.GrabbedBy = MetaPort.Instance.ownerId;
                 pickup._grabStartTime = Time.time;
             }
             if (spawnable) spawnable.isPhysicsSynced = true;

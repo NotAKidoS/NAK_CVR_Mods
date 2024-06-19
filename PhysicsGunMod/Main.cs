@@ -13,16 +13,16 @@ public class PhysicsGunMod : MelonMod
     {
         Logger = LoggerInstance;
         
-        // add to prop whitelist
-        SharedFilter._spawnableWhitelist.Add(typeof(PhysicsGunInteractionBehavior));
-        
-        // add to event whitelist
-        SharedFilter._allowedEventComponents.Add(typeof(PhysicsGunInteractionBehavior));
-        SharedFilter._allowedEventFunctions.Add(typeof(PhysicsGunInteractionBehavior), new List<string>
-        {
-            "set_enabled",
-            // TODO: expose more methods like release ?
-        });
+        // // add to prop whitelist
+        // //SharedFilter._spawnableWhitelist.Add(typeof(PhysicsGunInteractionBehavior));
+        //
+        // // add to event whitelist
+        // SharedFilter._allowedEventComponents.Add(typeof(PhysicsGunInteractionBehavior));
+        // SharedFilter._allowedEventFunctions.Add(typeof(PhysicsGunInteractionBehavior), new List<string>
+        // {
+        //     "set_enabled",
+        //     // TODO: expose more methods like release ?
+        // });
         
         // apply patches
         ApplyPatches(typeof(CVRInputManagerPatches));

@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Systems.InputManagement;
+using ABI.CCK.Attributes;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Scripting.APIUpdating;
@@ -16,6 +17,7 @@ using UnityEngine.Scripting.APIUpdating;
 
 namespace NAK.PhysicsGunMod.Components;
 
+[CCKWhitelistComponent(spawnable: true)]
 public class PhysicsGunInteractionBehavior : MonoBehaviour
 {
     public static PhysicsGunInteractionBehavior Instance;
