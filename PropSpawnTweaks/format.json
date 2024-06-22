@@ -6,12 +6,12 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "Exterrata & NotAKidoS",
-  "description": "Gives the Drop Prop button more utility by allowing you to drop props in the air, as well as providing a prop loading indicator.\n",
+  "description": "Gives the Drop Prop button more utility by allowing you to drop props in the air, as well as providing a prop loading indicator.",
   "searchtags": [
     "prop",
     "spawn",
     "indicator",
-    "loading",
+    "loading"
   ],
   "requirements": [
     "None"
