@@ -54,8 +54,9 @@ public class PropSpawnTweaksMod : MelonMod
         for (int i = Loading_Hex_List.Count - 1; i >= 0; i--)
         {
             LoadingPropHex loadingHex = Loading_Hex_List[i];
-            if (loadingHex.propData == null || (loadingHex.propData.Wrapper != null
-                                                && loadingHex.propData.Spawnable != null))
+            if (loadingHex.propData == null // i dont think can happen
+                || string.IsNullOrEmpty(loadingHex.propData.InstanceId) // prop data likely recycled 
+                || (loadingHex.propData.Wrapper != null && loadingHex.propData.Spawnable != null)) // prop has spawned
             {
                 loadingHex.Reset();
                 Loading_Hex_Pool.Give(loadingHex);
