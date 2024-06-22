@@ -63,6 +63,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OriginShift", "OriginShift\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrollFlight", "ScrollFlight\ScrollFlight.csproj", "{1B5D7DCB-01A4-4988-8B25-211948AEED76}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portals", "Portals\Portals.csproj", "{BE9629C2-8461-481C-B267-1B8A1805DCD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropSpawnTweaks", "PropSpawnTweaks\PropSpawnTweaks.csproj", "{642A2BC7-C027-4F8F-969C-EF0F867936FD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,6 +193,14 @@ Global
 		{1B5D7DCB-01A4-4988-8B25-211948AEED76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1B5D7DCB-01A4-4988-8B25-211948AEED76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1B5D7DCB-01A4-4988-8B25-211948AEED76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE9629C2-8461-481C-B267-1B8A1805DCD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE9629C2-8461-481C-B267-1B8A1805DCD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE9629C2-8461-481C-B267-1B8A1805DCD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE9629C2-8461-481C-B267-1B8A1805DCD7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{642A2BC7-C027-4F8F-969C-EF0F867936FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{642A2BC7-C027-4F8F-969C-EF0F867936FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{642A2BC7-C027-4F8F-969C-EF0F867936FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{642A2BC7-C027-4F8F-969C-EF0F867936FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

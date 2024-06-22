@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\loading_hexagon.assets">
+      <LogicalName>loading_hexagon.assets</LogicalName>
+    </EmbeddedResource>  </ItemGroup>
+</Project>
