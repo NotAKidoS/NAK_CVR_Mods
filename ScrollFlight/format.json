@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Scroll-wheel to adjust flight speed in Desktop.",
+  "description": "Scroll-wheel to adjust flight speed in Desktop. Stole idea from Luc.",
   "searchtags": [
     "flight",
     "scroll",
