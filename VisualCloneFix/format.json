@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "VisualCloneFix",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes the Visual Clone system and allows you to use it again.\n\nUsing the Visual Clone should be faster than the default Head Hiding & Shadow Clones, but will add a longer hitch on initial avatar load.",
+  "searchtags": [
+    "visual",
+    "clone",
+    "head",
+    "hiding"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r34/VisualCloneFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/VisualCloneFix/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
