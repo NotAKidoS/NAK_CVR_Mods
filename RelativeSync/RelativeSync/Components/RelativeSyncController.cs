@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NAK.RelativeSync.Components;
 
-[DefaultExecutionOrder(int.MaxValue)] // make sure this runs after NetIKController
+[DefaultExecutionOrder(9000)] // make sure this runs after NetIKController, but before Totally Wholesome LineController (9999)
 public class RelativeSyncController : MonoBehaviour
 {
     private const float MaxMagnitude = 750000000000f;
@@ -35,10 +35,13 @@ public class RelativeSyncController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (puppetMaster._isHidden)
-            return;
+        // if (puppetMaster._isHidden)
+        //     return;
 
         if (_relativeSyncMarker == null)
+            return;
+        
+        if (!_relativeSyncMarker.IsComponentActive)
             return;
         
         Animator animator = puppetMaster._animator;
@@ -66,7 +69,7 @@ public class RelativeSyncController : MonoBehaviour
         // TODO: handle the case where hip is not synced but is found on remote client
 
         float lerp = Mathf.Min((Time.time - _lastUpdate) / _updateInterval, 1f);
-        
+
         ApplyRelativeRotation(avatarTransform, hipTrans, lerp);
         ApplyRelativePosition(hipTrans, lerp);
         

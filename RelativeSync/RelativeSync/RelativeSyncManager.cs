@@ -15,14 +15,21 @@ public static class RelativeSyncManager
     public static void ApplyRelativeSync(string userId, int target, Vector3 position, Vector3 rotation)
     {
         if (!RelativeSyncControllers.TryGetValue(userId, out RelativeSyncController controller))
-            if (CVRPlayerManager.Instance.GetPlayerPuppetMaster(userId, out PuppetMaster pm))
-                controller = pm.AddComponentIfMissing<RelativeSyncController>();
-
-        if (controller == null)
         {
-            RelativeSyncMod.Logger.Error($"Failed to apply relative sync for user {userId}");
-            return;
+            if (CVRPlayerManager.Instance.GetPlayerPuppetMaster(userId, out PuppetMaster pm))
+            {
+                controller = pm.AddComponentIfMissing<RelativeSyncController>();
+                RelativeSyncMod.Logger.Msg($"Found PuppetMaster for user {userId}. This user is now eligible for relative sync.");
+            }
+            else
+            {
+                RelativeSyncControllers.Add(userId, null); // add null controller to prevent future lookups
+                RelativeSyncMod.Logger.Warning($"Failed to find PuppetMaster for user {userId}. This is likely because the user is blocked or has blocked you. This user will not be eligible for relative sync until next game restart.");
+            }
         }
+        
+        if (controller == null) 
+            return;
         
         // find target transform
         RelativeSyncMarker syncMarker = null;

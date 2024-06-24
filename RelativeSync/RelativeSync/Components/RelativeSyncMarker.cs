@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI.CCK.Components;
 using UnityEngine;
@@ -9,9 +10,14 @@ public class RelativeSyncMarker : MonoBehaviour
 {
     public int pathHash { get; private set; }
 
+    public bool IsComponentActive 
+        => _component.isActiveAndEnabled;
+    
     public bool ApplyRelativePosition = true;
     public bool ApplyRelativeRotation = true;
     public bool OnlyApplyRelativeHeading;
+    
+    private MonoBehaviour _component;
     
     private void Start()
     {
@@ -42,8 +48,12 @@ public class RelativeSyncMarker : MonoBehaviour
     
     private void ConfigureForPotentialMovementParent()
     {
-        if (!gameObject.TryGetComponent(out CVRMovementParent movementParent)) 
+        if (!gameObject.TryGetComponent(out CVRMovementParent movementParent))
+        {
+            _component = GetComponent<CVRSeat>(); // users cant animate enabled state so i dont think matters
             return;
+        }
+        _component = movementParent;
         
         // TODO: a refactor may be needed to handle the orientation mode being animated
         
