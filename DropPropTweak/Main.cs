@@ -14,7 +14,7 @@ public class DropPropTweakMod : MelonMod
         HarmonyInstance.Patch( // make drop prop actually usable
             typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.DropProp),
                 BindingFlags.Public | BindingFlags.Instance),
-            new HarmonyMethod(typeof(DropPropTweakMod).GetMethod(nameof(OnDropProp),
+            prefix: new HarmonyMethod(typeof(DropPropTweakMod).GetMethod(nameof(OnDropProp),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
     }
