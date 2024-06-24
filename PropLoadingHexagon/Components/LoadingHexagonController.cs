@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 
-namespace NAK.PropSpawnTweaks.Components;
+namespace NAK.PropLoadingHexagon.Components;
 
-public class PropLoadingHexagon : MonoBehaviour
+public class LoadingHexagonController : MonoBehaviour
 {
+    public bool IsLoadingCanceled { get; set; }
+    
     [SerializeField] private SkinnedMeshRenderer _hexRenderer;
     [SerializeField] private TMPro.TextMeshPro _loadingText;
     [SerializeField] private Transform[] _hexTransforms;
@@ -23,9 +25,12 @@ public class PropLoadingHexagon : MonoBehaviour
             _hexTransforms[i].Rotate(Vector3.up, 30f * Time.deltaTime * (i + 1));
         }
     }
-    
+
     public void SetLoadingText(string text)
-        => _loadingText.text = text; // SetAllDirty
+    {
+        if (_loadingText.text == text) return;
+        _loadingText.text = text;
+    }
 
     public void SetLoadingShape(float value)
         => _hexRenderer.SetBlendShapeWeight(0, value);

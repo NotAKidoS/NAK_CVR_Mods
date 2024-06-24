@@ -1,6 +1,8 @@
-# PropSpawnTweaks
+# PropLoadingHexagon
 
-Gives the Drop Prop button more utility by allowing you to drop props in the air, as well as providing a prop loading indicator.
+Adds a hexagon indicator to downloading props. Indicator is styled to look similar to Portals.
+
+Can use Delete Mode & The Clapper on loading hexagons to cancel stuck downloads. Setting is provided to display the hexagon for Blocked/Filtered props.
 
 ---
 

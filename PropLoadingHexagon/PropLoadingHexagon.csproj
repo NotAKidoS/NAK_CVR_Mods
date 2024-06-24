@@ -2,7 +2,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net48</TargetFramework>
+    <RootNamespace>PropSpawnTweaks</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="TheClapper">
+      <HintPath>..\.ManagedLibs\TheClapper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\loading_hexagon.assets">
       <LogicalName>loading_hexagon.assets</LogicalName>

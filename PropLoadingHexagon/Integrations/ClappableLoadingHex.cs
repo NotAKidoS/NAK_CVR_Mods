@@ -1,15 +1,15 @@
-﻿using NAK.PropSpawnTweaks.Components;
+﻿using NAK.PropLoadingHexagon.Components;
 using UnityEngine;
 
-namespace NAK.PropSpawnTweaks.Integrations;
+namespace NAK.PropLoadingHexagon.Integrations;
 
 public static class TheClapperIntegration
 {
     public static void Init()
     {
-        PropSpawnTweaksMod.OnPropPlaceholderCreated += (placeholder) =>
+        PropLoadingHexagonMod.OnPropPlaceholderCreated += (placeholder) =>
         {
-            if (placeholder.TryGetComponent(out PropLoadingHexagon loadingHexagon))
+            if (placeholder.TryGetComponent(out LoadingHexagonController loadingHexagon))
                 ClappableLoadingHex.Create(loadingHexagon);
         };
     }
@@ -17,16 +17,16 @@ public static class TheClapperIntegration
 
 public class ClappableLoadingHex : Kafe.TheClapper.Clappable
 {
-    [SerializeField] private PropLoadingHexagon _loadingHexagon;
+    private LoadingHexagonController _loadingHexagon;
     
     public override void OnClapped(Vector3 clappablePosition) 
     {
         if (_loadingHexagon == null) return;
         _loadingHexagon.IsLoadingCanceled = true;
-        Kafe.TheClapper.TheClapper.EmitParticles(clappablePosition, new Color(1f, 1f, 0f), 2f);
+        Kafe.TheClapper.TheClapper.EmitParticles(clappablePosition, new Color(1f, 1f, 0f), 2f); // why this internal
     }
     
-    public static void Create(PropLoadingHexagon loadingHexagon) 
+    public static void Create(LoadingHexagonController loadingHexagon) 
     {
         GameObject target = loadingHexagon.gameObject;
         if (!target.gameObject.TryGetComponent(out ClappableLoadingHex clappableHexagon))
