@@ -28,9 +28,9 @@ public class ClappableLoadingHex : Kafe.TheClapper.Clappable
     
     public static void Create(LoadingHexagonController loadingHexagon) 
     {
-        GameObject target = loadingHexagon.gameObject;
+        GameObject target = loadingHexagon.transform.GetChild(0).gameObject;
         if (!target.gameObject.TryGetComponent(out ClappableLoadingHex clappableHexagon))
-            clappableHexagon = target.gameObject.AddComponent<ClappableLoadingHex>();
+            clappableHexagon = target.AddComponent<ClappableLoadingHex>();
         clappableHexagon._loadingHexagon = loadingHexagon;
     }
 }
