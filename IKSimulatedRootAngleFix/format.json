@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "IKSimulatedRootAngleFix",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes a small issue with Desktop & HalfBody root angle being incorrectly calculated while on rotating Movement Parents. If you've ever noticed your body/feet insisting on facing opposite of the direction you are rotating, this fixes that.",
+  "searchtags": [
+    "ik",
+    "root",
+    "angle",
+    "burger"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r34/IKSimulatedRootAngleFix.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKSimulatedRootAngleFix/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
