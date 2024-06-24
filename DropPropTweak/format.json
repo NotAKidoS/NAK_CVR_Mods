@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "DropPropTweak",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Gives the Drop Prop button more utility by allowing you to drop props in the air.",
+  "searchtags": [
+    "prop",
+    "spawn",
+    "indicator",
+    "loading"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r34/DropPropTweak.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DropPropTweak/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#f61963"
+}
