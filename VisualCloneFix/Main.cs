@@ -41,7 +41,7 @@ public class VisualCloneFixMod : MelonMod
         
         HarmonyInstance.Patch( // fix binding of exclusion ids to compute buffer
             typeof(SkinnedLocalClone).GetMethod(nameof(SkinnedLocalClone.FindExclusionVertList),
-                BindingFlags.NonPublic | BindingFlags.Static),
+                BindingFlags.Public | BindingFlags.Static),
             prefix: new HarmonyMethod(typeof(VisualCloneFixMod).GetMethod(nameof(FindExclusionVertList),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
