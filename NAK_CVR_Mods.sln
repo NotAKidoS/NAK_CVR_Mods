@@ -65,7 +65,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrollFlight", "ScrollFligh
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portals", "Portals\Portals.csproj", "{BE9629C2-8461-481C-B267-1B8A1805DCD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropSpawnTweaks", "PropSpawnTweaks\PropSpawnTweaks.csproj", "{642A2BC7-C027-4F8F-969C-EF0F867936FD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropLoadingHexagon", "PropLoadingHexagon\PropLoadingHexagon.csproj", "{642A2BC7-C027-4F8F-969C-EF0F867936FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKSimulatedRootAngleFix", "IKSimulatedRootAngleFix\IKSimulatedRootAngleFix.csproj", "{D11214B0-94FE-4008-8D1B-3DC8614466B3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropPropTweak", "DropPropTweak\DropPropTweak.csproj", "{2CC1F7C6-A953-4008-8C10-C7592EB401E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,6 +205,14 @@ Global
 		{642A2BC7-C027-4F8F-969C-EF0F867936FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{642A2BC7-C027-4F8F-969C-EF0F867936FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{642A2BC7-C027-4F8F-969C-EF0F867936FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D11214B0-94FE-4008-8D1B-3DC8614466B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D11214B0-94FE-4008-8D1B-3DC8614466B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D11214B0-94FE-4008-8D1B-3DC8614466B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D11214B0-94FE-4008-8D1B-3DC8614466B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC1F7C6-A953-4008-8C10-C7592EB401E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC1F7C6-A953-4008-8C10-C7592EB401E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC1F7C6-A953-4008-8C10-C7592EB401E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC1F7C6-A953-4008-8C10-C7592EB401E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
