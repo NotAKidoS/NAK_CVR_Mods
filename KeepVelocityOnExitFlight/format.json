@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "KeepVelocityOnExitFlight",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod.",
+  "searchtags": [
+    "flight",
+    "mode",
+    "velocity",
+    "flying",
+    "fly"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r33/KeepVelocityOnExitFlight.dll",
+  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/KeepVelocityOnExitFlight/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
