@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.BadAnimatorFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/BadAnimatorFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

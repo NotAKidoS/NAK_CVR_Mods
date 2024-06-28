@@ -3,7 +3,7 @@ Allows you to switch between Desktop and VR with a keybind.
 
 Press Control + F6 to switch. SteamVR will automatically start if it isn't already running.
 
-https://github.com/NotAKidOnSteam/NAK_CVR_Mods/assets/37721153/3f7d6747-720a-45a0-aa51-af7ae677d15e
+https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/3f7d6747-720a-45a0-aa51-af7ae677d15e
 
 ---
 

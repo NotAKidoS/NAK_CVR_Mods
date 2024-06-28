@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.MoreMenuOptions),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MoreMenuOptions"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/MoreMenuOptions"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

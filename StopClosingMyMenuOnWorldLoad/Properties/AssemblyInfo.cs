@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.StopClosingMyMenuOnWorldLoad),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/StopClosingMyMenuOnWorldLoad"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/StopClosingMyMenuOnWorldLoad"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

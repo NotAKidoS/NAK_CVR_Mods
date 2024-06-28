@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.DesktopVRSwitch),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DesktopVRSwitch"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

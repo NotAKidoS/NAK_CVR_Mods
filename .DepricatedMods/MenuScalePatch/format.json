@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/MenuScalePatch.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MenuScalePatch/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r13/MenuScalePatch.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/MenuScalePatch/",
   "changelog": "- Added FOV handling to menu scaling. The menu will scale with changes to your FOV.",
   "embedcolor": "363020"
 }

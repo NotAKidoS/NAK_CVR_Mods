@@ -71,6 +71,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKSimulatedRootAngleFix", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropPropTweak", "DropPropTweak\DropPropTweak.csproj", "{2CC1F7C6-A953-4008-8C10-C7592EB401E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualCloneFix", "VisualCloneFix\VisualCloneFix.csproj", "{39915C4C-B555-4CB9-890F-26DE1388BC2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractionTest", "InteractionTest\InteractionTest.csproj", "{7C675E64-0A2D-4B34-B6D1-5D6AA369A520}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeepVelocityOnExitFlight", "KeepVelocityOnExitFlight\KeepVelocityOnExitFlight.csproj", "{0BB3D187-BBBA-4C58-B246-102342BE5E8C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -213,6 +219,18 @@ Global
 		{2CC1F7C6-A953-4008-8C10-C7592EB401E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CC1F7C6-A953-4008-8C10-C7592EB401E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CC1F7C6-A953-4008-8C10-C7592EB401E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39915C4C-B555-4CB9-890F-26DE1388BC2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39915C4C-B555-4CB9-890F-26DE1388BC2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39915C4C-B555-4CB9-890F-26DE1388BC2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39915C4C-B555-4CB9-890F-26DE1388BC2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C675E64-0A2D-4B34-B6D1-5D6AA369A520}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C675E64-0A2D-4B34-B6D1-5D6AA369A520}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C675E64-0A2D-4B34-B6D1-5D6AA369A520}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C675E64-0A2D-4B34-B6D1-5D6AA369A520}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BB3D187-BBBA-4C58-B246-102342BE5E8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BB3D187-BBBA-4C58-B246-102342BE5E8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BB3D187-BBBA-4C58-B246-102342BE5E8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BB3D187-BBBA-4C58-B246-102342BE5E8C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

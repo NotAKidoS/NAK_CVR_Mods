@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/ClearHudNotifications.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ClearHudNotifications/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r3/ClearHudNotifications.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ClearHudNotifications/",
   "changelog": "- Initial Release",
   "embedcolor": "#6495ED"
 }

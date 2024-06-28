@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.ReconnectionSystemFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ReconnectionSystemFix"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ReconnectionSystemFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

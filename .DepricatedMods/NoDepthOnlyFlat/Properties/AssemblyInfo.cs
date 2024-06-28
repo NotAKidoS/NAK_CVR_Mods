@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.NoDepthOnlyFlat),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/NoDepthOnlyFlat"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/NoDepthOnlyFlat"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

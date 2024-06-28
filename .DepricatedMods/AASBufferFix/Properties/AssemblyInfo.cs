@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.AASBufferFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AASBufferFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

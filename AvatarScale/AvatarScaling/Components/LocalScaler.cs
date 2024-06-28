@@ -35,8 +35,8 @@ public class LocalScaler : BaseScaler
         if (_animatorManager == null) 
             return;
 
-        _animatorManager.SetAnimatorParameter(ScaleFactorParameterName, _scaleFactor);
-        _animatorManager.SetAnimatorParameter(ScaleFactorParameterNameLocal, _scaleFactor);
+        _animatorManager.SetParameter(ScaleFactorParameterName, _scaleFactor);
+        _animatorManager.SetParameter(ScaleFactorParameterNameLocal, _scaleFactor);
     }
     
     public override void LateUpdate()
@@ -84,7 +84,6 @@ public class LocalScaler : BaseScaler
         // animation scale changed and now will override universal scaling
         ResetTargetHeight();
         InvokeAnimatedHeightOverride();
-        
         return true;
     }
     

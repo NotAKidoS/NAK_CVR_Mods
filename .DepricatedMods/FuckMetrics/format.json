@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r3/FuckMetrics.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckMetrics/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r3/FuckMetrics.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckMetrics/",
   "changelog": "- Initial Release.\n- Renamed to FuckMetrics.\n- Add Update Rate settings.\n- Add back CohtmlView disabling as option.\n- Update CoreUpdate on mic toggle if QM is open.\n- Fix Cohtml disabling not using menu instance.",
   "embedcolor": "#8ed6fb"
 }

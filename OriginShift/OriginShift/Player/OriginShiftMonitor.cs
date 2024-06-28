@@ -42,14 +42,14 @@ namespace NAK.OriginShift
             Vector3 position = PlayerSetup.Instance.GetPlayerPosition();
             
             // respawn height check
-            Vector3 absPosition = OriginShiftManager.GetAbsolutePosition(position);
-            if (absPosition.y < BetterBetterCharacterController.Instance.respawnHeight)
-            {
-                RootLogic.Instance.Respawn();
-                return;
-            }
+            // Vector3 absPosition = OriginShiftManager.GetAbsolutePosition(position);
+            // if (absPosition.y < BetterBetterCharacterController.Instance.respawnHeight)
+            // {
+            //     RootLogic.Instance.Respawn();
+            //     return;
+            // }
             
-            float halfThreshold = OriginShiftController.ORIGIN_SHIFT_THRESHOLD / 2; // i keep forgetting this
+            float halfThreshold = OriginShiftController.ORIGIN_SHIFT_THRESHOLD / 2f; // i keep forgetting this
             if (Mathf.Abs(position.x) > halfThreshold
                 || Mathf.Abs(position.y) > halfThreshold
                 || Mathf.Abs(position.z) > halfThreshold)

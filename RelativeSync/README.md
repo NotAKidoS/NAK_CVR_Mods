@@ -2,7 +2,7 @@
 
 Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network.
 
-https://github.com/NotAKidOnSteam/NAK_CVR_Mods/assets/37721153/ae6c6e4b-7529-42e2-bd2c-afa050849906
+https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/ae6c6e4b-7529-42e2-bd2c-afa050849906
 
 ## Mod Settings
 - **Debug Network Inbound**: Log network messages received from other players.

@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.FuckToes),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckToes"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckToes"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

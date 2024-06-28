@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.CameraFixes),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CameraFixes"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CameraFixes"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

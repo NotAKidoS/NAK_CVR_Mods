@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.FuckVivox),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckVivox"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckVivox"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

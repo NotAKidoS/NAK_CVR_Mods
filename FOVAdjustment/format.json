@@ -16,8 +16,8 @@
   "requirements": [
     "UIExpansionKit"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r16/FOVAdjustment.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FOVAdjustment/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r16/FOVAdjustment.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FOVAdjustment/",
   "changelog": "- Fixes for 2023r171.",
   "embedcolor": "#7d7d7d"
 }

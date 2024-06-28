@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.FuckCameraIndicator),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckCameraIndicator"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckCameraIndicator"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

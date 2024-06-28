@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.MuteSFX),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MuteSFX"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/MuteSFX"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

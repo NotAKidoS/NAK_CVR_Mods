@@ -15,7 +15,7 @@ using System.Reflection;
     nameof(NAK.OriginShift),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/OriginShift"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/OriginShift"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

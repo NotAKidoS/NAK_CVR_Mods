@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r26/StopClosingMyMenuOnWorldLoad.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/StopClosingMyMenuOnWorldLoad/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r26/StopClosingMyMenuOnWorldLoad.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/StopClosingMyMenuOnWorldLoad/",
   "changelog": "- Initial Release",
   "embedcolor": "#b589ec"
 }

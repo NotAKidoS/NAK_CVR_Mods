@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.KeepVelocityOnExitFlight),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/KeepVelocityOnExitFlight"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/KeepVelocityOnExitFlight"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

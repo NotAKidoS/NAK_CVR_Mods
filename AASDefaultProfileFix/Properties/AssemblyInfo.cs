@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.AASDefaultProfileFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASDefaultProfileFix"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AASDefaultProfileFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

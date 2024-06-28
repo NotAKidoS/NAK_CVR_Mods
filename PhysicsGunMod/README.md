@@ -4,10 +4,10 @@ Proof of concept mod to add Avatar Scaling to any avatar. This is local-only, bu
 
 Legit threw this together in three hours. ChilloutVR handles all the hard stuff already with its existing animation-clip-based Avatar Scaling.
 
-https://github.com/NotAKidOnSteam/NAK_CVR_Mods/assets/37721153/7405cef5-fd68-4103-8c18-b3164029eab1
+https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/7405cef5-fd68-4103-8c18-b3164029eab1
 
 ## Notes:
-* Constraint scaling partially conflicts with avatars run through my [Avatar Scale Tool](https://github.com/NotAKidOnSteam/AvatarScaleTool).
+* Constraint scaling partially conflicts with avatars run through my [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool).
 * This is local-only, at least unless I bother with Mod Network.
 * The entire thing is pretty messy and I am unsure of the performance impact, especially with scaling all lights, audio, & constraints.
 

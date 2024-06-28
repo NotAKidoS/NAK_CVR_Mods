@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.ScriptingSpoofer),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ScriptingSpoofer"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ScriptingSpoofer"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

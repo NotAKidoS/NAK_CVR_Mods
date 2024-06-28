@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.FuckCohtmlResourceHandler),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FuckCohtmlResourceHandler"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckCohtmlResourceHandler"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

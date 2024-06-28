@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r18/BadAnimatorFix.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/BadAnimatorFix/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r18/BadAnimatorFix.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/BadAnimatorFix/",
   "changelog": "- No longer rewinds states without loop specifically enabled.\n- Removed performance improvement claim, which has seemingly been fixed in 2021.\n- Fixed not being able to disable mod with the Enabled button.",
   "embedcolor": "#e25352"
 }

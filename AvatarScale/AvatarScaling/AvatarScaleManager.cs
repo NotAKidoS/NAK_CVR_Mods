@@ -23,7 +23,7 @@ public class AvatarScaleManager : MonoBehaviour
     #region Universal Scaling Limits
 
     // ReSharper disable MemberCanBePrivate.Global
-    // To match AvatarScaleTool: https://github.com/NotAKidOnSteam/AvatarScaleTool/tree/main
+    // To match AvatarScaleTool: https://github.com/NotAKidoS/AvatarScaleTool/tree/main
     public const float DefaultMinHeight = 0.25f;
     public const float DefaultMaxHeight = 2.50f;
     // ReSharper restore MemberCanBePrivate.Global
@@ -275,7 +275,7 @@ public class AvatarScaleManager : MonoBehaviour
         //doesn't have mod or has no custom height, get from player avatar directly
         CVRPlayerEntity playerEntity = CVRPlayerManager.Instance.NetworkPlayers.Find((players) => players.Uuid == playerId);
         if (playerEntity != null && playerEntity.PuppetMaster != null)
-            return playerEntity.PuppetMaster.GetAvatarHeight();
+            return playerEntity.PuppetMaster.netIkController.GetRemoteHeight();
         
         // player is invalid???
         return -1f;
@@ -296,8 +296,8 @@ public class AvatarScaleManager : MonoBehaviour
     {
         var playerId = puppetMaster._playerDescriptor.ownerId;
         if (_networkedScalers.TryGetValue(playerId, out NetworkScaler scaler))
-            scaler.OnAvatarInstantiated(puppetMaster.avatarObject, puppetMaster._initialAvatarHeight,
-                puppetMaster.initialAvatarScale);
+            scaler.OnAvatarInstantiated(puppetMaster.avatarObject, puppetMaster.netIkController._initialHeight,
+                puppetMaster.netIkController._initialScale);
     }
 
     internal void OnNetworkAvatarDestroyed(PuppetMaster puppetMaster)
@@ -349,8 +349,8 @@ public class AvatarScaleManager : MonoBehaviour
         NetworkScaler scaler = puppetMaster.gameObject.AddComponent<NetworkScaler>();
         scaler.Initialize(playerId);
 
-        scaler.OnAvatarInstantiated(puppetMaster.avatarObject, puppetMaster._initialAvatarHeight,
-            puppetMaster.initialAvatarScale);
+        scaler.OnAvatarInstantiated(puppetMaster.avatarObject, puppetMaster.netIkController._initialHeight,
+            puppetMaster.netIkController._initialScale);
 
         _networkedScalers[playerId] = scaler;
 

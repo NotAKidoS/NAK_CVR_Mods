@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.TrackedPointFix),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/TrackedPointFix"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/TrackedPointFix"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.CVRGizmos),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CVRGizmos"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

@@ -88,7 +88,7 @@ public class IKSimulatedRootAngleFixMod : MelonMod
         float playerHeading = GetRemappedPlayerHeading();
         
         // nicked original logic from DesktopVRIK, before i made it native and seemingly fucked it -_-
-        // https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/db9d5a24b62c96e3c5c403ce3956cd3221955898/.DepricatedMods/DesktopVRIK/IK/IKHandlers/IKHandlerDesktop.cs#L68
+        // https://github.com/NotAKidoS/NAK_CVR_Mods/blob/db9d5a24b62c96e3c5c403ce3956cd3221955898/.DepricatedMods/DesktopVRIK/IK/IKHandlers/IKHandlerDesktop.cs#L68
         var weightedAngleLimit = IKSystem.Instance.BodyHeadingLimit * __instance._solver.locomotion.weight;
         var deltaAngleRoot = Mathf.DeltaAngle(playerHeading, __instance._ikSimulatedRootAngle);
         var absDeltaAngleRoot = Mathf.Abs(deltaAngleRoot);

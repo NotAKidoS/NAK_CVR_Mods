@@ -15,7 +15,7 @@ using System.Reflection;
     nameof(NAK.ClearHudNotifications),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/UndoPropButton"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/UndoPropButton"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/IKFixes.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r21/IKFixes.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/IKFixes/",
   "changelog": "- Fix Seated Play button not returning once disconnecting all trackers from SteamVR.",
   "embedcolor": "f46e49"
 }

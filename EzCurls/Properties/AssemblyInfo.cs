@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.EzCurls),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/EzCurls"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/EzCurls"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

@@ -120,7 +120,7 @@ internal static class IKCalibrator
     public static void ConfigureDesktopVrIk(VRIK vrik)
     {
         // From DesktopVRIK
-        // https://github.com/NotAKidOnSteam/NAK_CVR_Mods/blob/fca0a32257311f044d1a9d6e68269baa4a65a45c/DesktopVRIK/DesktopVRIKCalibrator.cs#L219C2-L247C103
+        // https://github.com/NotAKidoS/NAK_CVR_Mods/blob/fca0a32257311f044d1a9d6e68269baa4a65a45c/DesktopVRIK/DesktopVRIKCalibrator.cs#L219C2-L247C103
 
         vrik.solver.spine.bodyPosStiffness = 1f;
         vrik.solver.spine.bodyRotStiffness = 0.2f;

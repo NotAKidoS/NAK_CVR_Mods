@@ -8,15 +8,15 @@ This mod is partially built off of [IKTweaks - GPLv3](https://github.com/knah/VR
 
 (BodyHandling, MusclePoses)
 
-With a mix of [DesktopVRIK](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK):
+With a mix of [DesktopVRIK](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DesktopVRIK):
 
 (Desktop IK, VRIKHelpers, IKPose)
 
-And a hint of [StateBehaviours](https://github.com/NotAKidOnSteam/StateBehaviours/tree/main/Mod/StateBehaviours):
+And a hint of [StateBehaviours](https://github.com/NotAKidoS/StateBehaviours/tree/main/Mod/StateBehaviours):
 
 (BodyControl)
 
-Then finally [IKFixes](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKFixes):
+Then finally [IKFixes](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/IKFixes):
 
 (Solver Weight Helpers)
 

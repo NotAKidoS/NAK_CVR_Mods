@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using ABI_RC.Core;
+using ABI_RC.Core.Util.AnimatorManager;
 using NAK.AvatarScaleMod.AvatarScaling;
 using NAK.AvatarScaleMod.ScaledComponents;
 using UnityEngine;
@@ -178,9 +179,13 @@ public class BaseScaler : MonoBehaviour
         if (_avatarTransform == null)
             return false;
         
+        _targetHeightChanged = false;
+        
         ScaleAvatarRoot();
         UpdateAnimatorParameter();
         ApplyComponentScaling();
+        
+        InvokeTargetHeightChanged();
         return true;
     }
     
@@ -195,11 +200,13 @@ public class BaseScaler : MonoBehaviour
         _targetHeight = _initialHeight;
         _targetScale = _initialScale;
         _scaleFactor = 1f;
-        _targetHeightChanged = true;
+        _targetHeightChanged = false;
         
         ScaleAvatarRoot();
         UpdateAnimatorParameter();
         ApplyComponentScaling();
+        
+        InvokeTargetHeightReset();
     }
 
     private void ScaleAvatarRoot()
@@ -222,17 +229,23 @@ public class BaseScaler : MonoBehaviour
         if (!_isAvatarInstantiated)
             return; // no avatar
         
-        if (!_targetHeightChanged 
-            && _useTargetHeight)
-            ScaleAvatarRoot();
+        if (!_shouldForceHeight)
+            return; // using built-in scaling
 
-        if (!_targetHeightChanged) 
-            return;
+        // called on state change
+        if (_targetHeightChanged)
+        {
+            if (_useTargetHeight)
+                ApplyTargetHeight();
+            else
+                ResetTargetHeight();
+            _targetHeightChanged = false;
+            InvokeTargetHeightChanged();
+        }
         
-        if (_useTargetHeight)
-            ApplyTargetHeight();
-        else
-            ResetTargetHeight();
+        // called constantly when forcing change
+        if (_shouldForceHeight)
+            ScaleAvatarRoot();
     }
 
     internal virtual void OnDestroy()
@@ -241,7 +254,7 @@ public class BaseScaler : MonoBehaviour
     }
 
     #endregion
-
+    
     #region Component Scaling
 
     internal static readonly Type[] scalableComponentTypes =

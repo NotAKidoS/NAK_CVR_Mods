@@ -1,6 +1,6 @@
-# AASDefaultProfileFix
+# IKSimulatedRootAngleFix
 
-Fixes the Default AAS profile not being applied when loading into an avatar without a profile selected.
+Fixes a small issue with Desktop & HalfBody root angle being incorrectly calculated while on rotating Movement Parents. If you've ever noticed your body/feet insisting on facing opposite of the direction you are rotating, this fixes that.
 
 ---
 

@@ -21,12 +21,12 @@ namespace NAK.OriginShift.Hacks
             _originalCullingState = _camera.useOcclusionCulling;
         }
 
-        private void OnEnable()
+        private void Awake() // we want to execute even if the component is disabled
         {
             OriginShiftManager.OnStateChanged += OnOriginShiftStateChanged;
         }
     
-        private void OnDisable()
+        private void OnDestroy()
         {
             OriginShiftManager.OnStateChanged -= OnOriginShiftStateChanged;
         }

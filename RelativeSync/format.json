@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r34/RelativeSync.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/RelativeSync/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r34/RelativeSync.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/RelativeSync/",
   "changelog": "- Fixed log spam when receiving relative sync data from a blocked user (thanks Mod Network for still forwarding that data -_-)\n- Adjusted execution order to apply relative sync before Totally Wholesomes LineController\n- Adjusted Relative Sync to still apply to avatar distance-hidden users\n- Adjusted Relative Sync to not apply if the CVRSeat or Movement Parent is disabled on receiving client",
   "embedcolor": "#f61963"
 }

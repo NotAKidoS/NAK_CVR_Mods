@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Reference Include="BTKUILib">
+      <HintPath>..\.ManagedLibs\BTKUILib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\origin-shift-inactive.png" />
+    <None Remove="Resources\origin-shift-forced.png" />
+    <None Remove="Resources\origin-shift-active.png" />
+  </ItemGroup>
+</Project>

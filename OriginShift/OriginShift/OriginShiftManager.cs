@@ -13,7 +13,7 @@ namespace NAK.OriginShift;
 public class OriginShiftManager : MonoBehaviour
 {
     #region Singleton
-        
+    
     private static OriginShiftManager _instance;
 
     public static OriginShiftManager Instance
@@ -87,16 +87,16 @@ public class OriginShiftManager : MonoBehaviour
 
     public static Action<OriginShiftState> OnStateChanged = delegate { };
     
-    public static Action<Vector3> OnOriginShifted = delegate { };
-    public static Action<Vector3> OnPostOriginShifted = delegate { };
+    public static Action<Vector3> OnOriginShifted = delegate { }; // move everything
+    public static Action<Vector3> OnPostOriginShifted = delegate { }; // player & chunks
 
     #endregion Actions
 
     #region Public Properties
     
-    [PublicAPI] public bool IsOriginShifted => ChunkOffset != Vector3.zero;
-    [PublicAPI] public Vector3 ChunkOffset { get; internal set; } = Vector3.zero;
-    [PublicAPI] public Vector3 ChunkPosition => ChunkOffset * OriginShiftController.ORIGIN_SHIFT_THRESHOLD;
+    [PublicAPI] public bool IsOriginShifted => ChunkOffset != Vector3Int.zero;
+    [PublicAPI] public Vector3Int ChunkOffset { get; internal set; } = Vector3Int.zero;
+    [PublicAPI] public Vector3Int ChunkPosition => ChunkOffset * OriginShiftController.ORIGIN_SHIFT_THRESHOLD;
     
     public enum OriginShiftState
     {
@@ -178,12 +178,12 @@ public class OriginShiftManager : MonoBehaviour
         stopwatch.Start();
 
         // normalize
-        float halfThreshold = (OriginShiftController.ORIGIN_SHIFT_THRESHOLD / 2);
+        float halfThreshold = (OriginShiftController.ORIGIN_SHIFT_THRESHOLD / 2f);
         rawPosition += new Vector3(halfThreshold, halfThreshold, halfThreshold);
         
         // add to chunk
-        Vector3 chunkDifference;
-        Vector3 calculatedChunk = chunkDifference = ChunkOffset;
+        Vector3Int chunkDifference;
+        Vector3Int calculatedChunk = chunkDifference = ChunkOffset;
         
         calculatedChunk.x += Mathf.FloorToInt(rawPosition.x / OriginShiftController.ORIGIN_SHIFT_THRESHOLD);
         calculatedChunk.y += Mathf.FloorToInt(rawPosition.y / OriginShiftController.ORIGIN_SHIFT_THRESHOLD);
@@ -210,7 +210,7 @@ public class OriginShiftManager : MonoBehaviour
         if (!_useOriginShift) return;
         
         ShiftOrigin(-ChunkPosition);
-        ChunkOffset = Vector3.zero;
+        ChunkOffset = Vector3Int.zero;
     }
     
     #endregion Origin Shift Implementation

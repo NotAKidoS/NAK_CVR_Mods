@@ -18,7 +18,7 @@ namespace NAK.OriginShift.Components
         [Header("Config / Shift Params")]
         
         [SerializeField] private bool _shiftVertical = true;
-        [SerializeField] [Range(10f, 2500f)] private float _shiftThreshold = 15f;
+        [SerializeField] [Range(10, 2500)] private int _shiftThreshold = 15;
         
         [Header("Config / Scene Objects")]
         
@@ -40,7 +40,7 @@ namespace NAK.OriginShift.Components
     
 #if !UNITY_EDITOR
     
-        public static float ORIGIN_SHIFT_THRESHOLD = 15f;
+        public static int ORIGIN_SHIFT_THRESHOLD = 15;
         
         #region Unity Events
 
@@ -59,7 +59,7 @@ namespace NAK.OriginShift.Components
         private void Start()
         {
             // set threshold (we can not support dynamic threshold change)
-            ORIGIN_SHIFT_THRESHOLD = IsForced ? 1000f : _shiftThreshold;
+            ORIGIN_SHIFT_THRESHOLD = IsForced ? 1000 : _shiftThreshold;
         
             OriginShiftManager.OnOriginShifted += OnOriginShifted;
             OriginShiftManager.Instance.SetupManager(IsForced);

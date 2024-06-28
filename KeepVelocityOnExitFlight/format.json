@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r34/KeepVelocityOnExitFlight.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/KeepVelocityOnExitFlight/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r34/KeepVelocityOnExitFlight.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/KeepVelocityOnExitFlight/",
   "changelog": "- Initial release",
   "embedcolor": "#f61963"
 }

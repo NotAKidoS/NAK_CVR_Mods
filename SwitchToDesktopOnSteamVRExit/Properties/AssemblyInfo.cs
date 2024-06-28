@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.SwitchToDesktopOnSteamVRExit),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SwitchToDesktopOnSteamVRExit"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SwitchToDesktopOnSteamVRExit"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

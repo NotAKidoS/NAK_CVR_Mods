@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r13/AASBufferFix.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASBufferFix/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r13/AASBufferFix.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AASBufferFix/",
   "changelog": "- Fixed an issue with the avatar footprint being calculated with values that exceed the 3200 AAS bit limit.",
   "embedcolor": "9b59b6"
 }

@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.ScrollFlight),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ScrollFlight"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ScrollFlight"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

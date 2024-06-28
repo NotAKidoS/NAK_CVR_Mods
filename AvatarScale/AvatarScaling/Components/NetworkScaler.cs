@@ -45,7 +45,7 @@ public class NetworkScaler : BaseScaler
 
     protected override void UpdateAnimatorParameter()
     {
-        _animatorManager?.SetAnimatorParameter(ScaleFactorParameterNameLocal, _scaleFactor);
+        _animatorManager?.SetParameter(ScaleFactorParameterNameLocal, _scaleFactor);
     }
     
     internal override void OnDestroy()

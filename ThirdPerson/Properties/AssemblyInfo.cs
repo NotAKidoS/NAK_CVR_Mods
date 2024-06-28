@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.ThirdPerson),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ThirdPerson"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r22/DesktopVRIK.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRIK/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r22/DesktopVRIK.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DesktopVRIK/",
   "changelog": "- Fixes for 2023r173.\n- Fixed ResetFootstepsOnIdle not working as intended.\n- Added swimming pitch control.\n- Added active body offset.",
   "embedcolor": "#9b59b6"
 }

@@ -16,8 +16,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/download/r21/DesktopVRSwitch.dll",
-  "sourcelink": "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DesktopVRSwitch/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r21/DesktopVRSwitch.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DesktopVRSwitch/",
   "changelog": "- Fixes for 2023r172.\n- Mouse is now force unlocked once entering VR mode as QOL.",
   "embedcolor": "3498db"
 }

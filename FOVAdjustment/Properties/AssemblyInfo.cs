@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.FOVAdjustment),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FOVAdjustment"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FOVAdjustment"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]

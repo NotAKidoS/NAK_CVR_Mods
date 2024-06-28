@@ -58,6 +58,11 @@ public class OriginShiftMod : MelonMod
         WorldFilter._Base.Add(typeof(OriginShiftTrailRendererReceiver)); // trail renderer
         WorldFilter._Base.Add(typeof(OriginShiftTransformReceiver)); // transform
         
+        // chunk controller
+        WorldFilter._Base.Add(typeof(ChunkController));
+        WorldFilter._Base.Add(typeof(ChunkListener));
+        WorldFilter._Base.Add(typeof(ChunkCreator));
+        
         InitializeIntegration("BTKUILib", BtkUiAddon.Initialize); // quick menu ui
         InitializeIntegration("ThirdPerson", ThirdPersonAddon.Initialize); // camera occlusion culling
         InitializeIntegration("PlayerRagdollMod", RagdollAddon.Initialize); // ragdoll rigidbodys
