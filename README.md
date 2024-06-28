@@ -1,46 +1,30 @@
 ## NotAKids ChilloutVR Mods
 
-# Update Notice: ChilloutVR r171
+## Released Mods
 
-Not all mods have been updated for r171. You can see what has been updated below:
-
----
-
-| Mod Name                                                                                                   | Approval State | Released in this repo | CVRMG Category          |
-|------------------------------------------------------------------------------------------------------------|----------------|-----------------------|-------------------------|
-| [AASBufferFix](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AASBufferFix)                      | Retired        | Yes                   | Utilities & Tweaks      |
-| [AvatarScaleMod](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AvatarScale)                     | N/A            | No                    | N/A                     |
-| [BadAnimatorFix](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/BadAnimatorFix)                  | Approved       | Yes                   | Fixes                   |
-| [Blackout](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/Blackout)                              | Approved       | No                    | New Features & Overhauls|
-| [ControllerFreeze](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ControllerFreeze)              | N/A            | No                    | N/A                     |
-| [CVRGizmos](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CVRGizmos)                            | Approved       | Yes                   | Very Niche              |
-| [ClearHudNotifications](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ClearHudNotifications)    | Retired        | No                    | UI                      |
-| [DesktopVRIK](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DesktopVRIK)                        | Approved       | Yes                   | Utilities & Tweaks      |
-| [DesktopVRSwitch](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DesktopVRSwitch)                | Retired        | Yes                   | New Features & Overhauls|
-| [FuckCohtmlResourceHandler](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckCohtmlResourceHandler) | N/A       | No                    | N/A                     |
-| [FuckMetrics](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckMetrics)                        | Retired        | No                    | Performance & Fidelity  |
-| [FuckMLA](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckMLA)                                | Approved       | Yes                   | Utilities & Tweaks      |
-| [FuckToes](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckToes)                              | Approved       | Yes                   | Utilities & Tweaks      |
-| [GestureLock](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/GestureLock)                        | Approved       | Yes                   | Utilities & Tweaks      |
-| [HeadBobbingFix](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/HeadBobbingFix)                  | Retired        | Yes                   | Fixes                   |
-| [IKFixes](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/IKFixes)                                | Retired        | Yes                   | Fixes                   |
-| [JumpPatch](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/JumpPatch)                            | Retired        | Yes                   | Utilities & Tweaks      |
-| [MenuScalePatch](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/MenuScalePatch)                  | Retired        | Yes                   | Utilities & Tweaks      |
-| [NAK.CustomComponents](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/NAK.CustomComponents)      | N/A            | No                    | N/A                     |
-| [Nevermind](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/Nevermind)                            | N/A            | No                    | N/A                     |
-| [PathCamDisabler](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PathCamDisabler)                | Approved       | Yes                   | Very Niche              |
-| [PickupPushPull](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PickupPushPull)                  | Retired        | No                    | Utilities & Tweaks      |
-| [PortableCameraAdditions](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PortableCameraAdditions)| Approved       | Yes                   | Camera                  |
-| [PropUndoButton](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PropUndo)                        | Outdated       | No                    | Utilities & Tweaks      |
-| [SmoothRay](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmoothRay)                            | Approved       | Yes                   | Utilities & Tweaks      |
-| [ThirdPerson](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ThirdPerson)                        | Approved       | Yes                   | New Features & Overhauls|
-| [TrackedControllerFix](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/TrackedControllerFix)      | Approved       | Yes                   | Fixes                   |
-
-### Note: This is a newly created central repository for my ChilloutVR mods. As I update and improve them, I will migrate releases to this repository and include them in each new release, following the approach used by SDraw and Kafejao.
-
-To ensure a seamless transition, I will archive the standalone repositories once the approved version of the mod in CVRMG directs users to this repository in its mod info. This way, you can conveniently access all the latest updates and improvements from one central location.
-
-This should also promote greater consistency across my mods, though results may vary.
+| Mod Name                     | README                                                 | Download                                                                                            | Description                                                  |
+|------------------------------|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------|
+| CVRGizmos                    | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/CVRGizmos.dll)                           | Adds runtime gizmos to common CCK components.                |
+| PathCamDisabler              | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PathCamDisabler.dll)               | Adds option to disable the Path Camera Controller keybinds.  |
+| PortableCameraAdditions      | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PortableCameraAdditions.dll) | Adds a few basic settings to the Portable Camera.            |
+| PropUndoButton               | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndoButton) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PropUndoButton.dll)                 | CTRL+Z to undo latest spawned prop.                          |
+| ThirdPerson                  | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ThirdPerson.dll)                       | Allows you to go into third person view.                     |
+| FOVAdjustment                | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FOVAdjustment) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/FOVAdjustment.dll)                    | Makes CVR_DesktopCameraController default FOV configurable.  |
+| MuteSFX                      | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MuteSFX) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/MuteSFX.dll)                             | Adds an audio cue for muting and unmuting.                   |
+| ShadowCloneFallback          | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ShadowCloneFallback) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ShadowCloneFallback.dll)               | Exposes a toggle for the Fallback Shadow Clone.              |
+| StopClosingMyMenuOnWorldLoad | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/StopClosingMyMenuOnWorldLoad)| [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/StopClosingMyMenuOnWorldLoad.dll)   | Prevents your menu from being closed when a world is loaded. |
+| SwitchToDesktopOnSteamVRExit | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SwitchToDesktopOnSteamVRExit)| [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/SwitchToDesktopOnSteamVRExit.dll)   | Initiates a VR Switch to Desktop when SteamVR is exited.     |
+| MoreMenuOptions              | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MoreMenuOptions) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/MoreMenuOptions.dll)                    | Exposes some menu placement configuration options.           |
+| RelativeSync                 | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/RelativeSync) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/RelativeSync.dll)                       | Relative sync for Movement Parent & Chairs.                  |
+| LazyPrune                    | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/LazyPrune) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/LazyPrune.dll)                           | Prevents loaded objects from immediately unloading.          |
+| ReconnectionSystemFix        | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ReconnectionSystemFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ReconnectionSystemFix.dll)              | Prevents recreating and reloading all remote players.        |
+| AASDefaultProfileFix         | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASDefaultProfileFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/AASDefaultProfileFix.dll)               | Fixes the Default AAS profile not being applied.             |
+| ScrollFlight                 | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ScrollFlight) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ScrollFlight.dll)                        | Scroll-wheel to adjust flight speed in Desktop.              |
+| PropLoadingHexagon           | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropLoadingHexagon) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PropLoadingHexagon.dll)                 | Adds a hexagon indicator to downloading props.               |
+| IKSimulatedRootAngleFix      | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKSimulatedRootAngleFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/IKSimulatedRootAngleFix.dll)            | Fixes Desktop & HalfBody root angle issues.                  |
+| DropPropTweak                | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DropPropTweak) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/DropPropTweak.dll)                       | Allows you to drop props in the air.                         |
+| VisualCloneFix               | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/VisualCloneFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/VisualCloneFix.dll)                      | Fixes the Visual Clone system.                               |
+| KeepVelocityOnExitFlight     | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/KeepVelocityOnExitFlight) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/KeepVelocityOnExitFlight.dll)           | Keeps the player's velocity when exiting flight mode.        |
 
 # How To Install
 
