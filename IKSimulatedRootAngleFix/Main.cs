@@ -21,6 +21,13 @@ public class IKSimulatedRootAngleFixMod : MelonMod
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         
+        HarmonyInstance.Patch( // fix offsetting of _ikSimulatedRootAngle when player rotates on wall or ceiling
+            typeof(IKHandler).GetMethod(nameof(IKHandler.Reset),
+                BindingFlags.Public | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(IKSimulatedRootAngleFixMod).GetMethod(nameof(OnHandlerReset),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        
         HarmonyInstance.Patch( // why did i dupe logic weirdly between Desktop & VR IKHandler ...
             typeof(IKHandlerDesktop).GetMethod(nameof(IKHandlerDesktop.HandleBodyHeading),
                 BindingFlags.NonPublic | BindingFlags.Instance),
@@ -66,6 +73,11 @@ public class IKSimulatedRootAngleFixMod : MelonMod
         float headingDelta = Vector3.SignedAngle(forwardBeforeRotation, forwardAfterRotation, up);
         __instance._ikSimulatedRootAngle = Mathf.Repeat(__instance._ikSimulatedRootAngle + headingDelta, 360f);
         return false;
+    }
+    
+    private static void OnHandlerReset(ref IKHandler __instance)
+    {
+        __instance._ikSimulatedRootAngle = GetRemappedPlayerHeading();
     }
     
     private static bool OnHandleBodyHeading(ref IKHandlerDesktop __instance)
