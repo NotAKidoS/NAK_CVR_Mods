@@ -101,10 +101,14 @@ public static class Patches
         int[] vertexIndices = new int[sharedMesh.vertexCount];
     
         // Pre-map bone transforms to their exclusion ids if applicable
-        int[] boneIndexToExclusionId = new int[renderer.bones.Length];
-        for (int i = 0; i < renderer.bones.Length; i++)
-            if (exclusions.TryGetValue(renderer.bones[i], out FPRExclusion exclusion))
-                boneIndexToExclusionId[i] = ((MeshHiderExclusion)exclusion.behaviour).id;
+        var bones = renderer.bones;
+        int[] boneIndexToExclusionId = new int[bones.Length];
+        for (int i = 0; i < bones.Length; i++)
+        {
+            Transform bone = bones[i];
+            if (bone != null && exclusions.TryGetValue(bone, out FPRExclusion exclusion))
+                boneIndexToExclusionId[i] = ((MeshHiderExclusion)(exclusion.behaviour)).id;
+        }
         
         const float minWeightThreshold = 0.2f;
         for (int i = 0; i < boneWeights.Length; i++) 
