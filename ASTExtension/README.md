@@ -5,7 +5,8 @@ Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTo
 - Persistent height
 - Copy height from others
 
-Requires setup in Unity. This is **not** Universal Scaling.
+Best used with Avatar Scale Tool, but will attempt to work with found scaling setups.
+Requires already having Avatar Scaling on the avatar. This is **not** Universal Scaling.
 
 ---
 

@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool):\n- VR Gesture to scale\n- Match IRL height\n- Persistent height\n- Copy height from others\n\nRequires setup in Unity. This is **not** Universal Scaling.",
+  "description": "Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool):\n- VR Gesture to scale\n- Persistent height\n- Copy height from others\n\nBest used with Avatar Scale Tool, but will attempt to work with found scaling setups.\nRequires already having Avatar Scaling on the avatar. This is **not** Universal Scaling.",
   "searchtags": [
     "tool",
     "scaling",
@@ -15,9 +15,9 @@
     "avatar"
   ],
   "requirements": [
-    "None"
+    "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r33/ASTExtension.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r34/ASTExtension.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ASTExtension/",
   "changelog": "- Initial release",
   "embedcolor": "#f61963"
