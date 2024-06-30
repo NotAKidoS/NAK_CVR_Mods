@@ -1,10 +1,12 @@
-﻿using ABI_RC.Core.InteractionSystem;
+﻿using System.Reflection;
+using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.AnimatorManager;
 using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.InputManagement;
 using ABI.CCK.Components;
+using HarmonyLib;
 using MelonLoader;
 using NAK.ASTExtension.Extensions;
 using UnityEngine;
@@ -90,10 +92,16 @@ public class ASTExtensionMod : MelonMod
         Logger = LoggerInstance;
 
         InitializeSettings();
-        InitializeScaleGesture();
 
         CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener(OnLocalAvatarLoad);
         CVRGameEventSystem.Avatar.OnLocalAvatarClear.AddListener(OnLocalAvatarClear);
+        
+        HarmonyInstance.Patch( // todo: once exp hit stable, use game event system
+            typeof(CVRGestureRecognizer).GetMethod(nameof(CVRGestureRecognizer.Start),
+                BindingFlags.Public | BindingFlags.Instance), // why public
+            postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(InitializeScaleGesture),
+                BindingFlags.NonPublic | BindingFlags.Instance))
+        );
     }
 
     #endregion Melon Events
