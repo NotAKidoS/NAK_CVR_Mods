@@ -7,6 +7,7 @@ using ABI_RC.Core.Util.AnimatorManager;
 using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.InputManagement;
 using ABI.CCK.Components;
+using ABI.CCK.Scripts;
 using HarmonyLib;
 using MelonLoader;
 using NAK.ASTExtension.Extensions;
@@ -16,24 +17,19 @@ namespace NAK.ASTExtension;
 
 public class ASTExtensionMod : MelonMod
 {
-    private static MelonLogger.Instance Logger;
+    internal static ASTExtensionMod Instance; // lazy
+    internal static MelonLogger.Instance Logger;
 
     #region Melon Preferences
 
+    internal const string ModName = nameof(ASTExtension);
+
     private static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(ASTExtension));
+        MelonPreferences.CreateCategory(ModName);
 
     private static readonly MelonPreferences_Entry<bool> EntryUseScaleGesture =
         Category.CreateEntry("use_scale_gesture", true,
             "Use Scale Gesture", "Use the scale gesture to adjust your avatar's height.");
-
-    private static readonly MelonPreferences_Entry<bool> EntryUseCustomParameter =
-        Category.CreateEntry("use_custom_parameter", false,
-            "Use Custom Parameter", "Use a custom parameter to adjust your avatar's height.");
-
-    private static readonly MelonPreferences_Entry<string> EntryCustomParameterName =
-        Category.CreateEntry("custom_parameter_name", "AvatarScale",
-            "Custom Parameter Name", "The name of the custom parameter to use for height adjustment.");
 
     private static readonly MelonPreferences_Entry<bool> EntryPersistentHeight =
         Category.CreateEntry("persistent_height", false,
@@ -51,79 +47,58 @@ public class ASTExtensionMod : MelonMod
     private static readonly MelonPreferences_Entry<float> EntryHiddenAvatarHeight =
         Category.CreateEntry("hidden_avatar_height", -2f, is_hidden: true);
 
-    private void InitializeSettings()
-    {
-        EntryUseCustomParameter.OnEntryValueChangedUntyped.Subscribe(OnUseCustomParameterChanged);
-        EntryCustomParameterName.OnEntryValueChangedUntyped.Subscribe(OnCustomParameterNameChanged);
-        OnUseCustomParameterChanged();
-    }
-
-    private void OnUseCustomParameterChanged(object oldValue = null, object newValue = null)
-    {
-        SetupCustomParameter();
-    }
-
-    private void OnCustomParameterNameChanged(object oldValue = null, object newValue = null)
-    {
-        SetupCustomParameter();
-    }
-
-    private void SetupCustomParameter()
-    {
-        // use custom parameter
-        if (EntryUseCustomParameter.Value)
-        {
-            _parameterName = EntryCustomParameterName.Value;
-            CalibrateCustomParameter();
-            return;
-        }
-
-        // reset to default
-        _parameterName = "AvatarScale";
-        _minHeight = GlobalMinHeight;
-        _maxHeight = GlobalMaxHeight;
-    }
-
     #endregion Melon Preferences
 
     #region Melon Events
 
     public override void OnInitializeMelon()
     {
+        Instance = this;
         Logger = LoggerInstance;
 
-        InitializeSettings();
+        //InitializeSettings();
 
         CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener(OnLocalAvatarLoad);
         CVRGameEventSystem.Avatar.OnLocalAvatarClear.AddListener(OnLocalAvatarClear);
         MelonCoroutines.Start(WaitForGestureRecogniser()); // todo: once stable, use initialization game event
+        
+        InitializeIntegration("BTKUILib", Integrations.BtkUiAddon.Initialize);
     }
 
+    private static void InitializeIntegration(string modName, Action integrationAction)
+    {
+        if (RegisteredMelons.All(it => it.Info.Name != modName))
+            return;
+
+        Logger.Msg($"Initializing {modName} integration.");
+        integrationAction.Invoke();
+    }
+    
+    #endregion Melon Events
+
+    #region Game Events
+    
     private IEnumerator WaitForGestureRecogniser()
     {
         yield return new WaitUntil(() => CVRGestureRecognizer.Instance);
         InitializeScaleGesture();
     }
 
-    #endregion Melon Events
-
-    #region Game Events
-
     private void OnLocalAvatarLoad(CVRAvatar _)
     {
-        _currentAvatarSupported = IsAvatarSupported();
-        if (!_currentAvatarSupported)
+        if (!FindSupportedParameter(out string parameterName))
             return;
-
-        if (EntryUseCustomParameter.Value
-            && !string.IsNullOrEmpty(_parameterName))
-            CalibrateCustomParameter();
+        
+        if (!AttemptCalibrateParameter(parameterName, out float minHeight, out float maxHeight, out float modifier))
+            return;
+        
+        SetupParameter(parameterName, minHeight, maxHeight, modifier);
 
         if (EntryPersistThroughRestart.Value
             && _lastHeight < 0) // has not been set
         {
             var lastHeight = EntryHiddenAvatarHeight.Value;
-            if (lastHeight > 0) SetAvatarHeight(lastHeight, true);
+            if (lastHeight > 0) SetAvatarHeight(lastHeight);
             return;
         }
 
@@ -132,107 +107,178 @@ public class ASTExtensionMod : MelonMod
             SetAvatarHeight(_lastHeight);
     }
 
-    private void OnLocalAvatarClear(CVRAvatar _)
+    private void OnLocalAvatarClear(CVRAvatar avatar)
     {
-        _currentAvatarSupported = false;
-
         if (!EntryPersistentHeight.Value)
+        {
+            ResetParameter();
             return;
+        }
 
-        if (!IsAvatarSupported()
+        if (!_currentAvatarSupported
             && !EntryPersistFromUnsupported.Value)
             return;
 
         // update the last height
-        var height = PlayerSetup.Instance.GetCurrentAvatarHeight();
-        _lastHeight = height;
-        EntryHiddenAvatarHeight.Value = height;
+        if (avatar != null) StoreLastHeight(PlayerSetup.Instance.GetCurrentAvatarHeight());
     }
 
     #endregion Game Events
 
-    #region Avatar Scale Tool
-
-    // todo: tool needs a dedicated parameter name
-    //private const string ASTParameterName = "ASTHeight";
-    //private const string ASTMotionParameterName = "#MotionScale";
+    #region Avatar Scale Tool Extension
+    
+    private static HashSet<string> SUPPORTED_PARAMETERS = new()
+    {
+        "AvatarScale", // default
+        "Scale", // most common
+        "Scale/Scale", // kafe
+        "Scaler", // momo
+        "Height", // loliwurt
+        "LoliModifier" // avatar
+    };
 
     //https://github.com/NotAKidoS/AvatarScaleTool/blob/eaa6d343f916b9bb834bb30989fc6987680492a2/AvatarScaleTool/Editor/Scripts/AvatarScaleTool.cs#L13-L14
-    private const float GlobalMinHeight = 0.25f;
-    private const float GlobalMaxHeight = 2.5f;
+    private const float DEFAULT_MIN_HEIGHT = 0.25f;
+    private const float DEFAULT_MAX_HEIGHT = 2.5f;
 
-    private string _parameterName = "AvatarScale";
-
-    private float _lastHeight = -1f;
-    private float _minHeight = GlobalMinHeight;
-    private float _maxHeight = GlobalMaxHeight;
     private bool _currentAvatarSupported;
+    private string _parameterName = SUPPORTED_PARAMETERS.First();
+
+    private float _minHeight = DEFAULT_MIN_HEIGHT;
+    private float _maxHeight = DEFAULT_MAX_HEIGHT;
+    private float _modifier = 1f;
+    private float _lastHeight = -1f;
+    
+    private void SetupParameter(string parameterName, float minHeight, float maxHeight, float modifier)
+    {
+        _parameterName = parameterName;
+        _minHeight = minHeight;
+        _maxHeight = maxHeight;
+        _modifier = modifier;
+        _currentAvatarSupported = true;
+    }
+    
+    private void ResetParameter()
+    {
+        _parameterName = SUPPORTED_PARAMETERS.First();
+        _minHeight = DEFAULT_MIN_HEIGHT;
+        _maxHeight = DEFAULT_MAX_HEIGHT;
+        _modifier = 1f;
+        _currentAvatarSupported = false;
+    }
+    
+    private void StoreLastHeight(float height)
+    {
+        _lastHeight = height;
+        EntryHiddenAvatarHeight.Value = height;
+    }
 
     private float GetValueFromHeight(float height)
     {
-        return Mathf.Clamp01((height - _minHeight) / (_maxHeight - _minHeight));
+        return Mathf.Sign(_modifier) > 0 // negative means min & max heights were swapped (because i said so)
+            ? Mathf.Clamp01((height - _minHeight) / (_maxHeight - _minHeight)) * Mathf.Abs(_modifier)
+            : 1 - Mathf.Clamp01((height - _minHeight) / (_maxHeight - _minHeight)) * Mathf.Abs(_modifier);
     }
 
-    private float GetHeightFromValue(float value)
+    // private float GetHeightFromValue(float value)
+    //     => Mathf.Lerp(_minHeight, _maxHeight, value * Mathf.Abs(_modifier));
+    
+    private static bool FindSupportedParameter(out string parameterName)
     {
-        return Mathf.Lerp(_minHeight, _maxHeight, value);
-    }
-
-    private void SetAvatarHeight(float height, bool immediate = false)
-    {
-        if (!IsAvatarSupported())
-            return;
-
+        parameterName = null;
+        
         AvatarAnimatorManager animatorManager = PlayerSetup.Instance.animatorManager;
         if (!animatorManager.IsInitialized)
         {
             Logger.Error("AnimatorManager is not initialized!");
-            return;
+            return false;
         }
 
-        if (!animatorManager.HasParameter(_parameterName))
+        var parameterSet = new HashSet<string>(animatorManager.Parameters.Keys, StringComparer.OrdinalIgnoreCase);
+        foreach (var parameter in SUPPORTED_PARAMETERS)
         {
-            Logger.Error($"Parameter '{_parameterName}' does not exist!");
-            return;
+            if (!parameterSet.Contains(parameter)) continue;
+            parameterName = parameterSet.First(p => p.Equals(parameter, StringComparison.OrdinalIgnoreCase));
+            Logger.Msg($"Found supported parameter '{parameterName}'");
+            return true;
+        }
+        
+        Logger.Error("No supported parameter found!");
+        return false;
+    }
+    
+    private static bool AttemptCalibrateParameter(string parameterName, 
+        out float minHeight, out float maxHeight, out float modifier)
+    {
+        minHeight = 0f;
+        maxHeight = 0f;
+        modifier = 1f;
+        
+        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.animatorManager;
+        if (!animatorManager.IsInitialized)
+        {
+            Logger.Error("AnimatorManager is not initialized!");
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(parameterName))
+        {
+            Logger.Error("Parameter name is empty!");
+            return false;
+        }
+
+        if (!animatorManager.HasParameter(parameterName))
+        {
+            Logger.Error($"Parameter '{parameterName}' does not exist!");
+            return false;
         }
 
         Animator animator = animatorManager.Animator;
-        var value = GetValueFromHeight(height);
-        animator.SetFloat(_parameterName, value);
-        if (immediate) animator.Update(0f); // apply
-
-        _lastHeight = height; // session
-        EntryHiddenAvatarHeight.Value = height; // persistent
-
-        // update in menus
-        CVR_MenuManager.Instance.SendAdvancedAvatarUpdate(_parameterName, value);
-    }
-
-    private bool IsAvatarSupported()
-    {
-        // check if avatar has the parameter
-        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.animatorManager;
-        if (!animatorManager.IsInitialized)
+        animatorManager.GetParameter(parameterName, out float initialValue);
+        
+        // set min height to 0
+        animator.SetFloat(parameterName, 0f);
+        animator.Update(0f); // apply
+        minHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
+        
+        // set max height to 1++
+        for (int i = 1; i <= 10; i++)
         {
-            Logger.Error("AnimatorManager is not initialized!");
+            animator.SetFloat(parameterName, i);
+            animator.Update(0f); // apply
+            var height = PlayerSetup.Instance.GetCurrentAvatarHeight();
+            if (height <= maxHeight) break; // stop if height is not increasing
+            modifier = i;
+            maxHeight = height;
+        }
+        
+        // reset the parameter to its initial value
+        animator.SetFloat(parameterName, initialValue);
+        animator.Update(0f); // apply
+        
+        // check if there was no change
+        if (Math.Abs(minHeight - maxHeight) < float.Epsilon)
+        {
+            Logger.Error("Calibration failed: min height is equal to max height!");
             return false;
         }
-
-        if (!animatorManager.HasParameter(_parameterName))
+        
+        // swap if needed
+        if (minHeight > maxHeight)
         {
-            Logger.Error($"Parameter '{_parameterName}' does not exist!");
-            return false;
+            (minHeight, maxHeight) = (maxHeight, minHeight);
+            modifier = -modifier; // invert
         }
-
+        
+        Logger.Msg($"Calibrated custom parameter '{parameterName}' with min height {minHeight} and max height {maxHeight} using modifier {modifier}");
         return true;
     }
-
-    #endregion Avatar Scale Tool
-
-    #region Custom Parameter Calibration
-
-    private void CalibrateCustomParameter()
+    
+    internal void SetAvatarHeight(float height)
     {
+        if (!_currentAvatarSupported)
+            return;
+
         AvatarAnimatorManager animatorManager = PlayerSetup.Instance.animatorManager;
         if (!animatorManager.IsInitialized)
         {
@@ -246,28 +292,15 @@ public class ASTExtensionMod : MelonMod
             return;
         }
 
-        Animator animator = animatorManager.Animator; // we get from animator manager to ensure we have *profile* param
-        animatorManager.GetParameter(_parameterName, out float initialValue);
-
-        // set min height to 0
-        animator.SetFloat(_parameterName, 0f);
-        animator.Update(0f); // apply
-        var minHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
-
-        // set max height to 1
-        animator.SetFloat(_parameterName, 1f);
-        animator.Update(0f); // apply
-        var maxHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
-
-        // reset the parameter to its initial value
-        animator.SetFloat(_parameterName, initialValue);
-        animator.Update(0f); // apply
-
-        Logger.Msg(
-            $"Calibrated custom parameter '{_parameterName}' with min height {minHeight} and max height {maxHeight}");
+        StoreLastHeight(height);
+        
+        var value = GetValueFromHeight(height);
+        animatorManager.SetParameter(_parameterName, value);
+        animatorManager.Animator.Update(0f); // apply
+        CVR_MenuManager.Instance.SendAdvancedAvatarUpdate(_parameterName, value); // update AAS menus
     }
 
-    #endregion Custom Parameter Calibration
+    #endregion Avatar Scale Tool Extension
 
     #region Scale Reconizer
 

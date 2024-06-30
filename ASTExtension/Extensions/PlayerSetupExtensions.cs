@@ -8,6 +8,12 @@ public static class PlayerSetupExtensions
     // immediate measurement of the player's avatar height
     public static float GetCurrentAvatarHeight(this PlayerSetup playerSetup)
     {
+        if (playerSetup._avatar == null)
+        {
+            ASTExtensionMod.Logger.Error("GetCurrentAvatarHeight: Avatar is null");
+            return 0f;
+        }
+        
         Vector3 localScale = playerSetup._avatar.transform.localScale;
         Vector3 initialScale = playerSetup.initialScale;
         float initialHeight = playerSetup._initialAvatarHeight;

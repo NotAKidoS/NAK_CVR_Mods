@@ -3,4 +3,12 @@
   <PropertyGroup>
     <RootNamespace>ASTExtension</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BTKUILib">
+      <HintPath>..\.ManagedLibs\BTKUILib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\ASM_Icon_AvatarHeightCopy.png" />
+  </ItemGroup>
 </Project>

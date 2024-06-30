@@ -2,7 +2,6 @@
 
 Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool):
 - VR Gesture to scale
-- Match IRL height
 - Persistent height
 - Copy height from others
 
