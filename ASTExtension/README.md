@@ -29,9 +29,9 @@ Examples:
   - This is the default setup for Avatar Scale Tool and will work perfectly.
 - `Scale` - 0 to 100 (input single)
   - This will also work perfectly as the max height is a multiple of 10.
-- 'Height' - 0 to 2 (input single)
+- `Height` - 0 to 2 (input single)
   - This will not work properly. The max value to drive the parameter to is not a multiple of 10, and as such ASTExtension will believe the parameter range is 0 to 1.
-- `BurntToast` - 0 to 100 (input single)
+- `BurntToast` - 0 to 10 (input single)
   - This will not work properly. The parameter name is not recognized by ASTExtension.
 
 If your setup is theoretically supported but not working, it is likely the scaling animation is not linear. In this case, you will need to fix your animation clip curves / blend tree to be linear, or use Avatar Scale Tool to generate a new scaling animation.
