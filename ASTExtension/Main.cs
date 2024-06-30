@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections;
+using System.Reflection;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
@@ -95,13 +96,13 @@ public class ASTExtensionMod : MelonMod
 
         CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener(OnLocalAvatarLoad);
         CVRGameEventSystem.Avatar.OnLocalAvatarClear.AddListener(OnLocalAvatarClear);
-        
-        HarmonyInstance.Patch( // todo: once exp hit stable, use game event system
-            typeof(CVRGestureRecognizer).GetMethod(nameof(CVRGestureRecognizer.Start),
-                BindingFlags.Public | BindingFlags.Instance), // why public
-            postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(InitializeScaleGesture),
-                BindingFlags.NonPublic | BindingFlags.Instance))
-        );
+        MelonCoroutines.Start(WaitForGestureRecogniser()); // todo: once stable, use initialization game event
+    }
+
+    private IEnumerator WaitForGestureRecogniser()
+    {
+        yield return new WaitUntil(() => CVRGestureRecognizer.Instance);
+        InitializeScaleGesture();
     }
 
     #endregion Melon Events
