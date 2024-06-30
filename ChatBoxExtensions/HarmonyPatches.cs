@@ -7,7 +7,7 @@ public class CVRInputManagerPatches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(CVRInputManager), nameof(CVRInputManager.Start))]
-    static void Postfix_CVRInputManager_Start(ref CVRInputManager __instance)
+    private static void Postfix_CVRInputManager_Start(ref CVRInputManager __instance)
     {
         __instance.AddInputModule(ChatBoxExtensions.InputModule);
     }

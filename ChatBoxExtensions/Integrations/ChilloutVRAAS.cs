@@ -14,7 +14,7 @@ internal class ChilloutVRAASCommands : CommandBase
                 {
                     if (args.Length > 2 && float.TryParse(args[2], out float value))
                     {
-                        PlayerSetup.Instance.changeAnimatorParam(args[1], value);
+                        PlayerSetup.Instance.ChangeAnimatorParam(args[1], value);
                     }
                 });
             },
@@ -24,7 +24,7 @@ internal class ChilloutVRAASCommands : CommandBase
                 {
                     if (args.Length > 2 && float.TryParse(args[2], out float value))
                     {
-                        PlayerSetup.Instance.changeAnimatorParam(args[1], value);
+                        PlayerSetup.Instance.ChangeAnimatorParam(args[1], value);
                     }
                 });
             });

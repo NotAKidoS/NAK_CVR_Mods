@@ -21,7 +21,7 @@ public class ChatBoxExtensions : MelonMod
         ApplyIntegrations();
     }
 
-    void ApplyIntegrations()
+    private void ApplyIntegrations()
     {
 
         Integrations.Commands.InitializeCommandHandlers();
@@ -39,7 +39,7 @@ public class ChatBoxExtensions : MelonMod
         }
     }
 
-    void ApplyPatches(Type type)
+    private void ApplyPatches(Type type)
     {
         try
         {

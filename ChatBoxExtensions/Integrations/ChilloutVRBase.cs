@@ -108,7 +108,7 @@ internal class ChilloutVRBaseCommands : CommandBase
             {
                 if (args.Length > 0)
                 {
-                    string player = args[0y];
+                    string player = args[0];
                     CVRPlayerEntity playerEnt = CVRPlayerManager.Instance.NetworkPlayers.FirstOrDefault(x => x.Username == player);
                     if (playerEnt != null) BetterBetterCharacterController.Instance.TeleportPlayerTo(playerEnt.PuppetMaster.transform.position, false, false);
                 }
