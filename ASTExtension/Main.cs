@@ -57,10 +57,29 @@ public class ASTExtensionMod : MelonMod
         Logger = LoggerInstance;
 
         //InitializeSettings();
-
-        CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener(OnLocalAvatarLoad);
-        CVRGameEventSystem.Avatar.OnLocalAvatarClear.AddListener(OnLocalAvatarClear);
-        MelonCoroutines.Start(WaitForGestureRecogniser()); // todo: once stable, use initialization game event
+        //CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener(OnLocalAvatarLoad);
+        //CVRGameEventSystem.Avatar.OnLocalAvatarClear.AddListener(OnLocalAvatarClear);
+        
+        HarmonyInstance.Patch(
+            typeof(CVRGestureRecognizer).GetMethod(nameof(CVRGestureRecognizer.Start),
+                BindingFlags.Public | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnGestureRecogniserInitialized),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        
+        HarmonyInstance.Patch(
+            typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.SetupAvatar),
+                BindingFlags.Public | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnSetupAvatar),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        
+        HarmonyInstance.Patch(
+            typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.ClearAvatar),
+                BindingFlags.Public | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnClearAvatar),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
         
         InitializeIntegration("BTKUILib", Integrations.BtkUiAddon.Initialize);
     }
@@ -76,13 +95,20 @@ public class ASTExtensionMod : MelonMod
     
     #endregion Melon Events
 
-    #region Game Events
+    #region Harmony Patches
+
+    private static void OnGestureRecogniserInitialized()
+        => Instance.InitializeScaleGesture();
     
-    private IEnumerator WaitForGestureRecogniser()
-    {
-        yield return new WaitUntil(() => CVRGestureRecognizer.Instance);
-        InitializeScaleGesture();
-    }
+    private static void OnSetupAvatar(ref CVRAvatar ____avatarDescriptor)
+        => Instance.OnLocalAvatarLoad(____avatarDescriptor);
+    
+    private static void OnClearAvatar(ref CVRAvatar ____avatarDescriptor)
+        => Instance.OnLocalAvatarClear(____avatarDescriptor);
+
+    #endregion Harmony Patches
+    
+    #region Game Events
 
     private void OnLocalAvatarLoad(CVRAvatar _)
     {
@@ -122,7 +148,7 @@ public class ASTExtensionMod : MelonMod
         // update the last height
         if (avatar != null) StoreLastHeight(PlayerSetup.Instance.GetCurrentAvatarHeight());
     }
-
+    
     #endregion Game Events
 
     #region Avatar Scale Tool Extension
@@ -393,7 +419,7 @@ public class ASTExtensionMod : MelonMod
         // Apply the adjustment to the target height
         var targetHeight = _initialTargetHeight * heightAdjustmentFactor;
         targetHeight = Mathf.Clamp(targetHeight, _minHeight, _maxHeight);
-        SetAvatarHeight(targetHeight);
+        MelonCoroutines.Start(SetAvatarHeightDelayed(targetHeight));
     }
 
     private static bool AreBothTriggersDown()
@@ -402,6 +428,13 @@ public class ASTExtensionMod : MelonMod
         return CVRInputManager.Instance.interactLeftValue > 0.75f &&
                CVRInputManager.Instance.interactRightValue > 0.75f;
     }
-
+    
+    private readonly YieldInstruction _heightUpdateYield = new WaitForEndOfFrame();
+    private IEnumerator SetAvatarHeightDelayed(float height)
+    {
+        yield return _heightUpdateYield;
+        SetAvatarHeight(height);
+    }
+    
     #endregion Scale Reconizer
 }
