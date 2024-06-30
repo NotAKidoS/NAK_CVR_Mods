@@ -324,6 +324,7 @@ public class ASTExtensionMod : MelonMod
         animatorManager.SetParameter(_parameterName, value);
         animatorManager.Animator.Update(0f); // apply
         CVR_MenuManager.Instance.SendAdvancedAvatarUpdate(_parameterName, value); // update AAS menus
+        PlayerSetup.Instance.CheckUpdateAvatarScaleToPlaySpaceRelation(); // update play space
     }
 
     #endregion Avatar Scale Tool Extension
