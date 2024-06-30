@@ -160,7 +160,10 @@ public class ASTExtensionMod : MelonMod
         "Scale/Scale", // kafe
         "Scaler", // momo
         "Height", // loliwurt
-        "LoliModifier" // avatar
+        "LoliModifier", // avatar
+        "AvatarSize", // froggo
+        "Size", // lily
+        "SizeScale", // tactical
     };
 
     //https://github.com/NotAKidoS/AvatarScaleTool/blob/eaa6d343f916b9bb834bb30989fc6987680492a2/AvatarScaleTool/Editor/Scripts/AvatarScaleTool.cs#L13-L14
