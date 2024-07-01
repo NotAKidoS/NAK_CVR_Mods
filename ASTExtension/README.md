@@ -19,6 +19,12 @@ ASTExtension will attempt to work with the following setups:
 - Scale/Scale
 - Height
 - LoliModifier
+- AvatarSize
+- Size
+- SizeScale
+- Scaling
+
+These parameter names are not case sensitive and have been gathered from polling the community for common parameter names.
 
 Assuming the parameter is a float, ASTExtension will attempt to use it as the height parameter. Will automatically calibrate to the height range of the found parameter, assuming the scaling animation is in a blend tree / state using motion time & is linear. The scaling animation state **must be active** at time of avatar load.
 
@@ -34,7 +40,7 @@ Examples:
 - `BurntToast` - 0 to 10 (input single)
   - This will not work properly. The parameter name is not recognized by ASTExtension.
 
-If your setup is theoretically supported but not working, it is likely the scaling animation is not linear. In this case, you will need to fix your animation clip curves / blend tree to be linear, or use Avatar Scale Tool to generate a new scaling animation.
+If your setup is theoretically supported but not working, it is likely the scaling animation is not linear or has loop enabled if using Motion Time, making the first and last frame identical height. In this case, you will need to fix your animation clip curves / blend tree to be linear &|| not loop, or use Avatar Scale Tool to generate a new scaling animation.
 
 ---
 
