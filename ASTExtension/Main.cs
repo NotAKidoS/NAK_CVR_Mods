@@ -368,7 +368,6 @@ public class ASTExtensionMod : MelonMod
         });
         gesture.onStart.AddListener(OnScaleStart);
         gesture.onStay.AddListener(OnScaleStay);
-        gesture.onEnd.AddListener(OnScaleEnd);
         CVRGestureRecognizer.Instance.gestures.Add(gesture);
 
         gesture = new CVRGesture
@@ -387,7 +386,6 @@ public class ASTExtensionMod : MelonMod
         });
         gesture.onStart.AddListener(OnScaleStart);
         gesture.onStay.AddListener(OnScaleStay);
-        gesture.onEnd.AddListener(OnScaleEnd);
         CVRGestureRecognizer.Instance.gestures.Add(gesture);
     }
 
@@ -402,9 +400,6 @@ public class ASTExtensionMod : MelonMod
         // Store initial modifier so we can get difference later
         _initialModifier = Mathf.Max(modifier, 0.01f); // no zero
         _initialTargetHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
-        
-        if (EntryRequireTriggersDuringGesture.Value) 
-            CVR_InteractableManager.enableInteractions = false;
     }
     
     private void OnScaleStay(float modifier, Transform transform1, Transform transform2)
@@ -438,18 +433,6 @@ public class ASTExtensionMod : MelonMod
         var targetHeight = _initialTargetHeight * heightAdjustmentFactor;
         targetHeight = Mathf.Clamp(targetHeight, _minHeight, _maxHeight);
         SetAvatarHeight(targetHeight);
-    }
-    
-    private void OnScaleEnd(float modifier, Transform transform1, Transform transform2)
-    {
-        if (!_currentAvatarSupported)
-            return;
-
-        if (!EntryUseScaleGesture.Value)
-            return;
-
-        if (EntryRequireTriggersDuringGesture.Value) 
-            CVR_InteractableManager.enableInteractions = true;
     }
 
     private static bool AreBothTriggersDown()
