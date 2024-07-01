@@ -30,6 +30,14 @@ public class ASTExtensionMod : MelonMod
     private static readonly MelonPreferences_Entry<bool> EntryUseScaleGesture =
         Category.CreateEntry("use_scale_gesture", true,
             "Use Scale Gesture", "Use the scale gesture to adjust your avatar's height.");
+    
+    private static readonly MelonPreferences_Entry<bool> EntryInvertGesture =
+        Category.CreateEntry("invert_scale_gesture", false,
+            "Invert Scale Gesture", "Invert the scale gesture to adjust your avatar's height.");
+    
+    private static readonly MelonPreferences_Entry<bool> EntryRequireTriggersDuringGesture =
+        Category.CreateEntry("require_triggers", true,
+            "Require Triggers", "Require triggers to be down while doing the scale gesture.");
 
     private static readonly MelonPreferences_Entry<bool> EntryPersistentHeight =
         Category.CreateEntry("persistent_height", false,
@@ -164,6 +172,7 @@ public class ASTExtensionMod : MelonMod
         "AvatarSize", // froggo
         "Size", // lily
         "SizeScale", // tactical
+        "Scaling", // dark gamer
     };
 
     //https://github.com/NotAKidoS/AvatarScaleTool/blob/eaa6d343f916b9bb834bb30989fc6987680492a2/AvatarScaleTool/Editor/Scripts/AvatarScaleTool.cs#L13-L14
@@ -271,7 +280,7 @@ public class ASTExtensionMod : MelonMod
         minHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
         
         // set max height to 1++
-        for (int i = 1; i <= 10; i++)
+        for (int i = 1; i <= 100; i++)
         {
             animator.SetFloat(parameterName, i);
             animator.Update(0f); // apply
@@ -333,14 +342,11 @@ public class ASTExtensionMod : MelonMod
     #endregion Avatar Scale Tool Extension
 
     #region Scale Reconizer
-
-    // Require triggers to be down while doing fist - Exteratta
-    private readonly bool RequireTriggers = true;
-
+    
     // Initial values when scale gesture is started
     private float _initialModifier;
     private float _initialTargetHeight;
-
+    
     private void InitializeScaleGesture()
     {
         // This requires arms far outward- pull inward with fist and triggers.
@@ -362,6 +368,7 @@ public class ASTExtensionMod : MelonMod
         });
         gesture.onStart.AddListener(OnScaleStart);
         gesture.onStay.AddListener(OnScaleStay);
+        gesture.onEnd.AddListener(OnScaleEnd);
         CVRGestureRecognizer.Instance.gestures.Add(gesture);
 
         gesture = new CVRGesture
@@ -380,6 +387,7 @@ public class ASTExtensionMod : MelonMod
         });
         gesture.onStart.AddListener(OnScaleStart);
         gesture.onStay.AddListener(OnScaleStay);
+        gesture.onEnd.AddListener(OnScaleEnd);
         CVRGestureRecognizer.Instance.gestures.Add(gesture);
     }
 
@@ -394,8 +402,11 @@ public class ASTExtensionMod : MelonMod
         // Store initial modifier so we can get difference later
         _initialModifier = Mathf.Max(modifier, 0.01f); // no zero
         _initialTargetHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
+        
+        if (EntryRequireTriggersDuringGesture.Value) 
+            CVR_InteractableManager.enableInteractions = false;
     }
-
+    
     private void OnScaleStay(float modifier, Transform transform1, Transform transform2)
     {
         if (!_currentAvatarSupported)
@@ -407,15 +418,18 @@ public class ASTExtensionMod : MelonMod
         modifier = Mathf.Max(modifier, 0.01f); // no zero
 
         // Allow user to release triggers to reset "world grip"
-        if (RequireTriggers && !AreBothTriggersDown())
+        if (EntryRequireTriggersDuringGesture.Value && !AreBothTriggersDown())
         {
             _initialModifier = modifier;
             _initialTargetHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
             return;
         }
 
-        // Invert so the gesture is more of a world squish instead of happy hug
-        var modifierRatio = 1f / (modifier / _initialModifier);
+        // Calculate modifier ratio
+        var modifierRatio = modifier / _initialModifier;
+
+        // If inversion is toggled, invert the modifier ratio
+        if (EntryInvertGesture.Value) modifierRatio = 1f / modifierRatio;
 
         // Determine the adjustment factor for the height, this will be >1 if scaling up, <1 if scaling down.
         var heightAdjustmentFactor = modifierRatio > 1 ? 1 + (modifierRatio - 1) : 1 - (1 - modifierRatio);
@@ -423,7 +437,19 @@ public class ASTExtensionMod : MelonMod
         // Apply the adjustment to the target height
         var targetHeight = _initialTargetHeight * heightAdjustmentFactor;
         targetHeight = Mathf.Clamp(targetHeight, _minHeight, _maxHeight);
-        MelonCoroutines.Start(SetAvatarHeightDelayed(targetHeight));
+        SetAvatarHeight(targetHeight);
+    }
+    
+    private void OnScaleEnd(float modifier, Transform transform1, Transform transform2)
+    {
+        if (!_currentAvatarSupported)
+            return;
+
+        if (!EntryUseScaleGesture.Value)
+            return;
+
+        if (EntryRequireTriggersDuringGesture.Value) 
+            CVR_InteractableManager.enableInteractions = true;
     }
 
     private static bool AreBothTriggersDown()
@@ -431,13 +457,6 @@ public class ASTExtensionMod : MelonMod
         // Maybe it should be one trigger? Imagine XSOverlay scaling but for player.
         return CVRInputManager.Instance.interactLeftValue > 0.75f &&
                CVRInputManager.Instance.interactRightValue > 0.75f;
-    }
-    
-    private readonly YieldInstruction _heightUpdateYield = new WaitForEndOfFrame();
-    private IEnumerator SetAvatarHeightDelayed(float height)
-    {
-        yield return _heightUpdateYield;
-        SetAvatarHeight(height);
     }
     
     #endregion Scale Reconizer
