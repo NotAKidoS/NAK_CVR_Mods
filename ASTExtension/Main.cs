@@ -429,7 +429,7 @@ public class ASTExtensionMod : MelonMod
         var modifierRatio = modifier / _initialModifier;
 
         // If inversion is toggled, invert the modifier ratio
-        if (EntryInvertGesture.Value) modifierRatio = 1f / modifierRatio;
+        if (!EntryInvertGesture.Value) modifierRatio = 1f / modifierRatio;
 
         // Determine the adjustment factor for the height, this will be >1 if scaling up, <1 if scaling down.
         var heightAdjustmentFactor = modifierRatio > 1 ? 1 + (modifierRatio - 1) : 1 - (1 - modifierRatio);
