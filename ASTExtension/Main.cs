@@ -406,6 +406,9 @@ public class ASTExtensionMod : MelonMod
 
         if (!EntryUseScaleGesture.Value)
             return;
+        
+        if (!IsGripping()) // knuckles controllers dont need grip to do Fist gesture
+            return;
 
         modifier = Mathf.Max(modifier, 0.01f); // no zero
 
@@ -432,6 +435,12 @@ public class ASTExtensionMod : MelonMod
         SetAvatarHeight(targetHeight);
     }
 
+    private static bool IsGripping()
+    {
+        return CVRInputManager.Instance.gripLeftValue > 0.50f ||
+               CVRInputManager.Instance.gripRightValue > 0.50f;
+    }
+    
     private static bool AreBothTriggersDown()
     {
         // Maybe it should be one trigger? Imagine XSOverlay scaling but for player.
