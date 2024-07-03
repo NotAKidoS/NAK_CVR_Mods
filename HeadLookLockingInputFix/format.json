@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "HeadLookLockingInputFix",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes a bug where pressing the head look locking key (ALT) while in VR with the game window focused would disable input and soft-lock you.",
+  "searchtags": [
+    "input",
+    "locked",
+    "vr",
+    "fix",
+    "meow"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r34/HeadLookLockingInputFix.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/HeadLookLockingInputFix/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
