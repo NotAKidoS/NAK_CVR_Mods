@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Fixes the Visual Clone system and allows you to use it again.\n\nUsing the Visual Clone should be faster than the default Head Hiding & Shadow Clones, but will add a longer hitch on initial avatar load.\n\n**NOTE:** The Visual Clone is still an *experimental* feature that was temporarily removed in [ChilloutVR 2024r175 Hotfix 1](https://abinteractive.net/blog/chilloutvr_2024r175_hotfix_1), so there may be bugs or issues with it.",
+  "description": "Fixes the Visual Clone system and allows you to use it again.\n\nUsing the Visual Clone should be faster than the default Head Hiding & Shadow Clones, but will add a longer hitch on initial avatar load.\n\n**NOTE:** The Visual Clone is still an experimental feature that was temporarily removed in [ChilloutVR 2024r175 Hotfix 1](https://abinteractive.net/blog/chilloutvr_2024r175_hotfix_1), so there may be bugs or issues with it.",
   "searchtags": [
     "visual",
     "clone",
