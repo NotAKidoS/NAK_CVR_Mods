@@ -4,7 +4,7 @@ https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a78
 
 Adds a hexagon indicator to downloading props. Indicator is styled to look similar to Portals.
 
-Can use Delete Mode & The Clapper on loading hexagons to cancel stuck downloads. Setting is provided to display the hexagon for Blocked/Filtered props.
+Can use Delete Mode ~~& The Clapper~~ on loading hexagons to cancel stuck downloads. Setting is provided to display the hexagon for Blocked/Filtered props.
 
 ---
 

@@ -82,7 +82,7 @@ public class ASTExtensionMod : MelonMod
         HarmonyInstance.Patch(
             typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.ClearAvatar),
                 BindingFlags.Public | BindingFlags.Instance),
-            postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnClearAvatar),
+            prefix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnClearAvatar),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         

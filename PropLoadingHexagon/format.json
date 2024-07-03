@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "Exterrata & NotAKidoS",
-  "description": "Adds a hexagon indicator to downloading props. Indicator is styled to look similar to Portals.\n\nCan use Delete Mode & The Clapper on loading hexagons to cancel stuck downloads. Setting is provided to display the hexagon for Blocked/Filtered props.",
+  "description": "Adds a hexagon indicator to downloading props. Indicator is styled to look similar to Portals.\n\nCan use Delete Mode on loading hexagons to cancel stuck downloads. Setting is provided to display the hexagon for Blocked/Filtered props.",
   "searchtags": [
     "prop",
     "spawn",

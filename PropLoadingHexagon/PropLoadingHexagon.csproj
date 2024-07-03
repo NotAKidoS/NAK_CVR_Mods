@@ -5,11 +5,6 @@
     <RootNamespace>PropSpawnTweaks</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="TheClapper">
-      <HintPath>..\.ManagedLibs\TheClapper.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Resources\loading_hexagon.assets">
       <LogicalName>loading_hexagon.assets</LogicalName>
     </EmbeddedResource>  </ItemGroup>

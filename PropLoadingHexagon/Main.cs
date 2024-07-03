@@ -65,8 +65,7 @@ public class PropLoadingHexagonMod : MelonMod
         );
         
         LoadAssetBundle();
-        
-        InitializeIntegration("TheClapper", Integrations.TheClapperIntegration.Init);
+        //HandleIntegrations();
     }
 
     public override void OnUpdate()
@@ -100,18 +99,19 @@ public class PropLoadingHexagonMod : MelonMod
 
     #endregion Melon Events
 
-    #region Integrations
-
-    private void InitializeIntegration(string modName, Action integrationAction)
-    {
-        if (RegisteredMelons.All(it => it.Info.Name != modName))
-            return;
-
-        LoggerInstance.Msg($"Initializing {modName} integration.");
-        integrationAction.Invoke();
-    }
-
-    #endregion Integrations
+    // #region Integrations
+    //
+    // [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    // private void HandleIntegrations()
+    // {
+    //     if (RegisteredMelons.Any(it => it.Info.Name == "TheClapper"))
+    //     {
+    //         LoggerInstance.Msg("Initializing TheClapper integration.");
+    //         Integrations.TheClapperIntegration.Init();
+    //     }
+    // }
+    //
+    // #endregion Integrations
 
     #region Asset Bundle Loading
 
