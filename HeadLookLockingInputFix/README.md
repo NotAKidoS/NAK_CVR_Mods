@@ -1,6 +1,6 @@
-# IKSimulatedRootAngleFix
+# HeadLookLockingInputFix
 
-Fixes a small issue with Desktop & HalfBody root angle being incorrectly calculated while on rotating Movement Parents. If you've ever noticed your body/feet insisting on facing opposite of the direction you are rotating, this fixes that.
+Fixes a bug where pressing the head look locking key (ALT) while in VR with the game window focused and a menu open would disable input and soft-lock you.
 
 ---
 
