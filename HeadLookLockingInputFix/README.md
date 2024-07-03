@@ -1,6 +1,6 @@
 # HeadLookLockingInputFix
 
-Fixes a bug where pressing the head look locking key (ALT) while in VR with the game window focused and a menu open would disable input and soft-lock you.
+Fixes a bug where pressing the independent head look key (ALT) while in VR with the game window focused and a menu open would disable input and soft-lock you.
 
 ---
 

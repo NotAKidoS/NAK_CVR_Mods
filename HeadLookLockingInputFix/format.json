@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Fixes a bug where pressing the head look locking key (ALT) while in VR with the game window focused and a menu open would disable input and soft-lock you.",
+  "description": "Fixes a bug where pressing the independent head look key (ALT) while in VR with the game window focused and a menu open would disable input and soft-lock you.",
   "searchtags": [
     "input",
     "locked",
