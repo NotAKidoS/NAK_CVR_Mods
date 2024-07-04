@@ -2,6 +2,7 @@
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
+using ABI_RC.Core.Util;
 using ABI_RC.Core.Util.AnimatorManager;
 using ABI_RC.Systems.InputManagement;
 using ABI.CCK.Components;
@@ -73,8 +74,8 @@ public class ASTExtensionMod : MelonMod
         );
         
         HarmonyInstance.Patch(
-            typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.SetupAvatar),
-                BindingFlags.Public | BindingFlags.Instance),
+            typeof(ColliderTools).GetMethod(nameof(ColliderTools.PlaceDefaultPointers),
+                BindingFlags.Public | BindingFlags.Static),
             postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnSetupAvatar),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
@@ -104,9 +105,12 @@ public class ASTExtensionMod : MelonMod
 
     private static void OnGestureRecogniserInitialized()
         => Instance.InitializeScaleGesture();
-    
-    private static void OnSetupAvatar(ref CVRAvatar ____avatarDescriptor)
-        => Instance.OnLocalAvatarLoad(____avatarDescriptor);
+
+    private static void OnSetupAvatar(bool isLocalPlayer)
+    {
+        if (!isLocalPlayer) return;
+        Instance.OnLocalAvatarLoad();
+    }
     
     private static void OnClearAvatar(ref CVRAvatar ____avatarDescriptor)
         => Instance.OnLocalAvatarClear(____avatarDescriptor);
@@ -115,7 +119,7 @@ public class ASTExtensionMod : MelonMod
     
     #region Game Events
 
-    private void OnLocalAvatarLoad(CVRAvatar _)
+    private void OnLocalAvatarLoad()
     {
         if (!FindSupportedParameter(out string parameterName))
             return;
@@ -272,14 +276,14 @@ public class ASTExtensionMod : MelonMod
         animatorManager.GetParameter(parameterName, out float initialValue);
         
         // set min height to 0
-        animator.SetFloat(parameterName, 0f);
+        animatorManager.SetParameter(parameterName, 0f);
         animator.Update(0f); // apply
         minHeight = PlayerSetup.Instance.GetCurrentAvatarHeight();
         
         // set max height to 1++
         for (int i = 1; i <= 100; i++)
         {
-            animator.SetFloat(parameterName, i);
+            animatorManager.SetParameter(parameterName, i);
             animator.Update(0f); // apply
             var height = PlayerSetup.Instance.GetCurrentAvatarHeight();
             if (height <= maxHeight) break; // stop if height is not increasing
@@ -288,7 +292,7 @@ public class ASTExtensionMod : MelonMod
         }
         
         // reset the parameter to its initial value
-        animator.SetFloat(parameterName, initialValue);
+        animatorManager.SetParameter(parameterName, initialValue);
         animator.Update(0f); // apply
         
         // check if there was no change
