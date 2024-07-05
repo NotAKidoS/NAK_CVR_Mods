@@ -19,6 +19,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r35/ASTExtension.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ASTExtension/",
-  "changelog": "- Fixed an issue where the parameter calibration process would sometimes result in the mouth pointer being misplaced when generated.",
+  "changelog": "- Fixed an issue where the parameter calibration process would sometimes result in the mouth pointer being misplaced when generated.\n- Fixed IsGripping check for Knuckles controllers not requiring *both* hands as intended.",
   "embedcolor": "#f61963"
 }

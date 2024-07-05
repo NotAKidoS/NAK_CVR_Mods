@@ -441,7 +441,7 @@ public class ASTExtensionMod : MelonMod
 
     private static bool IsGripping()
     {
-        return CVRInputManager.Instance.gripLeftValue > 0.50f ||
+        return CVRInputManager.Instance.gripLeftValue > 0.50f &&
                CVRInputManager.Instance.gripRightValue > 0.50f;
     }
     
