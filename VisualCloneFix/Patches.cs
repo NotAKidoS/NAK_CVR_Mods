@@ -26,9 +26,14 @@ public static class Patches
         ref Dictionary<Transform, FPRExclusion> __result)
     {
         // add an fpr exclusion to the head bone
-        FPRExclusion headExclusion = headBone.gameObject.AddComponent<FPRExclusion>();
+        if (!headBone.TryGetComponent(out FPRExclusion headExclusion))
+        {
+            headExclusion = headBone.gameObject.AddComponent<FPRExclusion>();
+            headExclusion.isShown = false; // default to hidden
+            headExclusion.target = headBone;
+        }
+        
         MeshHiderExclusion headExclusionBehaviour = new();
-        headExclusion.target = headBone;
         headExclusion.behaviour = headExclusionBehaviour;
         headExclusionBehaviour.id = 1; // head bone is always 1
         
@@ -126,6 +131,15 @@ public static class Patches
         }
 
         __result = vertexIndices;
+        return false;
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(MeshHiderExclusion), nameof(MeshHiderExclusion.UpdateExclusions))]
+    private static bool OnUpdateExclusions(bool isShown, bool shrinkToZero, ref int ___id)
+    {
+        if (isShown) LocalCloneManager.cullingMask &= ~(1 << ___id);
+        else LocalCloneManager.cullingMask |= 1 << ___id;
         return false;
     }
 }
