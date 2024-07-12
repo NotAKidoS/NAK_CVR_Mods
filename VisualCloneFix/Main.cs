@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using System;
+using MelonLoader;
 
 namespace NAK.VisualCloneFix;
 

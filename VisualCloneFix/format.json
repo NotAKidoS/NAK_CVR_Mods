@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r36/VisualCloneFix.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/VisualCloneFix/",
-  "changelog": "- Fixed FPRExclusions IsShown state being inverted when toggled.\n- Fixed head FPRExclusion generation not checking for existing exclusion.",
+  "changelog": "- Fixed FPRExclusions IsShown state being inverted when toggled.\n- Fixed head FPRExclusion generation not checking for existing exclusion.\n- Sped up FindExclusionVertList by 100x by not being an idiot. This heavily reduces avatar hitch with Visual Clone active.",
   "embedcolor": "#f61963"
 }
