@@ -107,8 +107,12 @@ public static class Patches
 
         // Populate the weights array
         for (int i = 0; i < boneCount; i++)
-            if (exclusions.ContainsKey(bones[i]))
+        {
+            Transform bone = bones[i];
+            if (bone == null) continue;
+            if (exclusions.ContainsKey(bone))
                 boneHasExclusion[i] = true;
+        }
 
         const float minWeightThreshold = 0.2f;
 
