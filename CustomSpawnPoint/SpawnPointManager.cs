@@ -77,7 +77,7 @@ namespace NAK.CustomSpawnPoint
             CustomSpawnPointMod.Logger.Msg("World loaded: " + worldId);
 
             currentWorldId = worldId;
-            currentSpawnPoint = spawnPoints.GetValueOrDefault(currentWorldId);
+            currentSpawnPoint = spawnPoints.TryGetValue(currentWorldId, out SpawnPointData spawnPoint) ? spawnPoint : null;
             originalSpawnPointsArray ??= world.spawns; // cache the original spawn points array, if null its fine
 
             if (currentSpawnPoint.HasValue)
