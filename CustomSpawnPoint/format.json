@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "CustomSpawnPoint",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Replaces the unused Images button in the World Details page with a button to set a custom spawn point.",
+  "searchtags": [
+    "spawn",
+    "point",
+    "custom",
+    "world",
+    "load"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r36/CustomSpawnPoint.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CustomSpawnPoint/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#f61963"
+}
