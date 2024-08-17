@@ -1,6 +1,6 @@
-# IKSimulatedRootAngleFix
+# CVRLuaToolsExtension
 
-Fixes a small issue with Desktop & HalfBody root angle being incorrectly calculated while on rotating Movement Parents. If you've ever noticed your body/feet insisting on facing opposite of the direction you are rotating, this fixes that.
+Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality.
 
 ---
 

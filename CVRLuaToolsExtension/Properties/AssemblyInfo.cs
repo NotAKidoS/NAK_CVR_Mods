@@ -27,6 +27,6 @@ using System.Reflection;
 namespace NAK.CVRLuaToolsExtension.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }

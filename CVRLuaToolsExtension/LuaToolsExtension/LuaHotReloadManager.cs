@@ -9,79 +9,64 @@ namespace NAK.CVRLuaToolsExtension;
 
 public static class LuaHotReloadManager
 {
-    private static readonly Dictionary<string, List<int>> s_AssetIdToLuaClientBehaviourIds = new();
-    private static readonly Dictionary<int, CVRLuaClientBehaviour> s_LuaComponentIdsToLuaClientBehaviour = new();
+    // (asset id + lua component id) -> index is component reference
+    private static readonly List<int> s_CombinedKeys = new();
+    private static readonly List<CVRLuaClientBehaviour> s_LuaComponentInstances = new();
 
     #region Game Events
 
     public static void OnCVRLuaBaseBehaviourLoadAndRunScript(CVRLuaClientBehaviour clientBehaviour)
     {
-        //CVRLuaToolsExtensionMod.Logger.Msg($"[LuaHotReloadManager] Script awake: {clientBehaviour.name}");
-
         if (!clientBehaviour.IsScriptEligibleForHotReload())
             return;
 
-        var assetId = clientBehaviour.GetAssetIdFromScript();
-        if (!s_AssetIdToLuaClientBehaviourIds.ContainsKey(assetId))
-            s_AssetIdToLuaClientBehaviourIds[assetId] = new List<int>();
-
-        var luaComponentId = GetGameObjectPathHashCode(clientBehaviour.transform);
-        if (s_AssetIdToLuaClientBehaviourIds[assetId].Contains(luaComponentId))
+        // check if the component is already in the list (shouldn't happen)
+        if (s_LuaComponentInstances.Contains(clientBehaviour))
         {
-            CVRLuaToolsExtensionMod.Logger.Warning(
-                $"[LuaHotReloadManager] Script already exists: {clientBehaviour.name}");
+            CVRLuaToolsExtensionMod.Logger.Warning($"[LuaHotReloadManager] Script already added: {clientBehaviour.name}");
             return;
         }
+        
+        // combine the assetId and instanceId into a single key, so multiple instances of the same script can be tracked
+        string assetId = clientBehaviour.GetAssetIdFromScript();
+        int instanceId = GetGameObjectPathHashCode(clientBehaviour.transform);
+        int combinedKey = GenerateCombinedKey(assetId.GetHashCode(), instanceId);
 
-        s_AssetIdToLuaClientBehaviourIds[assetId].Add(luaComponentId);
-        s_LuaComponentIdsToLuaClientBehaviour[luaComponentId] = clientBehaviour;
+        s_CombinedKeys.Add(combinedKey);
+        s_LuaComponentInstances.Add(clientBehaviour);
+
         CVRLuaToolsExtensionMod.Logger.Msg($"[LuaHotReloadManager] Added script: {clientBehaviour.name}");
     }
 
     public static void OnCVRLuaBaseBehaviourDestroy(CVRLuaClientBehaviour clientBehaviour)
     {
-        //CVRLuaToolsExtensionMod.Logger.Msg($"[LuaHotReloadManager] Script destroy: {clientBehaviour.name}");
-
-        var assetId = clientBehaviour.GetAssetIdFromScript();
-        if (!s_AssetIdToLuaClientBehaviourIds.ContainsKey(assetId))
+        if (!clientBehaviour.IsScriptEligibleForHotReload())
             return;
 
-        var luaClientBehaviourIds = s_AssetIdToLuaClientBehaviourIds[assetId];
-        foreach (var luaComponentId in luaClientBehaviourIds)
+        if (!s_LuaComponentInstances.Contains(clientBehaviour))
         {
-            if (!s_LuaComponentIdsToLuaClientBehaviour.TryGetValue(luaComponentId,
-                out CVRLuaClientBehaviour luaClientBehaviour))
-                continue;
-
-            if (luaClientBehaviour != clientBehaviour)
-                continue;
-
-            s_LuaComponentIdsToLuaClientBehaviour.Remove(luaComponentId);
-            luaClientBehaviourIds.Remove(luaComponentId);
-            if (luaClientBehaviourIds.Count == 0) s_AssetIdToLuaClientBehaviourIds.Remove(assetId);
-            CVRLuaToolsExtensionMod.Logger.Msg($"[LuaHotReloadManager] Removed script: {clientBehaviour.name}");
-            break;
+            CVRLuaToolsExtensionMod.Logger.Warning($"[LuaHotReloadManager] Eligible for Hot Reload script destroyed without being tracked first: {clientBehaviour.name}");
+            return;
         }
+        
+        int index = s_LuaComponentInstances.IndexOf(clientBehaviour);
+        s_CombinedKeys.RemoveAt(index);
+        s_LuaComponentInstances.RemoveAt(index);
+
+        CVRLuaToolsExtensionMod.Logger.Msg($"[LuaHotReloadManager] Removed script: {clientBehaviour.name}");
     }
-    
+
     public static void OnReceiveUpdatedScript(ScriptInfo info)
     {
-        if (!s_AssetIdToLuaClientBehaviourIds.TryGetValue(info.AssetId, out var luaComponentIds))
-        {
-            CVRLuaToolsExtensionMod.Logger.Warning(
-                $"[LuaHotReloadManager] No scripts found for asset id: {info.AssetId}");
-            return;
-        }
+        int combinedKey = GenerateCombinedKey(info.AssetId.GetHashCode(), info.LuaComponentId);
 
         bool found = false;
-        foreach (var luaComponentId in luaComponentIds)
+        for (int i = 0; i < s_CombinedKeys.Count; i++)
         {
-            if (!s_LuaComponentIdsToLuaClientBehaviour.TryGetValue(luaComponentId,
-                    out CVRLuaClientBehaviour clientBehaviour))
+            if (combinedKey != s_CombinedKeys[i])
                 continue;
 
-            found = true;
-            //CVRLuaToolsExtensionMod.Logger.Msg($"[LuaHotReloadManager] Reloading script: {info.ScriptName} for {clientBehaviour.name}");
+            CVRLuaClientBehaviour clientBehaviour = s_LuaComponentInstances[i];
 
             if (clientBehaviour.asset.m_ScriptPath == info.ScriptPath)
             {
@@ -89,6 +74,7 @@ public static class LuaHotReloadManager
                 clientBehaviour.asset.name = info.ScriptName;
                 clientBehaviour.asset.m_ScriptText = info.ScriptText;
                 clientBehaviour.Restart();
+                found = true;
             }
             else
             {
@@ -102,25 +88,31 @@ public static class LuaHotReloadManager
                 clientBehaviour.asset.m_ScriptText = info.ScriptText;
 
                 clientBehaviour.Restart();
+                found = true;
             }
         }
 
-        if (found) CohtmlHud.Instance.ViewDropTextImmediate("(Local) CVRLuaTools", "Received script update", "Reloaded script: " + info.ScriptName);
+        if (found)
+        {
+            CohtmlHud.Instance.ViewDropTextImmediate("(Local) CVRLuaTools", "Received script update", "Reloaded script: " + info.ScriptName);
+        }
     }
 
     #endregion Game Events
 
     #region Private Methods
     
+    private static int GenerateCombinedKey(int assetId, int instanceId)
+    {
+        return (assetId << 16) | instanceId; // yes
+    }
+    
     private static int GetGameObjectPathHashCode(Transform transform)
     {
-        // Attempt to find the root component transform in one step
-
-        Transform rootComponentTransform = null;
-        
         // both CVRAvatar & CVRSpawnable *should* have an asset info component
+        Transform rootComponentTransform = null;
         CVRAssetInfo rootComponent = transform.GetComponentInParent<CVRAssetInfo>(true);
-        if (rootComponent != null && rootComponent.type != CVRAssetInfo.AssetType.World)
+        if (rootComponent != null && rootComponent.type != CVRAssetInfo.AssetType.World) // ignore if under world instance
             rootComponentTransform = rootComponent.transform;
         
         // easy case, no need to crawl up the hierarchy

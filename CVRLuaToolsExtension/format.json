@@ -1,24 +1,24 @@
 {
   "_id": -1,
-  "name": "AASDefaultProfileFix",
+  "name": "CVRLuaToolsExtension",
   "modversion": "1.0.0",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Fixes the Default AAS profile not being applied when loading into an avatar without a profile selected.\n\nBy default, the game will not apply anything and the avatar will default to the state found within the Controller parameters.",
+  "description": "Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality.",
   "searchtags": [
-    "aas",
-    "profile",
-    "default",
-    "fix",
-    "meow"
+    "lua",
+    "scripting",
+    "hotreload",
+    "reload",
+    "development"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r33/AASDefaultProfileFix.dll",
-  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AASDefaultProfileFix/",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r33/CVRLuaToolsExtension.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CVRLuaToolsExtension/",
   "changelog": "- Initial release",
   "embedcolor": "#f61963"
 }
