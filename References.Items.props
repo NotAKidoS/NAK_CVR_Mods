@@ -76,6 +76,14 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Cohtml.Runtime.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="com.dogu.gamium.engine.unity.runtime">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\com.dogu.gamium.engine.unity.runtime.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="com.dogu.gamium.engine.unity.runtime.protocol">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\com.dogu.gamium.engine.unity.runtime.protocol.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="Crc32.NET">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Crc32.NET.dll</HintPath>
             <Private>False</Private>
@@ -136,6 +144,10 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\MeshBakerCore.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="Meta.XR.BuildingBlocks">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Meta.XR.BuildingBlocks.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="Mono.Security">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Mono.Security.dll</HintPath>
             <Private>False</Private>
@@ -170,6 +182,14 @@
         </Reference>
         <Reference Include="Oculus.LipSync">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Oculus.LipSync.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Oculus.Platform">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Oculus.Platform.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Oculus.VR">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Oculus.VR.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="PICO.Platform">
