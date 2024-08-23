@@ -7,6 +7,9 @@
 NStrip.exe
 .ManagedLibs/*.dll
 
+# Third party dependencies
+*/ThirdParty/*
+
 # User-specific files
 *.rsuser
 *.suo
