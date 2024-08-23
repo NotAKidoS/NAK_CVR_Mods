@@ -20,14 +20,12 @@ namespace NAK.OriginShift;
 public class OriginShiftMod : MelonMod
 {
     internal static MelonLogger.Instance Logger;
-    internal static HarmonyLib.Harmony HarmonyInst;
 
     #region Melon Mod Overrides
     
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
-        HarmonyInst = HarmonyInstance;
         
         ModSettings.Initialize();
         

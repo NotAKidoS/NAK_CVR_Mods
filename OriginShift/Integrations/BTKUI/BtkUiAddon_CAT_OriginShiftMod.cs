@@ -58,19 +58,16 @@ namespace NAK.OriginShiftMod.Integrations
                 default:
                 case OriginShiftManager.OriginShiftState.Inactive:
                     _ourMainButton.ButtonText = "Inactive";
-                    _ourMainButton.ButtonIcon = "OSM_Icon_OriginShiftConfig";
                     _ourMainButton.ButtonTooltip = "This world is not using Origin Shift.";
                     _ourMainButton.ButtonIcon = "OriginShift-Icon-Inactive";
                     break;
                 case OriginShiftManager.OriginShiftState.Active:
                     _ourMainButton.ButtonText = "Active";
-                    _ourMainButton.ButtonIcon = "OSM_Icon_OriginShiftConfig";
                     _ourMainButton.ButtonTooltip = "This world is currently using Origin Shift.";
                     _ourMainButton.ButtonIcon = "OriginShift-Icon-Active";
                     break;
                 case OriginShiftManager.OriginShiftState.Forced:
                     _ourMainButton.ButtonText = "Forced";
-                    _ourMainButton.ButtonIcon = "OSM_Icon_OriginShiftCopy";
                     _ourMainButton.ButtonTooltip = "You have forced Origin Shift for this world.";
                     _ourMainButton.ButtonIcon = "OriginShift-Icon-Forced";
                     break;
