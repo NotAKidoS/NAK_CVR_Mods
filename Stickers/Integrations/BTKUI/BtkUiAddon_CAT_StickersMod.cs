@@ -23,14 +23,14 @@ public static partial class BtkUiAddon
     private static readonly MultiSelection _desktopKeybindSelection = 
         new(
             "Desktop Keybind", 
-            Enum.GetNames(typeof(KeyCode)),
-            (int)ModSettings.Entry_PlaceBinding.Value
+            Enum.GetNames(typeof(ModSettings.KeyBind)),
+            Array.IndexOf(Enum.GetValues(typeof(ModSettings.KeyBind)), ModSettings.Entry_PlaceBinding.Value)
         )
         {
             OnOptionUpdated = i =>
             {
-                if (Enum.GetValues(typeof(KeyCode)) is string[] options) // inefficient but works
-                    ModSettings.Entry_PlaceBinding.Value = (KeyCode)Enum.Parse(typeof(KeyCode), options[i]);
+                string[] options = Enum.GetNames(typeof(ModSettings.KeyBind));
+                ModSettings.Entry_PlaceBinding.Value = (ModSettings.KeyBind)Enum.Parse(typeof(ModSettings.KeyBind), options[i]);
             }
         };
     

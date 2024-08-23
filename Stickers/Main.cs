@@ -33,7 +33,7 @@ public class StickerMod : MelonMod
         if (!ModSettings.Entry_UsePlaceBinding.Value) 
             return;
         
-        if (!Input.GetKeyDown(ModSettings.Entry_PlaceBinding.Value)) 
+        if (!Input.GetKeyDown((KeyCode)ModSettings.Entry_PlaceBinding.Value)) 
             return;
         
         StickerSystem.Instance.PlaceStickerFromTransform(PlayerSetup.Instance.activeCam.transform);
