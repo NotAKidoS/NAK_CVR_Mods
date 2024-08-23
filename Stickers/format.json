@@ -1,0 +1,23 @@
+{
+  "_id": 220,
+  "name": "PropLoadingHexagon",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "Exterrata & NotAKidoS",
+  "description": "Adds a hexagon indicator to downloading props. Indicator is styled to look similar to Portals.\n\nCan use Delete Mode on loading hexagons to cancel stuck downloads. Setting is provided to display the hexagon for Blocked/Filtered props.",
+  "searchtags": [
+    "prop",
+    "spawn",
+    "indicator",
+    "loading"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r34/PropLoadingHexagon.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PropLoadingHexagon/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
