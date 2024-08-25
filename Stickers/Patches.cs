@@ -1,5 +1,7 @@
 ﻿using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Core.IO;
 using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
 using HarmonyLib;
 using UnityEngine;
 
@@ -28,6 +30,20 @@ internal static class ControllerRayPatches
         if (__instance._hitUIInternal || !__instance._interactDown) 
             return;
         
-        StickerSystem.Instance.PlaceStickerFromTransform(__instance.rayDirectionTransform);
+        StickerSystem.Instance.PlaceStickerFromControllerRay(__instance.rayDirectionTransform, __instance.hand);
+    }
+}
+
+internal static class ShaderFilterHelperPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(ShaderFilterHelper), nameof(ShaderFilterHelper.SetupFilter))]
+    private static void Prefix_ShaderFilterHelper_SetupFilter()
+    {
+        if (!MetaPort.Instance.settings.GetSettingsBool("ExperimentalShaderLimitEnabled")) 
+            return;
+        
+        StickerMod.Logger.Warning("ExperimentalShaderLimitEnabled found to be true. Disabling setting to prevent crashes when spawning stickers!");
+        MetaPort.Instance.settings.SetSettingsBool("ExperimentalShaderLimitEnabled", false);
     }
 }

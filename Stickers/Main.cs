@@ -22,10 +22,11 @@ public class StickerMod : MelonMod
         
         ApplyPatches(typeof(Patches.PlayerSetupPatches));
         ApplyPatches(typeof(Patches.ControllerRayPatches));
+        ApplyPatches(typeof(Patches.ShaderFilterHelperPatches));
         
         LoadAssetBundle();
         
-        InitializeIntegration(nameof(BTKUILib), BtkUiAddon.Initialize); // quick menu ui
+        InitializeIntegration(nameof(BTKUILib), BTKUIAddon.Initialize); // quick menu ui
     }
     
     public override void OnUpdate()
@@ -36,7 +37,7 @@ public class StickerMod : MelonMod
         if (!Input.GetKeyDown((KeyCode)ModSettings.Entry_PlaceBinding.Value)) 
             return;
         
-        StickerSystem.Instance.PlaceStickerFromTransform(PlayerSetup.Instance.activeCam.transform);
+        StickerSystem.Instance.PlaceStickerFromControllerRay(PlayerSetup.Instance.activeCam.transform);
     }
     
     public override void OnApplicationQuit()
@@ -80,11 +81,13 @@ public class StickerMod : MelonMod
     
     private const string SourceSFX_PlayerSprayer = "Assets/Mods/Stickers/Source_sound_player_sprayer.wav";
     private const string LittleBigPlanetSFX_StickerPlace = "Assets/Mods/Stickers/LBP_Sticker_Place.wav";
+    private const string FactorioSFX_AlertDestroyed = "Assets/Mods/Stickers/Factorio_alert_destroyed.wav";
     
     internal static Shader DecalSimpleShader;
     internal static Shader DecalWriterShader;
     internal static AudioClip SourceSFXPlayerSprayer;
-    internal static AudioClip LittleBigPlanetStickerPlace;
+    internal static AudioClip LittleBigPlanetSFXStickerPlace;
+    internal static AudioClip FactorioSFXAlertDestroyed;
     
     private void LoadAssetBundle()
     {
@@ -127,13 +130,21 @@ public class StickerMod : MelonMod
         SourceSFXPlayerSprayer.hideFlags |= HideFlags.DontUnloadUnusedAsset;
         LoggerInstance.Msg($"Loaded {SourceSFX_PlayerSprayer}!");
         
-        LittleBigPlanetStickerPlace = assetBundle.LoadAsset<AudioClip>(LittleBigPlanetSFX_StickerPlace);
-        if (LittleBigPlanetStickerPlace == null) {
+        LittleBigPlanetSFXStickerPlace = assetBundle.LoadAsset<AudioClip>(LittleBigPlanetSFX_StickerPlace);
+        if (LittleBigPlanetSFXStickerPlace == null) {
             LoggerInstance.Error($"Failed to load {LittleBigPlanetSFX_StickerPlace}! Prefab is null!");
             return;
         }
-        LittleBigPlanetStickerPlace.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+        LittleBigPlanetSFXStickerPlace.hideFlags |= HideFlags.DontUnloadUnusedAsset;
         LoggerInstance.Msg($"Loaded {LittleBigPlanetSFX_StickerPlace}!");
+        
+        FactorioSFXAlertDestroyed = assetBundle.LoadAsset<AudioClip>(FactorioSFX_AlertDestroyed);
+        if (FactorioSFXAlertDestroyed == null) {
+            LoggerInstance.Error($"Failed to load {FactorioSFX_AlertDestroyed}! Prefab is null!");
+            return;
+        }
+        FactorioSFXAlertDestroyed.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+        LoggerInstance.Msg($"Loaded {FactorioSFX_AlertDestroyed}!");
         
         // load
         

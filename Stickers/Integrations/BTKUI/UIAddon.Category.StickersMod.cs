@@ -2,44 +2,24 @@
 using BTKUILib.UIObjects;
 using BTKUILib.UIObjects.Components;
 using BTKUILib.UIObjects.Objects;
-using UnityEngine;
 
 namespace NAK.Stickers.Integrations;
 
-public static partial class BtkUiAddon
+public static partial class BTKUIAddon
 {
     private static Category _ourCategory;
 
     private static readonly MultiSelection _sfxSelection = 
-        new(
-            "Sticker SFX", 
-            new[] { "Little Big Planet", "Source Engine", "None" }, 
-            (int)ModSettings.Entry_SelectedSFX.Value
-        )
-        {
-            OnOptionUpdated = i => ModSettings.Entry_SelectedSFX.Value = (ModSettings.SFXType)i
-        };
-    
+        BTKUILibExtensions.CreateMelonMultiSelection(ModSettings.Entry_SelectedSFX);
+
     private static readonly MultiSelection _desktopKeybindSelection = 
-        new(
-            "Desktop Keybind", 
-            Enum.GetNames(typeof(ModSettings.KeyBind)),
-            Array.IndexOf(Enum.GetValues(typeof(ModSettings.KeyBind)), ModSettings.Entry_PlaceBinding.Value)
-        )
-        {
-            OnOptionUpdated = i =>
-            {
-                string[] options = Enum.GetNames(typeof(ModSettings.KeyBind));
-                ModSettings.Entry_PlaceBinding.Value = (ModSettings.KeyBind)Enum.Parse(typeof(ModSettings.KeyBind), options[i]);
-            }
-        };
+        BTKUILibExtensions.CreateMelonMultiSelection(ModSettings.Entry_PlaceBinding);
     
     #region Category Setup
     
-    private static void Setup_StickersModCategory(Page page)
+    private static void Setup_StickersModCategory()
     {
-        //_ourCategory = page.AddCategory(ModSettings.Stickers_SettingsCategory, ModSettings.ModName, true, true, false);
-        _ourCategory = AddMelonCategory(ref page, ModSettings.Hidden_Foldout_SettingsCategory);
+        _ourCategory = _rootPage.AddMelonCategory(ModSettings.Hidden_Foldout_SettingsCategory);
 
         Button placeStickersButton = _ourCategory.AddButton("Place Stickers", "Stickers-magic-wand", "Place stickers via raycast.", ButtonStyle.TextWithIcon);
         placeStickersButton.OnPress += OnPlaceStickersButtonClick;
@@ -55,6 +35,8 @@ public static partial class BtkUiAddon
         
         Button openMultiSelectionButton = _ourCategory.AddButton("Sticker SFX", "Stickers-headset", "Choose the SFX used when a sticker is placed.", ButtonStyle.TextWithIcon);
         openMultiSelectionButton.OnPress += () => QuickMenuAPI.OpenMultiSelect(_sfxSelection);
+
+        _ourCategory.AddMelonToggle(ModSettings.Entry_HapticsOnPlace);
         
         ToggleButton toggleDesktopKeybindButton = _ourCategory.AddToggle("Use Desktop Keybind", "Should the Desktop keybind be active.", ModSettings.Entry_UsePlaceBinding.Value);
         Button openDesktopKeybindButton = _ourCategory.AddButton("Desktop Keybind", "Stickers-alphabet", "Choose the key binding to place stickers.", ButtonStyle.TextWithIcon);

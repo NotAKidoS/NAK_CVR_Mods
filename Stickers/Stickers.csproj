@@ -29,6 +29,8 @@
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-rubbish-bin.png" />
     <None Remove="Resources\Gohsantosadrive_Icons\Stickers-alphabet.png" />
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-alphabet.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-magnifying-glass.png" />
+    <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-magnifying-glass.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BTKUILib">
