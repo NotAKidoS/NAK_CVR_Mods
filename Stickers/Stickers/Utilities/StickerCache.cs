@@ -140,7 +140,7 @@ public static class StickerCache
             imageStream.Dispose();
             return false;
         }
-
+        
         PrepareIconFromMemoryStream(ModSettings.ModName, relativePathWithoutExtension, imageStream);
         imageStream.Dispose();
         return true;
@@ -154,9 +154,10 @@ public static class StickerCache
         }
         else
         {
-            iconPath = UIUtils.GetCleanString(iconPath);
+            //iconPath = UIUtils.GetCleanString(iconPath);
             iconPath = Path.Combine(ThumbnailPath, iconPath);
             File.WriteAllBytes(iconPath + ".png", destination.ToArray());
+            //StickerMod.Logger.Msg("Prepared icon: " + iconPath);
         }
     }
     
