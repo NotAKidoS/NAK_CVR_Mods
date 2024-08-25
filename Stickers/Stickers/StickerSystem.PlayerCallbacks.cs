@@ -84,15 +84,15 @@ public partial class StickerSystem
     public void OnStickerClearAllReceived(string playerId)
         => ClearStickersForPlayer(playerId);
     
-    public void OnStickerIdentifyReceived(string playerId)
-    {
-        if (!_playerStickers.TryGetValue(playerId, out StickerData stickerData))
-            return;
-        
-        // todo: make prettier (idk shaders)
-        SchedulerSystem.AddJob(() => stickerData.Identify(), 0f, 0.1f, 30);
-        SchedulerSystem.AddJob(() => stickerData.ResetIdentify(), 4f, 1f, 1);
-    }
+    // public void OnStickerIdentifyReceived(string playerId)
+    // {
+    //     if (!_playerStickers.TryGetValue(playerId, out StickerData stickerData))
+    //         return;
+    //     
+    //     // todo: make prettier (idk shaders)
+    //     SchedulerSystem.AddJob(() => stickerData.Identify(), 0f, 0.1f, 30);
+    //     SchedulerSystem.AddJob(() => stickerData.ResetIdentify(), 4f, 1f, 1);
+    // }
 
     #endregion Player Callbacks
 }

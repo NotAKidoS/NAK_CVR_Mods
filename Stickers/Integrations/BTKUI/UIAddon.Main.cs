@@ -19,7 +19,7 @@ public static partial class BTKUIAddon
         Setup_PlayerOptionsPage();
     }
 
-    #region Initialization
+    #region Setup
 
     private static void Setup_Icons()
     {
@@ -68,7 +68,7 @@ public static partial class BTKUIAddon
         Setup_DebugOptionsCategory();
     }
 
-    #endregion
+    #endregion Setup
 
     #region Double-Click Place Sticker
 

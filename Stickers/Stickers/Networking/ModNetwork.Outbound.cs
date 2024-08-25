@@ -78,7 +78,7 @@ public static partial class ModNetwork
         LoggerOutbound("ClearAllStickers");
     }
 
-    public static void SendStartTexture(int stickerSlot, Guid textureHash, int chunkCount, int width, int height)
+    private static void SendStartTexture(int stickerSlot, Guid textureHash, int chunkCount, int width, int height)
     {
         if (!IsConnectedToGameNetwork())
             return;

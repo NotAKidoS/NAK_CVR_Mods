@@ -31,7 +31,7 @@ public partial class StickerSystem
     #endregion Singleton
 
     #region Data
-
+    
     private int _selectedStickerSlot;
     public int SelectedStickerSlot
     {
