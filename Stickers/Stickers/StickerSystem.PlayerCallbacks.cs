@@ -65,7 +65,13 @@ public partial class StickerSystem
                 continue;
             }
             
-            _playerStickers.Remove(_playerStickers.First(x => x.Value == stickerData).Key);
+            for (int j = 0; j < _playerStickers.Values.Count; j++)
+            {
+                if (_playerStickers.Values.ElementAt(j) != stickerData) continue;
+                _playerStickers.Remove(_playerStickers.Keys.ElementAt(j));
+                break;
+            }
+            
             _deadStickerPool.RemoveAt(i);
             stickerData.Cleanup();
         }
