@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core;
+using ABI_RC.Core.IO;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -111,9 +112,16 @@ namespace NAK.Stickers
                 return;
             }
 
+            // for performance it is best to let them batch, but we also want movable objects to always
+            // be decaled instead of floating in-scene (so avatars/props are always considered movable)
+            
             Transform rootObject = null;
-            if (hit.rigidbody != null) rootObject = hit.rigidbody.transform;
-
+            GameObject hitGO = hit.transform.gameObject;
+            if (hitGO.TryGetComponent(out Rigidbody _) 
+                || hitGO.TryGetComponent(out Animator _)
+                || hitGO.scene.buildIndex == 4) // additive (dynamic) content
+                rootObject = hitGO.transform;
+            
             _lastPlacedPosition = hit.point;
             LastPlacedTime = Time.time;
 
