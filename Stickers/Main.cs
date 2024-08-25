@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core.Player;
+using ABI_RC.Systems.InputManagement;
 using MelonLoader;
 using NAK.Stickers.Integrations;
 using NAK.Stickers.Networking;
@@ -31,6 +32,14 @@ public class StickerMod : MelonMod
     
     public override void OnUpdate()
     {
+        if (StickerSystem.Instance == null) 
+            return;
+
+        if (Input.mouseScrollDelta.y != 0f 
+            && Cursor.lockState == CursorLockMode.Locked // prevent scrolling while in menus
+            && !CVRInputManager.Instance.zoom) // prevent scrolling while using scroll zoom
+            StickerSystem.Instance.SelectedStickerSlot += (int)Input.mouseScrollDelta.y;
+        
         if (!ModSettings.Entry_UsePlaceBinding.Value) 
             return;
         

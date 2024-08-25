@@ -38,7 +38,7 @@ public partial class StickerSystem
         get => _selectedStickerSlot;
         set
         {
-            _selectedStickerSlot = Mathf.Clamp(value, 0, ModSettings.MaxStickerSlots - 1);
+            _selectedStickerSlot = value < 0 ? ModSettings.MaxStickerSlots - 1 : value % ModSettings.MaxStickerSlots;
             IsInStickerMode = IsInStickerMode; // refresh sticker mode
         }
     }
