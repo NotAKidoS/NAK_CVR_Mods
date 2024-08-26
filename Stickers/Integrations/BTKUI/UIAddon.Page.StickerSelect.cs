@@ -174,7 +174,7 @@ public static partial class BTKUIAddon
 
     private static void PopulateMenuItems()
     {
-        StickerMod.Logger.Msg("Populating menu items.");
+        //StickerMod.Logger.Msg("Populating menu items.");
         try
         {
             Thread.CurrentThread.IsBackground = false; // working around bug in MTJobManager
