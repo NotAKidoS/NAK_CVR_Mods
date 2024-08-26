@@ -15,6 +15,9 @@ public static partial class BTKUIAddon
     private static readonly MultiSelection _desktopKeybindSelection = 
         BTKUILibExtensions.CreateMelonMultiSelection(ModSettings.Entry_PlaceBinding);
     
+    private static readonly MultiSelection _tabDoubleClickSelection = 
+        BTKUILibExtensions.CreateMelonMultiSelection(ModSettings.Entry_TabDoubleClick);
+    
     #region Category Setup
     
     private static void Setup_StickersModCategory()
@@ -35,8 +38,6 @@ public static partial class BTKUIAddon
         
         Button openMultiSelectionButton = _ourCategory.AddButton("Sticker SFX", "Stickers-headset", "Choose the SFX used when a sticker is placed.", ButtonStyle.TextWithIcon);
         openMultiSelectionButton.OnPress += () => QuickMenuAPI.OpenMultiSelect(_sfxSelection);
-
-        _ourCategory.AddMelonToggle(ModSettings.Entry_HapticsOnPlace);
         
         ToggleButton toggleDesktopKeybindButton = _ourCategory.AddToggle("Use Desktop Keybind", "Should the Desktop keybind be active.", ModSettings.Entry_UsePlaceBinding.Value);
         Button openDesktopKeybindButton = _ourCategory.AddButton("Desktop Keybind", "Stickers-alphabet", "Choose the key binding to place stickers.", ButtonStyle.TextWithIcon);
@@ -46,8 +47,9 @@ public static partial class BTKUIAddon
             ModSettings.Entry_UsePlaceBinding.Value = b;
             openDesktopKeybindButton.Disabled = !b;
         };
-
-        //AddMelonToggle(ref _ourCategory, ModSettings.Entry_UsePlaceBinding);
+        
+        Button openTabDoubleClickButton = _ourCategory.AddButton("Tab Double Click", "Stickers-mouse", "Choose the action to perform when double clicking the Stickers tab.", ButtonStyle.TextWithIcon);
+        openTabDoubleClickButton.OnPress += () => QuickMenuAPI.OpenMultiSelect(_tabDoubleClickSelection);
     }
     
     #endregion Category Setup

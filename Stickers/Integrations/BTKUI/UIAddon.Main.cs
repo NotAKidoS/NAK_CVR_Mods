@@ -30,7 +30,8 @@ public static partial class BTKUIAddon
         QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-headset", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-headset.png"));
         QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magnifying-glass", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-magnifying-glass.png"));
         QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magic-wand", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-magic-wand.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-pencil", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-pencil.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-mouse", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-mouse.png"));
+        //QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-pencil", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-pencil.png"));
         QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-puzzle", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-puzzle.png"));
         QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-rubbish-bin", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-rubbish-bin.png"));
     }
@@ -82,7 +83,21 @@ public static partial class BTKUIAddon
         TimeSpan timeDifference = DateTime.Now - lastTime;
         if (timeDifference.TotalSeconds <= 0.5)
         {
-            StickerSystem.Instance.IsInStickerMode = !StickerSystem.Instance.IsInStickerMode;
+            switch (ModSettings.Entry_TabDoubleClick.Value)
+            {
+                default:
+                case TabDoubleClick.ToggleStickerMode:
+                    OnPlaceStickersButtonClick();
+                    break;
+                case TabDoubleClick.ClearAllStickers:
+                    OnClearAllStickersButtonClick();
+                    break;
+                case TabDoubleClick.ClearSelfStickers:
+                    OnClearSelfStickersButtonClick();
+                    break;
+                case TabDoubleClick.None:
+                    break;
+            }
             return;
         }
         lastTime = DateTime.Now;

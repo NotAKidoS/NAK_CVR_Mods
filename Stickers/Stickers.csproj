@@ -22,7 +22,6 @@
     <None Remove="Resources\Gohsantosadrive_Icons\Stickers-magic-wand.png" />
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-magic-wand.png" />
     <None Remove="Resources\Gohsantosadrive_Icons\Stickers-pencil.png" />
-    <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-pencil.png" />
     <None Remove="Resources\Gohsantosadrive_Icons\Stickers-puzzle.png" />
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-puzzle.png" />
     <None Remove="Resources\Gohsantosadrive_Icons\Stickers-rubbish-bin.png" />
@@ -31,6 +30,8 @@
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-alphabet.png" />
     <None Remove="Resources\Gohsantosadrive_Icons\Stickers-magnifying-glass.png" />
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-magnifying-glass.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-mouse.png" />
+    <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-mouse.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BTKUILib">

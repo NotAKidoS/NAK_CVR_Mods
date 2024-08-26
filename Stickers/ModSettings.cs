@@ -50,6 +50,9 @@ public static class ModSettings
     internal static readonly MelonPreferences_Entry<KeyBind> Entry_PlaceBinding =
         Category.CreateEntry("place_binding", KeyBind.G, "Sticker Bind", "The key binding to place stickers.");
     
+    internal static readonly MelonPreferences_Entry<TabDoubleClick> Entry_TabDoubleClick =
+        Category.CreateEntry("tab_double_click", TabDoubleClick.ToggleStickerMode, "Tab Double Click", "The action to perform when double clicking the Stickers tab.");
+    
     internal static readonly MelonPreferences_Entry<string[]> Hidden_SelectedStickerNames =
         Category.CreateEntry("selected_sticker_name", Array.Empty<string>(), 
             display_name: "Selected Sticker Name", 
