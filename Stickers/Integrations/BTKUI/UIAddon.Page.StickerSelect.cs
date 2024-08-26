@@ -141,7 +141,6 @@ public static partial class BTKUIAddon
             if (button == null) break; // Array resized, excess buttons are generating
             //if (button.Hidden) break; // Reached the end of the visible buttons
             button.Hidden = true;
-            button.ButtonIcon = string.Empty; // hoping this makes cohtml less mad
         }
     }
     
