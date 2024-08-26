@@ -146,6 +146,8 @@ public static partial class ModNetwork
         {
             try
             {
+                Thread.CurrentThread.IsBackground = false; // working around bug in MTJobManager
+                
                 var textureData = _textureStorage[stickerSlot].textureData;
                 var textureHash = _textureStorage[stickerSlot].textureHash;
                 var width = _textureStorage[stickerSlot].width;
@@ -181,6 +183,7 @@ public static partial class ModNetwork
             {
                 IsSendingTexture = false;
                 InvokeTextureOutboundStateChanged(false);
+                Thread.CurrentThread.IsBackground = true; // working around bug in MTJobManager
             }
         });
     }

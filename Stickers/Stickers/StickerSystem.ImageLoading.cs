@@ -50,6 +50,7 @@ public partial class StickerSystem
         {
             try
             {
+                Thread.CurrentThread.IsBackground = false; // working around bug in MTJobManager
                 if (!TryLoadImage(imageName, slotIndex, out string errorMessage))
                     throw new Exception(errorMessage);
             }
@@ -61,6 +62,7 @@ public partial class StickerSystem
             finally
             {
                 _isLoadingImage[slotIndex] = false;
+                Thread.CurrentThread.IsBackground = true; // working around bug in MTJobManager
             }
         });
     }

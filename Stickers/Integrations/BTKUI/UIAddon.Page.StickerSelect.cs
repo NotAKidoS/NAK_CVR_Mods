@@ -175,6 +175,8 @@ public static partial class BTKUIAddon
        // StickerMod.Logger.Msg("Populating menu items.");
         try
         {
+            Thread.CurrentThread.IsBackground = false; // working around bug in MTJobManager
+            
             var directories = _curDirectoryInfo.GetDirectories();
             var files = _curDirectoryInfo.GetFiles();
             
@@ -213,6 +215,7 @@ public static partial class BTKUIAddon
         finally
         {
             IsPopulatingPage = false;
+            Thread.CurrentThread.IsBackground = true; // working around bug in MTJobManager
         }
     }
 
@@ -220,10 +223,10 @@ public static partial class BTKUIAddon
     {
         for (int i = 0; i < _folderButtons.Length; i++)
         {
-            Button button = _folderButtons[i];
             if (i >= directories.Count)
                 break;
-
+            
+            Button button = _folderButtons[i];
             button.ButtonText = directories[i].Name;
             button.ButtonTooltip = $"Open {directories[i].Name}";
             MTJobManager.RunOnMainThread("PopulateMenuItems", () => button.Hidden = false);
@@ -236,10 +239,9 @@ public static partial class BTKUIAddon
     {
         for (int i = 0; i < _fileButtons.Length; i++)
         {
-            Button button = _fileButtons[i];
             if (i >= files.Count)
                 break;
-
+            
             FileInfo fileInfo = files[i];
 
             if (!SUPPORTED_IMAGE_EXTENSIONS.Contains(fileInfo.Extension.ToLower()))
@@ -248,6 +250,7 @@ public static partial class BTKUIAddon
             string relativePath = Path.GetRelativePath(_initialDirectory, fileInfo.FullName);
             string relativePathWithoutExtension = relativePath[..^fileInfo.Extension.Length];
 
+            Button button = _fileButtons[i];
             button.ButtonTooltip = $"Load {fileInfo.Name}"; // Do not change "Load " prefix, we extract file name
 
             if (StickerCache.IsThumbnailAvailable(relativePathWithoutExtension))

@@ -83,6 +83,8 @@ public static class StickerCache
         {
             try
             {
+                Thread.CurrentThread.IsBackground = false; // working around bug in MTJobManager
+                
                 int generatedThumbnails = 0;
 
                 while (BTKUIAddon.IsPopulatingPage || _filesToGenerateThumbnails.Count > 0)
@@ -113,6 +115,7 @@ public static class StickerCache
             finally
             {
                 IsGeneratingThumbnails = false;
+                Thread.CurrentThread.IsBackground = true; // working around bug in MTJobManager
             }
         });
     }
