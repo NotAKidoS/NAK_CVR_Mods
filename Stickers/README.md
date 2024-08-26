@@ -6,6 +6,7 @@ Stickers! Allows you to place small images on any surface. Requires both users t
 Any image placed in the `UserData/Stickers/` folder will be available to choose from within the BTKUI tab. Once you’ve selected an image, enter Sticker Mode or use the Desktop Binding to start placing the sticker. Remote clients running the mod will automatically request the image data if they do not have it stored locally.
 
 ### Limitations
+- Only 512 max images per folder (otherwise Cohtml gets very upset).
 - Only PNG, JPG, & JPEG images are supported.
   - While it would be cool to send gifs, I don't want to abuse Mod Network that much lol.
 - Target surface must have a renderer on the same GameObject as the collider.
