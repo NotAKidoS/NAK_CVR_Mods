@@ -60,11 +60,9 @@ public static class StickerCache
     {
         lock (_filesBeingProcessed)
         {
-            if (!_filesBeingProcessed.Add(fileInfo.FullName))
-                return;
-            
+            if (!_filesBeingProcessed.Add(fileInfo.FullName)) return;
             _filesToGenerateThumbnails.Enqueue((fileInfo, button));
-            MTJobManager.RunOnMainThread("StartGeneratingThumbnailsIfNeeded", StartGeneratingThumbnailsIfNeeded);
+            StartGeneratingThumbnailsIfNeeded();
         }
     }
     

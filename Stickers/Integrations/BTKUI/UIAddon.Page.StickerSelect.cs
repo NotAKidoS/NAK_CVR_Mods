@@ -1,4 +1,5 @@
-﻿using BTKUILib;
+﻿using System.Diagnostics;
+using BTKUILib;
 using BTKUILib.UIObjects;
 using BTKUILib.UIObjects.Components;
 using MTJobSystem;
@@ -18,6 +19,7 @@ public static partial class BTKUIAddon
     private static Category _fileCategory;
     private static Category _folderCategory;
     
+    private const int MAX_BUTTONS = 512; // cohtml literally will start to explode
     private static Button[] _fileButtons = new Button[80]; // 100 files, will resize if needed
     private static Button[] _folderButtons = new Button[20]; // 20 folders, will resize if needed
     
@@ -139,6 +141,7 @@ public static partial class BTKUIAddon
             if (button == null) break; // Array resized, excess buttons are generating
             //if (button.Hidden) break; // Reached the end of the visible buttons
             button.Hidden = true;
+            button.ButtonIcon = string.Empty; // hoping this makes cohtml less mad
         }
     }
     
@@ -172,7 +175,7 @@ public static partial class BTKUIAddon
 
     private static void PopulateMenuItems()
     {
-       // StickerMod.Logger.Msg("Populating menu items.");
+        StickerMod.Logger.Msg("Populating menu items.");
         try
         {
             Thread.CurrentThread.IsBackground = false; // working around bug in MTJobManager
@@ -183,26 +186,26 @@ public static partial class BTKUIAddon
             MTJobManager.RunOnMainThread("PopulateMenuItems", () =>
             {
                 // resize the arrays to the max amount of buttons
-                int difference = directories.Length - _folderButtons.Length;
-                if (difference > 0)
+                int foldersCount = Mathf.Min(directories.Length, MAX_BUTTONS);
+                if (foldersCount > _folderButtons.Length)
                 {
-                    Array.Resize(ref _folderButtons, directories.Length);
-                    SetupFolderButtons(difference);
-                    StickerMod.Logger.Msg($"Resized folder buttons to {directories.Length}");
+                    int folderEndIdx = _folderButtons.Length;
+                    Array.Resize(ref _folderButtons, foldersCount);
+                    SetupFolderButtons(folderEndIdx);
                 }
 
-                difference = files.Length - _fileButtons.Length;
-                if (difference > 0)
+                int filesCount = Mathf.Min(files.Length, MAX_BUTTONS);
+                if (filesCount > _fileButtons.Length)
                 {
-                    Array.Resize(ref _fileButtons, files.Length);
-                    SetupFileButtons(difference);
-                    StickerMod.Logger.Msg($"Resized file buttons to {files.Length}");
+                    int fileEndIdx = _fileButtons.Length;
+                    Array.Resize(ref _fileButtons, filesCount);
+                    SetupFileButtons(fileEndIdx);
                 }
                 
-                _folderCategory.Hidden = directories.Length == 0;
-                _folderCategory.CategoryName = $"Subdirectories ({directories.Length})";
-                _fileCategory.Hidden = files.Length == 0;
-                _fileCategory.CategoryName = $"Images ({files.Length})";
+                _folderCategory.Hidden = foldersCount == 0;
+                _folderCategory.CategoryName = $"Subdirectories ({foldersCount})";
+                _fileCategory.Hidden = filesCount == 0;
+                _fileCategory.CategoryName = $"Images ({filesCount})";
             });
 
             PopulateFolders(directories);
@@ -227,9 +230,11 @@ public static partial class BTKUIAddon
                 break;
             
             Button button = _folderButtons[i];
+            //if (button == null) continue; // Array resized, excess buttons are generating
+            
             button.ButtonText = directories[i].Name;
             button.ButtonTooltip = $"Open {directories[i].Name}";
-            MTJobManager.RunOnMainThread("PopulateMenuItems", () => button.Hidden = false);
+            MTJobManager.RunAsyncOnMainThread("PopulateMenuItems", () => button.Hidden = false);
 
             if (i <= 16) Thread.Sleep(10); // For the pop-in effect
         }
@@ -251,6 +256,8 @@ public static partial class BTKUIAddon
             string relativePathWithoutExtension = relativePath[..^fileInfo.Extension.Length];
 
             Button button = _fileButtons[i];
+            //if (button == null) continue; // Array resized, excess buttons are generating
+            
             button.ButtonTooltip = $"Load {fileInfo.Name}"; // Do not change "Load " prefix, we extract file name
 
             if (StickerCache.IsThumbnailAvailable(relativePathWithoutExtension))
@@ -263,7 +270,7 @@ public static partial class BTKUIAddon
                 StickerCache.EnqueueThumbnailGeneration(fileInfo, button);
             }
 
-            MTJobManager.RunOnMainThread("PopulateMenuItems", () => button.Hidden = false);
+            MTJobManager.RunAsyncOnMainThread("PopulateMenuItems", () => button.Hidden = false);
 
             if (i <= 16) Thread.Sleep(10); // For the pop-in effect
         }
