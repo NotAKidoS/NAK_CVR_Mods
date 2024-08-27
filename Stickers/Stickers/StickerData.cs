@@ -196,6 +196,7 @@ namespace NAK.Stickers
         {
             foreach (Material material in _materials)
             {
+                if (material == null) continue;
                 Color color = material.color;
                 color.a = alpha;
                 material.color = color;
