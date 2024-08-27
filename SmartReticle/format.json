@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "SmartReticle",
+  "modversion": "1.0.0",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Simple mod that makes the Desktop reticle only appear when needed.",
+  "searchtags": [
+    "reticle",
+    "hud",
+    "cursor",
+    "dot"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r39/SmartReticle.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmartReticle/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#f61963"
+}
