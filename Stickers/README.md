@@ -5,6 +5,10 @@ Stickers! Allows you to place small images on any surface. Requires both users t
 ### How to use
 Any image placed in the `UserData/Stickers/` folder will be available to choose from within the BTKUI tab. Once you’ve selected an image, enter Sticker Mode or use the Desktop Binding to start placing the sticker. Remote clients running the mod will automatically request the image data if they do not have it stored locally.
 
+### Please read the tooltips
+- You have 4 "Sticker Slots".
+- You double-click or hold a "Sticker Slot" to select an image from the `UserData/Stickers/` folder.
+
 ### Limitations
 - Only PNG, JPG, & JPEG images are supported.
   - While it would be cool to send gifs, I don't want to abuse Mod Network that much lol.
