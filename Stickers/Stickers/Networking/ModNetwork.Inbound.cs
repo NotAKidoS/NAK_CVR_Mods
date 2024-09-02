@@ -156,7 +156,7 @@ public static partial class ModNetwork
             return;
         }
 
-        _textureChunkBuffers[sender] = new byte[Mathf.Clamp(chunkCount * ChunkSize, 0, MaxTextureSize)];
+        _textureChunkBuffers[sender] = new byte[Mathf.Clamp(chunkCount * ChunkSize, 0, MaxChunkCount)];
         _receivedChunkCounts[sender] = 0;
         _expectedChunkCounts[sender] = chunkCount;
         _textureMetadata[sender] = (stickerSlot, textureHash, width, height);
