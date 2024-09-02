@@ -67,36 +67,28 @@ public static partial class ModNetwork
                 case MessageType.PlaceSticker:
                     HandlePlaceSticker(msg);
                     break;
-                
                 case MessageType.ClearSticker:
                     HandleClearSticker(msg);
                     break;
-                
                 case MessageType.ClearAllStickers:
                     HandleClearAllStickers(msg);
                     break;
-
                 case MessageType.StartTexture:
                     HandleStartTexture(msg);
                     break;
-
                 case MessageType.SendTexture:
                     HandleSendTexture(msg);
                     break;
-
                 case MessageType.EndTexture:
                     HandleEndTexture(msg);
                     break;
-
                 case MessageType.RequestTexture:
                     HandleRequestTexture(msg);
                     break;
-
                 default:
                     LoggerInbound($"Invalid message type received: {msgTypeRaw}");
                     break;
             }
-            
         }
         catch (Exception e)
         {
@@ -156,10 +148,10 @@ public static partial class ModNetwork
             return;
         }
 
-        _textureChunkBuffers[sender] = new byte[Mathf.Clamp(chunkCount * ChunkSize, 0, MaxChunkCount)];
-        _receivedChunkCounts[sender] = 0;
-        _expectedChunkCounts[sender] = chunkCount;
         _textureMetadata[sender] = (stickerSlot, textureHash, width, height);
+        _textureChunkBuffers[sender] = new byte[Mathf.Clamp(chunkCount * ChunkSize, 0, MaxTextureSize)];
+        _expectedChunkCounts[sender] = Mathf.Clamp(chunkCount, 0, MaxChunkCount);
+        _receivedChunkCounts[sender] = 0;
         
         LoggerInbound($"Received StartTexture message from {sender}: Slot: {stickerSlot}, Hash: {textureHash}, Chunks: {chunkCount}, Resolution: {width}x{height}");
     }
