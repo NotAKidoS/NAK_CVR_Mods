@@ -1,5 +1,8 @@
-﻿using ABI_RC.Core.UI;
+﻿using ABI_RC.Core.IO;
+using ABI_RC.Core.Networking.IO.Instancing;
+using ABI_RC.Core.UI;
 using ABI_RC.Systems.GameEventSystem;
+using NAK.Stickers.Networking;
 using NAK.Stickers.Utilities;
 using UnityEngine;
 
@@ -22,13 +25,43 @@ public partial class StickerSystem
         DecalManager.SetPreferredMode(DecalUtils.Mode.GPU, false, 0);
         
         // ensure cache folder exists
-        if (!Directory.Exists(s_StickersFolderPath)) Directory.CreateDirectory(s_StickersFolderPath);
+        EnsureStickersFolderExists();
         
         // listen for game events
         CVRGameEventSystem.Initialization.OnPlayerSetupStart.AddListener(Instance.OnPlayerSetupStart);
     }
     
     #endregion Singleton
+
+    #region Callback Registration
+    
+    private void OnPlayerSetupStart()
+    {
+        CVRGameEventSystem.World.OnUnload.AddListener(_ => OnWorldUnload());
+        CVRGameEventSystem.Instance.OnConnected.AddListener((_) => { if (!Instances.IsReconnecting) OnInitialConnection(); });
+        
+        CVRGameEventSystem.Player.OnJoinEntity.AddListener(Instance.OnPlayerJoined);
+        CVRGameEventSystem.Player.OnLeaveEntity.AddListener(Instance.OnPlayerLeft);
+        SchedulerSystem.AddJob(Instance.OnOccasionalUpdate, 10f, 1f);
+        LoadAllImagesAtStartup();
+    }
+
+    #endregion Callback Registration
+    
+    #region Game Events
+    
+    private void OnInitialConnection()
+    {
+        ClearStickersSelf(); // clear stickers on remotes just in case we rejoined
+        ModNetwork.Reset(); // reset network buffers and metadata
+    }
+    
+    private void OnWorldUnload()
+    {
+        CleanupAllButSelf(); // release all stickers except for self
+    }
+    
+    #endregion Game Events
 
     #region Data
     
@@ -63,9 +96,7 @@ public partial class StickerSystem
     private const float StickerKillTime = 30f;
     private const float StickerCooldown = 0.2f;
     private readonly Dictionary<string, StickerData> _playerStickers = new();
-    private const string PlayerLocalId = "_PLAYERLOCAL";
+    internal const string PlayerLocalId = "_PLAYERLOCAL";
     
-    private readonly List<StickerData> _deadStickerPool = new(); // for cleanup on player leave
-
     #endregion Data
 }

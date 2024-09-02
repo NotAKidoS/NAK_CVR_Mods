@@ -149,6 +149,11 @@ public partial class StickerSystem
         if (!Directory.Exists(s_StickersFolderPath)) Directory.CreateDirectory(s_StickersFolderPath);
         return s_StickersFolderPath;
     }
+    
+    public static void EnsureStickersFolderExists()
+    {
+        if (!Directory.Exists(s_StickersFolderPath)) Directory.CreateDirectory(s_StickersFolderPath);
+    }
 
     #endregion Image Loading
 }

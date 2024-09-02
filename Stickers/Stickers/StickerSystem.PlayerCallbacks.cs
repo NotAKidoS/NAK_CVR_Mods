@@ -1,7 +1,4 @@
-﻿using ABI_RC.Core.IO;
-using ABI_RC.Core.Networking.IO.Instancing;
-using ABI_RC.Core.Player;
-using ABI_RC.Systems.GameEventSystem;
+﻿using ABI_RC.Core.Player;
 using UnityEngine;
 
 namespace NAK.Stickers;
@@ -10,17 +7,6 @@ public partial class StickerSystem
 {
     #region Player Callbacks
     
-    private void OnPlayerSetupStart()
-    {
-        CVRGameEventSystem.World.OnUnload.AddListener(_ => Instance.CleanupAllButSelf());
-        CVRGameEventSystem.Instance.OnConnected.AddListener((_) => { if (!Instances.IsReconnecting) Instance.ClearStickersSelf(); });
-        
-        CVRGameEventSystem.Player.OnJoinEntity.AddListener(Instance.OnPlayerJoined);
-        CVRGameEventSystem.Player.OnLeaveEntity.AddListener(Instance.OnPlayerLeft);
-        SchedulerSystem.AddJob(Instance.OnOccasionalUpdate, 10f, 1f);
-        LoadAllImagesAtStartup();
-    }
-
     private void OnPlayerJoined(CVRPlayerEntity playerEntity)
     {
         if (!_playerStickers.TryGetValue(playerEntity.Uuid, out StickerData stickerData))
@@ -28,7 +14,6 @@ public partial class StickerSystem
 
         stickerData.DeathTime = -1f;
         stickerData.SetAlpha(1f);
-        _deadStickerPool.Remove(stickerData);
     }
 
     private void OnPlayerLeft(CVRPlayerEntity playerEntity)
@@ -38,25 +23,16 @@ public partial class StickerSystem
 
         stickerData.DeathTime = Time.time + StickerKillTime;
         stickerData.SetAlpha(1f);
-        _deadStickerPool.Add(stickerData);
     }
 
     private void OnOccasionalUpdate()
     {
-        if (_deadStickerPool.Count == 0) 
-            return;
-
-        for (var i = _deadStickerPool.Count - 1; i >= 0; i--)
+        float currentTime = Time.time;
+        for (int i = 0; i < _playerStickers.Values.Count; i++)
         {
-            float currentTime = Time.time;
-            StickerData stickerData = _deadStickerPool[i];
-            if (stickerData == null)
-            {
-                _deadStickerPool.RemoveAt(i);
-                continue;
-            }
+            StickerData stickerData = _playerStickers.Values.ElementAt(i);
             
-            if (stickerData.DeathTime < 0f) 
+            if (stickerData.DeathTime < 0f)
                 continue;
 
             if (currentTime < stickerData.DeathTime)
@@ -65,15 +41,8 @@ public partial class StickerSystem
                 continue;
             }
             
-            for (int j = 0; j < _playerStickers.Values.Count; j++)
-            {
-                if (_playerStickers.Values.ElementAt(j) != stickerData) continue;
-                _playerStickers.Remove(_playerStickers.Keys.ElementAt(j));
-                break;
-            }
-            
-            _deadStickerPool.RemoveAt(i);
             stickerData.Cleanup();
+            _playerStickers.Remove(stickerData.PlayerId);
         }
     }
 

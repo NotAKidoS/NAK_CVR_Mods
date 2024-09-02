@@ -1,4 +1,5 @@
-﻿using NAK.Stickers.Properties;
+﻿using ABI_RC.Core.Util.AnimatorManager;
+using NAK.Stickers.Properties;
 
 namespace NAK.Stickers.Networking;
 
@@ -12,6 +13,6 @@ public static partial class ModNetwork
     private const string ModId = $"MelonMod.NAK.Stickers_v{NetworkVersion}";
     private const int ChunkSize = 1024; // roughly 1KB per ModNetworkMessage
     private const int MaxChunkCount = MaxTextureSize / ChunkSize;
-
+    
     #endregion Constants
 }

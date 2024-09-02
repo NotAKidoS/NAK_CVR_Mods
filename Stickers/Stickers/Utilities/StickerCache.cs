@@ -66,6 +66,13 @@ public static class StickerCache
         }
     }
     
+    public static void ClearCache()
+    {
+        if (!Directory.Exists(ThumbnailPath)) return;
+        Directory.Delete(ThumbnailPath, true);
+        StickerMod.Logger.Msg("Cleared thumbnail cache.");
+    }
+    
     #endregion Public Methods
     
     #region Private Methods

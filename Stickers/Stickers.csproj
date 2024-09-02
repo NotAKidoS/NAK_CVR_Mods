@@ -4,7 +4,7 @@
     <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DefineConstants>TRACE;TRACE;UNITY_2017_1_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2019_3_OR_NEWER;USE_BURST;USE_NEWMATHS;USE_BURST_REALLY;</DefineConstants>
+    <DefineConstants>TRACE;TRACE;UNITY_2017_1_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2019_3_OR_NEWER;USE_BURST;USE_NEWMATHS;USE_BURST_REALLY;USEDFORSTICKERMOD;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="ThirdParty\" />

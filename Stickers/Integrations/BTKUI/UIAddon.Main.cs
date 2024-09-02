@@ -66,7 +66,7 @@ public static partial class BTKUIAddon
 
         Setup_StickersModCategory();
         Setup_StickerSelectionCategory();
-        Setup_DebugOptionsCategory();
+        Setup_OtherOptionsCategory();
     }
 
     #endregion Setup

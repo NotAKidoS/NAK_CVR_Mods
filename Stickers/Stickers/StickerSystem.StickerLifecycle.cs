@@ -15,7 +15,7 @@ public partial class StickerSystem
         if (_playerStickers.TryGetValue(playerId, out StickerData stickerData)) 
             return stickerData;
         
-        stickerData = new StickerData(playerId == PlayerLocalId, ModSettings.MaxStickerSlots);
+        stickerData = new StickerData(playerId, ModSettings.MaxStickerSlots);
         _playerStickers[playerId] = stickerData;
         return stickerData;
     }
@@ -40,8 +40,6 @@ public partial class StickerSystem
         if (!PlaceStickerSelf(transform.position, transform.forward, targetUp))
             return;
         
-        // do haptic if not lame
-        if (!ModSettings.Entry_HapticsOnPlace.Value) return;
         CVRInputManager.Instance.Vibrate(0f, 0.1f, 10f, 0.1f, hand);
     }
 
@@ -67,6 +65,10 @@ public partial class StickerSystem
                 10f, LayerMask, QueryTriggerInteraction.Ignore)) 
             return false;
         
+        // if gameobject name starts with [NoSticker] then don't place sticker
+        if (hit.transform.gameObject.name.StartsWith("[NoSticker]"))
+            return false;
+        
         stickerData.Place(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot);
         stickerData.PlayAudio();
         return true;
@@ -76,6 +78,12 @@ public partial class StickerSystem
     {
         ClearStickersForPlayer(PlayerLocalId);
         ModNetwork.SendClearAllStickers();
+    }
+    
+    public void ClearStickerSelf(int stickerSlot)
+    {
+        ClearStickersForPlayer(PlayerLocalId, stickerSlot);
+        ModNetwork.SendClearSticker(stickerSlot);
     }
     
     private void ClearStickersForPlayer(string playerId)
@@ -100,6 +108,7 @@ public partial class StickerSystem
         texture.LoadImage(imageBytes);
         texture.Compress(true); // noachi said to do
         
+        ClearStickerSelf(stickerSlot); // clear placed stickers in-scene so we can't replace an entire wall at once
         OnPlayerStickerTextureReceived(PlayerLocalId, Guid.Empty, texture, stickerSlot);
         ModNetwork.SetTexture(stickerSlot, imageBytes);
     }
@@ -138,22 +147,12 @@ public partial class StickerSystem
         
         foreach ((_, StickerData data) in _playerStickers)
         {
-            if (data.IsLocal) data.Clear();
+            if (data == localStickerData) data.Clear();
             else data.Cleanup();
         }
         
         _playerStickers.Clear();
         _playerStickers[PlayerLocalId] = localStickerData;
-    }
-
-    public void SelectStickerSlot(int stickerSlot)
-    {
-        SelectedStickerSlot = Mathf.Clamp(stickerSlot, 0, ModSettings.MaxStickerSlots - 1);
-    }
-
-    public int GetCurrentStickerSlot()
-    {
-        return SelectedStickerSlot;
     }
 
     #endregion Sticker Lifecycle

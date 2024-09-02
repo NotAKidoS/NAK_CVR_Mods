@@ -11,7 +11,7 @@ public static class ModSettings
     
     internal const string SM_SettingsCategory = "Stickers Mod";
     private const string SM_SelectionCategory = "Sticker Selection";
-    private const string DEBUG_SettingsCategory = "Debug Options";
+    private const string MISC_SettingsCategory = "Miscellaneous Options";
 
     internal const int MaxStickerSlots = 4;
     
@@ -27,16 +27,13 @@ public static class ModSettings
     
     internal static readonly MelonPreferences_Entry<bool> Hidden_Foldout_SelectionCategory =
         Category.CreateEntry("hidden_foldout_selection", true, is_hidden: true, display_name: SM_SelectionCategory, description: "Foldout state for Sticker selection.");
-    
-    internal static readonly MelonPreferences_Entry<bool> Hidden_Foldout_DebugCategory =
-        Category.CreateEntry("hidden_foldout_debug", false, is_hidden: true, display_name: DEBUG_SettingsCategory, description: "Foldout state for Debug settings.");
+
+    internal static readonly MelonPreferences_Entry<bool> Hidden_Foldout_MiscCategory =
+        Category.CreateEntry("hidden_foldout_miscellaneous", false, is_hidden: true, display_name: MISC_SettingsCategory, description: "Foldout state for Miscellaneous settings.");
 
     #endregion Hidden Foldout Entries
     
     #region Stickers Mod Settings
-    
-    internal static readonly MelonPreferences_Entry<bool> Entry_HapticsOnPlace =
-        Category.CreateEntry("haptics_on_place", true, "Haptics On Place", "Enable haptic feedback when placing stickers.");
     
     internal static readonly MelonPreferences_Entry<float> Entry_PlayerUpAlignmentThreshold =
         Category.CreateEntry("player_up_alignment_threshold", 20f, "Player Up Alignment Threshold", "The threshold the controller roll can be within to align perfectly with the player up vector. Set to 0f to always align to controller up.");
@@ -58,6 +55,9 @@ public static class ModSettings
             display_name: "Selected Sticker Name", 
             description: "The name of the sticker selected for stickering.", 
             is_hidden: true);
+    
+    internal static readonly MelonPreferences_Entry<bool> Entry_FriendsOnly =
+        Category.CreateEntry("friends_only", false, "Friends Only", "Only allow friends to use stickers.");
 
     #endregion Stickers Mod Settings
     

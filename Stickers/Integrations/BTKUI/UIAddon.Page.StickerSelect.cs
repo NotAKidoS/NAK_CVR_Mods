@@ -18,6 +18,7 @@ public static partial class BTKUIAddon
     
     private static Category _fileCategory;
     private static Category _folderCategory;
+    private static TextBlock _noFilesTextBlock;
     
     private const int MAX_BUTTONS = 512; // cohtml literally will start to explode
     private static Button[] _fileButtons = new Button[80]; // 100 files, will resize if needed
@@ -49,10 +50,12 @@ public static partial class BTKUIAddon
         // Create page
         _ourDirectoryBrowserPage = Page.GetOrCreatePage(ModSettings.ModName, "Directory Browser");
         QuickMenuAPI.AddRootPage(_ourDirectoryBrowserPage);
-
+        
         // Setup categories
         _folderCategory = _ourDirectoryBrowserPage.AddCategory("Subdirectories");
         _fileCategory = _ourDirectoryBrowserPage.AddCategory("Images");
+        _noFilesTextBlock = _fileCategory.AddTextBlock("No images found in this directory. You can add your own images and subfolders to the `UserData/Stickers/` folder.");
+        _noFilesTextBlock.Hidden = true;
 
         SetupFolderButtons();
         SetupFileButtons();
@@ -88,6 +91,7 @@ public static partial class BTKUIAddon
                 string absolutePath = Path.Combine(_curDirectoryInfo.FullName, button.ButtonTooltip[5..]);
                 string relativePath = Path.GetRelativePath(_initialDirectory, absolutePath);
                 StickerSystem.Instance.LoadImage(relativePath, _curSelectedSticker);
+                _rootPage.OpenPage(true); // close the directory browser to artificially limit loading speed
             };
             _fileButtons[i] = button;
         }
@@ -162,12 +166,16 @@ public static partial class BTKUIAddon
             return;
         }
         _stickerSelectionButtonDoubleClickTime = Time.time;
+        
+        // quick menu notification
+        QuickMenuAPI.ShowAlertToast($"Selected sticker slot {index + 1}", 1);
     }
 
     private static void OpenStickerSelectionForSlot(int index)
     {
         if (IsPopulatingPage) return;
         _curSelectedSticker = index;
+        _initialDirectory = StickerSystem.GetStickersFolderPath(); // creates folder if needed (lazy fix)
         _curDirectoryInfo = new DirectoryInfo(_initialDirectory);
         _ourDirectoryBrowserPage.OpenPage(false, true);
     }
@@ -203,8 +211,9 @@ public static partial class BTKUIAddon
                 
                 _folderCategory.Hidden = foldersCount == 0;
                 _folderCategory.CategoryName = $"Subdirectories ({foldersCount})";
-                _fileCategory.Hidden = filesCount == 0;
+                //_fileCategory.Hidden = filesCount == 0;
                 _fileCategory.CategoryName = $"Images ({filesCount})";
+                _noFilesTextBlock.Hidden = filesCount > 0;
             });
 
             PopulateFolders(directories);

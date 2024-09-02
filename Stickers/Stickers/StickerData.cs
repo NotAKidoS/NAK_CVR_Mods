@@ -8,14 +8,13 @@ namespace NAK.Stickers
     public class StickerData
     {
         private const float DECAL_SIZE = 0.25f;
-
-        private static readonly int s_EmissionStrengthID = Shader.PropertyToID("_EmissionStrength");
-
-        public float DeathTime; // when a remote player leaves, we need to kill their stickers
+        
+        public readonly string PlayerId;
         public float LastPlacedTime;
+        public float DeathTime = -1f;
+        
         private Vector3 _lastPlacedPosition = Vector3.zero;
 
-        public readonly bool IsLocal;
         private readonly DecalType _decal;
         private readonly DecalSpawner[] _decalSpawners;
         
@@ -23,9 +22,9 @@ namespace NAK.Stickers
         private readonly Material[] _materials;
         private readonly AudioSource _audioSource;
 
-        public StickerData(bool isLocal, int decalSpawnersCount)
+        public StickerData(string playerId, int decalSpawnersCount)
         {
-            IsLocal = isLocal;
+            PlayerId = playerId;
 
             _decal = ScriptableObject.CreateInstance<DecalType>();
             _decalSpawners = new DecalSpawner[decalSpawnersCount];
@@ -54,7 +53,7 @@ namespace NAK.Stickers
             _audioSource.maxDistance = 5f;
             _audioSource.minDistance = 1f;
             _audioSource.outputAudioMixerGroup = RootLogic.Instance.propSfx; // props are close enough to stickers
-            if (isLocal) Object.DontDestroyOnLoad(_audioSource.gameObject); // keep audio source through world transitions
+            if (PlayerId == StickerSystem.PlayerLocalId) Object.DontDestroyOnLoad(_audioSource.gameObject); // keep audio source through world transitions
         }
         
         public Guid GetTextureHash(int spawnerIndex = 0)
@@ -95,8 +94,6 @@ namespace NAK.Stickers
                 ? FilterMode.Bilinear // smear it cause its fat
                 : FilterMode.Point; // my minecraft skin looked shit
 
-            if (IsLocal) StickerMod.Logger.Msg($"Set texture filter mode to: {texture.filterMode}");
-
             Material material = _materials[spawnerIndex];
 
             // Destroy the previous texture to avoid memory leaks
@@ -117,9 +114,9 @@ namespace NAK.Stickers
             
             Transform rootObject = null;
             GameObject hitGO = hit.transform.gameObject;
-            if (hitGO.TryGetComponent(out Rigidbody _) 
-                || hitGO.TryGetComponent(out Animator _)
-                || hitGO.scene.buildIndex == 4) // additive (dynamic) content
+            if (hitGO.scene.buildIndex == 4 // additive (dynamic) content
+                || hitGO.TryGetComponent(out Animator _) // potentially movable
+                || hitGO.GetComponentInParent<Rigidbody>() != null) // movable
                 rootObject = hitGO.transform;
             
             _lastPlacedPosition = hit.point;
@@ -128,7 +125,7 @@ namespace NAK.Stickers
             // Add decal to the specified spawner
             _decalSpawners[spawnerIndex].AddDecal(
                 _lastPlacedPosition, Quaternion.LookRotation(forwardDirection, upDirection),
-                hit.collider.gameObject,
+                hitGO,
                 DECAL_SIZE, DECAL_SIZE, 1f, 1f, 0f, rootObject);
         }
 
@@ -162,8 +159,9 @@ namespace NAK.Stickers
                 _decalSpawners[i].Release();
                 _decalSpawners[i].staticGroups.Clear();
                 _decalSpawners[i].movableGroups.Clear();
-
+                
                 // Clean up textures and materials
+                if (_materials[i] == null) continue;
                 if (_materials[i].mainTexture != null) Object.Destroy(_materials[i].mainTexture);
                 Object.Destroy(_materials[i]);
             }

@@ -36,8 +36,8 @@ public static partial class BTKUIAddon
         Button openStickersFolderButton = _ourCategory.AddButton("Open Stickers Folder", "Stickers-folder", "Open UserData/Stickers folder in explorer. If above 256kb your image will automatically be downscaled for networking reasons.", ButtonStyle.TextWithIcon);
         openStickersFolderButton.OnPress += OnOpenStickersFolderButtonClick;
         
-        Button openMultiSelectionButton = _ourCategory.AddButton("Sticker SFX", "Stickers-headset", "Choose the SFX used when a sticker is placed.", ButtonStyle.TextWithIcon);
-        openMultiSelectionButton.OnPress += () => QuickMenuAPI.OpenMultiSelect(_sfxSelection);
+        Button openStickerSFXButton = _ourCategory.AddButton("Sticker SFX", "Stickers-headset", "Choose the SFX used when a sticker is placed.", ButtonStyle.TextWithIcon);
+        openStickerSFXButton.OnPress += () => QuickMenuAPI.OpenMultiSelect(_sfxSelection);
         
         ToggleButton toggleDesktopKeybindButton = _ourCategory.AddToggle("Use Desktop Keybind", "Should the Desktop keybind be active.", ModSettings.Entry_UsePlaceBinding.Value);
         Button openDesktopKeybindButton = _ourCategory.AddButton("Desktop Keybind", "Stickers-alphabet", "Choose the key binding to place stickers.", ButtonStyle.TextWithIcon);

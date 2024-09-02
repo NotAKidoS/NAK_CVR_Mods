@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.Savior;
+﻿using ABI_RC.Core.Networking.IO.Social;
+using ABI_RC.Core.Savior;
 using ABI_RC.Systems.ModNetwork;
 using NAK.Stickers.Utilities;
 using UnityEngine;
@@ -15,58 +16,91 @@ public static partial class ModNetwork
     private static readonly Dictionary<string, (int stickerSlot, Guid Hash, int Width, int Height)> _textureMetadata = new();
     
     #endregion Inbound Buffers
+    
+    #region Reset Method
+
+    public static void Reset()
+    {
+        _textureChunkBuffers.Clear();
+        _receivedChunkCounts.Clear();
+        _expectedChunkCounts.Clear();
+        _textureMetadata.Clear();
+
+        LoggerInbound("ModNetwork inbound buffers and metadata have been reset.");
+    }
+
+    #endregion Reset Method
 
     #region Inbound Methods
+    
+    private static bool ShouldReceiveFromSender(string sender)
+    {
+        if (_disallowedForSession.Contains(sender))
+            return false; // ignore messages from disallowed users
+
+        if (MetaPort.Instance.blockedUserIds.Contains(sender))
+            return false; // ignore messages from blocked users
+        
+        if (ModSettings.Entry_FriendsOnly.Value && !Friends.FriendsWith(sender))
+            return false; // ignore messages from non-friends if friends only is enabled
+        
+        return true;
+    }
 
     private static void HandleMessageReceived(ModNetworkMessage msg)
     {
-        string sender = msg.Sender;
-        msg.Read(out byte msgTypeRaw);
-
-        if (!Enum.IsDefined(typeof(MessageType), msgTypeRaw))
-            return;
-        
-        if (_disallowedForSession.Contains(sender))
-            return; // ignore messages from disallowed users
-
-        if (MetaPort.Instance.blockedUserIds.Contains(sender))
-            return; // ignore messages from blocked users
-
-        LoggerInbound($"Received message from {msg.Sender}, Type: {(MessageType)msgTypeRaw}");
-
-        switch ((MessageType)msgTypeRaw)
+        try
         {
-            case MessageType.PlaceSticker:
-                HandlePlaceSticker(msg);
-                break;
+            string sender = msg.Sender;
+            msg.Read(out byte msgTypeRaw);
 
-            case MessageType.ClearSticker:
-                HandleClearSticker(msg);
-                break;
+            if (!Enum.IsDefined(typeof(MessageType), msgTypeRaw))
+                return;
+            
+            if (!ShouldReceiveFromSender(sender))
+                return;
 
-            case MessageType.ClearAllStickers:
-                HandleClearAllStickers(msg);
-                break;
+            LoggerInbound($"Received message from {msg.Sender}, Type: {(MessageType)msgTypeRaw}");
 
-            case MessageType.StartTexture:
-                HandleStartTexture(msg);
-                break;
+            switch ((MessageType)msgTypeRaw)
+            {
+                case MessageType.PlaceSticker:
+                    HandlePlaceSticker(msg);
+                    break;
+                
+                case MessageType.ClearSticker:
+                    HandleClearSticker(msg);
+                    break;
+                
+                case MessageType.ClearAllStickers:
+                    HandleClearAllStickers(msg);
+                    break;
 
-            case MessageType.SendTexture:
-                HandleSendTexture(msg);
-                break;
+                case MessageType.StartTexture:
+                    HandleStartTexture(msg);
+                    break;
 
-            case MessageType.EndTexture:
-                HandleEndTexture(msg);
-                break;
+                case MessageType.SendTexture:
+                    HandleSendTexture(msg);
+                    break;
 
-            case MessageType.RequestTexture:
-                HandleRequestTexture(msg);
-                break;
+                case MessageType.EndTexture:
+                    HandleEndTexture(msg);
+                    break;
 
-            default:
-                LoggerInbound($"Invalid message type received: {msgTypeRaw}");
-                break;
+                case MessageType.RequestTexture:
+                    HandleRequestTexture(msg);
+                    break;
+
+                default:
+                    LoggerInbound($"Invalid message type received: {msgTypeRaw}");
+                    break;
+            }
+            
+        }
+        catch (Exception e)
+        {
+            LoggerInbound($"Error handling message from {msg.Sender}: {e.Message}", true);
         }
     }
 
