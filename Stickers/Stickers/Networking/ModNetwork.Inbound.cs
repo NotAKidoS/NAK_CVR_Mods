@@ -18,7 +18,7 @@ public static partial class ModNetwork
     #endregion Inbound Buffers
     
     #region Reset Method
-
+    
     public static void Reset()
     {
         _textureChunkBuffers.Clear();
