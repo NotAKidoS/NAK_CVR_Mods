@@ -40,7 +40,7 @@ public class WhereAmIPointingMod : MelonMod
 
     #region Patches
     
-     private static class ControllerRay_Patches
+    private static class ControllerRay_Patches
     {
         private const float ORIGINAL_ALPHA = 0.502f;
         private const float INTERACTION_ALPHA = 0.1f;
@@ -70,7 +70,8 @@ public class WhereAmIPointingMod : MelonMod
             Material material = instance.lineRenderer.material;
             Color color = material.color;
 
-            float targetAlpha = instance.uiActive ? ORIGINAL_ALPHA : INTERACTION_ALPHA;
+            bool anyMenuOpen = ViewManager.Instance.IsAnyMenuOpen;
+            float targetAlpha = (!anyMenuOpen || instance.uiActive) ? ORIGINAL_ALPHA : INTERACTION_ALPHA;
             if (!(Math.Abs(color.a - targetAlpha) > float.Epsilon)) 
                 return;
             
