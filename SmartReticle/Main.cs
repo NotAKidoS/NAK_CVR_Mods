@@ -65,15 +65,18 @@ public class SmartReticleMod : MelonMod
             if (!Entry_Enabled.Value) 
                 return;
             
-            if (!__instance.isDesktopRay) 
+            GameObject pointer;
+            if (__instance.isDesktopRay) // in desktop mode
+                pointer = CohtmlHud.Instance.desktopPointer;
+            else if (__instance.isHeadRay) // in VR mode with no controllers
+                pointer = __instance.backupCrossHair;
+            else
                 return;
-            
-            GameObject desktopPointer = CohtmlHud.Instance.desktopPointer;
 
-            if (!desktopPointer.activeSelf)
+            if (!pointer.activeSelf)
             {
                 _lastDisplayedTime = 0; // reset time
-                return; // pointing at menu or cursor is active
+                return; // pointing at menu or cursor / controllers active
             }
             
             bool shouldDisplayPointer = (__instance._interact  // pressing mouse1 or mouse2
@@ -93,7 +96,7 @@ public class SmartReticleMod : MelonMod
             }
             
             if (Time.time - _lastDisplayedTime > Entry_HideTimeout.Value) 
-                desktopPointer.SetActive(false);
+                pointer.SetActive(false);
         }
     }
     

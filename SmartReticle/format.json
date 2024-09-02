@@ -1,12 +1,12 @@
 {
-  "_id": -1,
+  "_id": 233,
   "name": "SmartReticle",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Simple mod that makes the Desktop reticle only appear when needed.",
+  "description": "Simple mod that makes the Desktop/VR Head reticle only appear when hovering over an interactable, holding an interaction button, or when using a tool.",
   "searchtags": [
     "reticle",
     "hud",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r39/SmartReticle.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r40/SmartReticle.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmartReticle/",
-  "changelog": "- Initial Release",
+  "changelog": "- Adjusted to also work for the VR head reticle.",
   "embedcolor": "#f61963"
 }
