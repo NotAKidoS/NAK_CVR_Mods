@@ -97,7 +97,7 @@ namespace NAK.CustomSpawnPoint
 
         internal static void OnRequestWorldDetailsPage(string worldId)
         {
-            CustomSpawnPointMod.Logger.Msg("Requesting world details page for world: " + worldId);
+            //CustomSpawnPointMod.Logger.Msg("Requesting world details page for world: " + worldId);
             
             requestedWorldId = worldId;
             requestedSpawnPoint = spawnPoints.TryGetValue(requestedWorldId, out SpawnPointData spawnPoint) ? spawnPoint : null;

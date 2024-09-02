@@ -1,7 +1,7 @@
 {
   "_id": 228,
   "name": "CustomSpawnPoint",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2024r175",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r37/CustomSpawnPoint.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r40/CustomSpawnPoint.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CustomSpawnPoint/",
-  "changelog": "- Initial Release",
+  "changelog": "- Removed unneeded logging when opening a World Details page.",
   "embedcolor": "#f61963"
 }
