@@ -15,8 +15,8 @@ public static partial class BTKUIAddon
     {
         Category category = QuickMenuAPI.PlayerSelectPage.AddCategory(ModSettings.SM_SettingsCategory, ModSettings.ModName);
         
-        //Button identifyButton = category.AddButton("Identify Stickers", "Stickers-magnifying-glass", "Identify this players stickers by making them flash.");
-        //identifyButton.OnPress += OnPressIdentifyPlayerStickersButton;
+        Button identifyButton = category.AddButton("Identify Stickers", "Stickers-magnifying-glass", "Identify this players stickers by making them flash.");
+        identifyButton.OnPress += OnPressIdentifyPlayerStickersButton;
         
         Button clearStickersButton = category.AddButton("Clear Stickers", "Stickers-eraser", "Clear this players stickers.");
         clearStickersButton.OnPress += OnPressClearSelectedPlayerStickersButton;
@@ -30,11 +30,11 @@ public static partial class BTKUIAddon
 
     #region Callbacks
     
-    // private static void OnPressIdentifyPlayerStickersButton()
-    // {
-    //     if (string.IsNullOrEmpty(QuickMenuAPI.SelectedPlayerID)) return;
-    //     StickerSystem.Instance.OnStickerIdentifyReceived(QuickMenuAPI.SelectedPlayerID);
-    // }
+    private static void OnPressIdentifyPlayerStickersButton()
+    {
+        if (string.IsNullOrEmpty(QuickMenuAPI.SelectedPlayerID)) return;
+        StickerSystem.Instance.OnStickerIdentifyReceived(QuickMenuAPI.SelectedPlayerID);
+    }
     
     private static void OnPressClearSelectedPlayerStickersButton()
     {

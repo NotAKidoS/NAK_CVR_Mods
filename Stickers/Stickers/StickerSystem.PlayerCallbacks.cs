@@ -25,24 +25,38 @@ public partial class StickerSystem
         stickerData.SetAlpha(1f);
     }
 
-    private void OnOccasionalUpdate()
+    private void OnUpdate()
     {
         float currentTime = Time.time;
         for (int i = 0; i < _playerStickers.Values.Count; i++)
         {
             StickerData stickerData = _playerStickers.Values.ElementAt(i);
-            
-            if (stickerData.DeathTime < 0f)
-                continue;
 
-            if (currentTime < stickerData.DeathTime)
+            if (stickerData.DeathTime > 0f)
             {
-                stickerData.SetAlpha(Mathf.Lerp(0f, 1f, (stickerData.DeathTime - currentTime) / StickerKillTime));
+                if (currentTime < stickerData.DeathTime)
+                {
+                    stickerData.SetAlpha(Mathf.Lerp(0f, 1f, (stickerData.DeathTime - currentTime) / StickerKillTime));
+                    continue;
+                }
+
+                stickerData.Cleanup();
+                _playerStickers.Remove(stickerData.PlayerId);
                 continue;
             }
-            
-            stickerData.Cleanup();
-            _playerStickers.Remove(stickerData.PlayerId);
+
+            if (stickerData.IdentifyTime > 0)
+            {
+                if (currentTime < stickerData.IdentifyTime)
+                {
+                    // blink alpha 3 times but not completely off
+                    stickerData.SetAlpha(Mathf.Lerp(0.2f, 1f, Mathf.PingPong((stickerData.IdentifyTime - currentTime) * 2f, 1f)));
+                    continue;
+                }
+
+                stickerData.SetAlpha(1f);
+                stickerData.IdentifyTime = -1;
+            }
         }
     }
 
@@ -59,15 +73,13 @@ public partial class StickerSystem
     public void OnStickerClearAllReceived(string playerId)
         => ClearStickersForPlayer(playerId);
     
-    // public void OnStickerIdentifyReceived(string playerId)
-    // {
-    //     if (!_playerStickers.TryGetValue(playerId, out StickerData stickerData))
-    //         return;
-    //     
-    //     // todo: make prettier (idk shaders)
-    //     SchedulerSystem.AddJob(() => stickerData.Identify(), 0f, 0.1f, 30);
-    //     SchedulerSystem.AddJob(() => stickerData.ResetIdentify(), 4f, 1f, 1);
-    // }
+    public void OnStickerIdentifyReceived(string playerId)
+    {
+        if (!_playerStickers.TryGetValue(playerId, out StickerData stickerData))
+            return;
+        
+        stickerData.IdentifyTime = Time.time + 3f;
+    }
 
     #endregion Player Callbacks
 }

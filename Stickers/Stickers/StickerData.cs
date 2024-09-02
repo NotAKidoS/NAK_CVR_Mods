@@ -12,6 +12,7 @@ namespace NAK.Stickers
         public readonly string PlayerId;
         public float LastPlacedTime;
         public float DeathTime = -1f;
+        public float IdentifyTime = -1f;
         
         private Vector3 _lastPlacedPosition = Vector3.zero;
 
@@ -200,22 +201,5 @@ namespace NAK.Stickers
                 material.color = color;
             }
         }
-
-        #region shitty identify
-        
-        public void Identify()
-        {
-            Color color = Color.HSVToRGB(Time.time % 1f, 1f, 1f);
-            foreach (Material material in _materials)
-                material.color = color; // cycle rainbow
-        }
-        
-        public void ResetIdentify()
-        {
-            foreach (Material material in _materials)
-                material.color = Color.white;
-        }
-        
-        #endregion shitty identify
     }
 }

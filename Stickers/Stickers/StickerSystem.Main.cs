@@ -42,7 +42,7 @@ public partial class StickerSystem
         
         CVRGameEventSystem.Player.OnJoinEntity.AddListener(Instance.OnPlayerJoined);
         CVRGameEventSystem.Player.OnLeaveEntity.AddListener(Instance.OnPlayerLeft);
-        SchedulerSystem.AddJob(Instance.OnOccasionalUpdate, 10f, 1f);
+        SchedulerSystem.AddJob(Instance.OnUpdate, 10f, -1);
         LoadAllImagesAtStartup();
     }
 
