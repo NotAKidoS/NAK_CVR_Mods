@@ -51,7 +51,7 @@ public static class ModSettings
         Category.CreateEntry("tab_double_click", TabDoubleClick.ToggleStickerMode, "Tab Double Click", "The action to perform when double clicking the Stickers tab.");
     
     internal static readonly MelonPreferences_Entry<string[]> Hidden_SelectedStickerNames =
-        Category.CreateEntry("selected_sticker_name", Array.Empty<string>(), 
+        Category.CreateEntry("selected_sticker_name", new[] { "", "", "", "" }, 
             display_name: "Selected Sticker Name", 
             description: "The name of the sticker selected for stickering.", 
             is_hidden: true);
@@ -78,6 +78,11 @@ public static class ModSettings
         // ensure sticker slots are initialized to the correct size
         string[] selectedStickerNames = Hidden_SelectedStickerNames.Value;
         if (selectedStickerNames.Length != MaxStickerSlots) Array.Resize(ref selectedStickerNames, MaxStickerSlots);
+        
+        // ensure theres no null entries so toml shuts the fuck up
+        for (int i = 0; i < selectedStickerNames.Length; i++)
+            selectedStickerNames[i] ??= "";
+
         Hidden_SelectedStickerNames.Value = selectedStickerNames;
 
         foreach (var selectedSticker in selectedStickerNames)
