@@ -36,6 +36,12 @@ If preferred, you may also download the most recent version directly from the **
 
 It is important to exercise caution when using anything outside of the ChilloutVR Modding Group releases, as it may not have undergone review and could be harmful or non-functional.
 
+# License
+
+Copyright © 2024 NotAKidoS - All Rights Reserved unless otherwise specified.
+
+The repository history contains MIT-licensed commits. Refer to specific commits or versions for the applicable license terms. Commits up to #848 are MIT-licensed.
+
 ---
 
 Here is the block of text where I tell you this mod is not affiliated or endorsed by ABI.
