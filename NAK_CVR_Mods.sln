@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropUndoButton", "PropUndoB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThirdPerson", "ThirdPerson\ThirdPerson.csproj", "{675CEC0E-3E8A-4970-98EA-9B79277A7252}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AvatarScaleMod", "AvatarScale\AvatarScaleMod.csproj", "{A6DF0D98-428C-4FE2-BA7F-756312122B1E}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IKAdjustments", "IKAdjustments\IKAdjustments.csproj", "{CCD510BF-1A32-441F-B52B-8A937BF75CE3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FOVAdjustment", "FOVAdjustment\FOVAdjustment.csproj", "{EE552804-30B1-49CF-BBDE-3B312895AFF7}"
@@ -87,6 +85,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartReticle", "SmartReticl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereAmIPointing", "WhereAmIPointing\WhereAmIPointing.csproj", "{E285BCC9-D953-4066-8FA2-97EA28EB348E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarScaleMod", "AvatarScaleMod\AvatarScaleMod.csproj", "{A38E687F-8B6B-499E-ABC9-BD95C53DD391}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,10 +121,6 @@ Global
 		{675CEC0E-3E8A-4970-98EA-9B79277A7252}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{675CEC0E-3E8A-4970-98EA-9B79277A7252}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{675CEC0E-3E8A-4970-98EA-9B79277A7252}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A6DF0D98-428C-4FE2-BA7F-756312122B1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A6DF0D98-428C-4FE2-BA7F-756312122B1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A6DF0D98-428C-4FE2-BA7F-756312122B1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A6DF0D98-428C-4FE2-BA7F-756312122B1E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CCD510BF-1A32-441F-B52B-8A937BF75CE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CCD510BF-1A32-441F-B52B-8A937BF75CE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCD510BF-1A32-441F-B52B-8A937BF75CE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -261,6 +257,10 @@ Global
 		{E285BCC9-D953-4066-8FA2-97EA28EB348E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E285BCC9-D953-4066-8FA2-97EA28EB348E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E285BCC9-D953-4066-8FA2-97EA28EB348E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A38E687F-8B6B-499E-ABC9-BD95C53DD391}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A38E687F-8B6B-499E-ABC9-BD95C53DD391}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A38E687F-8B6B-499E-ABC9-BD95C53DD391}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A38E687F-8B6B-499E-ABC9-BD95C53DD391}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
