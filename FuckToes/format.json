@@ -1,7 +1,7 @@
 {
   "_id": 129,
   "name": "FuckToes",
-  "modversion": "1.0.2",
+  "modversion": "1.0.3",
   "gameversion": "2023r171",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -19,5 +19,5 @@
   "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r14/FuckToes.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckToes/",
   "changelog": "- Fixes for 2023r171.",
-  "embedcolor": "#ffc800"
+  "embedcolor": "#f61963"
 }
