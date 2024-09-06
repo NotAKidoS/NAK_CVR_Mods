@@ -31,12 +31,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzCurls", "EzCurls\EzCurls.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhysicsGunMod", "PhysicsGunMod\PhysicsGunMod.csproj", "{F94DDB73-9041-4F5C-AD43-6960701E8417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MirrorClone", "MirrorClone\MirrorClone.csproj", "{D5E81123-9D3B-4420-9CCD-1861657BE00B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterShadowClone", "BetterShadowClone\BetterShadowClone.csproj", "{D0C40987-AF16-490A-9304-F99D5A5A774C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckCameraIndicator", "FuckCameraIndicator\FuckCameraIndicator.csproj", "{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nevermind", "Nevermind\Nevermind.csproj", "{AC4857DD-F6D9-436D-A3EE-D148A518E642}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowCloneFallback", "ShadowCloneFallback\ShadowCloneFallback.csproj", "{69AF3C10-1BB1-4746-B697-B5A81D78C8D9}"
@@ -84,8 +78,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarQueueSystemTweaks", "AvatarQueueSystemTweaks\AvatarQueueSystemTweaks.csproj", "{D178E422-283B-4FB3-89A6-AA4FB9F87E2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomSpawnPoint", "CustomSpawnPoint\CustomSpawnPoint.csproj", "{51CA34CA-7684-4819-AC9E-89DFAD63E9AB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NukePostPresentHandoff", "NukePostPresentHandoff\NukePostPresentHandoff.csproj", "{77F332CD-019A-472F-9269-CFDEB087B3F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVRLuaToolsExtension", "CVRLuaToolsExtension\CVRLuaToolsExtension.csproj", "{FE6BA6EC-2C11-49E1-A2FB-13F2A1C9E7F9}"
 EndProject
@@ -157,18 +149,6 @@ Global
 		{F94DDB73-9041-4F5C-AD43-6960701E8417}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F94DDB73-9041-4F5C-AD43-6960701E8417}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F94DDB73-9041-4F5C-AD43-6960701E8417}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5E81123-9D3B-4420-9CCD-1861657BE00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5E81123-9D3B-4420-9CCD-1861657BE00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5E81123-9D3B-4420-9CCD-1861657BE00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5E81123-9D3B-4420-9CCD-1861657BE00B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D0C40987-AF16-490A-9304-F99D5A5A774C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D0C40987-AF16-490A-9304-F99D5A5A774C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D0C40987-AF16-490A-9304-F99D5A5A774C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D0C40987-AF16-490A-9304-F99D5A5A774C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0BE10630-EA6A-40FB-B3AF-5C2018F22BD3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC4857DD-F6D9-436D-A3EE-D148A518E642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC4857DD-F6D9-436D-A3EE-D148A518E642}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AC4857DD-F6D9-436D-A3EE-D148A518E642}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -265,10 +245,6 @@ Global
 		{51CA34CA-7684-4819-AC9E-89DFAD63E9AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51CA34CA-7684-4819-AC9E-89DFAD63E9AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51CA34CA-7684-4819-AC9E-89DFAD63E9AB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77F332CD-019A-472F-9269-CFDEB087B3F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77F332CD-019A-472F-9269-CFDEB087B3F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77F332CD-019A-472F-9269-CFDEB087B3F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77F332CD-019A-472F-9269-CFDEB087B3F9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FE6BA6EC-2C11-49E1-A2FB-13F2A1C9E7F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FE6BA6EC-2C11-49E1-A2FB-13F2A1C9E7F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE6BA6EC-2C11-49E1-A2FB-13F2A1C9E7F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
