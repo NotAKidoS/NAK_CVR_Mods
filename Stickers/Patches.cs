@@ -26,6 +26,8 @@ internal static class ControllerRayPatches
         if (!StickerSystem.Instance.IsInStickerMode) 
             return;
 
+        StickerSystem.Instance.PlaceStickerFromControllerRay(__instance.rayDirectionTransform, __instance.hand, true); // preview
+
         if (__instance._gripDown) StickerSystem.Instance.IsInStickerMode = false;
         if (__instance._hitUIInternal || !__instance._interactDown) 
             return;

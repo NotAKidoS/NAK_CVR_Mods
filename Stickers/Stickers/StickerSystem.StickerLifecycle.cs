@@ -20,7 +20,7 @@ public partial class StickerSystem
         return stickerData;
     }
 
-    public void PlaceStickerFromControllerRay(Transform transform, CVRHand hand = CVRHand.Left)
+    public void PlaceStickerFromControllerRay(Transform transform, CVRHand hand = CVRHand.Left, bool isPreview = false)
     {
         Vector3 controllerForward = transform.forward;
         Vector3 controllerUp = transform.up;
@@ -36,6 +36,12 @@ public partial class StickerSystem
             // leave 0.01% of the controller up vector to prevent issues with alignment on floor & ceiling in Desktop
             ? Vector3.Slerp(controllerUp, playerUp, 0.99f) 
             : controllerUp;
+        
+        if (isPreview)
+        {
+            PlaceStickerPreview(transform.position, controllerForward, targetUp);
+            return;
+        }
         
         if (!PlaceStickerSelf(transform.position, transform.forward, targetUp))
             return;
@@ -53,7 +59,7 @@ public partial class StickerSystem
         return true;
     }
     
-    private bool AttemptPlaceSticker(string playerId, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0)
+    private bool AttemptPlaceSticker(string playerId, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0, bool isPreview = false)
     {
         StickerData stickerData = GetOrCreateStickerData(playerId);
         if (Time.time - stickerData.LastPlacedTime < StickerCooldown)
@@ -68,6 +74,12 @@ public partial class StickerSystem
         // if gameobject name starts with [NoSticker] then don't place sticker
         if (hit.transform.gameObject.name.StartsWith("[NoSticker]"))
             return false;
+        
+        if (isPreview)
+        {
+            stickerData.PlacePreview(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot);
+            return true;
+        }
         
         stickerData.Place(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot);
         stickerData.PlayAudio();
@@ -153,6 +165,25 @@ public partial class StickerSystem
         
         _playerStickers.Clear();
         _playerStickers[PlayerLocalId] = localStickerData;
+    }
+    
+    public void PlaceStickerPreview(Vector3 position, Vector3 forward, Vector3 up)
+    {
+        AttemptPlaceSticker(PlayerLocalId, position, forward, up, true, SelectedStickerSlot, true);
+    }
+
+    public void UpdateStickerPreview()
+    {
+        if (!IsInStickerMode) return;
+        
+        StickerData localStickerData = GetOrCreateStickerData(PlayerLocalId);
+        localStickerData.UpdatePreview(SelectedStickerSlot);
+    }
+    
+    public void ClearStickerPreview()
+    {
+        StickerData localStickerData = GetOrCreateStickerData(PlayerLocalId);
+        localStickerData.ClearPreview();
     }
 
     #endregion Sticker Lifecycle

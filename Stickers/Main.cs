@@ -1,4 +1,6 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI_RC.Core;
+using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
 using ABI_RC.Systems.InputManagement;
 using MelonLoader;
 using NAK.Stickers.Integrations;
@@ -35,11 +37,19 @@ public class StickerMod : MelonMod
         if (StickerSystem.Instance == null) 
             return;
 
-        if (StickerSystem.Instance.IsInStickerMode
-            && Input.mouseScrollDelta.y != 0f 
-            && Cursor.lockState == CursorLockMode.Locked // prevent scrolling while in menus
-            && !CVRInputManager.Instance.zoom) // prevent scrolling while using scroll zoom
-            StickerSystem.Instance.SelectedStickerSlot += (int)Input.mouseScrollDelta.y;
+        if (!MetaPort.Instance.isUsingVr 
+            && StickerSystem.Instance.IsInStickerMode)
+        {
+            if (Input.mouseScrollDelta.y != 0f
+                && Cursor.lockState == CursorLockMode.Locked // prevent scrolling while in menus
+                && !CVRInputManager.Instance.zoom) // prevent scrolling while using scroll zoom
+            {
+                StickerSystem.Instance.SelectedStickerSlot += (int)Input.mouseScrollDelta.y;
+            }
+            StickerSystem.Instance.PlaceStickerFromControllerRay(PlayerSetup.Instance.activeCam.transform, CVRHand.Left, true);
+        }
+        
+        StickerSystem.Instance.UpdateStickerPreview(); // flashy flash
         
         if (!ModSettings.Entry_UsePlaceBinding.Value) 
             return;

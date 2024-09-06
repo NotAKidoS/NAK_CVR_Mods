@@ -16,7 +16,6 @@ namespace NAK.Stickers
         
         private Vector3 _lastPlacedPosition = Vector3.zero;
 
-        private readonly DecalType _decal;
         private readonly DecalSpawner[] _decalSpawners;
         
         private readonly Guid[] _textureHashes;
@@ -27,7 +26,6 @@ namespace NAK.Stickers
         {
             PlayerId = playerId;
 
-            _decal = ScriptableObject.CreateInstance<DecalType>();
             _decalSpawners = new DecalSpawner[decalSpawnersCount];
             _materials = new Material[decalSpawnersCount];
             _textureHashes = new Guid[decalSpawnersCount];
@@ -35,14 +33,14 @@ namespace NAK.Stickers
             for (int i = 0; i < decalSpawnersCount; i++)
             {
                 _materials[i] = new Material(StickerMod.DecalSimpleShader);
-                _decal.decalSettings = new DecalSpawner.InitData
+                DecalSpawner.InitData decalSettings = new()
                 {
                     material = _materials[i],
                     useShaderReplacement = false,
                     inheritMaterialProperties = false,
                     inheritMaterialPropertyBlock = false,
                 };
-                _decalSpawners[i] = DecalManager.GetSpawner(_decal.decalSettings, 4096, 1024);
+                _decalSpawners[i] = DecalManager.GetSpawner(decalSettings, 4096, 1024);
             }
 
             _audioSource = new GameObject("StickerAudioSource").AddComponent<AudioSource>();
@@ -54,7 +52,21 @@ namespace NAK.Stickers
             _audioSource.maxDistance = 5f;
             _audioSource.minDistance = 1f;
             _audioSource.outputAudioMixerGroup = RootLogic.Instance.propSfx; // props are close enough to stickers
-            if (PlayerId == StickerSystem.PlayerLocalId) Object.DontDestroyOnLoad(_audioSource.gameObject); // keep audio source through world transitions
+            
+            // this is a hack so judge and fuck off lol
+            if (PlayerId == StickerSystem.PlayerLocalId)
+            {
+                Object.DontDestroyOnLoad(_audioSource.gameObject); // keep audio source through world transitions
+
+                _previewMaterial = new Material(StickerMod.DecalSimpleShader);
+                _previewDecalSpawner = DecalManager.GetSpawner(new DecalSpawner.InitData
+                {
+                    material = _previewMaterial, // default material
+                    useShaderReplacement = false,
+                    inheritMaterialProperties = false,
+                    inheritMaterialPropertyBlock = false,
+                }, 4096, 1024);
+            }
         }
         
         public Guid GetTextureHash(int spawnerIndex = 0)
@@ -97,9 +109,13 @@ namespace NAK.Stickers
 
             Material material = _materials[spawnerIndex];
 
-            // Destroy the previous texture to avoid memory leaks
+            // destroy the previous texture to avoid memory leaks
             if (material.mainTexture != null) Object.Destroy(material.mainTexture);
             material.mainTexture = texture;
+
+            // update the preview as well i guess cause lame
+            if (_previewMaterial != null && _previewSpawnerIndex != spawnerIndex)
+                _previewMaterial.mainTexture = texture;
         }
 
         public void Place(RaycastHit hit, Vector3 forwardDirection, Vector3 upDirection, int spawnerIndex = 0)
@@ -166,8 +182,15 @@ namespace NAK.Stickers
                 if (_materials[i].mainTexture != null) Object.Destroy(_materials[i].mainTexture);
                 Object.Destroy(_materials[i]);
             }
-
-            Object.Destroy(_decal);
+            
+            if (_audioSource != null) Object.Destroy(_audioSource.gameObject);
+            if (_previewDecalSpawner != null) // local player only
+            {
+                _previewDecalSpawner.Release();
+                _previewDecalSpawner.staticGroups.Clear();
+                _previewDecalSpawner.movableGroups.Clear();
+                Object.Destroy(_previewMaterial);
+            }
         }
 
         public void PlayAudio()
@@ -201,5 +224,70 @@ namespace NAK.Stickers
                 material.color = color;
             }
         }
+        
+        #region Sticker Preview
+        
+        private const float FLASH_FREQUENCY = 2f;
+        private readonly DecalSpawner _previewDecalSpawner;
+        private readonly Material _previewMaterial;
+        private int _previewSpawnerIndex = -1;
+        private float _flashTime;
+        
+        public void PlacePreview(RaycastHit hit, Vector3 forwardDirection, Vector3 upDirection, int spawnerIndex = 0)
+        {
+            if (spawnerIndex < 0 || spawnerIndex >= _decalSpawners.Length)
+            {
+                StickerMod.Logger.Warning("Invalid spawner index for preview!");
+                return;
+            }
+            
+            if (_previewDecalSpawner == null)
+                return; // uh fuck
+
+            // clear previous
+            ClearPreview();
+
+            // place at hit pos
+            Transform rootObject = null;
+            GameObject hitGO = hit.transform.gameObject;
+            if (hitGO.scene.buildIndex == 4 || hitGO.TryGetComponent(out Animator _) || hitGO.GetComponentInParent<Rigidbody>() != null)
+                rootObject = hitGO.transform;
+
+            Vector3 position = hit.point;
+            _previewDecalSpawner.AddDecal(position, 
+                Quaternion.LookRotation(forwardDirection, upDirection), 
+                hitGO, 
+                DECAL_SIZE, DECAL_SIZE, 1f, 1f, 0f,
+                rootObject);
+        }
+
+        public void UpdatePreview(int spawnerIndex)
+        {
+            if (_previewSpawnerIndex != spawnerIndex)
+            {
+                _previewSpawnerIndex = spawnerIndex; // update the preview image
+                _previewMaterial.mainTexture = _materials[spawnerIndex].mainTexture;
+            }
+
+            _flashTime += Time.deltaTime;
+            float baseAlpha = (Mathf.Sin(_flashTime * 2f * Mathf.PI / FLASH_FREQUENCY) + 1f) / 2f;
+            float alpha = Mathf.Lerp(0.5f, 0.8f, baseAlpha); // 50% to 80% alpha
+
+            Color color = _previewMaterial.color;
+            color.a = alpha;
+            _previewMaterial.color = color;
+        }
+
+        public void ClearPreview()
+        {
+            if (_previewDecalSpawner == null) 
+                return;
+            
+            _previewDecalSpawner.Release();
+            _previewDecalSpawner.staticGroups.Clear();
+            _previewDecalSpawner.movableGroups.Clear();
+        }
+    
+        #endregion Sticker Preview
     }
 }

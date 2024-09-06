@@ -83,11 +83,18 @@ public partial class StickerSystem
         set
         {
             _isInStickerMode = value;
-            if (_isInStickerMode) CohtmlHud.Instance.SelectPropToSpawn(
+            if (_isInStickerMode)
+            {
+                CohtmlHud.Instance.SelectPropToSpawn(
                 StickerCache.GetCohtmlResourcesPath(SelectedStickerName),
                 Path.GetFileNameWithoutExtension(SelectedStickerName), 
                 "Sticker selected for stickering:");
-            else CohtmlHud.Instance.ClearPropToSpawn();
+            }
+            else
+            {
+                CohtmlHud.Instance.ClearPropToSpawn();
+                ClearStickerPreview();
+            }
         }
     }
 

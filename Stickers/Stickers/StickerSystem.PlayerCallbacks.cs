@@ -31,7 +31,7 @@ public partial class StickerSystem
         for (int i = 0; i < _playerStickers.Values.Count; i++)
         {
             StickerData stickerData = _playerStickers.Values.ElementAt(i);
-
+            
             if (stickerData.DeathTime > 0f)
             {
                 if (currentTime < stickerData.DeathTime)
