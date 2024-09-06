@@ -1,7 +1,7 @@
 {
   "_id": -1,
   "name": "ScriptingSpoofer",
-  "modversion": "1.0.0",
+  "modversion": "1.0.1",
   "gameversion": "2024r176",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r25/ScriptingSpoofer.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ScriptingSpoofer/",
-  "changelog": "- Initial Release",
-  "embedcolor": "#00FFFF"
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
 }

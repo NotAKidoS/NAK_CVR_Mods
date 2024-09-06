@@ -83,9 +83,8 @@ public class ScriptingSpoofer : MelonMod
     private static class PlayerApiPatches
     {
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LocalPlayerAPI), nameof(LocalPlayerAPI.Username), MethodType.Getter)]
-        [HarmonyPatch(typeof(PlayerAPIBase), nameof(PlayerAPIBase.Username), MethodType.Getter)]
-        private static bool GetSpoofedUsername(ref PlayerAPIBase __instance, ref string __result)
+        [HarmonyPatch(typeof(Player), nameof(Player.Username), MethodType.Getter)]
+        private static bool GetSpoofedUsername(ref Player __instance, ref string __result)
         {
             if (__instance.IsRemote) return true;
             if (!EntryEnabled.Value) return true;
@@ -95,9 +94,8 @@ public class ScriptingSpoofer : MelonMod
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(LocalPlayerAPI), nameof(LocalPlayerAPI.UserID), MethodType.Getter)]
-        [HarmonyPatch(typeof(PlayerAPIBase), nameof(PlayerAPIBase.UserID), MethodType.Getter)]
-        private static bool GetSpoofedUserId(ref PlayerAPIBase __instance, ref string __result)
+        [HarmonyPatch(typeof(Player), nameof(Player.UserID), MethodType.Getter)]
+        private static bool GetSpoofedUserId(ref Player __instance, ref string __result)
         {
             if (__instance.IsRemote) return true;
             if (!EntryEnabled.Value) return true;
