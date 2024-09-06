@@ -5,23 +5,23 @@ using UnityEngine;
 
 namespace NAK.Nevermind;
 
-public class Nevermind : MelonMod
+public class NevermindMod : MelonMod
 {
-    #region Mod Settings
+    #region Melon Preferences
 
     private static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(Nevermind));
+        MelonPreferences.CreateCategory(nameof(NevermindMod));
 
-    private static readonly MelonPreferences_Entry<KeyCode> Setting_NevermindKey =
-        Category.CreateEntry("Keybind", KeyCode.Home, description: "Key to cancel world join.");
+    private static readonly MelonPreferences_Entry<KeyCode> Entry_CancelKeybind =
+        Category.CreateEntry("keybind", KeyCode.Home, description: "Key to cancel world join.");
     
-    #endregion
+    #endregion Melon Preferences
 
     #region Melon Events
     
     public override void OnUpdate()
     {
-        if (!Input.GetKeyDown(Setting_NevermindKey.Value)) 
+        if (!Input.GetKeyDown(Entry_CancelKeybind.Value)) 
             return;
 
         if (CVRObjectLoader.Instance == null
@@ -35,7 +35,6 @@ public class Nevermind : MelonMod
             return; // too late to cancel, world is being loaded
         
         // Cancel world join if still downloading
-        CVRDownloadManager.Instance.ActiveWorldDownload = false;
         foreach (var download in CVRDownloadManager.Instance._downloadTasks)
             download.Value.JoinOnComplete = false;
         
@@ -49,5 +48,5 @@ public class Nevermind : MelonMod
         ViewManager.Instance.NotifyUser("(Local) Client", "World Join Cancelled", 2f);
     }
     
-    #endregion
+    #endregion Melon Events
 }
