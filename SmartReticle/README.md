@@ -1,6 +1,6 @@
 # SmartReticle
 
-Simple mod that makes the Desktop reticle only appear when needed.
+Simple mod that makes the Desktop/VR Head reticle only appear when hovering over an interactable, holding an interaction button, or when using a tool.
 
 ---
 
