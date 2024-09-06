@@ -30,7 +30,10 @@ public class InteractionTracker : MonoBehaviour
         sphereCol.isTrigger = true;
         
         BetterBetterCharacterController.QueueRemovePlayerCollision(sphereCol);
-        trackerObject.AddComponent<InteractionTracker>().isLeft = isLeft;
+        
+        InteractionTracker tracker = trackerObject.AddComponent<InteractionTracker>();
+        tracker.isLeft = isLeft;
+        tracker.Initialize();
     }
 
     #endregion Setup
@@ -57,7 +60,7 @@ public class InteractionTracker : MonoBehaviour
 
     #region Unity Events
     
-    private void Awake()
+    private void Initialize()
     {
         _selfCollider = GetComponent<Collider>();
         CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener(OnLocalAvatarLoaded);
@@ -76,6 +79,8 @@ public class InteractionTracker : MonoBehaviour
     private IEnumerator FrameLateInit()
     {
         yield return null;
+        yield return null;
+        OnInitSolver();
         IKSystem.vrik.onPreSolverUpdate.AddListener(OnPreSolverUpdate);
         IKSystem.vrik.onPostSolverUpdate.AddListener(OnPostSolverUpdate);
     }
@@ -154,34 +159,55 @@ public class InteractionTracker : MonoBehaviour
 
     private Transform _oldTarget;
     
+    private Vector3 _initialPosOffset;
+    private Quaternion _initialRotOffset;
+
+    private IKSolverVR.Arm _armSolver;
+    
+    private void OnInitSolver()
+    {
+        _armSolver = isLeft ? IKSystem.vrik.solver.arms[0] : IKSystem.vrik.solver.arms[1];
+
+        Transform target = _armSolver.target;
+        if (target == null)
+            target = transform.parent.Find("RotationTarget"); // LeapMotion: RotationTarget
+        
+        if (target == null) return;
+        
+        _initialPosOffset = target.localPosition;
+        _initialRotOffset = target.localRotation;
+    }
+    
     private void OnPreSolverUpdate()
     {
-        if (!IsColliding) return;
+        if (!IsColliding) 
+            return;
         
-        var solverArms = IKSystem.vrik.solver.arms;
-        IKSolverVR.Arm arm = isLeft ? solverArms[0] : solverArms[1];
+        Transform selfTransform = transform;
+        
+        float dot = Vector3.Dot(_lastPenetrationNormal, selfTransform.forward);
+        if (dot > -0.45f) 
+            return;
 
-        _oldTarget = arm.target;
-        arm.target = transform.GetChild(0);
+        _oldTarget = _armSolver.target;
+        _armSolver.target = selfTransform.GetChild(0);
+
+        _armSolver.target.position = ClosestPoint + selfTransform.rotation * _initialPosOffset;
+        _armSolver.target.rotation = _initialRotOffset * Quaternion.LookRotation(-_lastPenetrationNormal, selfTransform.up);
         
-        arm.target.position = ClosestPoint;
-        arm.target.rotation = Quaternion.LookRotation(_lastPenetrationNormal, _oldTarget.rotation * Vector3.up);
-        
-        arm.positionWeight = 1f;
-        arm.rotationWeight = 1f;
+        _armSolver.positionWeight = 1f;
+        _armSolver.rotationWeight = 1f;
     }
 
     private void OnPostSolverUpdate()
     {
         if (!_oldTarget) 
             return;
-        
-        var solverArms = IKSystem.vrik.solver.arms;
-        IKSolverVR.Arm arm = isLeft ? solverArms[0] : solverArms[1];
-        arm.target = _oldTarget;
+
+        _armSolver.target = _oldTarget;
         _oldTarget = null;
         
-        arm.positionWeight = 0f;
-        arm.rotationWeight = 0f;
+        _armSolver.positionWeight = 0f;
+        _armSolver.rotationWeight = 0f;
     }
 }
