@@ -131,8 +131,8 @@ public class SmoothRayer : MonoBehaviour
         _menuOnly = SmoothRay.EntryMenuOnly.Value;
         _smallMovementThresholdAngle = SmoothRay.EntrySmallMovementThresholdAngle.Value;
         // dont let value hit 0, itll freeze controllers
-        _positionSmoothingValue = Math.Max(20f - Mathf.Clamp(SmoothRay.EntryPositionSmoothing.Value, 0f, 20f), 0.1f);
-        _rotationSmoothingValue = Math.Max(20f - Mathf.Clamp(SmoothRay.EntryRotationSmoothing.Value, 0f, 20f), 0.1f);
+        _positionSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRay.EntryPositionSmoothing.Value, 0f, 20f), 0.1f);
+        _rotationSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRay.EntryRotationSmoothing.Value, 0f, 20f), 0.1f);
     }
 
     private void OnAppliedPoses()

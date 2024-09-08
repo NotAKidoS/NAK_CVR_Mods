@@ -1,6 +1,9 @@
 # SmoothRay
 
 Smoothes your controller while using the Quick and Main menus to make it easier to navigate.
+This is a CVR adaptation of a Beat Saber mod: [BeatSaber_SmoothedController](https://github.com/kinsi55/BeatSaber_SmoothedController)
+
+**Only supports OpenVR, not OpenXR.**
 
 ---
 
