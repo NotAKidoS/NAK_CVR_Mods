@@ -24,16 +24,16 @@ public static partial class BTKUIAddon
     private static void Setup_Icons()
     {
         // All icons used - https://www.flaticon.com/authors/gohsantosadrive
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-alphabet", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-alphabet.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-eraser", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-eraser.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-folder", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-folder.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-headset", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-headset.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magnifying-glass", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-magnifying-glass.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magic-wand", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-magic-wand.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-mouse", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-mouse.png"));
-        //QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-pencil", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-pencil.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-puzzle", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-puzzle.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-rubbish-bin", BTKUILibExtensions.GetIconStream("Gohsantosadrive_Icons.Stickers-rubbish-bin.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-alphabet", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-alphabet.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-eraser", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-eraser.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-folder", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-folder.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-headset", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-headset.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magnifying-glass", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-magnifying-glass.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magic-wand", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-magic-wand.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-mouse", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-mouse.png"));
+        //QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-pencil", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-pencil.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-puzzle", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-puzzle.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-rubbish-bin", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-rubbish-bin.png"));
     }
 
     private static void Setup_StickerModTab()

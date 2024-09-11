@@ -10,13 +10,13 @@ public static partial class BTKUIAddon
     private static Category _ourCategory;
 
     private static readonly MultiSelection _sfxSelection = 
-        BTKUILibExtensions.CreateMelonMultiSelection(ModSettings.Entry_SelectedSFX);
+        MultiSelection.CreateMultiSelectionFromMelonPref(ModSettings.Entry_SelectedSFX);
 
     private static readonly MultiSelection _desktopKeybindSelection = 
-        BTKUILibExtensions.CreateMelonMultiSelection(ModSettings.Entry_PlaceBinding);
+        MultiSelection.CreateMultiSelectionFromMelonPref(ModSettings.Entry_PlaceBinding);
     
     private static readonly MultiSelection _tabDoubleClickSelection = 
-        BTKUILibExtensions.CreateMelonMultiSelection(ModSettings.Entry_TabDoubleClick);
+        MultiSelection.CreateMultiSelectionFromMelonPref(ModSettings.Entry_TabDoubleClick);
     
     #region Category Setup
     
