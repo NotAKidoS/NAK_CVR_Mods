@@ -4,7 +4,6 @@ using ABI_RC.Core.UI;
 using ABI_RC.Systems.GameEventSystem;
 using NAK.Stickers.Networking;
 using NAK.Stickers.Utilities;
-using UnityEngine;
 
 namespace NAK.Stickers;
 
@@ -64,6 +63,29 @@ public partial class StickerSystem
     #endregion Game Events
 
     #region Data
+
+    // private bool _isEnabled = true;
+    //
+    // public bool IsEnabled
+    // {
+    //     get => _isEnabled;
+    //     set
+    //     {
+    //         if (_isEnabled == value) 
+    //             return;
+    //         
+    //         _isEnabled = value;
+    //         if (!_isEnabled) ClearAllStickers();
+    //         ModNetwork.IsEnabled = _isEnabled;
+    //     }
+    // }
+    
+    private string SelectedStickerName => ModSettings.Hidden_SelectedStickerNames.Value[_selectedStickerSlot];
+
+    private const float StickerKillTime = 30f;
+    private const float StickerCooldown = 0.2f;
+    private readonly Dictionary<string, StickerData> _playerStickers = new();
+    internal const string PlayerLocalId = "_PLAYERLOCAL";
     
     private int _selectedStickerSlot;
     public int SelectedStickerSlot
@@ -97,13 +119,6 @@ public partial class StickerSystem
             }
         }
     }
-
-    private string SelectedStickerName => ModSettings.Hidden_SelectedStickerNames.Value[_selectedStickerSlot];
-
-    private const float StickerKillTime = 30f;
-    private const float StickerCooldown = 0.2f;
-    private readonly Dictionary<string, StickerData> _playerStickers = new();
-    internal const string PlayerLocalId = "_PLAYERLOCAL";
     
     #endregion Data
 }

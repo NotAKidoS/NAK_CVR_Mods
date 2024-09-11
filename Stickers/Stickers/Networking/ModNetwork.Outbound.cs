@@ -38,6 +38,9 @@ public static partial class ModNetwork
 
     public static void SendPlaceSticker(int stickerSlot, Vector3 position, Vector3 forward, Vector3 up)
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork())
             return;
 
@@ -55,6 +58,9 @@ public static partial class ModNetwork
 
     public static void SendClearSticker(int stickerSlot)
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork())
             return;
 
@@ -68,6 +74,9 @@ public static partial class ModNetwork
 
     public static void SendClearAllStickers()
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork())
             return;
 
@@ -80,6 +89,9 @@ public static partial class ModNetwork
 
     private static void SendStartTexture(int stickerSlot, Guid textureHash, int chunkCount, int width, int height)
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork())
             return;
 
@@ -97,6 +109,9 @@ public static partial class ModNetwork
 
     public static void SendTextureChunk(int chunkIdx, byte[] chunkData)
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork())
             return;
 
@@ -111,6 +126,9 @@ public static partial class ModNetwork
 
     public static void SendEndTexture()
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork())
             return;
 
@@ -123,6 +141,9 @@ public static partial class ModNetwork
 
     public static void SendRequestTexture(int stickerSlot, Guid textureHash)
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork())
             return;
 
@@ -137,6 +158,9 @@ public static partial class ModNetwork
 
     public static void SendTexture(int stickerSlot)
     {
+        if (!_isSubscribedToModNetwork)
+            return;
+        
         if (!IsConnectedToGameNetwork() || IsSendingTexture)
             return;
 

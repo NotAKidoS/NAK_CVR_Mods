@@ -6,6 +6,25 @@ public static partial class ModNetwork
 {
     #region Mod Network Internals
     
+    // private static bool _isEnabled = true;
+    //
+    // public static bool IsEnabled
+    // {
+    //     get => _isEnabled;
+    //     set
+    //     {
+    //         if (_isEnabled == value) 
+    //             return;
+    //         
+    //         _isEnabled = value;
+    //         
+    //         if (_isEnabled) Subscribe();
+    //         else Unsubscribe();
+    //         
+    //         Reset(); // reset buffers and metadata
+    //     }
+    // }
+    
     public static bool IsSendingTexture { get; private set; }
     private static bool _isSubscribedToModNetwork;
 
@@ -15,6 +34,16 @@ public static partial class ModNetwork
         
         _isSubscribedToModNetwork = ModNetworkManager.IsSubscribed(ModId);
         if (!_isSubscribedToModNetwork) StickerMod.Logger.Error("Failed to subscribe to Mod Network! This should not happen.");
+        else StickerMod.Logger.Msg("Subscribed to Mod Network.");
+    }
+
+    private static void Unsubscribe()
+    {
+        ModNetworkManager.Unsubscribe(ModId);
+        
+        _isSubscribedToModNetwork = ModNetworkManager.IsSubscribed(ModId);
+        if (_isSubscribedToModNetwork) StickerMod.Logger.Error("Failed to unsubscribe from Mod Network! This should not happen.");
+        else StickerMod.Logger.Msg("Unsubscribed from Mod Network.");
     }
 
     #endregion Mod Network Internals
