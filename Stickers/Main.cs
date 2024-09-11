@@ -26,6 +26,7 @@ public class StickerMod : MelonMod
         ApplyPatches(typeof(Patches.PlayerSetupPatches));
         ApplyPatches(typeof(Patches.ControllerRayPatches));
         ApplyPatches(typeof(Patches.ShaderFilterHelperPatches));
+        ApplyPatches(typeof(Patches.CVRToolsPatches));
         
         LoadAssetBundle();
         

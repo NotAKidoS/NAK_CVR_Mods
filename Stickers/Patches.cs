@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.InteractionSystem;
+﻿using ABI_RC.Core;
+using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.IO;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
@@ -47,5 +48,16 @@ internal static class ShaderFilterHelperPatches
         
         StickerMod.Logger.Warning("ExperimentalShaderLimitEnabled found to be true. Disabling setting to prevent crashes when spawning stickers!");
         MetaPort.Instance.settings.SetSettingsBool("ExperimentalShaderLimitEnabled", false);
+    }
+}
+
+internal static class CVRToolsPatches
+{
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(CVRTools), nameof(CVRTools.ReplaceShaders), typeof(Material), typeof(string))]
+    private static bool Prefix_CVRTools_ReplaceShaders(Material material, string fallbackShaderName = "")
+    {
+        if (material == null || material.shader == null) return true;
+        return material.shader != StickerMod.DecalSimpleShader; // prevent replacing decals with fallback shader
     }
 }

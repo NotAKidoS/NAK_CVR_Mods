@@ -27,6 +27,6 @@ using System.Reflection;
 namespace NAK.Stickers.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.6";
+    public const string Version = "1.0.7";
     public const string Author = "NotAKidoS";
 }
