@@ -1,23 +1,23 @@
 {
-  "_id": 211,
-  "name": "RelativeSync",
+  "_id": -1,
+  "name": "LuaTTS",
   "modversion": "1.0.2",
-  "gameversion": "2024r175",
+  "gameversion": "2024r176",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network.\n\nProvides some Experimental settings to also fix local jitter on movement parents.",
+  "description": "Provides access to the built-in text-to-speech (TTS) functionality to lua scripts. Allows you to make the local player speak.",
   "searchtags": [
-    "relative",
-    "sync",
-    "movement",
-    "chair"
+    "lua",
+    "tts",
+    "texttospeech",
+    "tomato"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r28/RelativeSync.dll",
-  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/RelativeSync/",
-  "changelog": "- Fixed RelativeSyncMarker not generating correct path hash for local player\n  - This fixes relative sync on local avatar movement parents\n- Fixed initial calculated interpolation interval when assigning a new RelativeSyncMarker for a remote user\n  - Would calculate from time was last on a movement parent, which could lead to seconds long interpolation\n- Added Network Debug settings\n- Added experimental settings to fix **local** jitter on movement parents\n  - These options are disabled by default as they have not been heavily tested",
-  "embedcolor": "#507e64"
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r28/LuaTTS.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/LuaTTS/",
+  "changelog": "- Initial release.",
+  "embedcolor": "#f61963"
 }

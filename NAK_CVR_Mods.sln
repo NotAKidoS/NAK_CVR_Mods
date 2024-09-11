@@ -79,6 +79,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarScaleMod", "AvatarSca
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmoothRay", "SmoothRay\SmoothRay.csproj", "{99F9D60D-9A2D-4DBE-AA52-13D8A0838696}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaNetworkVariables", "LuaNetworkVariables\LuaNetworkVariables.csproj", "{A3D97D1A-3099-49C5-85AD-D8C79CC5FDE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,10 @@ Global
 		{99F9D60D-9A2D-4DBE-AA52-13D8A0838696}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99F9D60D-9A2D-4DBE-AA52-13D8A0838696}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99F9D60D-9A2D-4DBE-AA52-13D8A0838696}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3D97D1A-3099-49C5-85AD-D8C79CC5FDE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3D97D1A-3099-49C5-85AD-D8C79CC5FDE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3D97D1A-3099-49C5-85AD-D8C79CC5FDE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3D97D1A-3099-49C5-85AD-D8C79CC5FDE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
