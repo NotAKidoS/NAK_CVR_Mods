@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r40/SmootherRay.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmootherRay/",
-  "changelog": "- Fixed for 2024r176.",
+  "changelog": "- Fixed for 2024r176.\n- Rebranded to SmootherRayer due to native implementation now existing and sucking.",
   "embedcolor": "#f61963"
 }
