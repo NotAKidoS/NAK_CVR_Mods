@@ -1,20 +1,20 @@
 ﻿using MelonLoader;
-using NAK.SmoothRay.Properties;
+using NAK.SmootherRay.Properties;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.SmoothRay))]
+[assembly: AssemblyTitle(nameof(NAK.SmootherRay))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.SmoothRay))]
+[assembly: AssemblyProduct(nameof(NAK.SmootherRay))]
 
 [assembly: MelonInfo(
-    typeof(NAK.SmoothRay.SmoothRayMod),
-    nameof(NAK.SmoothRay),
+    typeof(NAK.SmootherRay.SmootherRayMod),
+    nameof(NAK.SmootherRay),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmoothRay"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmootherRay"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -24,7 +24,7 @@ using System.Reflection;
 [assembly: MelonAuthorColor(255, 158, 21, 32)] // red
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.SmoothRay.Properties;
+namespace NAK.SmootherRay.Properties;
 
 internal static class AssemblyInfoParams
 {

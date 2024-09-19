@@ -4,20 +4,20 @@ using ABI_RC.Core.Player;
 using HarmonyLib;
 using MelonLoader;
 
-namespace NAK.SmoothRay;
+namespace NAK.SmootherRay;
 
 // ChilloutVR adaptation of:
 // https://github.com/kinsi55/BeatSaber_SmoothedController
 // https://github.com/kinsi55/BeatSaber_SmoothedController/blob/master/LICENSE
 
-public class SmoothRayMod : MelonMod
+public class SmootherRayMod : MelonMod
 {
     internal static MelonLogger.Instance Logger; 
     
     #region Melon Preferences
     
     public static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(SmoothRayMod));
+        MelonPreferences.CreateCategory(nameof(SmootherRayMod));
 
     public static readonly MelonPreferences_Entry<bool> EntryEnabled =
         Category.CreateEntry("Enable Smoothing", true,
@@ -73,18 +73,18 @@ public class SmoothRayMod : MelonMod
         [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.Start))]
         private static void Postfix_PlayerSetup_Start(ref PlayerSetup __instance)
         {
-            __instance.vrLeftHandTracker.gameObject.AddComponent<SmoothRayer>().ray = __instance.vrRayLeft;
-            __instance.vrRightHandTracker.gameObject.AddComponent<SmoothRayer>().ray = __instance.vrRayRight;
+            __instance.vrLeftHandTracker.gameObject.AddComponent<SmootherRayer>().ray = __instance.vrRayLeft;
+            __instance.vrRightHandTracker.gameObject.AddComponent<SmootherRayer>().ray = __instance.vrRayRight;
         }
     }
 
     internal static class ControllerRay_Patches
     {
-        // SmoothRay
+        // SmootherRay
         [HarmonyPrefix]
         [HarmonyPatch(typeof(ControllerRay), nameof(ControllerRay.SmoothRay))]
         private static bool Prefix_ControllerRay_SmoothRay(ref ControllerRay __instance)
-            => !EntryEnabled.Value; // SmoothRay method enforces identity local pos when disabled, so we skip it
+            => !EntryEnabled.Value; // SmootherRay method enforces identity local pos when disabled, so we skip it
     }
     
     #endregion Harmony Patches

@@ -77,7 +77,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereAmIPointing", "WhereAm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarScaleMod", "AvatarScaleMod\AvatarScaleMod.csproj", "{A38E687F-8B6B-499E-ABC9-BD95C53DD391}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmoothRay", "SmoothRay\SmoothRay.csproj", "{99F9D60D-9A2D-4DBE-AA52-13D8A0838696}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmootherRay", "SmootherRay\SmootherRay.csproj", "{99F9D60D-9A2D-4DBE-AA52-13D8A0838696}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaNetworkVariables", "LuaNetworkVariables\LuaNetworkVariables.csproj", "{A3D97D1A-3099-49C5-85AD-D8C79CC5FDE3}"
 EndProject

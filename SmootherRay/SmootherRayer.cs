@@ -30,9 +30,9 @@ using MelonLoader;
 using UnityEngine;
 using Valve.VR;
 
-namespace NAK.SmoothRay;
+namespace NAK.SmootherRay;
 
-public class SmoothRayer : MonoBehaviour
+public class SmootherRayer : MonoBehaviour
 {
     #region Variables
 
@@ -72,7 +72,7 @@ public class SmoothRayer : MonoBehaviour
             UpdatePosesAction(true);
         }
 
-        foreach (MelonPreferences_Entry setting in SmoothRayMod.Category.Entries)
+        foreach (MelonPreferences_Entry setting in SmootherRayMod.Category.Entries)
             setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
         
         MetaPort.Instance.settings.settingBoolChanged.AddListener(OnSettingsBoolChanged);
@@ -131,13 +131,13 @@ public class SmoothRayer : MonoBehaviour
 
     private void OnUpdateSettings(object arg1, object arg2)
     {
-        _isEnabled = SmoothRayMod.EntryEnabled.Value;
-        _menuOnly = SmoothRayMod.EntryMenuOnly.Value;
-        _smallMovementThresholdAngle = SmoothRayMod.EntrySmallMovementThresholdAngle.Value;
+        _isEnabled = SmootherRayMod.EntryEnabled.Value;
+        _menuOnly = SmootherRayMod.EntryMenuOnly.Value;
+        _smallMovementThresholdAngle = SmootherRayMod.EntrySmallMovementThresholdAngle.Value;
         
         // dont let value hit 0, itll freeze controllers
-        _positionSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRayMod.EntryPositionSmoothing.Value, 0f, 20f), 0.1f);
-        _rotationSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRayMod.EntryRotationSmoothing.Value, 0f, 20f), 0.1f);
+        _positionSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmootherRayMod.EntryPositionSmoothing.Value, 0f, 20f), 0.1f);
+        _rotationSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmootherRayMod.EntryRotationSmoothing.Value, 0f, 20f), 0.1f);
         
         if (!_isEnabled)
             return; // only care about setting being enabled
@@ -147,7 +147,7 @@ public class SmoothRayer : MonoBehaviour
         if (MetaPort.Instance.settings.GetSettingsBool("ControlSmoothRaycast")) 
             return; // disable saved setting once
         
-        SmoothRayMod.Logger.Msg("Built-in SmoothRay setting found to be enabled. Disabling built-in SmoothRay implementation in favor of modded implementation.");
+        SmootherRayMod.Logger.Msg("Built-in SmootherRay setting found to be enabled. Disabling built-in SmootherRay implementation in favor of modded implementation.");
         MetaPort.Instance.settings.SetSettingsBool("ControlSmoothRaycast", false);
         ViewManager.SetGameSettingBool("ControlSmoothRaycast", false); 
         // ^ did you know the game doesn't even use this method native...
@@ -161,11 +161,11 @@ public class SmoothRayer : MonoBehaviour
         if (!value) 
             return; // only care about setting being enabled
         
-        _isEnabled = false; // ensure modded SmoothRay is disabled
+        _isEnabled = false; // ensure modded SmootherRay is disabled
         
-        if (!SmoothRayMod.EntryEnabled.Value) return; // disable saved setting once
-        SmoothRayMod.Logger.Msg("Modded SmoothRay found to be enabled. Disabling modded SmoothRay implementation in favor of built-in implementation.");
-        SmoothRayMod.EntryEnabled.Value = false;
+        if (!SmootherRayMod.EntryEnabled.Value) return; // disable saved setting once
+        SmootherRayMod.Logger.Msg("Modded SmootherRay found to be enabled. Disabling modded SmootherRay implementation in favor of built-in implementation.");
+        SmootherRayMod.EntryEnabled.Value = false;
     }
 
     private void OnAppliedPoses()
