@@ -10,7 +10,7 @@ using System.Reflection;
 [assembly: AssemblyProduct(nameof(NAK.SmoothRay))]
 
 [assembly: MelonInfo(
-    typeof(NAK.SmoothRay.SmoothRay),
+    typeof(NAK.SmoothRay.SmoothRayMod),
     nameof(NAK.SmoothRay),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
@@ -28,6 +28,6 @@ namespace NAK.SmoothRay.Properties;
 
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.4";
+    public const string Version = "1.0.5";
     public const string Author = "NotAKidoS";
 }

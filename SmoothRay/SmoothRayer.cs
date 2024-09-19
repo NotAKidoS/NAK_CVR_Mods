@@ -22,8 +22,10 @@
     SOFTWARE.
 **/
 
+using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Savior;
+using ABI_RC.Systems.InputManagement;
 using MelonLoader;
 using UnityEngine;
 using Valve.VR;
@@ -70,8 +72,10 @@ public class SmoothRayer : MonoBehaviour
             UpdatePosesAction(true);
         }
 
-        foreach (MelonPreferences_Entry setting in SmoothRay.Category.Entries)
+        foreach (MelonPreferences_Entry setting in SmoothRayMod.Category.Entries)
             setting.OnEntryValueChangedUntyped.Subscribe(OnUpdateSettings);
+        
+        MetaPort.Instance.settings.settingBoolChanged.AddListener(OnSettingsBoolChanged);
 
         OnUpdateSettings(null, null);
     }
@@ -127,12 +131,41 @@ public class SmoothRayer : MonoBehaviour
 
     private void OnUpdateSettings(object arg1, object arg2)
     {
-        _isEnabled = SmoothRay.EntryEnabled.Value;
-        _menuOnly = SmoothRay.EntryMenuOnly.Value;
-        _smallMovementThresholdAngle = SmoothRay.EntrySmallMovementThresholdAngle.Value;
+        _isEnabled = SmoothRayMod.EntryEnabled.Value;
+        _menuOnly = SmoothRayMod.EntryMenuOnly.Value;
+        _smallMovementThresholdAngle = SmoothRayMod.EntrySmallMovementThresholdAngle.Value;
+        
         // dont let value hit 0, itll freeze controllers
-        _positionSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRay.EntryPositionSmoothing.Value, 0f, 20f), 0.1f);
-        _rotationSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRay.EntryRotationSmoothing.Value, 0f, 20f), 0.1f);
+        _positionSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRayMod.EntryPositionSmoothing.Value, 0f, 20f), 0.1f);
+        _rotationSmoothingValue = Mathf.Max(20f - Mathf.Clamp(SmoothRayMod.EntryRotationSmoothing.Value, 0f, 20f), 0.1f);
+        
+        if (!_isEnabled)
+            return; // only care about setting being enabled
+        
+        ray._enableSmoothRay = false; // ensure built-in smoothing is disabled
+        
+        if (MetaPort.Instance.settings.GetSettingsBool("ControlSmoothRaycast")) 
+            return; // disable saved setting once
+        
+        SmoothRayMod.Logger.Msg("Built-in SmoothRay setting found to be enabled. Disabling built-in SmoothRay implementation in favor of modded implementation.");
+        MetaPort.Instance.settings.SetSettingsBool("ControlSmoothRaycast", false);
+        ViewManager.SetGameSettingBool("ControlSmoothRaycast", false); 
+        // ^ did you know the game doesn't even use this method native...
+    }
+    
+    private void OnSettingsBoolChanged(string key, bool value)
+    {
+        if (key != "ControlSmoothRaycast") 
+            return; // only care about SmoothRaycast setting
+        
+        if (!value) 
+            return; // only care about setting being enabled
+        
+        _isEnabled = false; // ensure modded SmoothRay is disabled
+        
+        if (!SmoothRayMod.EntryEnabled.Value) return; // disable saved setting once
+        SmoothRayMod.Logger.Msg("Modded SmoothRay found to be enabled. Disabling modded SmoothRay implementation in favor of built-in implementation.");
+        SmoothRayMod.EntryEnabled.Value = false;
     }
 
     private void OnAppliedPoses()
@@ -148,12 +181,13 @@ public class SmoothRayer : MonoBehaviour
     private void SmoothTransform()
     {
         Transform controller = transform;
-        if (_isEnabled && ray.lineRenderer != null && ray.lineRenderer.enabled)
+        if (!CanSmoothRay())
         {
-            if (_menuOnly && (!ray.uiActive || (ray.hitTransform != ViewManager.Instance.transform &&
-                                                ray.hitTransform != CVR_MenuManager.Instance.quickMenu.transform)))
-                return;
-
+            _smoothedPosition = controller.localPosition;
+            _smoothedRotation = controller.localRotation;
+        }
+        else
+        {
             var angDiff = Quaternion.Angle(_smoothedRotation, controller.localRotation);
             _angleVelocitySnap = Mathf.Min(_angleVelocitySnap + angDiff, 90f);
 
@@ -176,12 +210,25 @@ public class SmoothRayer : MonoBehaviour
                 controller.localRotation = _smoothedRotation;
             }
         }
-        else
-        {
-            _smoothedPosition = controller.localPosition;
-            _smoothedRotation = controller.localRotation;
-        }
     }
 
-    #endregion
+    private bool CanSmoothRay()
+    {
+        bool canSmoothRay = _isEnabled && ray.lineRenderer != null && ray.lineRenderer.enabled;
+        
+        if (_menuOnly)
+        {
+            switch (ray.hand)
+            {
+                case CVRHand.Left when !CVRInputManager.Instance.leftControllerPointingMenu:
+                case CVRHand.Right when !CVRInputManager.Instance.rightControllerPointingMenu:
+                    canSmoothRay = false;
+                    break;
+            }
+        }
+        
+        return canSmoothRay;
+    }
+    
+    #endregion Private Methods
 }
