@@ -51,7 +51,7 @@ public partial class StickerSystem
 
     private bool PlaceStickerSelf(Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true)
     {
-        if (!AttemptPlaceSticker(PlayerLocalId, position, forward, up, alignWithNormal, SelectedStickerSlot))
+        if (!AttemptPlaceSticker(PlayerLocalId, position, forward, up, alignWithNormal, SelectedStickerSlot, RestrictedInstance))
             return false; // failed
         
         // placed, now network
@@ -59,7 +59,7 @@ public partial class StickerSystem
         return true;
     }
     
-    private bool AttemptPlaceSticker(string playerId, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0, bool isPreview = false)
+    private bool AttemptPlaceSticker(string playerId, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0, bool RestrictedInstance = false, bool isPreview = false)
     {
         StickerData stickerData = GetOrCreateStickerData(playerId);
         if (Time.time - stickerData.LastPlacedTime < StickerCooldown)
@@ -74,7 +74,11 @@ public partial class StickerSystem
         // if gameobject name starts with [NoSticker] then don't place sticker
         if (hit.transform.gameObject.name.StartsWith("[NoSticker]"))
             return false;
-        
+
+        //  if the world contained a gameobject with the [DisableStickers] name and restricted the instance disable stickers!
+        if (RestrictedInstance == true)
+        return false;
+
         if (isPreview)
         {
             stickerData.PlacePreview(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot);
