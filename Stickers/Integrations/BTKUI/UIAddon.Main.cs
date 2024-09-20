@@ -2,6 +2,8 @@
 using BTKUILib.UIObjects;
 using NAK.Stickers.Networking;
 using NAK.Stickers.Utilities;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace NAK.Stickers.Integrations;
 
@@ -24,24 +26,26 @@ public static partial class BTKUIAddon
     private static void Setup_Icons()
     {
         // All icons used - https://www.flaticon.com/authors/gohsantosadrive
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-alphabet", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-alphabet.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-eraser", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-eraser.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-folder", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-folder.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-headset", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-headset.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magnifying-glass", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-magnifying-glass.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magic-wand", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-magic-wand.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-mouse", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-mouse.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-alphabet", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-alphabet.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-eraser", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-eraser.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-folder", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-folder.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-headset", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-headset.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magnifying-glass", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-magnifying-glass.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magic-wand", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-magic-wand.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-magic-wand-broken", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-magic-wand-broken.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-mouse", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-mouse.png"));
         //QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-pencil", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-pencil.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-puzzle", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-puzzle.png"));
-        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-rubbish-bin", UIUtils.GetIconStream("Gohsantosadrive_Icons.Stickers-rubbish-bin.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-puzzle", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-puzzle.png"));
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-puzzle-disabled", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-puzzle-disabled.png")); //Disabled Sticker Puzzle
+        QuickMenuAPI.PrepareIcon(ModSettings.ModName, "Stickers-rubbish-bin", Assembly.GetExecutingAssembly().GetManifestResourceStream("Stickers.Resources.Gohsantosadrive_Icons.Stickers-rubbish-bin.png"));
     }
 
     private static void Setup_StickerModTab()
     {
-        _rootPage = new Page(ModSettings.ModName, ModSettings.SM_SettingsCategory, true, "Stickers-puzzle")
+        _rootPage = new Page(ModSettings.ModName, ModSettings.SM_SettingsCategory, true, "Stickers-Puzzle") //Sticker Icon will be left blank as it is updated on world join, AFTER Icon value is exposed..
         {
             MenuTitle = ModSettings.SM_SettingsCategory,
-            MenuSubtitle = "Stickers! Double-click the tab to quickly toggle Sticker Mode.",
+            MenuSubtitle = "", //Left this blank as it is defined when the world loads
         };
 
         _rootPageElementID = _rootPage.ElementID;
@@ -87,7 +91,10 @@ public static partial class BTKUIAddon
             {
                 default:
                 case TabDoubleClick.ToggleStickerMode:
-                    OnPlaceStickersButtonClick();
+                    if (StickerSystem.RestrictedInstance == false)
+                    {
+                        OnPlaceStickersButtonClick();
+                    }
                     break;
                 case TabDoubleClick.ClearAllStickers:
                     OnClearAllStickersButtonClick();
