@@ -22,6 +22,12 @@ Any image placed in the `UserData/Stickers/` folder will be available to choose 
 - Requires the experimental Shader Safety Settings to be disabled as it will cause crashes when decals attempt to generate on GPU.
   - The mod will automatically disable this setting when it is enabled on startup.
 
+### Restrictions
+- Full Restriction.
+  - To disable Stickers for the whole world, name an empty GameObject "**[DisableStickers]**".
+- Partial Restriction.
+  - To keep stickers enabled but not allowing it on certain objects, add the "**[NoSticker]**" tag to the GameObject name.
+
 ## Attributions
 - All icons used are by [Gohsantosadrive](<https://www.flaticon.com/authors/gohsantosadrive>) on Flaticon.
 - Decal generation system by [Mr F](<https://assetstore.unity.com/publishers/37453>) on the Unity Asset Store.
