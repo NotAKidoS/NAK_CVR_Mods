@@ -51,7 +51,7 @@ public partial class StickerSystem
 
     private bool PlaceStickerSelf(Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true)
     {
-        if (!AttemptPlaceSticker(PlayerLocalId, position, forward, up, alignWithNormal, SelectedStickerSlot, RestrictedInstance))
+        if (!AttemptPlaceSticker(PlayerLocalId, position, forward, up, alignWithNormal, SelectedStickerSlot))
             return false; // failed
         
         // placed, now network
@@ -59,8 +59,12 @@ public partial class StickerSystem
         return true;
     }
     
-    private bool AttemptPlaceSticker(string playerId, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0, bool RestrictedInstance = false, bool isPreview = false)
+    private bool AttemptPlaceSticker(string playerId, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0, bool isPreview = false)
     {
+        // if the world contained a gameobject with the [DisableStickers] name and restricted the instance disable stickers!
+        if (IsRestrictedInstance)
+            return false;
+        
         StickerData stickerData = GetOrCreateStickerData(playerId);
         if (Time.time - stickerData.LastPlacedTime < StickerCooldown)
             return false;
@@ -74,10 +78,6 @@ public partial class StickerSystem
         // if gameobject name starts with [NoSticker] then don't place sticker
         if (hit.transform.gameObject.name.StartsWith("[NoSticker]"))
             return false;
-
-        //  if the world contained a gameobject with the [DisableStickers] name and restricted the instance disable stickers!
-        if (RestrictedInstance == true)
-        return false;
 
         if (isPreview)
         {
@@ -181,6 +181,7 @@ public partial class StickerSystem
         if (!IsInStickerMode) return;
         
         StickerData localStickerData = GetOrCreateStickerData(PlayerLocalId);
+        localStickerData.ClearPreview(); // clear prior frames sticker preview
         localStickerData.UpdatePreview(SelectedStickerSlot);
     }
     

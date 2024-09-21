@@ -8,6 +8,8 @@ namespace NAK.Stickers.Integrations;
 public static partial class BTKUIAddon
 {
     private static Category _ourCategory;
+    
+    private static Button _placeStickersButton;
 
     private static readonly MultiSelection _sfxSelection = 
         MultiSelection.CreateMultiSelectionFromMelonPref(ModSettings.Entry_SelectedSFX);
@@ -17,17 +19,15 @@ public static partial class BTKUIAddon
     
     private static readonly MultiSelection _tabDoubleClickSelection = 
         MultiSelection.CreateMultiSelectionFromMelonPref(ModSettings.Entry_TabDoubleClick);
-
-    public static Button placeStickersButton;
-
+    
     #region Category Setup
 
     private static void Setup_StickersModCategory()
     {
         _ourCategory = _rootPage.AddMelonCategory(ModSettings.Hidden_Foldout_SettingsCategory);
 
-        placeStickersButton = _ourCategory.AddButton("Place Stickers", "Stickers-magic-wand", "Place stickers via raycast.", ButtonStyle.TextWithIcon);
-        placeStickersButton.OnPress += OnPlaceStickersButtonClick;
+        _placeStickersButton = _ourCategory.AddButton("Place Stickers", "Stickers-magic-wand", "Place stickers via raycast.", ButtonStyle.TextWithIcon);
+        _placeStickersButton.OnPress += OnPlaceStickersButtonClick;
 
         Button clearSelfStickersButton = _ourCategory.AddButton("Clear Self", "Stickers-eraser", "Clear own stickers.", ButtonStyle.TextWithIcon);
         clearSelfStickersButton.OnPress += OnClearSelfStickersButtonClick;
@@ -62,16 +62,15 @@ public static partial class BTKUIAddon
     {
         if (!_isOurTabOpened) return;
 
-        if (StickerSystem.RestrictedInstance == false)
-        {
-            string mode = StickerSystem.Instance.IsInStickerMode ? "Exiting" : "Entering";
-            QuickMenuAPI.ShowAlertToast($"{mode} sticker placement mode...", 2);
-            StickerSystem.Instance.IsInStickerMode = !StickerSystem.Instance.IsInStickerMode;
-        }
-        else
+        if (StickerSystem.Instance.IsRestrictedInstance)
         {
             QuickMenuAPI.ShowAlertToast("Stickers are not allowed in this world!", 2);
+            return;
         }
+
+        string mode = StickerSystem.Instance.IsInStickerMode ? "Exiting" : "Entering";
+        QuickMenuAPI.ShowAlertToast($"{mode} sticker placement mode...", 2);
+        StickerSystem.Instance.IsInStickerMode = !StickerSystem.Instance.IsInStickerMode;
     }
     
     private static void OnClearSelfStickersButtonClick()
@@ -95,28 +94,25 @@ public static partial class BTKUIAddon
         StickerSystem.OpenStickersFolder();
     }
     
-    public static void UpdateStickerMenu() //TODO: add Icon changing, Bono needs to expose the value first.
+    public static void OnStickerRestrictionUpdated(bool isRestricted = false) //TODO: add Icon changing, Bono needs to expose the value first.
     {
-        if (StickerSystem.RestrictedInstance == true)
+        if (isRestricted)
         {
             _rootPage.MenuSubtitle = "Stickers... are sadly disabled in this world.";
 
-            placeStickersButton.Disabled = true;
-            placeStickersButton.ButtonText = "Stickers Disabled";
-            placeStickersButton.ButtonTooltip = "This world is not allowing Stickers.";
-            placeStickersButton.ButtonIcon = "Stickers-magic-wand-broken";
-
-        }
-        else
-        {
-            _rootPage.MenuSubtitle = "Stickers! Double-click the tab to quickly toggle Sticker Mode.";
-
-            placeStickersButton.Disabled = false;
-            placeStickersButton.ButtonText = "Place Stickers";
-            placeStickersButton.ButtonTooltip = "Place stickers via raycast.";
-            placeStickersButton.ButtonIcon = "Stickers-magic-wand";
+            _placeStickersButton.Disabled = true;
+            _placeStickersButton.ButtonText = "Stickers Disabled";
+            _placeStickersButton.ButtonTooltip = "This world is not allowing Stickers.";
+            _placeStickersButton.ButtonIcon = "Stickers-magic-wand-broken";
+            return;
         }
 
+        _rootPage.MenuSubtitle = "Stickers! Double-click the tab to quickly toggle Sticker Mode.";
+            
+        _placeStickersButton.Disabled = false;
+        _placeStickersButton.ButtonText = "Place Stickers";
+        _placeStickersButton.ButtonTooltip = "Place stickers via raycast.";
+        _placeStickersButton.ButtonIcon = "Stickers-magic-wand";
     }
 
     #endregion Button Actions

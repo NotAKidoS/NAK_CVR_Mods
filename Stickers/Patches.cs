@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace NAK.Stickers.Patches;
 
-internal static class PlayerSetupPatches
+internal static class PlayerSetup_Patches
 {
     [HarmonyPostfix]
     [HarmonyPatch(typeof(PlayerSetup), nameof(PlayerSetup.GetCurrentPropSelectionMode))]
@@ -18,7 +18,7 @@ internal static class PlayerSetupPatches
     }
 }
 
-internal static class ControllerRayPatches
+internal static class ControllerRay_Patches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(ControllerRay), nameof(ControllerRay.HandlePropSpawn))]
@@ -30,14 +30,14 @@ internal static class ControllerRayPatches
         StickerSystem.Instance.PlaceStickerFromControllerRay(__instance.rayDirectionTransform, __instance.hand, true); // preview
 
         if (__instance._gripDown) StickerSystem.Instance.IsInStickerMode = false;
-        if (__instance._hitUIInternal || !__instance._interactDown) 
+        if (__instance._hitUIInternal || !__instance._interactDown)
             return;
         
         StickerSystem.Instance.PlaceStickerFromControllerRay(__instance.rayDirectionTransform, __instance.hand);
     }
 }
 
-internal static class ShaderFilterHelperPatches
+internal static class ShaderFilterHelper_Patches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(ShaderFilterHelper), nameof(ShaderFilterHelper.SetupFilter))]
@@ -51,7 +51,7 @@ internal static class ShaderFilterHelperPatches
     }
 }
 
-internal static class CVRToolsPatches
+internal static class CVRTools_Patches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(CVRTools), nameof(CVRTools.ReplaceShaders), typeof(Material), typeof(string))]

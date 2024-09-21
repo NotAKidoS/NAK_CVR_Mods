@@ -16,9 +16,7 @@ namespace NAK.Stickers;
 public partial class StickerSystem
 {
     #region Singleton
-
-    public static bool RestrictedInstance = false;
-
+    
     public static StickerSystem Instance { get; private set; }
 
     public static void Initialize()
@@ -45,8 +43,9 @@ public partial class StickerSystem
     
     private void OnPlayerSetupStart()
     {
+        // TODO: this can be spammed by world author toggling CVRWorld.enabled state
+        CVRGameEventSystem.World.OnLoad.AddListener(_ => OnWorldLoad()); 
         CVRGameEventSystem.World.OnUnload.AddListener(_ => OnWorldUnload());
-        CVRGameEventSystem.World.OnLoad.AddListener(_ => OnWorldLoad());
         CVRGameEventSystem.Instance.OnConnected.AddListener((_) => { if (!Instances.IsReconnecting) OnInitialConnection(); });
         
         CVRGameEventSystem.Player.OnJoinEntity.AddListener(Instance.OnPlayerJoined);
@@ -61,30 +60,21 @@ public partial class StickerSystem
     
     private void OnInitialConnection()
     {
-        OnWorldLoad(); //Checks the world again in case the bundle updated.
         ClearStickersSelf(); // clear stickers on remotes just in case we rejoined
         ModNetwork.Reset(); // reset network buffers and metadata
     }
 
     private void OnWorldLoad()
     {
-        GameObject StickerWorldRestriction = GameObject.Find("[DisableStickers]");
-        if (StickerWorldRestriction != null)
-            {
-                RestrictedInstance = true;
-                MelonLogger.Msg("This is a Restricted Instance");
-            }
-        else
-            {
-                MelonLogger.Msg("This is NOT a Restricted Instance");
-            }
-        BTKUIAddon.UpdateStickerMenu();
+        IsRestrictedInstance = GameObject.Find("[DisableStickers]") != null;
+        if (IsRestrictedInstance) StickerMod.Logger.Msg("Stickers are restricted by the world author.");
+        BTKUIAddon.OnStickerRestrictionUpdated(IsRestrictedInstance);
     }
 
     private void OnWorldUnload()
     {
-        RestrictedInstance = false;
-        CleanupAllButSelf(); // release all stickers except for self
+        IsRestrictedInstance = false;
+        CleanupAllButSelf();
     }
     
     #endregion Game Events
@@ -106,6 +96,8 @@ public partial class StickerSystem
     //         ModNetwork.IsEnabled = _isEnabled;
     //     }
     // }
+    
+    public bool IsRestrictedInstance { get; internal set; }
     
     private string SelectedStickerName => ModSettings.Hidden_SelectedStickerNames.Value[_selectedStickerSlot];
 
@@ -131,7 +123,7 @@ public partial class StickerSystem
         get => _isInStickerMode;
         set
         {
-            _isInStickerMode = value;
+            _isInStickerMode = value && !IsRestrictedInstance; // ensure cannot enter when restricted
             if (_isInStickerMode)
             {
                 CohtmlHud.Instance.SelectPropToSpawn(

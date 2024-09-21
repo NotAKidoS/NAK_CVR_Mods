@@ -1,11 +1,11 @@
 {
   "_id": 232,
   "name": "Stickers",
-  "modversion": "1.0.6",
-  "gameversion": "2024r175",
+  "modversion": "1.0.8",
+  "gameversion": "2024r177",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
-  "author": "NotAKidoS",
+  "author": "NotAKidoS, SketchFoxsky",
   "description": "Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network.\n\nLimitations:\n- Image should be under 256KB in size.\n- Image dimensions should be a power of 2 (e.g. 512x512, 1024x1024).\n  - If the image exceeds the size limit or is not a power of 2 the mod will automatically resize it.\n  - The automatic resizing may result in loss of quality (or may just fail), so it is recommended to resize the image yourself before placing it in the `UserData/Stickers/` folder.\n\n-# More information can be found on the [README](https://github.com/NotAKidoS/NAK_CVR_Mods/blob/main/Stickers/README.md).",
   "searchtags": [
     "stickers",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r40/Stickers.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r41/Stickers.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/Stickers/",
-  "changelog": "- Added Friends Only setting.\n- Added button to clear sticker thumbnail cache.\n- Added Identify button to Player Selection page.\n- Added `[NoSticker]` GameObject name check. \n- Adjusted inbound network buffers to be cleared on initial connection to an instance.\n- Adjusted selecting a new image for a sticker slot to clear stickers in-scene for that slot.\n- Stripped all unused classes a bunch of other methods from decalery.\n  - Completely removed Skinned Mesh Renderer support as it required running on CPU.\n  - Most uploaded content is not marked as readable anyways (plus it crashed consistantly).\n- Fixed nullref spam when clearing stickers when sticker was already marked as dead.\n- Fixed issue where saving melon preferences would error due to null sticker selection.",
+  "changelog": "- Added world restriction via `[DisableStickers]` GameObject (thx Sketch).\n- Added sticker placement preview.\n- Fixed stickers being hit by VR switch shader replacement.\n- Fixed Desktop Sticker placement bind firing when a text field was focused.",
   "embedcolor": "#f61963"
 }

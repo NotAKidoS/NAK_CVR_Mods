@@ -23,10 +23,10 @@ public class StickerMod : MelonMod
         ModSettings.Initialize();
         StickerSystem.Initialize();
         
-        ApplyPatches(typeof(Patches.PlayerSetupPatches));
-        ApplyPatches(typeof(Patches.ControllerRayPatches));
-        ApplyPatches(typeof(Patches.ShaderFilterHelperPatches));
-        ApplyPatches(typeof(Patches.CVRToolsPatches));
+        ApplyPatches(typeof(Patches.PlayerSetup_Patches));
+        ApplyPatches(typeof(Patches.ControllerRay_Patches));
+        ApplyPatches(typeof(Patches.ShaderFilterHelper_Patches));
+        ApplyPatches(typeof(Patches.CVRTools_Patches));
         
         LoadAssetBundle();
         
@@ -38,17 +38,10 @@ public class StickerMod : MelonMod
         if (StickerSystem.Instance == null) 
             return;
 
-        if (!MetaPort.Instance.isUsingVr 
-            && StickerSystem.Instance.IsInStickerMode)
-        {
-            if (Input.mouseScrollDelta.y != 0f
-                && Cursor.lockState == CursorLockMode.Locked // prevent scrolling while in menus
-                && !CVRInputManager.Instance.zoom) // prevent scrolling while using scroll zoom
-            {
-                StickerSystem.Instance.SelectedStickerSlot += (int)Input.mouseScrollDelta.y;
-            }
-            StickerSystem.Instance.PlaceStickerFromControllerRay(PlayerSetup.Instance.activeCam.transform, CVRHand.Left, true);
-        }
+        if (Input.mouseScrollDelta.y != 0f
+            && Cursor.lockState == CursorLockMode.Locked // prevent scrolling while in menus
+            && !CVRInputManager.Instance.zoom) // prevent scrolling while using scroll zoom
+            StickerSystem.Instance.SelectedStickerSlot += (int)Input.mouseScrollDelta.y;
         
         StickerSystem.Instance.UpdateStickerPreview(); // flashy flash
         
@@ -57,6 +50,9 @@ public class StickerMod : MelonMod
         
         if (!Input.GetKeyDown((KeyCode)ModSettings.Entry_PlaceBinding.Value)) 
             return;
+
+        if (CVRInputManager.Instance.textInputFocused)
+            return; // prevent placing stickers while typing
         
         StickerSystem.Instance.PlaceStickerFromControllerRay(PlayerSetup.Instance.activeCam.transform);
     }

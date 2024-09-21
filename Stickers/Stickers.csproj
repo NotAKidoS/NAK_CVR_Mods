@@ -32,6 +32,10 @@
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-magnifying-glass.png" />
     <None Remove="Resources\Gohsantosadrive_Icons\Stickers-mouse.png" />
     <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-mouse.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-puzzle-disabled.png" />
+    <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-puzzle-disabled.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-magic-wand-broken.png" />
+    <EmbeddedResource Include="Resources\Gohsantosadrive_Icons\Stickers-magic-wand-broken.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BTKUILib">

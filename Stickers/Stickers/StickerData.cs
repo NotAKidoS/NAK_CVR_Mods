@@ -69,16 +69,16 @@ namespace NAK.Stickers
             }
         }
         
-        public Guid GetTextureHash(int spawnerIndex = 0)
-        {
-            if (spawnerIndex < 0 || spawnerIndex >= _decalSpawners.Length)
-            {
-                StickerMod.Logger.Warning("Invalid spawner index!");
-                return Guid.Empty;
-            }
-
-            return _textureHashes[spawnerIndex];
-        }
+        // public Guid GetTextureHash(int spawnerIndex = 0)
+        // {
+        //     if (spawnerIndex < 0 || spawnerIndex >= _decalSpawners.Length)
+        //     {
+        //         StickerMod.Logger.Warning("Invalid spawner index!");
+        //         return Guid.Empty;
+        //     }
+        //
+        //     return _textureHashes[spawnerIndex];
+        // }
         
         public bool CheckHasTextureHash(Guid textureHash)
         {
@@ -132,7 +132,7 @@ namespace NAK.Stickers
             Transform rootObject = null;
             GameObject hitGO = hit.transform.gameObject;
             if (hitGO.scene.buildIndex == 4 // additive (dynamic) content
-                || hitGO.TryGetComponent(out Animator _) // potentially movable
+                || hitGO.GetComponentInParent<Animator>() != null // potentially movable
                 || hitGO.GetComponentInParent<Rigidbody>() != null) // movable
                 rootObject = hitGO.transform;
             
@@ -244,21 +244,18 @@ namespace NAK.Stickers
             if (_previewDecalSpawner == null)
                 return; // uh fuck
 
-            // clear previous
-            ClearPreview();
-
             // place at hit pos
             Transform rootObject = null;
             GameObject hitGO = hit.transform.gameObject;
-            if (hitGO.scene.buildIndex == 4 || hitGO.TryGetComponent(out Animator _) || hitGO.GetComponentInParent<Rigidbody>() != null)
+            if (hitGO.scene.buildIndex == 4 // additive (dynamic) content
+                || hitGO.GetComponentInParent<Animator>() != null // potentially movable
+                || hitGO.GetComponentInParent<Rigidbody>() != null) // movable
                 rootObject = hitGO.transform;
 
-            Vector3 position = hit.point;
-            _previewDecalSpawner.AddDecal(position, 
-                Quaternion.LookRotation(forwardDirection, upDirection), 
-                hitGO, 
-                DECAL_SIZE, DECAL_SIZE, 1f, 1f, 0f,
-                rootObject);
+            _previewDecalSpawner.AddDecal(
+                hit.point, Quaternion.LookRotation(forwardDirection, upDirection),
+                hitGO,
+                DECAL_SIZE, DECAL_SIZE, 1f, 1f, 0f, rootObject);
         }
 
         public void UpdatePreview(int spawnerIndex)
