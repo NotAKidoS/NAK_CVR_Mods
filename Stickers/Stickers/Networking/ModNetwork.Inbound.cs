@@ -43,6 +43,8 @@ public static partial class ModNetwork
         
         if (ModSettings.Entry_FriendsOnly.Value && !Friends.FriendsWith(sender))
             return false; // ignore messages from non-friends if friends only is enabled
+        if (StickerSystem.RestrictedInstance == true) // ignore messages from users when the world is restricted. This also includes older or modified version of Stickers mod.
+            return false;
         
         return true;
     }

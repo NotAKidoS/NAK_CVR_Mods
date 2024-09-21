@@ -2,14 +2,22 @@
 using ABI_RC.Core.Networking.IO.Instancing;
 using ABI_RC.Core.UI;
 using ABI_RC.Systems.GameEventSystem;
+using JetBrains.Annotations;
 using NAK.Stickers.Networking;
 using NAK.Stickers.Utilities;
+using System.EnterpriseServices;
+using UnityEngine;
+using MelonLoader;
+using UnityEngine.ProBuilder.MeshOperations;
+using NAK.Stickers.Integrations;
 
 namespace NAK.Stickers;
 
 public partial class StickerSystem
 {
     #region Singleton
+
+    public static bool RestrictedInstance = false;
 
     public static StickerSystem Instance { get; private set; }
 
@@ -28,7 +36,8 @@ public partial class StickerSystem
         
         // listen for game events
         CVRGameEventSystem.Initialization.OnPlayerSetupStart.AddListener(Instance.OnPlayerSetupStart);
-    }
+
+}
     
     #endregion Singleton
 
@@ -37,6 +46,7 @@ public partial class StickerSystem
     private void OnPlayerSetupStart()
     {
         CVRGameEventSystem.World.OnUnload.AddListener(_ => OnWorldUnload());
+        CVRGameEventSystem.World.OnLoad.AddListener(_ => OnWorldLoad());
         CVRGameEventSystem.Instance.OnConnected.AddListener((_) => { if (!Instances.IsReconnecting) OnInitialConnection(); });
         
         CVRGameEventSystem.Player.OnJoinEntity.AddListener(Instance.OnPlayerJoined);
@@ -51,12 +61,29 @@ public partial class StickerSystem
     
     private void OnInitialConnection()
     {
+        OnWorldLoad(); //Checks the world again in case the bundle updated.
         ClearStickersSelf(); // clear stickers on remotes just in case we rejoined
         ModNetwork.Reset(); // reset network buffers and metadata
     }
-    
+
+    private void OnWorldLoad()
+    {
+        GameObject StickerWorldRestriction = GameObject.Find("[DisableStickers]");
+        if (StickerWorldRestriction != null)
+            {
+                RestrictedInstance = true;
+                MelonLogger.Msg("This is a Restricted Instance");
+            }
+        else
+            {
+                MelonLogger.Msg("This is NOT a Restricted Instance");
+            }
+        BTKUIAddon.UpdateStickerMenu();
+    }
+
     private void OnWorldUnload()
     {
+        RestrictedInstance = false;
         CleanupAllButSelf(); // release all stickers except for self
     }
     
