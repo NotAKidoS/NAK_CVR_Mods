@@ -18,6 +18,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r41/Stickers.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/Stickers/",
-  "changelog": "- Added world restriction via `[DisableStickers]` GameObject (thx Sketch).\n- Added sticker placement preview.\n- Fixed stickers being hit by VR switch shader replacement.\n- Fixed Desktop Sticker placement bind firing when a text field was focused.",
+  "changelog": "- Added world restriction via `[DisableStickers]` GameObject (thx Sketch).\n- Added sticker placement preview.\n- Fixed stickers being hit by VR switch shader replacement.\n- Fixed Desktop Sticker placement bind firing when a text field was focused.\n- **This version is not backwards compatible with previous versions over network.**",
   "embedcolor": "#f61963"
 }
