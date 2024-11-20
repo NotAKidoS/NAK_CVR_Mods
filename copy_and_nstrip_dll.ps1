@@ -35,6 +35,10 @@ else {
     else {
         Write-Host "[ERROR] ChilloutVR.exe not found in CVRPATH or the default Steam location."
         Write-Host "        Please define the Environment Variable CVRPATH pointing to the ChilloutVR folder!"
+        Write-Host ""
+        Write-Host "Press any key to exit..."
+        $HOST.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | OUT-NULL
+        $HOST.UI.RawUI.Flushinputbuffer()
         return
     }
 }
