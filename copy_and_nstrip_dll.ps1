@@ -35,6 +35,10 @@ else {
     else {
         Write-Host "[ERROR] ChilloutVR.exe not found in CVRPATH or the default Steam location."
         Write-Host "        Please define the Environment Variable CVRPATH pointing to the ChilloutVR folder!"
+        Write-Host ""
+        Write-Host "Press any key to exit..."
+        $HOST.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | OUT-NULL
+        $HOST.UI.RawUI.Flushinputbuffer()
         return
     }
 }
@@ -139,7 +143,7 @@ if ($missingMods.Count -gt 0) {
 Write-Host ""
 Write-Host "Copied all libraries!"
 Write-Host ""
-Write-Host "Press any key to strip the Dlls using NStrip"
+Write-Host "Press any key to strip the DLLs using NStrip..."
 $HOST.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | OUT-NULL
 $HOST.UI.RawUI.Flushinputbuffer()
 
@@ -156,6 +160,10 @@ else {
         # Display an error message if NStrip.exe could not be found
         Write-Host "Could not find NStrip.exe in the current directory nor in the PATH." -ForegroundColor Red
         Write-Host "Visit https://github.com/bbepis/NStrip/releases/latest to grab a copy." -ForegroundColor Red
+        Write-Host ""
+        Write-Host "Press any key to exit..."
+        $HOST.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | OUT-NULL
+        $HOST.UI.RawUI.Flushinputbuffer()
         return
     }
 }
@@ -169,6 +177,6 @@ foreach($dllFile in $dllsToStrip) {
 Write-Host ""
 Write-Host "Copied all libraries and stripped the DLLs!"
 Write-Host ""
-Write-Host "Press any key to exit"
+Write-Host "Press any key to exit..."
 $HOST.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown") | OUT-NULL
 $HOST.UI.RawUI.Flushinputbuffer()
