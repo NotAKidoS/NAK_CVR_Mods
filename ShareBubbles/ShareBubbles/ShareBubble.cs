@@ -345,8 +345,8 @@ public class ShareBubble : MonoBehaviour
     {
         if (!IsOwnBubble) return;
 
-        bool isAllowed = implementation.IsPermitted || 
-                         Data.Rule == ShareRule.Everyone || 
+        // Check if requester is allowed to claim
+        bool isAllowed = Data.Rule == ShareRule.Everyone || 
                          (Data.Rule == ShareRule.FriendsOnly && Friends.FriendsWith(requesterId));
 
         if (!isAllowed)

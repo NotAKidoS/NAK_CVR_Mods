@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.Networking.IO.Instancing;
+﻿using ABI_RC.Core.IO;
+using ABI_RC.Core.Networking.IO.Instancing;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
@@ -7,6 +8,7 @@ using ABI_RC.Systems.Gravity;
 using NAK.ShareBubbles.Impl;
 using NAK.ShareBubbles.Networking;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 namespace NAK.ShareBubbles;
@@ -233,6 +235,9 @@ public class ShareBubbleManager
             bubbleRootObject = Object.Instantiate(ShareBubblesMod.SharingBubblePrefab);
             bubbleRootObject.transform.SetLocalPositionAndRotation(position, rotation);
             bubbleRootObject.SetActive(true);
+            
+            // Move to Additive scene to prevent being hit by shader replacement on VR switch
+            SceneManager.MoveGameObjectToScene(bubbleRootObject, SceneManager.GetSceneByName(CVRObjectLoader.AdditiveContentSceneName));
 
             Transform bubbleTransform = bubbleRootObject.transform.GetChild(0);
             if (bubbleTransform == null)
