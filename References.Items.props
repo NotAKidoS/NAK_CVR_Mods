@@ -196,6 +196,18 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\PICO.Platform.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="Pico.Spatializer">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Pico.Spatializer.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="Pico.Spatializer.Example">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Pico.Spatializer.Example.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
+        <Reference Include="PICO.TobSupport">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\PICO.TobSupport.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="PWCommon3DLL">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\PWCommon3DLL.dll</HintPath>
             <Private>False</Private>
@@ -584,6 +596,10 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.Hands.Samples.VisualizerSample.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="Unity.XR.Interaction.Toolkit">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.Interaction.Toolkit.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="Unity.XR.Management">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.Management.dll</HintPath>
             <Private>False</Private>
@@ -616,16 +632,12 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.OpenXR.Features.OculusQuestSupport.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="Unity.XR.OpenXR.Features.PICOSupport">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.OpenXR.Features.PICOSupport.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
         <Reference Include="Unity.XR.OpenXR.Features.RuntimeDebugger">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.OpenXR.Features.RuntimeDebugger.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="Unity.XR.OpenXRPico">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.OpenXRPico.dll</HintPath>
+        <Reference Include="Unity.XR.PICO">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.PICO.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="UnityEngine.AccessibilityModule">
