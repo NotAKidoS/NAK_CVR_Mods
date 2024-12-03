@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DefineConstants>TRACE;TRACE;UNITY_2017_1_OR_NEWER;UNITY_2018_1_OR_NEWER;UNITY_2019_3_OR_NEWER;USE_BURST;USE_NEWMATHS;USE_BURST_REALLY;USE_TERRAINS</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-eraser.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-folder.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-headset.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-magic-wand.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-pencil.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-puzzle.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-rubbish-bin.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-alphabet.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-magnifying-glass.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-mouse.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-puzzle-disabled.png" />
+    <None Remove="Resources\Gohsantosadrive_Icons\Stickers-magic-wand-broken.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BTKUILib">
+      <HintPath>..\.ManagedLibs\BTKUILib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Resources\sharingbubble.assets" />
+    <EmbeddedResource Include="Resources\sharingbubble.assets" />
+  </ItemGroup>
+</Project>
