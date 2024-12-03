@@ -1,4 +1,5 @@
-﻿using ABI_RC.Core.Player;
+﻿using ABI_RC.Core;
+using ABI_RC.Core.Player;
 using UnityEngine;
 
 namespace NAK.ASTExtension.Extensions;
@@ -17,7 +18,7 @@ public static class PlayerSetupExtensions
         Vector3 localScale = playerSetup._avatar.transform.localScale;
         Vector3 initialScale = playerSetup.initialScale;
         float initialHeight = playerSetup._initialAvatarHeight;
-        Vector3 scaleDifference = PlayerSetup.DivideVectors(localScale - initialScale, initialScale);
+        Vector3 scaleDifference = CVRTools.DivideVectors(localScale - initialScale, initialScale);
         return initialHeight + initialHeight * scaleDifference.y;
     }
 }
