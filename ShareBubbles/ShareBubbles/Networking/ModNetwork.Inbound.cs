@@ -150,11 +150,20 @@ public static partial class ModNetwork
     private static void HandleBubbleClaimResponse(ModNetworkMessage msg)
     {
         msg.Read(out uint bubbleNetworkId);
-        msg.Read(out bool claimAccepted);
+        msg.Read(out byte responseTypeRaw);
         
-        ShareBubbleManager.Instance.OnRemoteBubbleClaimResponse(msg.Sender, bubbleNetworkId, claimAccepted);
+        if (!Enum.IsDefined(typeof(ClaimResponseType), responseTypeRaw))
+        {
+            LoggerInbound($"Invalid claim response type received: {responseTypeRaw}");
+            return;
+        }
+
+        ClaimResponseType responseType = (ClaimResponseType)responseTypeRaw;
+
+        if (_pendingClaimRequests.TryGetValue(bubbleNetworkId, out PendingClaimRequest request))
+            request.CompletionSource.TrySetResult(responseType);
         
-        LoggerInbound($"Bubble with ID {bubbleNetworkId} claim response: {claimAccepted}");
+        LoggerInbound($"Bubble with ID {bubbleNetworkId} claim response: {responseType}");
     }
     
     private static void HandleActiveBubblesRequest(ModNetworkMessage msg)

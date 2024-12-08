@@ -1,4 +1,6 @@
-﻿namespace NAK.ShareBubbles.Impl;
+﻿using ShareBubbles.ShareBubbles.Implementation;
+
+namespace NAK.ShareBubbles.Impl;
 
 public interface IShareBubbleImpl
 {
@@ -8,6 +10,6 @@ public interface IShareBubbleImpl
     Task FetchContentInfo(); // Load the content info from the API
     void ViewDetailsPage(); // Open the details page for the content
     void EquipContent(); // Equip the content (Switch/Select)
-    void HandleClaimAccept(string userId, Action<bool> onClaimActionCompleted); // Handle the claim action (Share via API)
+    Task<ShareClaimResult> HandleClaimAccept(string userId);
     void Cleanup(); // Cleanup any resources
 }

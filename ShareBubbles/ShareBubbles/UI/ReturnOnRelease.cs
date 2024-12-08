@@ -30,12 +30,12 @@ public class ReturnOnRelease : MonoBehaviour
         pickupable.onDrop.AddListener(OnPickupRelease);
     }
 
-    public void OnPickupGrabbed(InteractionContext _)
+    public void OnPickupGrabbed()
     {
         isReturning = false;
     }
 
-    public void OnPickupRelease(InteractionContext _)
+    public void OnPickupRelease()
     {
         isReturning = true;
     }

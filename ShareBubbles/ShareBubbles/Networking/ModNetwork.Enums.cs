@@ -29,9 +29,18 @@ public static partial class ModNetwork
     
     private enum MNLogLevel : byte
     {
-        Info = 0,
-        Warning = 1,
-        Error = 2
+        Info,
+        Warning,
+        Error
+    }
+    
+    public enum ClaimResponseType : byte
+    {
+        Accepted,
+        Rejected,
+        NotAcceptingSharesFromNonFriends,
+        AlreadyShared,
+        Timeout
     }
 
     #endregion Enums

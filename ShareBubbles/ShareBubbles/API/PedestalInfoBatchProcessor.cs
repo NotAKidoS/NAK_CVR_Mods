@@ -19,11 +19,11 @@ public enum PedestalType
 /// </summary>
 public static class PedestalInfoBatchProcessor
 {
-    private static readonly Dictionary<PedestalType, Dictionary<string, TaskCompletionSource<PedestalInfoResponseButWithPublicationState>>> _pendingRequests 
+    private static readonly Dictionary<PedestalType, Dictionary<string, TaskCompletionSource<PedestalInfoResponse_ButCorrect>>> _pendingRequests 
         = new()
         {
-            { PedestalType.Avatar, new Dictionary<string, TaskCompletionSource<PedestalInfoResponseButWithPublicationState>>() },
-            { PedestalType.Prop, new Dictionary<string, TaskCompletionSource<PedestalInfoResponseButWithPublicationState>>() }
+            { PedestalType.Avatar, new Dictionary<string, TaskCompletionSource<PedestalInfoResponse_ButCorrect>>() },
+            { PedestalType.Prop, new Dictionary<string, TaskCompletionSource<PedestalInfoResponse_ButCorrect>>() }
         };
     
     private static readonly Dictionary<PedestalType, bool> _isBatchProcessing 
@@ -36,9 +36,9 @@ public static class PedestalInfoBatchProcessor
     private static readonly object _lock = new();
     private const float BATCH_DELAY = 2f;
 
-    public static Task<PedestalInfoResponseButWithPublicationState> QueuePedestalInfoRequest(PedestalType type, string contentId)
+    public static Task<PedestalInfoResponse_ButCorrect> QueuePedestalInfoRequest(PedestalType type, string contentId)
     {
-        var tcs = new TaskCompletionSource<PedestalInfoResponseButWithPublicationState>();
+        var tcs = new TaskCompletionSource<PedestalInfoResponse_ButCorrect>();
         
         lock (_lock)
         {
@@ -62,12 +62,12 @@ public static class PedestalInfoBatchProcessor
         await Task.Delay(TimeSpan.FromSeconds(BATCH_DELAY));
         
         List<string> contentIds;
-        Dictionary<string, TaskCompletionSource<PedestalInfoResponseButWithPublicationState>> requestBatch;
+        Dictionary<string, TaskCompletionSource<PedestalInfoResponse_ButCorrect>> requestBatch;
         
         lock (_lock)
         {
             contentIds = _pendingRequests[type].Keys.ToList();
-            requestBatch = new Dictionary<string, TaskCompletionSource<PedestalInfoResponseButWithPublicationState>>(_pendingRequests[type]);
+            requestBatch = new Dictionary<string, TaskCompletionSource<PedestalInfoResponse_ButCorrect>>(_pendingRequests[type]);
             _pendingRequests[type].Clear();
             _isBatchProcessing[type] = false;
             //ShareBubblesMod.Logger.Msg($"Processing {type} pedestal info batch with {contentIds.Count} items");
@@ -82,7 +82,7 @@ public static class PedestalInfoBatchProcessor
                 _ => throw new ArgumentException($"Unsupported pedestal type: {type}")
             };
 
-            var response = await ApiConnection.MakeRequest<IEnumerable<PedestalInfoResponseButWithPublicationState>>(operation, contentIds);
+            var response = await ApiConnection.MakeRequest<IEnumerable<PedestalInfoResponse_ButCorrect>>(operation, contentIds);
 
             if (response?.Data != null)
             {

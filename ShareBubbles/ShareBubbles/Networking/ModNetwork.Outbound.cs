@@ -51,20 +51,44 @@ public static partial class ModNetwork
         LoggerOutbound($"Sending BubbleMove message for bubble {bubbleId}");
     }
     
-    public static void SendBubbleClaimRequest(string bubbleOwnerId, uint bubbleNetworkId)
+    public static async Task<ClaimResponseType> SendBubbleClaimRequestAsync(string bubbleOwnerId, uint bubbleNetworkId)
     {
         if (!CanSendModNetworkMessage())
-            return;
+            return ClaimResponseType.Rejected;
 
-        using ModNetworkMessage modMsg = new(ModId, bubbleOwnerId);
-        modMsg.Write((byte)MessageType.BubbleClaimRequest);
-        modMsg.Write(bubbleNetworkId);
-        modMsg.Send();
+        // Create pending request
+        PendingClaimRequest request = new(bubbleNetworkId);
+        _pendingClaimRequests[bubbleNetworkId] = request;
+
+        // Send request
+        using (ModNetworkMessage modMsg = new(ModId, bubbleOwnerId))
+        {
+            modMsg.Write((byte)MessageType.BubbleClaimRequest);
+            modMsg.Write(bubbleNetworkId);
+            modMsg.Send();
+        }
 
         LoggerOutbound($"Sending BubbleClaimRequest message for bubble {bubbleNetworkId}");
+
+        try
+        {
+            // Wait for response with timeout
+            using CancellationTokenSource cts = new(TimeSpan.FromSeconds(ClaimRequestTimeout));
+            Task timeoutTask = Task.Delay(TimeSpan.FromSeconds(ClaimRequestTimeout), cts.Token);
+            var responseTask = request.CompletionSource.Task;
+            
+            Task completedTask = await Task.WhenAny(responseTask, timeoutTask);
+            if (completedTask == timeoutTask) return ClaimResponseType.Timeout;
+            
+            return await responseTask;
+        }
+        finally
+        {
+            _pendingClaimRequests.Remove(bubbleNetworkId);
+        }
     }
     
-    public static void SendBubbleClaimResponse(string requesterUserId, uint bubbleNetworkId, bool success)
+    public static void SendBubbleClaimResponse(string requesterUserId, uint bubbleNetworkId, ClaimResponseType responseType)
     {
         if (!CanSendModNetworkMessage())
             return;
@@ -72,10 +96,10 @@ public static partial class ModNetwork
         using ModNetworkMessage modMsg = new(ModId, requesterUserId);
         modMsg.Write((byte)MessageType.BubbleClaimResponse);
         modMsg.Write(bubbleNetworkId);
-        modMsg.Write(success);
+        modMsg.Write((byte)responseType);
         modMsg.Send();
 
-        LoggerOutbound($"Sending BubbleClaimResponse message for bubble {bubbleNetworkId}");
+        LoggerOutbound($"Sending BubbleClaimResponse message for bubble {bubbleNetworkId}: {responseType}");
     }
     
     public static void SendActiveBubblesRequest()

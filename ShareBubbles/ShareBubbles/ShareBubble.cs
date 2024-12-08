@@ -8,6 +8,8 @@ using NAK.ShareBubbles.Networking;
 using NAK.ShareBubbles.UI;
 using TMPro;
 using System.Collections;
+using ABI_RC.Core.InteractionSystem;
+using ShareBubbles.ShareBubbles.Implementation;
 
 namespace NAK.ShareBubbles;
 
@@ -308,18 +310,62 @@ public class ShareBubble : MonoBehaviour
     public void RequestContentClaim()
     {
         if (!CanRequestClaim()) return;
-        if (!RequestClaimTimeoutInactive()) return;
 
-        lastClaimRequest = DateTime.Now;
-        ModNetwork.SendBubbleClaimRequest(OwnerId, Data.BubbleId);
-        CurrentClaimState = ClaimState.Requested;
-            
-        return;
-        bool RequestClaimTimeoutInactive()
+        // Fire and forget but with error handling~
+        _ = RequestContentClaimAsync().ContinueWith(task =>
         {
-            if (!lastClaimRequest.HasValue) return true;
-            TimeSpan timeSinceLastRequest = DateTime.Now - lastClaimRequest.Value;
-            return timeSinceLastRequest.TotalSeconds >= ClaimTimeout;
+            if (!task.IsFaulted) 
+                return;
+            
+            ShareBubblesMod.Logger.Error($"Error requesting content claim: {task.Exception}");
+            CurrentClaimState = ClaimState.Rejected;
+        }, TaskScheduler.FromCurrentSynchronizationContext());
+    }
+
+    private async Task<ModNetwork.ClaimResponseType> RequestContentClaimAsync()
+    {
+        if (!CanRequestClaim()) 
+            return ModNetwork.ClaimResponseType.Rejected;
+
+        CurrentClaimState = ClaimState.Requested;
+
+        try
+        {
+            ModNetwork.ClaimResponseType response = await ModNetwork.SendBubbleClaimRequestAsync(OwnerId, Data.BubbleId);
+            
+            switch (response)
+            {
+                case ModNetwork.ClaimResponseType.Accepted:
+                case ModNetwork.ClaimResponseType.AlreadyShared:
+                    CurrentClaimState = ClaimState.Permitted;
+                    break;
+                default:
+                case ModNetwork.ClaimResponseType.Rejected:
+                case ModNetwork.ClaimResponseType.Timeout:
+                    CurrentClaimState = ClaimState.Rejected;
+                    break;
+                case ModNetwork.ClaimResponseType.NotAcceptingSharesFromNonFriends:
+                    CurrentClaimState = ClaimState.Rejected;
+                    
+                    string ownerName = CVRPlayerManager.Instance.TryGetPlayerName(OwnerId);
+                    
+                    ShareBubblesMod.Logger.Msg($"Claim request for {Data.BubbleId} rejected: " +
+                                               $"You are not friends with the owner ({ownerName}) and do not have the permission " +
+                                               $"enabled on the Community Hub to accept shares from non-friends.");
+                    // Display in UI
+                    ViewManager.Instance.TriggerAlert("Claim Request Rejected",
+                        $"You are not friends with the owner ({ownerName}) and do not have the permission " +
+                        "enabled on the Community Hub to accept shares from non-friends.", -1, false);
+                    
+                    break;
+            }
+
+            return response;
+        }
+        catch
+        {
+            CurrentClaimState = ClaimState.Rejected;
+            return ModNetwork.ClaimResponseType.Rejected;
         }
     }
 
@@ -341,22 +387,19 @@ public class ShareBubble : MonoBehaviour
         UpdateButtonStates();
     }
 
-    public void OnRemoteWantsClaim(string requesterId)
+    public async void OnRemoteWantsClaim(string requesterId)
     {
         if (!IsOwnBubble) return;
 
-        // Check if requester is allowed to claim
-        bool isAllowed = Data.Rule == ShareRule.Everyone || 
-                         (Data.Rule == ShareRule.FriendsOnly && Friends.FriendsWith(requesterId));
-
-        if (!isAllowed)
+        // Rule check bypass attempt - reject immediately
+        if (Data.Rule == ShareRule.FriendsOnly && !Friends.FriendsWith(requesterId))
         {
-            ModNetwork.SendBubbleClaimResponse(requesterId, Data.BubbleId, false);
+            ModNetwork.SendBubbleClaimResponse(requesterId, Data.BubbleId, ModNetwork.ClaimResponseType.Rejected);
             return;
         }
 
-        implementation.HandleClaimAccept(requesterId, 
-            wasAccepted => ModNetwork.SendBubbleClaimResponse(requesterId, Data.BubbleId, wasAccepted));
+        ShareClaimResult result = await implementation.HandleClaimAccept(requesterId);
+        ModNetwork.SendBubbleClaimResponse(requesterId, Data.BubbleId, result.ResponseType);
     }
         
     #endregion Mod Network Callbacks

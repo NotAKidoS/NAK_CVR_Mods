@@ -14,12 +14,12 @@ public class BubbleInteract : Interactable
         return Vector3.Distance(transform.position, sourcePos) < 1.5f;
     }
 
-    public override void OnInteractDown(InteractionContext context, ControllerRay controllerRay)
+    public override void OnInteractDown(ControllerRay controllerRay)
     {
         // Not used
     }
 
-    public override void OnInteractUp(InteractionContext context, ControllerRay controllerRay)
+    public override void OnInteractUp(ControllerRay controllerRay)
     {
         if (PlayerSetup.Instance.GetCurrentPropSelectionMode() 
             != PlayerSetup.PropSelectionMode.None)
@@ -39,12 +39,12 @@ public class BubbleInteract : Interactable
         GetComponentInParent<ShareBubble>().ViewDetailsPage();
     }
 
-    public override void OnHoverEnter(InteractionContext context, ControllerRay controllerRay)
+    public override void OnHoverEnter()
     {
         // Not used
     }
 
-    public override void OnHoverExit(InteractionContext context, ControllerRay controllerRay)
+    public override void OnHoverExit()
     {
         // Not used
     }

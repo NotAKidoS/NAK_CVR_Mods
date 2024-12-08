@@ -4,6 +4,7 @@ namespace NAK.ShareBubbles.Networking;
 
 public static partial class ModNetwork
 {
+    
     #region Mod Network Internals
     
     private static bool _isSubscribedToModNetwork;
@@ -33,4 +34,24 @@ public static partial class ModNetwork
     }
 
     #endregion Mod Network Internals
+
+    #region Pending Claim Requests
+
+    private static readonly Dictionary<uint, PendingClaimRequest> _pendingClaimRequests = new();
+
+    public class PendingClaimRequest
+    {
+        public TaskCompletionSource<ClaimResponseType> CompletionSource { get; }
+        public DateTime RequestTime { get; }
+        public uint BubbleId { get; }
+    
+        public PendingClaimRequest(uint bubbleId)
+        {
+            CompletionSource = new TaskCompletionSource<ClaimResponseType>();
+            RequestTime = DateTime.UtcNow;
+            BubbleId = bubbleId;
+        }
+    }
+    
+    #endregion
 }

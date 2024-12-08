@@ -2,7 +2,10 @@
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.IO;
 using ABI_RC.Core.Networking.API.UserWebsocket;
+using ABI_RC.Core.Savior;
 using NAK.ShareBubbles.API;
+using NAK.ShareBubbles.API.Exceptions;
+using ShareBubbles.ShareBubbles.Implementation;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -36,8 +39,10 @@ namespace NAK.ShareBubbles.Impl
                 Name = infoResponse.Name,
                 ImageUrl = infoResponse.ImageUrl,
                 AuthorId = infoResponse.User.Id,
-                IsPermitted = infoResponse.Permitted,
                 IsPublic = infoResponse.Published,
+                
+                // Permit access if Public, Owned, or (CANNOT DO PRIVATE & SHARED CAUSE API DOESNT GIVE)
+                IsPermitted = infoResponse.Published || infoResponse.User.Id == MetaPort.Instance.ownerId,
             };
             
             downloadedTexture = await ImageCache.GetImageAsync(details.ImageUrl);
@@ -57,28 +62,40 @@ namespace NAK.ShareBubbles.Impl
             });
         }
 
-        public void HandleClaimAccept(string userId, Action<bool> onClaimActionCompleted)
+        public async Task<ShareClaimResult> HandleClaimAccept(string userId)
         {
-            Task.Run(async () =>
+            if (details == null)
+                return ShareClaimResult.Rejected();
+
+            try
             {
-                try
+                await ShareApiHelper.ShareContentAsync<BaseResponse>(
+                    ShareApiHelper.ShareContentType.Avatar, 
+                    avatarId, 
+                    userId);
+                
+                // Add to temp shares if session access
+                if (bubble.Data.Access == ShareAccess.Session)
                 {
-                    var response = await ShareApiHelper.ShareContentAsync<BaseResponse>(
-                        ShareApiHelper.ShareContentType.Avatar, avatarId, userId);
-                    
-                    // Store the temporary share to revoke when either party leaves the instance
-                    if (bubble.Data.Access == ShareAccess.Session)
-                        TempShareManager.Instance.AddTempShare(ShareApiHelper.ShareContentType.Avatar, 
-                            avatarId, userId);
-                    
-                    onClaimActionCompleted(response.IsSuccessStatusCode);
+                    TempShareManager.Instance.AddTempShare(ShareApiHelper.ShareContentType.Avatar, 
+                        avatarId, userId);
                 }
-                catch (Exception ex)
-                {
-                    ShareBubblesMod.Logger.Error($"Error sharing avatar: {ex.Message}");
-                    onClaimActionCompleted(false);
-                }
-            });
+            
+                return ShareClaimResult.Success(bubble.Data.Access == ShareAccess.Session);
+            }
+            catch (ContentAlreadySharedException)
+            {
+                return ShareClaimResult.AlreadyShared();
+            }
+            catch (UserOnlyAllowsSharesFromFriendsException)
+            {
+                return ShareClaimResult.FriendsOnly();
+            }
+            catch (Exception ex)
+            {
+                ShareBubblesMod.Logger.Error($"Error sharing avatar: {ex.Message}");
+                return ShareClaimResult.Rejected();
+            }
         }
 
         public void ViewDetailsPage()
