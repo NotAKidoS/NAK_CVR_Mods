@@ -1,7 +1,7 @@
 {
   "_id": -1,
   "name": "ShareBubbles",
-  "modversion": "1.0.1",
+  "modversion": "1.0.2",
   "gameversion": "2024r177",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
@@ -17,7 +17,7 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r41/ShareBubbles.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r43/ShareBubbles.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ShareBubbles/",
   "changelog": "- Initial release.",
   "embedcolor": "#f61963"

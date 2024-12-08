@@ -2,6 +2,12 @@
 
 Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network.
 
+### NOTICE - 1.0.2
+**Some features will not work as intended until ChilloutVRs API is updated.**
+- Bubbles will display "Private" label regardless of publication state.
+- Bubbles of private content you do not own will display "Claim" button regardless of if the content is already shared with you.
+- Unshare button will be accessible when viewing Public content not owned by you.
+
 ### How to use
 Open a Content Details page and click the Share button. You can choose between placing a Share Bubble or Sharing directly with users in the same instance. When placing a Share Bubble, you will be prompted to configure the bubble. Once you're ready, you can then Drop or Select the bubble for placement.
 
