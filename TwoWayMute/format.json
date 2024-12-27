@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Adjusts the self moderation muting behaviour to also prevent the muted user from hearing you.\nBasically- if you mute someone, they will also not be able to hear you.",
+  "description": "Adjusts the self moderation muting behaviour to also prevent the muted user from hearing you.\n\nBasically- if you mute someone, they will also not be able to hear you.",
   "searchtags": [
     "mute",
     "communication",

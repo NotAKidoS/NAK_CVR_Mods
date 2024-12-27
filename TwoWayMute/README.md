@@ -1,6 +1,7 @@
 # TwoWayMute
 
 Adjusts the self moderation muting behaviour to also prevent the muted user from hearing you.
+
 Basically- if you mute someone, they will also not be able to hear you.
 
 ---
