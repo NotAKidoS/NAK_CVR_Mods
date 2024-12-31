@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BTKUILib">
+      <HintPath>..\.ManagedLibs\BTKUILib.dll</HintPath>
+    </Reference>
+    <Reference Include="TheClapper">
+      <HintPath>..\.ManagedLibs\TheClapper.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>
