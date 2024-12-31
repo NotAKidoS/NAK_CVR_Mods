@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "LegacyContentMitigation",
+  "modversion": "1.0.0",
+  "gameversion": "2024r177",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Experimental mod that manually renders both VR eyes separately while in Legacy Worlds.\n\nThe mod will automatically kick-in when loading NonSpi Worlds & prevent Shader Replacement for all content while active. You can also manually toggle it within the BTKUI Misc tab for experimenting.\n\n-# There is an obvious performance penalty with rendering the world 2x & toggling the head hiding per eye, so enabling the mod outside of Legacy Worlds is not recommended.",
+  "searchtags": [
+    "legacy",
+    "content",
+    "spi",
+    "shaders"
+  ],
+  "requirements": [
+    "BTKUILib"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r44/LegacyContentMitigation.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/LegacyContentMitigation/",
+  "changelog": "- Initial release",
+  "embedcolor": "#507e64"
+}

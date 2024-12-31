@@ -9,6 +9,7 @@ using ABI.CCK.Components;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.SceneManagement;
 
 namespace NAK.LegacyContentMitigation.Patches;
 
@@ -27,8 +28,10 @@ internal static class SceneLoaded_Patches
 {
     [HarmonyPrefix]
     [HarmonyPatch(typeof(SceneLoaded), nameof(SceneLoaded.OnSceneLoadedHandleJob))]
-    private static void Prefix_SceneLoaded_OnSceneLoadedHandleJob()
+    private static void Prefix_SceneLoaded_OnSceneLoadedHandleJob(Scene scene, LoadSceneMode mode)
     {
+        if (mode == LoadSceneMode.Additive) return;
+        
         if (!ModSettings.EntryAutoForLegacyWorlds.Value)
         {
             LegacyContentMitigationMod.Logger.Msg("LegacyContentMitigationMod is disabled.");

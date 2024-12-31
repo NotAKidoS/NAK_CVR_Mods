@@ -41,7 +41,7 @@ public static class BtkUiAddon
             string.Empty, "Records Camera events & logs them next frame. Useful for determining camera render order shenanigans.");
         printCameraCallbacksButton.OnPress += () => CameraCallbackLogger.Instance.LogCameraEvents();
 
-        OnCurrentStateToggled(FakeMultiPassHack.Instance.IsEnabled);
+        OnMultiPassActiveChanged(FakeMultiPassHack.Instance.IsEnabled);
         FakeMultiPassHack.OnMultiPassActiveChanged += OnMultiPassActiveChanged;
     }
 
