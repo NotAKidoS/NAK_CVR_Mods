@@ -52,7 +52,7 @@ public class BoneVertexBoundsUtility : MonoBehaviour
     /// Calculates the bounds of a transform based on:
     /// - Children Renderers
     /// - Skinned Mesh Weights
-    /// - Constrained Child Renderers & Skinned Mesh Weights
+    /// - Constrained Child Renderers & Skinned Mesh Weights (thanks Fearless)
     /// </summary>
     public static void CalculateBoneWeightedBounds(Transform bone, float weightThreshold, BoundsCalculationFlags flags, Action<BoundsResult> onComplete)
         => Instance.StartCoroutine(Instance.CalculateBoundsCoroutine(bone, weightThreshold, flags, onComplete));

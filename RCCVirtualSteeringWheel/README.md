@@ -1,6 +1,6 @@
 # RCCVirtualSteeringWheel
 
-Experiment with making rigged RCC vehicle steering wheels work for VR steering input.
+Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component.
 
 ---
 
@@ -11,5 +11,4 @@ https://documentation.abinteractive.net/official/legal/tos/#7-modding-our-games
 
 > Use of this mod is done so at the user's own risk and the creator cannot be held responsible for any issues arising from its use.
 
-> To the best of my knowledge, I have adhered to the Modding Guidelines established by Alpha Blend Interactive.
-~~~~
+> To the best of my knowledge, I have adhered to the Modding Guidelines established by Alpha Blend Interactive.~~~~

@@ -65,6 +65,7 @@ public class SteeringWheelRoot : MonoBehaviour
     #region Public Properties
 
     private bool IsWheelBeingHeld => _pickups[0].IsPickedUp || _pickups[1].IsPickedUp;
+    private bool IsWheelInactive => !IsWheelBeingHeld && _averageAngle == 0f;
 
     #endregion Public Properties
 
@@ -75,6 +76,8 @@ public class SteeringWheelRoot : MonoBehaviour
     
     private float _originalSteeringWheelAngleMultiplier;
     private float _originalSteeringWheelSign;
+    private bool _originalCounterSteer;
+    private bool _originalSteerSmoothing;
     
     private readonly List<Transform> _trackedTransforms = new();
     private readonly List<Vector3> _lastPositions = new();
@@ -84,6 +87,7 @@ public class SteeringWheelRoot : MonoBehaviour
     private float _averageAngle;
     private float _timeWheelReleased = -1f;
     private const float RETURN_TO_CENTER_DURATION = 2f;
+    private const float RETURN_START_DELAY = 0.1f;
 
     #endregion Private Variables
 
@@ -115,21 +119,7 @@ public class SteeringWheelRoot : MonoBehaviour
     {
         if (trans == null) return;
 
-        var currentAngle = 0f;
-        if (_isTracking)
-        {
-            var sum = 0f;
-            var validTransforms = 0;
-            for (var i = 0; i < _trackedTransforms.Count; i++)
-                if (_trackedTransforms[i] != null)
-                {
-                    sum += _totalAngles[i];
-                    validTransforms++;
-                }
-
-            if (validTransforms > 0)
-                currentAngle = sum / validTransforms;
-        }
+        var currentAngle = _isTracking ? CalculateAverageAngle(_trackedTransforms, _totalAngles) : 0f;
 
         _trackedTransforms.Add(trans);
         _lastPositions.Add(GetLocalPositionWithoutRotation(transform.position));
@@ -142,7 +132,7 @@ public class SteeringWheelRoot : MonoBehaviour
         var index = _trackedTransforms.IndexOf(trans);
         if (index == -1) return;
 
-        var currentAverage = CalculateCurrentAverage();
+        var currentAverage = CalculateAverageAngle(_trackedTransforms, _totalAngles);
         _trackedTransforms.RemoveAt(index);
         _lastPositions.RemoveAt(index);
         _totalAngles.RemoveAt(index);
@@ -153,21 +143,7 @@ public class SteeringWheelRoot : MonoBehaviour
         for (var i = 0; i < _totalAngles.Count; i++)
             _totalAngles[i] = currentAverage;
     }
-
-    private float CalculateCurrentAverage()
-    {
-        var sum = 0f;
-        var validTransforms = 0;
-        for (var i = 0; i < _trackedTransforms.Count; i++)
-            if (_trackedTransforms[i] != null)
-            {
-                sum += _totalAngles[i];
-                validTransforms++;
-            }
-
-        return validTransforms > 0 ? sum / validTransforms : 0f;
-    }
-
+    
     #endregion Public Methods
 
     #region Private Methods
@@ -176,8 +152,8 @@ public class SteeringWheelRoot : MonoBehaviour
     {
         _originalSteeringWheelAngleMultiplier = _carController.steeringWheelAngleMultiplier;
         _originalSteeringWheelSign = Mathf.Sign(_originalSteeringWheelAngleMultiplier);
-        _carController.useCounterSteering = false;
-        _carController.useSteeringSmoother = false;
+        _originalCounterSteer = _carController.useCounterSteering;
+        _originalSteerSmoothing = _carController.useSteeringSmoother;
     }
 
     private void UpdateWheelState()
@@ -191,27 +167,34 @@ public class SteeringWheelRoot : MonoBehaviour
 
     private void UpdateSteeringBehavior()
     {
-        UpdateSteeringMultiplier();
-
+        SetSteeringAssistsState(!IsWheelInactive);
+        
         if (IsWheelBeingHeld)
             UpdateRotationTracking();
         else if (_timeWheelReleased >= 0f)
             HandleWheelReturn();
     }
 
-    private void UpdateSteeringMultiplier()
+    private void SetSteeringAssistsState(bool shouldOverride)
     {
-        _carController.steeringWheelAngleMultiplier = ModSettings.EntryOverrideSteeringRange.Value
+        _carController.useCounterSteering = !shouldOverride && _originalCounterSteer;
+        _carController.useSteeringSmoother = !shouldOverride && _originalSteerSmoothing;
+        _carController.steeringWheelAngleMultiplier = ModSettings.EntryOverrideSteeringRange.Value && shouldOverride
             ? ModSettings.EntryCustomSteeringRange.Value * _originalSteeringWheelSign / _carController.steerAngle
             : _originalSteeringWheelAngleMultiplier;
     }
-
+    
     private void HandleWheelReturn()
     {
         var timeSinceRelease = Time.time - _timeWheelReleased;
-        if (timeSinceRelease < RETURN_TO_CENTER_DURATION)
+        
+        if (timeSinceRelease < RETURN_START_DELAY)
+            return;
+            
+        var returnTime = timeSinceRelease - RETURN_START_DELAY;
+        if (returnTime < RETURN_TO_CENTER_DURATION)
         {
-            var t = timeSinceRelease / RETURN_TO_CENTER_DURATION;
+            var t = returnTime / RETURN_TO_CENTER_DURATION;
             _averageAngle = Mathf.Lerp(_averageAngle, 0f, t);
 
             for (var i = 0; i < _totalAngles.Count; i++)
@@ -267,7 +250,7 @@ public class SteeringWheelRoot : MonoBehaviour
 
         Vector3 trackingAxis = GetSteeringWheelLocalAxis();
         UpdateTransformAngles(trackingAxis);
-        UpdateAverageAngle();
+        _averageAngle = CalculateAverageAngle(_trackedTransforms, _totalAngles);
     }
 
     private void UpdateTransformAngles(Vector3 trackingAxis)
@@ -293,20 +276,19 @@ public class SteeringWheelRoot : MonoBehaviour
         }
     }
 
-    private void UpdateAverageAngle()
+    private static float CalculateAverageAngle(List<Transform> transforms, List<float> angles)
     {
-        var sumAngles = 0f;
+        var sum = 0f;
         var validTransforms = 0;
-
-        for (var i = 0; i < _trackedTransforms.Count; i++)
+        
+        for (var i = 0; i < transforms.Count; i++)
         {
-            if (_trackedTransforms[i] == null) continue;
-            sumAngles += _totalAngles[i];
+            if (transforms[i] == null) continue;
+            sum += angles[i];
             validTransforms++;
         }
 
-        if (validTransforms > 0)
-            _averageAngle = sumAngles / validTransforms;
+        return validTransforms > 0 ? sum / validTransforms : 0f;
     }
 
     #endregion Private Methods

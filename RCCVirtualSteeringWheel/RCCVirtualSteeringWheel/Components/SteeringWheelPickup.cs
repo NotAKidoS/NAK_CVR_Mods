@@ -1,12 +1,16 @@
 ﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.InteractionSystem.Base;
+using ABI_RC.Core.Savior;
 using UnityEngine;
 
 namespace NAK.RCCVirtualSteeringWheel;
 
 public class SteeringWheelPickup : Pickupable
 {
-    #region Public Properties
+    internal SteeringWheelRoot root;
+    
+    #region Pickupable Properties
+    
     public override bool DisallowTheft => true;
     public override float MaxGrabDistance => 0.8f;
     public override float MaxPushDistance => 0f;
@@ -14,11 +18,12 @@ public class SteeringWheelPickup : Pickupable
     public override bool IsObjectRotationAllowed => false;
     public override bool IsObjectPushPullAllowed => false;
     public override bool IsObjectUseAllowed => false;
-    public override bool CanPickup => IsPickupable && !IsPickedUp;
-    internal SteeringWheelRoot root;
-    #endregion
-
-    #region Public Methods
+    public override bool CanPickup => IsPickupable && !IsPickedUp && MetaPort.Instance.isUsingVr;
+    
+    #endregion Pickupable Properties
+    
+    #region Pickupable Methods
+    
     public override void OnUseDown(InteractionContext context) { }
     public override void OnUseUp(InteractionContext context) { }
     public override void OnFlingTowardsTarget(Vector3 target) { }
@@ -32,5 +37,6 @@ public class SteeringWheelPickup : Pickupable
         if (ControllerRay?.transform != null)
             root.StopTrackingTransform(ControllerRay.transform);
     }
-    #endregion
+    
+    #endregion Pickupable Methods
 }
