@@ -1,21 +1,21 @@
 ﻿using System.Reflection;
 using MelonLoader;
-using NAK.GrabbableSteeringWheel;
-using NAK.GrabbableSteeringWheel.Properties;
+using NAK.RCCVirtualSteeringWheel;
+using NAK.RCCVirtualSteeringWheel.Properties;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.GrabbableSteeringWheel))]
+[assembly: AssemblyTitle(nameof(NAK.RCCVirtualSteeringWheel))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.GrabbableSteeringWheel))]
+[assembly: AssemblyProduct(nameof(NAK.RCCVirtualSteeringWheel))]
 
 [assembly: MelonInfo(
-    typeof(GrabbableSteeringWheelMod),
-    nameof(NAK.GrabbableSteeringWheel),
+    typeof(RCCVirtualSteeringWheelMod),
+    nameof(NAK.RCCVirtualSteeringWheel),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/GrabbableSteeringWheel"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/RCCVirtualSteeringWheel"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -25,7 +25,7 @@ using NAK.GrabbableSteeringWheel.Properties;
 [assembly: MelonAuthorColor(255, 158, 21, 32)] // red
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.GrabbableSteeringWheel.Properties;
+namespace NAK.RCCVirtualSteeringWheel.Properties;
 internal static class AssemblyInfoParams
 {
     public const string Version = "1.0.0";

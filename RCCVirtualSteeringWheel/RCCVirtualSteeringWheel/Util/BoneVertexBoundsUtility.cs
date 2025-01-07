@@ -6,6 +6,8 @@ using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.Animations;
 
+namespace NAK.RCCVirtualSteeringWheel.Util;
+
 public class BoneVertexBoundsUtility : MonoBehaviour
 {
     private static readonly ProfilerMarker s_calculateBoundsMarker = new("BoneVertexBounds.Calculate");
@@ -201,7 +203,7 @@ public class BoneVertexBoundsUtility : MonoBehaviour
             {
                 yield return StartCoroutine(ProcessSkinnedMeshRenderersLocal(bone, weightThreshold, skinnedPoints =>
                 {
-                    if (skinnedPoints == null || skinnedPoints.Count <= 0) return;
+                    if (skinnedPoints is not { Count: > 0 }) return;
                     allWeightedPoints.AddRange(skinnedPoints);
                     hasValidPoints = true;
                 }));
