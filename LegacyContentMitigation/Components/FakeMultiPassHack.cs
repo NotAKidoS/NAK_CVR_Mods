@@ -207,9 +207,11 @@ public class FakeMultiPassHack : MonoBehaviour
             eyeCamera.targetTexture = targetTexture;
             eyeCamera.cullingMask = CachedCullingMask;
             eyeCamera.stereoTargetEye = StereoTargetEyeMask.None;
+            eyeCamera.cullingMatrix = _mainCamera.cullingMatrix;
             eyeCamera.projectionMatrix = _mainCamera.GetStereoProjectionMatrix(eye);
             eyeCamera.worldToCameraMatrix = _mainCamera.GetStereoViewMatrix(eye);
             eyeCamera.Render();
+            eyeCamera.ResetCullingMatrix();
         }
     }
     

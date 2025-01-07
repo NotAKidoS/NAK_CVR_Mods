@@ -6,6 +6,8 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Player.LocalClone;
 using ABI_RC.Core.Player.TransformHider;
 using ABI.CCK.Components;
+using cohtml;
+using cohtml.Net;
 using HarmonyLib;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
@@ -125,4 +127,15 @@ internal static class HeadHiderManager_Patches
                 transformHiderManager._resetAfterThisRender = flag;
         }
     }
+}
+
+internal static class CVRMirror_Patches
+{
+    [HarmonyPostfix]
+    [HarmonyPatch(typeof(CVRMirror), nameof(CVRMirror.CopyCameraProperties))]
+    private static void Postfix_CVRMirror_CopyCameraProperties(ref CVRMirror __instance)
+    {
+        __instance.m_ReflectionCamera.ResetCullingMatrix();
+    }
+    
 }

@@ -33,6 +33,7 @@ public class LegacyContentMitigationMod : MelonMod
         ApplyPatches(typeof(Patches.CVRWorld_Patches)); // post processing shit
         ApplyPatches(typeof(Patches.CVRTools_Patches)); // prevent shader replacement when fix is active
         ApplyPatches(typeof(Patches.HeadHiderManager_Patches)); // prevent main cam triggering early head hide
+        ApplyPatches(typeof(Patches.CVRMirror_Patches));
         
         InitializeIntegration("BTKUILib", Integrations.BtkUiAddon.Initialize); // quick menu options
     }
