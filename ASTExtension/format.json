@@ -1,8 +1,8 @@
 {
   "_id": 223,
   "name": "ASTExtension",
-  "modversion": "1.0.1",
-  "gameversion": "2024r175",
+  "modversion": "1.0.2",
+  "gameversion": "2025r178",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r35/ASTExtension.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r45/ASTExtension.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ASTExtension/",
-  "changelog": "- Fixed an issue where the parameter calibration process would sometimes result in the mouth pointer being misplaced when generated.\n- Fixed IsGripping check for Knuckles controllers not requiring *both* hands as intended.",
+  "changelog": "- Fixes for 2025r178",
   "embedcolor": "#f61963"
 }
