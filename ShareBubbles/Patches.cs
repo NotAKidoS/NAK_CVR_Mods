@@ -1462,7 +1462,7 @@ ContentShareMod.init();
     public static void Postfix_ViewManager_Start(ViewManager __instance) 
     {
         // Inject the details toolbar patches when the game menu view is loaded
-        __instance.gameMenuView.Listener.FinishLoad += _ => {
+        __instance.gameMenuView.Listener.FinishLoad += (_) => {
             __instance.gameMenuView.View._view.ExecuteScript(DETAILS_TOOLBAR_PATCHES);
             __instance.gameMenuView.View.BindCall("NAKCallShareContent", OnShareContent);
             __instance.gameMenuView.View.BindCall("NAKGetContentShares", OnGetContentShares);
