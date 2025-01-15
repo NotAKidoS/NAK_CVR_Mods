@@ -1,20 +1,20 @@
-﻿using NAK.TwoWayMute.Properties;
+﻿using NAK.MutualMute.Properties;
 using MelonLoader;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.TwoWayMute))]
+[assembly: AssemblyTitle(nameof(NAK.MutualMute))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.TwoWayMute))]
+[assembly: AssemblyProduct(nameof(NAK.MutualMute))]
 
 [assembly: MelonInfo(
-    typeof(NAK.TwoWayMute.TwoWayMuteMod),
-    nameof(NAK.TwoWayMute),
+    typeof(NAK.MutualMute.MutualMuteMod),
+    nameof(NAK.MutualMute),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/TwoWayMute"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/MutualMute"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -24,9 +24,9 @@ using System.Reflection;
 [assembly: MelonAuthorColor(255, 158, 21, 32)] // red
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.TwoWayMute.Properties;
+namespace NAK.MutualMute.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }

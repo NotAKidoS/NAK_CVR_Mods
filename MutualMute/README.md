@@ -1,8 +1,10 @@
-# TwoWayMute
+# MutualMute
 
 Adjusts the self moderation muting behaviour to also prevent the muted user from hearing you.
 
 Basically- if you mute someone, they will also not be able to hear you.
+
+#### This will work even of the other user does not have the mod installed, as it modifies the BBC Flow Control system.
 
 ---
 
