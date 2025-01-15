@@ -27,7 +27,6 @@ public class SteeringWheelRoot : MonoBehaviour
     public static void SetupSteeringWheel(RCC_CarControllerV3 carController, Bounds steeringWheelBounds)
     {
         Transform steeringWheel = carController.SteeringWheel;
-        if (carController == null) return;
 
         SteeringWheelRoot wheel = steeringWheel.gameObject.AddComponent<SteeringWheelRoot>();
         wheel._carController = carController;

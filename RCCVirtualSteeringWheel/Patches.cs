@@ -24,6 +24,9 @@ internal static class RCCCarControllerV3_Patches
         {
             if (!result.IsValid)
                 return;
+
+            if (!__instance)
+                return;
             
             SteeringWheelRoot.SetupSteeringWheel(__instance, result.LocalBounds);
         });
