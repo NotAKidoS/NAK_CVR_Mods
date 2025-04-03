@@ -42,8 +42,8 @@ public class ScrollFlightMod : MelonMod
     {
         CVRWorld.GameRulesUpdated += OnApplyMovementSettings; // thank you kafe for using actions
     }
-    
-    bool wasFlying = false;
+
+    private bool wasFlying;
     
     // stole from LucMod :3
     public override void OnUpdate()
@@ -66,7 +66,7 @@ public class ScrollFlightMod : MelonMod
         wasFlying = isFlying;
         
         if (!isFlying
-            || Input.GetKey(KeyCode.Mouse2) // scroll zoom
+            || Input.GetKey(KeyCode.Mouse2) // scroll zoom (TODO: Use CVRInputManager.zoom, but requires fixing zoom toggle mode on client)
             || Input.GetKey(KeyCode.LeftControl) // third person / better interact desktop
             || Cursor.lockState != CursorLockMode.Locked) // unity explorer / in menu
             return;
