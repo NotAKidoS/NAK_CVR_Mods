@@ -50,9 +50,9 @@ public class PropLoadingHexagonMod : MelonMod
         );
         
         HarmonyInstance.Patch( // delete mode on prop placeholder
-            typeof(ControllerRay).GetMethod(nameof(ControllerRay.DeleteSpawnable),
+            typeof(ControllerRay).GetMethod(nameof(ControllerRay.HandleSpawnableClicked),
                 BindingFlags.NonPublic | BindingFlags.Instance),
-            prefix: new HarmonyMethod(typeof(PropLoadingHexagonMod).GetMethod(nameof(OnDeleteSpawnableCheck),
+            prefix: new HarmonyMethod(typeof(PropLoadingHexagonMod).GetMethod(nameof(OnHandleSpawnableClicked),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         
@@ -185,7 +185,7 @@ public class PropLoadingHexagonMod : MelonMod
         Loading_Hex_List.Add(loadingHex);
     }
 
-    private static void OnDeleteSpawnableCheck(ref ControllerRay __instance)
+    private static void OnHandleSpawnableClicked(ref ControllerRay __instance)
     {
         if (!__instance._interactDown)
             return; // not interacted, no need to check
