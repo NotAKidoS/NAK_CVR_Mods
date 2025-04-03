@@ -1,4 +1,6 @@
 ﻿using ABI_RC.Core;
+using ABI_RC.Core.EventSystem;
+using ABI_RC.Core.Savior;
 using MelonLoader;
 using UnityEngine;
 
@@ -15,17 +17,17 @@ public class AvatarCloneTestMod : MelonMod
         Category.CreateEntry("use_avatar_clone_test", true,
             "Use Avatar Clone", description: "Uses the Avatar Clone setup for the local avatar.");
     
-    // internal static readonly MelonPreferences_Entry<bool> EntryCopyBlendShapes =
-    //     Category.CreateEntry("copy_blend_shapes", true,
-    //         "Copy Blend Shapes", description: "Copies the blend shapes from the original avatar to the clone.");
-    // 
-    // internal static readonly MelonPreferences_Entry<bool> EntryCopyMaterials =
-    //     Category.CreateEntry("copy_materials", true,
-    //         "Copy Materials", description: "Copies the materials from the original avatar to the clone.");
-    // 
-    // internal static readonly MelonPreferences_Entry<bool> EntryCopyMeshes =
-    //     Category.CreateEntry("copy_meshes", true,
-    //         "Copy Meshes", description: "Copies the meshes from the original avatar to the clone.");
+    internal static readonly MelonPreferences_Entry<bool> EntryCloneMeshRenderers =
+        Category.CreateEntry("clone_mesh_renderers", false,
+            "Clone Mesh Renderers", description: "Clones the mesh renderers from the original avatar to the clone.");
+    
+    internal static readonly MelonPreferences_Entry<bool> EntryCopyBlendShapes =
+        Category.CreateEntry("copy_blend_shapes", true,
+            "Copy Blend Shapes", description: "Copies the blend shapes from the original avatar to the clone.");
+    
+    internal static readonly MelonPreferences_Entry<bool> EntryCopyMaterials =
+        Category.CreateEntry("copy_materials", true,
+            "Copy Materials", description: "Copies the materials from the original avatar to the clone.");
     
     #endregion Melon Preferences
 
@@ -48,6 +50,13 @@ public class AvatarCloneTestMod : MelonMod
                     camera.cullingMask &= ~(1 << CVRLayers.PlayerClone);
                 }
             }
+        }
+        
+        // if pressing ctrl + r, reload avatar
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.R))
+        {
+            var player = MetaPort.Instance.currentAvatarGuid;
+            AssetManagement.Instance.LoadLocalAvatar(player);
         }
     }
     

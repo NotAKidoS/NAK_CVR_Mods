@@ -7,45 +7,45 @@ using NAK.OriginShift.Utility;
 
 // Creator Exposed component
 
-namespace NAK.OriginShift.Components
+namespace NAK.OriginShift.Components;
+
+public class OriginShiftController : MonoBehaviour
 {
-    public class OriginShiftController : MonoBehaviour
-    {
-        public static OriginShiftController Instance { get; private set; }
+    public static OriginShiftController Instance { get; private set; }
         
-        #region Serialized Fields
+    #region Serialized Fields
         
-        [Header("Config / Shift Params")]
+    [Header("Config / Shift Params")]
         
-        [SerializeField] private bool _shiftVertical = true;
-        [SerializeField] [Range(10, 2500)] private int _shiftThreshold = 15;
+    [SerializeField] private bool _shiftVertical = true;
+    [SerializeField] [Range(10, 2500)] private int _shiftThreshold = 15;
         
-        [Header("Config / Scene Objects")]
+    [Header("Config / Scene Objects")]
         
-        [SerializeField] private bool _autoMoveSceneRoots = true;
-        [SerializeField] private Transform[] _toShiftTransforms = Array.Empty<Transform>();
+    [SerializeField] private bool _autoMoveSceneRoots = true;
+    [SerializeField] private Transform[] _toShiftTransforms = Array.Empty<Transform>();
 
-        [Header("Config / Additive Objects")] 
+    [Header("Config / Additive Objects")] 
     
-        [SerializeField] private bool _shiftRemotePlayers = true;
-        [SerializeField] private bool _shiftSpawnedObjects = true;
+    [SerializeField] private bool _shiftRemotePlayers = true;
+    [SerializeField] private bool _shiftSpawnedObjects = true;
 
-        #endregion Serialized Fields
+    #endregion Serialized Fields
 
-        #region Internal Fields
+    #region Internal Fields
 
-        internal bool IsForced { get; set; }
+    internal bool IsForced { get; set; }
 
-        #endregion Internal Fields
+    #endregion Internal Fields
     
 #if !UNITY_EDITOR
     
-        public static int ORIGIN_SHIFT_THRESHOLD = 15;
+    public static int ORIGIN_SHIFT_THRESHOLD = 15;
         
-        #region Unity Events
+    #region Unity Events
 
-        private void Awake()
-        {
+    private void Awake()
+    {
             if (Instance != null
                 && Instance != this)
             {
@@ -56,8 +56,8 @@ namespace NAK.OriginShift.Components
             Instance = this;
         }
         
-        private void Start()
-        {
+    private void Start()
+    {
             // set threshold (we can not support dynamic threshold change)
             ORIGIN_SHIFT_THRESHOLD = IsForced ? 1000 : _shiftThreshold;
         
@@ -73,26 +73,26 @@ namespace NAK.OriginShift.Components
                 AnchorAllStaticRenderers();
         }
 
-        private void OnDestroy()
-        {
+    private void OnDestroy()
+    {
             OriginShiftManager.OnOriginShifted -= OnOriginShifted;
             OriginShiftManager.Instance.ResetManager();
         }
         
-        #endregion Unity Events
+    #endregion Unity Events
 
-        #region Private Methods
+    #region Private Methods
 
-        private void GetAllSceneRootTransforms()
-        {
+    private void GetAllSceneRootTransforms()
+    {
             Scene scene = gameObject.scene;
             var sceneRoots = scene.GetRootGameObjects();
             _toShiftTransforms = new Transform[sceneRoots.Length + 1]; // +1 for the static batch anchor
             for (var i = 0; i < sceneRoots.Length; i++) _toShiftTransforms[i] = sceneRoots[i].transform;
         }
 
-        private void AnchorAllStaticRenderers()
-        {
+    private void AnchorAllStaticRenderers()
+    {
             // create an anchor object at 0,0,0
             Transform anchor = new GameObject("NAK.StaticBatchAnchor").transform;
             anchor.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
@@ -113,12 +113,12 @@ namespace NAK.OriginShift.Components
             }
         }
 
-        #endregion Private Methods
+    #endregion Private Methods
         
-        #region Origin Shift Events
+    #region Origin Shift Events
         
-        private void OnOriginShifted(Vector3 shift)
-        {
+    private void OnOriginShifted(Vector3 shift)
+    {
             foreach (Transform toShiftTransform in _toShiftTransforms)
             {
                 if (toShiftTransform == null) continue; // skip nulls
@@ -126,8 +126,7 @@ namespace NAK.OriginShift.Components
             }
         }
         
-        #endregion Origin Shift Events
+    #endregion Origin Shift Events
     
 #endif
-    }
 }

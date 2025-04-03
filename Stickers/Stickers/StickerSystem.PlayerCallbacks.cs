@@ -62,7 +62,7 @@ public partial class StickerSystem
 
     #endregion Player Callbacks
 
-    #region Player Callbacks
+    #region Sticker Callbacks
 
     public void OnStickerPlaceReceived(string playerId, int stickerSlot, Vector3 position, Vector3 forward, Vector3 up)
         => AttemptPlaceSticker(playerId, position, forward, up, alignWithNormal: true, stickerSlot);
@@ -81,5 +81,5 @@ public partial class StickerSystem
         stickerData.IdentifyTime = Time.time + 3f;
     }
 
-    #endregion Player Callbacks
+    #endregion Sticker Callbacks
 }

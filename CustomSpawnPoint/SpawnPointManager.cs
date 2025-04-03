@@ -7,38 +7,38 @@ using Object = UnityEngine.Object;
 using ABI_RC.Core;
 using Newtonsoft.Json;
 
-namespace NAK.CustomSpawnPoint
+namespace NAK.CustomSpawnPoint;
+
+internal static class SpawnPointManager
 {
-    internal static class SpawnPointManager
-    {
-        #region Fields
+    #region Fields
 
-        private static string currentWorldId = string.Empty;
-        private static SpawnPointData? currentSpawnPoint;
+    private static string currentWorldId = string.Empty;
+    private static SpawnPointData? currentSpawnPoint;
 
-        private static string requestedWorldId = string.Empty;
-        private static SpawnPointData? requestedSpawnPoint;
+    private static string requestedWorldId = string.Empty;
+    private static SpawnPointData? requestedSpawnPoint;
 
-        private static Dictionary<string, SpawnPointData> spawnPoints = new();
-        private static readonly string jsonFilePath = Path.Combine("UserData", "customspawnpoints.json");
+    private static Dictionary<string, SpawnPointData> spawnPoints = new();
+    private static readonly string jsonFilePath = Path.Combine("UserData", "customspawnpoints.json");
         
-        private static GameObject[] customSpawnPointsArray;
-        private static GameObject[] originalSpawnPointsArray;
+    private static GameObject[] customSpawnPointsArray;
+    private static GameObject[] originalSpawnPointsArray;
 
-        #endregion Fields
+    #endregion Fields
 
-        #region Initialization
+    #region Initialization
 
-        internal static void Init()
-        {
+    internal static void Init()
+    {
             LoadSpawnpoints();
             CVRGameEventSystem.World.OnLoad.AddListener(OnWorldLoaded);
             CVRGameEventSystem.World.OnUnload.AddListener(OnWorldUnloaded);
             MelonLoader.MelonCoroutines.Start(WaitMainMenuUi());
         }
 
-        private static System.Collections.IEnumerator WaitMainMenuUi()
-        {
+    private static System.Collections.IEnumerator WaitMainMenuUi()
+    {
             while (ViewManager.Instance == null)
                 yield return null;
             while (ViewManager.Instance.gameMenuView == null)
@@ -65,12 +65,12 @@ namespace NAK.CustomSpawnPoint
             customSpawnPointsArray = new[] { customSpawnPointObject };
         }
 
-        #endregion Initialization
+    #endregion Initialization
         
-        #region Game Events
+    #region Game Events
         
-        private static void OnWorldLoaded(string worldId)
-        {
+    private static void OnWorldLoaded(string worldId)
+    {
             CVRWorld world = CVRWorld.Instance;
             if (world == null) return;
             
@@ -90,13 +90,13 @@ namespace NAK.CustomSpawnPoint
             }
         }
 
-        private static void OnWorldUnloaded(string worldId)
-        {
+    private static void OnWorldUnloaded(string worldId)
+    {
             ClearCurrentWorldState();
         }
 
-        internal static void OnRequestWorldDetailsPage(string worldId)
-        {
+    internal static void OnRequestWorldDetailsPage(string worldId)
+    {
             //CustomSpawnPointMod.Logger.Msg("Requesting world details page for world: " + worldId);
             
             requestedWorldId = worldId;
@@ -106,24 +106,24 @@ namespace NAK.CustomSpawnPoint
             UpdateMenuButtonState(hasSpawnpoint, worldId == currentWorldId && CVRWorld.Instance != null && CVRWorld.Instance.allowFlying);
         }
         
-        private static void OnClearSpawnpointConfirm(string id, string value, string data)
-        {
+    private static void OnClearSpawnpointConfirm(string id, string value, string data)
+    {
             if (id != "nak_clear_spawnpoint") return;
             if (value == "true") ClearSpawnPoint();
         }
 
-        #endregion Game Events
+    #endregion Game Events
 
-        #region Spawnpoint Management
+    #region Spawnpoint Management
         
-        public static void SetSpawnPoint()
-            => SetSpawnPointForWorld(currentWorldId);
+    public static void SetSpawnPoint()
+        => SetSpawnPointForWorld(currentWorldId);
         
-        public static void ClearSpawnPoint()
-            => ClearSpawnPointForWorld(currentWorldId);
+    public static void ClearSpawnPoint()
+        => ClearSpawnPointForWorld(currentWorldId);
         
-        private static void SetSpawnPointForWorld(string worldId)
-        {
+    private static void SetSpawnPointForWorld(string worldId)
+    {
             CustomSpawnPointMod.Logger.Msg("Setting spawn point for world: " + worldId);
             
             Vector3 playerPosition = PlayerSetup.Instance.GetPlayerPosition();
@@ -152,8 +152,8 @@ namespace NAK.CustomSpawnPoint
             UpdateMenuButtonState(true, worldId == currentWorldId);
         }
 
-        private static void ClearSpawnPointForWorld(string worldId)
-        {
+    private static void ClearSpawnPointForWorld(string worldId)
+    {
             CustomSpawnPointMod.Logger.Msg("Clearing spawn point for world: " + worldId);
             
             if (spawnPoints.ContainsKey(worldId))
@@ -172,29 +172,29 @@ namespace NAK.CustomSpawnPoint
             UpdateMenuButtonState(false, worldId == currentWorldId);
         }
 
-        private static void UpdateCustomSpawnPointTransform(SpawnPointData spawnPoint)
-        {
+    private static void UpdateCustomSpawnPointTransform(SpawnPointData spawnPoint)
+    {
             customSpawnPointsArray[0].transform.SetPositionAndRotation(spawnPoint.Position, Quaternion.Euler(spawnPoint.Rotation));
         }
 
-        private static void UpdateMenuButtonState(bool hasSpawnpoint, bool isInWorld)
-        {
+    private static void UpdateMenuButtonState(bool hasSpawnpoint, bool isInWorld)
+    {
             ViewManager.Instance.gameMenuView.View.TriggerEvent("NAKUpdateSpawnpointStatus", hasSpawnpoint.ToString(), isInWorld.ToString());
         }
 
-        private static void ClearCurrentWorldState()
-        {
+    private static void ClearCurrentWorldState()
+    {
             currentWorldId = string.Empty;
             currentSpawnPoint = null;
             originalSpawnPointsArray = null;
         }
 
-        #endregion Spawnpoint Management
+    #endregion Spawnpoint Management
 
-        #region JSON Management
+    #region JSON Management
 
-        private static void LoadSpawnpoints()
-        {
+    private static void LoadSpawnpoints()
+    {
             if (File.Exists(jsonFilePath))
             {
                 string json = File.ReadAllText(jsonFilePath);
@@ -206,18 +206,18 @@ namespace NAK.CustomSpawnPoint
             }
         }
 
-        private static void SaveSpawnpoints()
-        {
+    private static void SaveSpawnpoints()
+    {
             File.WriteAllText(jsonFilePath, JsonConvert.SerializeObject(spawnPoints, Formatting.Indented, 
                 new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore } // death
             ));
         }
 
-        #endregion JSON Management
+    #endregion JSON Management
         
-        #region Spawnpoint JS
+    #region Spawnpoint JS
 
-        private const string spawnpointJs = @"
+    private const string spawnpointJs = @"
 let hasSpawnpointForThisWorld = false;
 let spawnpointButton = null;
 
@@ -249,17 +249,16 @@ engine.on('NAKUpdateSpawnpointStatus', function (hasSpawnpoint, isInWorld) {
 });
 ";
 
-        #endregion Spawnpoint JS
-    }
-
-    #region Serializable
-    
-    [Serializable]
-    public struct SpawnPointData
-    {
-        public Vector3 Position;
-        public Vector3 Rotation;
-    }
-    
-    #endregion Serializable
+    #endregion Spawnpoint JS
 }
+
+#region Serializable
+    
+[Serializable]
+public struct SpawnPointData
+{
+    public Vector3 Position;
+    public Vector3 Rotation;
+}
+    
+#endregion Serializable

@@ -1,17 +1,17 @@
 ﻿using UnityEngine;
 
-namespace NAK.OriginShift.Components
+namespace NAK.OriginShift.Components;
+
+public class OriginShiftRigidbodyReceiver : MonoBehaviour
 {
-    public class OriginShiftRigidbodyReceiver : MonoBehaviour
-    {
 #if !UNITY_EDITOR
     
-        private Rigidbody _rigidbody;
+    private Rigidbody _rigidbody;
     
-        #region Unity Events
+    #region Unity Events
 
-        private void Start()
-        {
+    private void Start()
+    {
             _rigidbody = GetComponentInChildren<Rigidbody>();
             if (_rigidbody == null)
             {
@@ -20,27 +20,26 @@ namespace NAK.OriginShift.Components
             }
         }
 
-        private void OnEnable()
-        {
+    private void OnEnable()
+    {
             OriginShiftManager.OnOriginShifted += OnOriginShifted;
         }
     
-        private void OnDisable()
-        {
+    private void OnDisable()
+    {
             OriginShiftManager.OnOriginShifted -= OnOriginShifted;
         }
 
-        #endregion Unity Events
+    #endregion Unity Events
     
-        #region Origin Shift Events
+    #region Origin Shift Events
     
-        private void OnOriginShifted(Vector3 shift)
-        {
+    private void OnOriginShifted(Vector3 shift)
+    {
             _rigidbody.position += shift;
         }
     
-        #endregion Origin Shift Events
+    #endregion Origin Shift Events
     
 #endif
-    }
 }

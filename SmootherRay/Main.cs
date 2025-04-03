@@ -39,6 +39,10 @@ public class SmootherRayMod : MelonMod
         Category.CreateEntry("Small Angle Threshold (6f)", 6f,
         description: "Angle difference to consider a 'small' movement. The less shaky your hands are, the lower you probably want to set this. This is probably the primary value you want to tweak. Use the slider to adjust the threshold angle. Range: 4 to 15.");
 
+    public static readonly MelonPreferences_Entry<bool> EntrySmoothWhenHoldingPickup =
+        Category.CreateEntry("Smooth When Holding Pickup", false,
+        description: "Enable or disable smoothing when holding a pickup.");
+        
     #endregion Melon Preferences
 
     #region Melon Events

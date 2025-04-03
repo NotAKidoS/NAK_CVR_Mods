@@ -227,6 +227,10 @@ public class SmootherRayer : MonoBehaviour
             }
         }
         
+        if (SmootherRayMod.EntrySmoothWhenHoldingPickup.Value
+            && ray.grabbedObject)
+            canSmoothRay = true;
+        
         return canSmoothRay;
     }
     

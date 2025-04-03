@@ -1,0 +1,23 @@
+{
+  "_id": 234,
+  "name": "WhereAmIPointing",
+  "modversion": "1.0.1",
+  "gameversion": "2024r175",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Simple mod that makes your controller rays always visible when the menus are open. Useful for when you're trying to aim at something in the distance. Also visualizes which ray is being used for menu interaction.",
+  "searchtags": [
+    "controller",
+    "ray",
+    "line",
+    "tomato"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r40/WhereAmIPointing.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/WhereAmIPointing/",
+  "changelog": "- Fixed line renderer alpha not being reset when the menu is closed.",
+  "embedcolor": "#f61963"
+}

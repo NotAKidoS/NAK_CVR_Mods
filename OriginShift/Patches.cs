@@ -10,6 +10,7 @@ using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.Movement;
 using ABI.CCK.Components;
 using DarkRift;
+using ECM2;
 using HarmonyLib;
 using NAK.OriginShift.Components;
 using NAK.OriginShift.Hacks;

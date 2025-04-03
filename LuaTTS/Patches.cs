@@ -11,17 +11,17 @@ internal static class LuaScriptFactoryPatches
     [HarmonyPostfix]
     [HarmonyPatch(typeof(LuaScriptFactory.CVRRequireModule), nameof(LuaScriptFactory.CVRRequireModule.Require))]
     private static void Postfix_CVRRequireModule_require(
-        string modid, 
+        string moduleFriendlyName, 
         ref LuaScriptFactory.CVRRequireModule __instance,
         ref object __result, 
-        ref Script  ___script, 
-        ref CVRLuaContext ___context)
+        ref Script  ____script, 
+        ref CVRLuaContext ____context)
     {
         const string TTSModuleID = "TextToSpeech";
-        if (TTSModuleID != modid) 
+        if (TTSModuleID != moduleFriendlyName) 
             return; // not our module
         
-        __result = TTSLuaModule.RegisterUserData(___script, ___context);
+        __result = TTSLuaModule.RegisterUserData(____script, ____context);
         __instance.RegisteredModules[TTSModuleID] = __result; // add module to cache
     }
 }

@@ -110,7 +110,7 @@ public partial class StickerSystem
         stickerData.Clear();
     }
     
-    private void ClearStickersForPlayer(string playerId, int stickerSlot)
+    public void ClearStickersForPlayer(string playerId, int stickerSlot)
     {
         if (!_playerStickers.TryGetValue(playerId, out StickerData stickerData)) 
             return;

@@ -28,10 +28,6 @@ internal static class Patches
             typeof(CVRTools).GetMethod(nameof(CVRTools.ConfigureHudAffinity), BindingFlags.Public | BindingFlags.Static),
             postfix: typeof(Patches).GetMethod(nameof(OnConfigureHudAffinity), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
          );
-        harmony.Patch(
-            typeof(TransformHiderManager).GetMethod(nameof(TransformHiderManager.CheckPlayerCamWithinRange), BindingFlags.NonPublic | BindingFlags.Static),
-            prefix: typeof(Patches).GetMethod(nameof(OnCheckPlayerCamWithinRange), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
-        );
     }
 
     //Copy camera settings & postprocessing components
@@ -39,5 +35,4 @@ internal static class Patches
     //Adjust camera distance with height as modifier
     private static void OnScaleAdjusted(float height) => AdjustScale(height);
     private static void OnConfigureHudAffinity() => CheckVRMode();
-    private static bool OnCheckPlayerCamWithinRange() => !State; // don't hide head if in third person
 }

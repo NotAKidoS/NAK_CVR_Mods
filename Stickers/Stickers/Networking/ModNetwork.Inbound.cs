@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core.Networking.IO.Social;
+using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.ModNetwork;
 using NAK.Stickers.Utilities;
@@ -46,6 +47,9 @@ public static partial class ModNetwork
         
         if (StickerSystem.Instance.IsRestrictedInstance) // ignore messages from users when the world is restricted. This also includes older or modified version of Stickers mod.
             return false;
+        
+        if (!CVRPlayerManager.Instance.GetPlayerPuppetMaster(sender, out PuppetMaster _))
+            return false; // ignore messages from players that don't exist
         
         return true;
     }
@@ -108,7 +112,10 @@ public static partial class ModNetwork
         msg.Read(out Vector3 up);
 
         if (!StickerSystem.Instance.HasTextureHash(msg.Sender, textureHash))
+        {
             SendRequestTexture(stickerSlot, textureHash);
+            StickerSystem.Instance.ClearStickersForPlayer(msg.Sender, stickerSlot); // Ensure no exploit
+        }
 
         StickerSystem.Instance.OnStickerPlaceReceived(msg.Sender, stickerSlot, position, forward, up);
     }
@@ -158,7 +165,7 @@ public static partial class ModNetwork
         
         LoggerInbound($"Received StartTexture message from {sender}: Slot: {stickerSlot}, Hash: {textureHash}, Chunks: {chunkCount}, Resolution: {width}x{height}");
     }
-
+    
     private static void HandleSendTexture(ModNetworkMessage msg)
     {
         string sender = msg.Sender;

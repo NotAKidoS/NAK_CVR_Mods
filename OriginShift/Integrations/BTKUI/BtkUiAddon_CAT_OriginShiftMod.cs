@@ -4,19 +4,19 @@ using BTKUILib.UIObjects;
 using BTKUILib.UIObjects.Components;
 using NAK.OriginShift;
 
-namespace NAK.OriginShiftMod.Integrations
+namespace NAK.OriginShiftMod.Integrations;
+
+public static partial class BtkUiAddon
 {
-    public static partial class BtkUiAddon
+    private static Category _ourCategory;
+        
+    private static Button _ourMainButton;
+    private static bool _isForcedMode;
+        
+    private static ToggleButton _ourToggle;
+        
+    private static void Setup_OriginShiftModCategory(Page page)
     {
-        private static Category _ourCategory;
-        
-        private static Button _ourMainButton;
-        private static bool _isForcedMode;
-        
-        private static ToggleButton _ourToggle;
-        
-        private static void Setup_OriginShiftModCategory(Page page)
-        {
             // dear category
             _ourCategory = page.AddCategory(ModSettings.OSM_SettingsCategory, ModSettings.ModName, true, true, false);
             
@@ -38,21 +38,21 @@ namespace NAK.OriginShiftMod.Integrations
             debugToggle.OnValueUpdated += OnDebugToggle;
         }
 
-        #region Category Actions
+    #region Category Actions
         
-        private static void UpdateCategoryModUserCount()
-        {
+    private static void UpdateCategoryModUserCount()
+    {
             int modUsers = 1; // we are always here :3
             int playerCount = CVRPlayerManager.Instance.NetworkPlayers.Count + 1; // +1 for us :3
             _ourCategory.CategoryName = $"{ModSettings.OSM_SettingsCategory} ({modUsers}/{playerCount})";
         }
 
-        #endregion Category Actions
+    #endregion Category Actions
 
-        #region Button Actions
+    #region Button Actions
 
-        private static void SetButtonState(OriginShiftManager.OriginShiftState state)
-        {
+    private static void SetButtonState(OriginShiftManager.OriginShiftState state)
+    {
             switch (state)
             {
                 default:
@@ -74,8 +74,8 @@ namespace NAK.OriginShiftMod.Integrations
             }
         }
         
-        private static void OnMainButtonClick()
-        {
+    private static void OnMainButtonClick()
+    {
             // if active, return as world is using Origin Shift
             if (OriginShiftManager.Instance.CurrentState 
                 is OriginShiftManager.OriginShiftState.Active)
@@ -97,19 +97,19 @@ namespace NAK.OriginShiftMod.Integrations
             }
         }
 
-        private static void OnOriginShiftStateChanged(OriginShiftManager.OriginShiftState state)
-        {
+    private static void OnOriginShiftStateChanged(OriginShiftManager.OriginShiftState state)
+    {
             _isForcedMode = state == OriginShiftManager.OriginShiftState.Forced;
             SetButtonState(state);
             SetToggleLocked(_isForcedMode);
         }
         
-        #endregion Button Actions
+    #endregion Button Actions
 
-        #region Toggle Actions
+    #region Toggle Actions
         
-        private static void SetToggleLocked(bool value)
-        {
+    private static void SetToggleLocked(bool value)
+    {
             if (value)
             {
                 // lock the toggle
@@ -126,20 +126,19 @@ namespace NAK.OriginShiftMod.Integrations
             }
         }
         
-        private static void OnCompatibilityModeToggle(bool value)
-        {
+    private static void OnCompatibilityModeToggle(bool value)
+    {
             ModSettings.EntryCompatibilityMode.Value = value;
         }
 
-        #endregion Toggle Actions
+    #endregion Toggle Actions
 
-        #region Debug Toggle Actions
+    #region Debug Toggle Actions
 
-        private static void OnDebugToggle(bool value)
-        {
+    private static void OnDebugToggle(bool value)
+    {
             OriginShiftManager.Instance.ToggleDebugOverlay(value);
         }
 
-        #endregion Debug Toggle Actions
-    }
+    #endregion Debug Toggle Actions
 }

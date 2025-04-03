@@ -1,5 +1,6 @@
 ﻿using ABI_RC.Core.Player.ShadowClone;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace NAK.AvatarCloneTest;
 
@@ -9,120 +10,295 @@ public partial class AvatarClone
     
     private void InitializeCollections()
     {
-        _standardRenderers = new List<MeshRenderer>();
-        _standardFilters = new List<MeshFilter>();
+#if ENABLE_PROFILER
+        s_InitializeData.Begin();
+#endif
+        
+        // Initialize source collections
         _skinnedRenderers = new List<SkinnedMeshRenderer>();
-        _allSourceRenderers = new List<Renderer>();
+        _blendShapeWeights = new List<List<float>>();
         
-        _standardClones = new List<MeshRenderer>();
-        _standardCloneFilters = new List<MeshFilter>();
+        _meshRenderers = new List<MeshRenderer>();
+        _meshFilters = new List<MeshFilter>();
+        
+        _otherRenderers = new List<Renderer>();
+        
+        // Initialize clone collections
         _skinnedClones = new List<SkinnedMeshRenderer>();
+        _skinnedCloneMaterials = new List<Material[]>();
+        _skinnedCloneCullingMaterials = new List<Material[]>();
         
-        _standardRenderersNeedingChecks = new List<int>();
-        _skinnedRenderersNeedingChecks = new List<int>();
-        _cachedSkinnedBoneCounts = new List<int>();
-        _cachedSharedMeshes = new List<Mesh>();
+        if (Setting_CloneMeshRenderers)
+        {
+            _meshClones = new List<MeshRenderer>();
+            _meshCloneFilters = new List<MeshFilter>();
+            _meshCloneMaterials = new List<Material[]>();
+            _meshCloneCullingMaterials = new List<Material[]>();
+        }
         
-        _localMaterials = new List<Material[]>();
-        _cullingMaterials = new List<Material[]>();
-        _mainMaterials = new List<Material>();
+        // Initialize shared resources
+        _materialWorkingList = new List<Material>();
         _propertyBlock = new MaterialPropertyBlock();
         
-        _blendShapeWeights = new List<List<float>>();
+#if ENABLE_PROFILER
+        s_InitializeData.End();
+#endif
     }
     
-    private void InitializeRenderers()
+    private void CollectRenderers()
     {
-        var renderers = GetComponentsInChildren<Renderer>(true);
+    #if ENABLE_PROFILER
+        s_InitializeData.Begin();
+    #endif
         
-        // Pre-size lists based on found renderers
-        // _standardRenderers.Capacity = renderers.Length;
-        // _standardFilters.Capacity = renderers.Length;
-        // _skinnedRenderers.Capacity = renderers.Length;
-        // _allSourceRenderers.Capacity = renderers.Length;
-
-        // Sort renderers into their respective lists
-        foreach (Renderer render in renderers)
+        var renderers = GetComponentsInChildren<Renderer>(true);
+        var currentIndex = 0;
+        var nonCloned = 0;
+        
+        // Single pass: directly categorize renderers
+        foreach (Renderer renderer in renderers)
         {
-            _allSourceRenderers.Add(render);
-            
-            switch (render)
+            switch (renderer)
             {
-                case MeshRenderer meshRenderer:
-                {
-                    MeshFilter filter = meshRenderer.GetComponent<MeshFilter>();
+                case SkinnedMeshRenderer skinned when skinned.sharedMesh != null:
+                    AddSkinnedRenderer(skinned);
+                    currentIndex++;
+                    break;
+                    
+                case MeshRenderer mesh:
+                    MeshFilter filter = mesh.GetComponent<MeshFilter>();
                     if (filter != null && filter.sharedMesh != null)
                     {
-                        _standardRenderers.Add(meshRenderer);
-                        _standardFilters.Add(filter);
+                        if (Setting_CloneMeshRenderers)
+                        {
+                            AddMeshRenderer(mesh, filter);
+                        }
+                        else
+                        {
+                            AddMeshRenderer(mesh, filter);
+                            nonCloned++;
+                        }
+                        currentIndex++;
                     }
                     break;
-                }
-                case SkinnedMeshRenderer skinnedRenderer:
-                {
-                    if (skinnedRenderer.sharedMesh != null) _skinnedRenderers.Add(skinnedRenderer);
+                    
+                default:
+                    AddOtherRenderer(renderer);
+                    currentIndex++;
+                    nonCloned++;
                     break;
-                }
             }
         }
-    }
-    
-    private void SetupMaterialsAndBlendShapes()
-    {
-        // Cache counts
-        int standardCount = _standardRenderers.Count;
-        int skinnedCount = _skinnedRenderers.Count;
-        var standardRenderers = _standardRenderers;
-        var skinnedRenderers = _skinnedRenderers;
-        var localMats = _localMaterials;
-        var cullingMats = _cullingMaterials;
-        var blendWeights = _blendShapeWeights;
         
-        // Setup standard renderer materials
-        for (int i = 0; i < standardCount; i++)
-        {
-            MeshRenderer render = standardRenderers[i];
-            int matCount = render.sharedMaterials.Length;
-            
-            // Local materials array
-            var localMatArray = new Material[matCount];
-            for (int j = 0; j < matCount; j++) localMatArray[j] = render.sharedMaterials[j];
-            localMats.Add(localMatArray);
-            
-            // Culling materials array
-            var cullingMatArray = new Material[matCount];
-            for (int j = 0; j < matCount; j++) cullingMatArray[j] = ShadowCloneUtils.cullingMaterial;
-            cullingMats.Add(cullingMatArray);
-        }
-        
-        // Setup skinned renderer materials and blend shapes
-        for (int i = 0; i < skinnedCount; i++)
-        {
-            SkinnedMeshRenderer render = skinnedRenderers[i];
-            int matCount = render.sharedMaterials.Length;
-            
-            // Local materials array
-            var localMatArray = new Material[matCount];
-            for (int j = 0; j < matCount; j++) localMatArray[j] = render.sharedMaterials[j];
-            localMats.Add(localMatArray);
-            
-            // Culling materials array
-            var cullingMatArray = new Material[matCount];
-            for (int j = 0; j < matCount; j++) cullingMatArray[j] = ShadowCloneUtils.cullingMaterial;
-            cullingMats.Add(cullingMatArray);
-            
-            // Blend shape weights
-            int blendShapeCount = render.sharedMesh.blendShapeCount;
-            var weights = new List<float>(blendShapeCount);
-            for (int j = 0; j < blendShapeCount; j++) weights.Add(0f);
-            blendWeights.Add(weights);
-        }
-        
-        // Initialize renderer state arrays
-        int totalRenderers = _allSourceRenderers.Count;
-        _originallyHadShadows = new bool[totalRenderers];
-        _originallyWasEnabled = new bool[totalRenderers];
+        _rendererActiveStates = new bool[currentIndex];
+        _originalShadowCastingMode = new ShadowCastingMode[currentIndex];
+        _sourceShouldBeHiddenFromFPR = new bool[nonCloned];
+
+    #if ENABLE_PROFILER
+        s_InitializeData.End();
+    #endif
     }
 
+    private void AddSkinnedRenderer(SkinnedMeshRenderer renderer)
+    {
+#if ENABLE_PROFILER
+        s_AddRenderer.Begin();
+#endif
+        
+        _skinnedRenderers.Add(renderer);
+        
+        // Clone materials array for clone renderer
+        var materials = renderer.sharedMaterials;
+        var cloneMaterials = new Material[materials.Length];
+        for (int i = 0; i < materials.Length; i++) cloneMaterials[i] = materials[i];
+        _skinnedCloneMaterials.Add(cloneMaterials);
+
+        // Cache culling materials
+        var cullingMaterialArray = new Material[materials.Length];
+#if !UNITY_EDITOR
+        for (int i = 0; i < materials.Length; i++) cullingMaterialArray[i] = ShadowCloneUtils.cullingMaterial;
+#else
+        for (int i = 0; i < materials.Length; i++) cullingMaterialArray[i] = cullingMaterial;
+#endif
+        _skinnedCloneCullingMaterials.Add(cullingMaterialArray);
+        
+        // Cache blend shape weights
+        var weights = new List<float>(renderer.sharedMesh.blendShapeCount);
+        for (int i = 0; i < renderer.sharedMesh.blendShapeCount; i++) weights.Add(0f);
+        _blendShapeWeights.Add(weights);
+        
+#if ENABLE_PROFILER
+        s_AddRenderer.End();
+#endif
+    }
+    
+    private void AddMeshRenderer(MeshRenderer renderer, MeshFilter filter)
+    {
+#if ENABLE_PROFILER
+        s_AddRenderer.Begin();
+#endif
+        
+        _meshRenderers.Add(renderer);
+        _meshFilters.Add(filter);
+        
+        if (!Setting_CloneMeshRenderers) return;
+        
+        // Clone materials array for clone renderer
+        var materials = renderer.sharedMaterials;
+        var cloneMaterials = new Material[materials.Length];
+        for (int i = 0; i < materials.Length; i++) cloneMaterials[i] = materials[i];
+        _meshCloneMaterials.Add(cloneMaterials);
+
+        // Cache culling materials
+        var cullingMaterialArray = new Material[materials.Length];
+#if !UNITY_EDITOR
+        for (int i = 0; i < materials.Length; i++) cullingMaterialArray[i] = ShadowCloneUtils.cullingMaterial;
+#else
+        for (int i = 0; i < materials.Length; i++) cullingMaterialArray[i] = cullingMaterial;
+#endif
+        _meshCloneCullingMaterials.Add(cullingMaterialArray);
+        
+#if ENABLE_PROFILER
+        s_AddRenderer.End();
+#endif
+    }
+    
+    private void AddOtherRenderer(Renderer renderer)
+    {
+#if ENABLE_PROFILER
+        s_AddRenderer.Begin();
+#endif        
+        _otherRenderers.Add(renderer);
+#if ENABLE_PROFILER
+        s_AddRenderer.End();
+#endif
+    }
+
+    private void CreateClones()
+    {
+#if ENABLE_PROFILER
+        s_InitializeData.Begin();
+#endif
+
+        // Always create skinned mesh clones
+        int skinnedCount = _skinnedRenderers.Count;
+        for (int i = 0; i < skinnedCount; i++)
+        {
+            CreateSkinnedClone(i);
+        }
+        
+        // Optionally create mesh clones
+        if (Setting_CloneMeshRenderers)
+        {
+            int meshCount = _meshRenderers.Count;
+            for (int i = 0; i < meshCount; i++)
+            {
+                CreateMeshClone(i);
+            }
+        }
+        
+#if ENABLE_PROFILER
+        s_InitializeData.End();
+#endif
+    }
+
+    private void CreateSkinnedClone(int index)
+    {
+#if ENABLE_PROFILER
+        s_CreateClone.Begin();
+#endif
+        
+        SkinnedMeshRenderer source = _skinnedRenderers[index];
+        
+        GameObject clone = new(source.name + "_Clone")
+        {
+            layer = CLONE_LAYER
+        };
+        
+        clone.transform.SetParent(source.transform, false);
+        
+        SkinnedMeshRenderer cloneRenderer = clone.AddComponent<SkinnedMeshRenderer>();
+        
+        // Basic setup
+        cloneRenderer.sharedMaterials = _skinnedCloneMaterials[index];
+        cloneRenderer.shadowCastingMode = ShadowCastingMode.Off;
+        cloneRenderer.probeAnchor = source.probeAnchor;
+        cloneRenderer.sharedMesh = source.sharedMesh;
+        cloneRenderer.rootBone = source.rootBone;
+        cloneRenderer.bones = source.bones;
+        
+#if !UNITY_EDITOR
+        cloneRenderer.localBounds = new Bounds(source.localBounds.center, source.localBounds.size * 2f);
+#endif
+        
+        // Quality settings
+        cloneRenderer.motionVectorGenerationMode = MotionVectorGenerationMode.ForceNoMotion;
+        cloneRenderer.allowOcclusionWhenDynamic = false;
+        cloneRenderer.updateWhenOffscreen = false;
+        cloneRenderer.skinnedMotionVectors = false;
+        cloneRenderer.forceMatrixRecalculationPerRender = false;
+        cloneRenderer.quality = SkinQuality.Bone4;
+        
+        source.motionVectorGenerationMode = MotionVectorGenerationMode.ForceNoMotion;
+        source.allowOcclusionWhenDynamic = false;
+        source.updateWhenOffscreen = false;
+        source.skinnedMotionVectors = false;
+        source.forceMatrixRecalculationPerRender = false;
+        source.quality = SkinQuality.Bone4;
+        
+        // Add to clone list
+        _skinnedClones.Add(cloneRenderer);
+        
+#if ENABLE_PROFILER
+        s_CreateClone.End();
+#endif
+    }
+
+    private void CreateMeshClone(int index)
+    {
+#if ENABLE_PROFILER
+        s_CreateClone.Begin();
+#endif
+        
+        MeshRenderer source = _meshRenderers[index];
+        MeshFilter sourceFilter = _meshFilters[index];
+        
+        GameObject clone = new(source.name + "_Clone")
+        {
+            layer = CLONE_LAYER
+        };
+        
+        clone.transform.SetParent(source.transform, false);
+        
+        MeshRenderer cloneRenderer = clone.AddComponent<MeshRenderer>();
+        MeshFilter cloneFilter = clone.AddComponent<MeshFilter>();
+        
+        // Basic setup
+        cloneRenderer.sharedMaterials = _meshCloneMaterials[index];
+        cloneRenderer.shadowCastingMode = ShadowCastingMode.Off;
+        cloneRenderer.probeAnchor = source.probeAnchor;
+        
+#if !UNITY_EDITOR
+        cloneRenderer.localBounds = new Bounds(source.localBounds.center, source.localBounds.size * 2f);
+#endif
+        
+        cloneFilter.sharedMesh = sourceFilter.sharedMesh;
+        
+        // Quality settings
+        cloneRenderer.motionVectorGenerationMode = MotionVectorGenerationMode.ForceNoMotion;
+        cloneRenderer.allowOcclusionWhenDynamic = false;
+
+        source.motionVectorGenerationMode = MotionVectorGenerationMode.ForceNoMotion;
+        source.allowOcclusionWhenDynamic = false;
+        
+        // Add to clone lists
+        _meshClones.Add(cloneRenderer);
+        _meshCloneFilters.Add(cloneFilter);
+        
+#if ENABLE_PROFILER
+        s_CreateClone.End();
+#endif
+    }
+    
     #endregion Initialization
 }

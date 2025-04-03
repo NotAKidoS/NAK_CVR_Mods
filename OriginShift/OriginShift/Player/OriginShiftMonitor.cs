@@ -9,35 +9,35 @@ using UnityEngine;
 using ABI_RC.Systems.Movement;
 #endif
 
-namespace NAK.OriginShift
+namespace NAK.OriginShift;
+
+[DefaultExecutionOrder(int.MaxValue)]
+public class OriginShiftMonitor : MonoBehaviour
 {
-    [DefaultExecutionOrder(int.MaxValue)]
-    public class OriginShiftMonitor : MonoBehaviour
-    {
 #if !UNITY_EDITOR
-        private PlayerSetup _playerSetup;
-        private BetterBetterCharacterController _characterController;
+    private PlayerSetup _playerSetup;
+    private BetterBetterCharacterController _characterController;
 #endif
         
-        #region Unity Events
+    #region Unity Events
 
-        private void Start()
-        {
+    private void Start()
+    {
 #if !UNITY_EDITOR
-            _playerSetup = GetComponent<PlayerSetup>();
-            _characterController = GetComponent<BetterBetterCharacterController>();
+        _playerSetup = GetComponent<PlayerSetup>();
+        _characterController = GetComponent<BetterBetterCharacterController>();
 #endif
-            OriginShiftManager.OnPostOriginShifted += OnPostOriginShifted;
-        }
+        OriginShiftManager.OnPostOriginShifted += OnPostOriginShifted;
+    }
 
-        private void OnDestroy()
-        {
+    private void OnDestroy()
+    {
             OriginShiftManager.OnPostOriginShifted -= OnPostOriginShifted;
             StopAllCoroutines();
         }
         
-        private void Update()
-        {
+    private void Update()
+    {
             // in CVR use GetPlayerPosition to account for VR offset
             Vector3 position = PlayerSetup.Instance.GetPlayerPosition();
             
@@ -56,21 +56,20 @@ namespace NAK.OriginShift
                 OriginShiftManager.Instance.ShiftOrigin(position);
         }
         
-        #endregion Unity Events
+    #endregion Unity Events
         
-        #region Origin Shift Events
+    #region Origin Shift Events
         
-        private void OnPostOriginShifted(Vector3 shift)
-        {
+    private void OnPostOriginShifted(Vector3 shift)
+    {
 #if UNITY_EDITOR
             // shift our transform back
             transform.position += shift;
 #else 
-            _characterController.OffsetBy(shift);
-            _playerSetup.OffsetAvatarMovementData(shift);
+        _characterController.OffsetBy(shift);
+        _playerSetup.OffsetAvatarMovementData(shift);
 #endif
-        }
-    
-        #endregion Origin Shift Events
     }
+    
+    #endregion Origin Shift Events
 }

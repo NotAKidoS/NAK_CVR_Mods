@@ -1,16 +1,16 @@
 ﻿using UnityEngine;
 
-namespace NAK.OriginShift.Hacks
-{
-    public class OriginShiftOcclusionCullingDisabler : MonoBehaviour
-    {
-        private Camera _camera;
-        private bool _originalCullingState;
-        
-        #region Unity Events
+namespace NAK.OriginShift.Hacks;
 
-        private void Start()
-        {
+public class OriginShiftOcclusionCullingDisabler : MonoBehaviour
+{
+    private Camera _camera;
+    private bool _originalCullingState;
+        
+    #region Unity Events
+
+    private void Start()
+    {
             _camera = GetComponent<Camera>();
             if (_camera == null)
             {
@@ -21,25 +21,24 @@ namespace NAK.OriginShift.Hacks
             _originalCullingState = _camera.useOcclusionCulling;
         }
 
-        private void Awake() // we want to execute even if the component is disabled
-        {
+    private void Awake() // we want to execute even if the component is disabled
+    {
             OriginShiftManager.OnStateChanged += OnOriginShiftStateChanged;
         }
     
-        private void OnDestroy()
-        {
+    private void OnDestroy()
+    {
             OriginShiftManager.OnStateChanged -= OnOriginShiftStateChanged;
         }
 
-        #endregion Unity Events
+    #endregion Unity Events
     
-        #region Origin Shift Events
+    #region Origin Shift Events
     
-        private void OnOriginShiftStateChanged(OriginShiftManager.OriginShiftState state)
-        {
+    private void OnOriginShiftStateChanged(OriginShiftManager.OriginShiftState state)
+    {
             _camera.useOcclusionCulling = state != OriginShiftManager.OriginShiftState.Forced && _originalCullingState;
         }
     
-        #endregion Origin Shift Events
-    }
+    #endregion Origin Shift Events
 }

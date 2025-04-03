@@ -3,23 +3,23 @@ using BTKUILib;
 using BTKUILib.UIObjects;
 using NAK.OriginShift;
 
-namespace NAK.OriginShiftMod.Integrations
-{
-    public static partial class BtkUiAddon
-    {
-        private static Page _miscTabPage;
-        private static string _miscTabElementID;
+namespace NAK.OriginShiftMod.Integrations;
 
-        public static void Initialize()
-        {
+public static partial class BtkUiAddon
+{
+    private static Page _miscTabPage;
+    private static string _miscTabElementID;
+
+    public static void Initialize()
+    {
             Prepare_Icons();
             Setup_OriginShiftTab();
         }
 
-        #region Initialization
+    #region Initialization
 
-        private static void Prepare_Icons()
-        {
+    private static void Prepare_Icons()
+    {
             QuickMenuAPI.PrepareIcon(ModSettings.ModName, "OriginShift-Icon-Active",
                 GetIconStream("OriginShift-Icon-Active.png"));
             
@@ -30,8 +30,8 @@ namespace NAK.OriginShiftMod.Integrations
                 GetIconStream("OriginShift-Icon-Forced.png"));
         }
 
-        private static void Setup_OriginShiftTab()
-        {
+    private static void Setup_OriginShiftTab()
+    {
             _miscTabPage = QuickMenuAPI.MiscTabPage;
             _miscTabElementID = _miscTabPage.ElementID;
             QuickMenuAPI.UserJoin += OnUserJoinLeave;
@@ -51,16 +51,15 @@ namespace NAK.OriginShiftMod.Integrations
             // Setup_DebugOptionsCategory(_miscTabPage);
         }
 
-        #endregion
+    #endregion
 
-        #region Player Count Display
+    #region Player Count Display
 
-        private static void OnWorldLeave()
-            => UpdateCategoryModUserCount();
+    private static void OnWorldLeave()
+        => UpdateCategoryModUserCount();
         
-        private static void OnUserJoinLeave(CVRPlayerEntity _)
-            => UpdateCategoryModUserCount();
+    private static void OnUserJoinLeave(CVRPlayerEntity _)
+        => UpdateCategoryModUserCount();
         
-        #endregion
-    }
+    #endregion
 }

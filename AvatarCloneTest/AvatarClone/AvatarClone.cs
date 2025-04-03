@@ -1,3 +1,4 @@
+﻿using NAK.AvatarCloneTest;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -5,130 +6,142 @@ namespace NAK.AvatarCloneTest;
 
 public partial class AvatarClone : MonoBehaviour
 {
+    #region Constants
+    
+    private const int LOCAL_LAYER = 8;
+    private const int CLONE_LAYER = 9;
+    
+    #endregion Constants
+
+    #region Profiler Markers
+    
+#if ENABLE_PROFILER
+    private static readonly ProfilerMarker s_CopyEnabledState = new($"{nameof(AvatarClone)}.{nameof(SyncEnabledState)}");
+    private static readonly ProfilerMarker s_CopyMaterials = new($"{nameof(AvatarClone)}.{nameof(CopyMaterialsAndProperties)}");
+    private static readonly ProfilerMarker s_CopyBlendShapes = new($"{nameof(AvatarClone)}.{nameof(CopyBlendShapes)}");
+    private static readonly ProfilerMarker s_InitializeData = new($"{nameof(AvatarClone)}.Initialize");
+    private static readonly ProfilerMarker s_UpdateExclusions = new($"{nameof(AvatarClone)}.{nameof(HandleExclusionUpdate)}");
+    private static readonly ProfilerMarker s_CollectExclusionData = new($"{nameof(AvatarClone)}.{nameof(CollectExclusionData)}");
+    private static readonly ProfilerMarker s_HandleBoneUpdates = new($"{nameof(AvatarClone)}.{nameof(UpdateSkinnedMeshBones)}");
+    private static readonly ProfilerMarker s_PreCullUpdate = new($"{nameof(AvatarClone)}.{nameof(MyOnPreCull)}");
+    private static readonly ProfilerMarker s_ConfigureShadowCasting = new($"{nameof(AvatarClone)}.{nameof(ConfigureSourceShadowCasting)}");
+    private static readonly ProfilerMarker s_ConfigureUICulling = new($"{nameof(AvatarClone)}.{nameof(ConfigureCloneUICulling)}");
+    private static readonly ProfilerMarker s_AddRenderer = new($"{nameof(AvatarClone)}.AddRenderer");
+    private static readonly ProfilerMarker s_CreateClone = new($"{nameof(AvatarClone)}.CreateClone");
+#endif
+    
+    #endregion Profiler Markers
+    
+    #region Settings
+    
+    public bool Setting_CloneMeshRenderers;
+    public bool Setting_CopyMaterials = true;
+    public bool Setting_CopyBlendShapes = true;
+    
+    #endregion Settings
+
+    #region Source Collections - Cloned Renderers
+    
+    // Skinned mesh renderers (always cloned)
+    private List<SkinnedMeshRenderer> _skinnedRenderers;
+    private List<List<float>> _blendShapeWeights;
+    
+    // Mesh renderers (optionally cloned)
+    private List<MeshRenderer> _meshRenderers;
+    private List<MeshFilter> _meshFilters;
+    
+    #endregion Source Collections - Cloned Renderers
+    
+    #region Source Collections - Non-Cloned Renderers
+    
+    // All other renderers (never cloned)
+    private List<Renderer> _otherRenderers;
+    
+    // True if source renderer should hide. False if source renderer should show.
+    // Only used for non-cloned renderers (MeshRenderers and other Renderers).
+    private bool[] _sourceShouldBeHiddenFromFPR; 
+    // Three states: On, ShadowsOnly, Off
+    private ShadowCastingMode[] _originalShadowCastingMode;
+    
+    #endregion Source Collections - Non-Cloned Renderers
+    
+    #region Clone Collections
+    
+    // Skinned mesh clones
+    private List<SkinnedMeshRenderer> _skinnedClones;
+    private List<Material[]> _skinnedCloneMaterials;
+    private List<Material[]> _skinnedCloneCullingMaterials;
+    
+    // Mesh clones (optional)
+    private List<MeshRenderer> _meshClones;
+    private List<MeshFilter> _meshCloneFilters;
+    private List<Material[]> _meshCloneMaterials;
+    private List<Material[]> _meshCloneCullingMaterials;
+    
+    #endregion Clone Collections
+    
+    #region Shared Resources
+    
+    private List<Material> _materialWorkingList; // Used for GetSharedMaterials
+    private MaterialPropertyBlock _propertyBlock;
+    
+    #endregion Shared Resources
+
+    #region State
+    
+    private bool _sourcesSetForShadowCasting;
+    private bool _clonesSetForUiCulling;
+    private bool[] _rendererActiveStates;
+    
+    #endregion State
+    
     #region Unity Events
     
     private void Start()
     {
-        InitializeCollections();
-        InitializeRenderers();
-        SetupMaterialsAndBlendShapes();
-        CreateClones();
+        Setting_CloneMeshRenderers = AvatarCloneTestMod.EntryCloneMeshRenderers.Value;
         
+        InitializeCollections();
+        CollectRenderers();
+        CreateClones();
+        AddExclusionToHeadIfNeeded();
         InitializeExclusions();
         SetupMagicaClothSupport();
 
-        Camera.onPreCull += MyOnPreRender;
-    }
+        // bool animatesClone = transform.Find("[ExplicitlyAnimatesVisualClones]") != null;
+        // Setting_CopyMaterials = !animatesClone;
+        // Setting_CopyBlendShapes = !animatesClone;
+        // Animator animator = GetComponent<Animator>();
+        // if (animator && animatesClone) animator.Rebind();
 
-    private void OnDestroy()
-    {
-        Camera.onPreCull -= MyOnPreRender;
-    }
-
-    private void LateUpdate()
-    {
-        // Update all renderers with basic properties (Materials & BlendShapes)
-        UpdateStandardRenderers();
-        UpdateSkinnedRenderers();
-        
-        // Additional pass for renderers needing extra checks (Shared Mesh & Bone Changes)
-        UpdateStandardRenderersWithChecks();
-        UpdateSkinnedRenderersWithChecks();
+        // Likely a Unity bug with where we can touch shadowCastingMode & forceRenderingOff
+#if !UNITY_EDITOR
+        Camera.onPreCull += MyOnPreCull;
+#else 
+        Camera.onPreRender += MyOnPreCull;
+#endif
     }
     
-    private void MyOnPreRender(Camera cam)
+    private void LateUpdate()
     {
-        s_MyOnPreRender.Begin();
+        SyncEnabledState();
         
-        bool isOurUiCamera = IsUIInternalCamera(cam);
-        bool rendersOurPlayerLayer = CameraRendersPlayerLocalLayer(cam);
-        bool rendersOurCloneLayer = CameraRendersPlayerCloneLayer(cam);
+        if (Setting_CopyMaterials && AvatarCloneTestMod.EntryCopyMaterials.Value)
+            SyncMaterials();
         
-        // Renders both player layers.
-        // PlayerLocal will now act as a shadow caster, while PlayerClone will act as the actual head-hidden renderer.
-        bool rendersBothPlayerLayers = rendersOurPlayerLayer && rendersOurCloneLayer;
-        if (!_shadowsOnlyActive && rendersBothPlayerLayers)
-        {
-            s_SetShadowsOnly.Begin();
-
-            int sourceCount = _allSourceRenderers.Count;
-            var sourceRenderers = _allSourceRenderers;
-            for (int i = 0; i < sourceCount; i++)
-            {
-                Renderer renderer = sourceRenderers[i];
-                if (!IsRendererValid(renderer)) continue;
-                
-                bool shouldRender = renderer.shadowCastingMode != ShadowCastingMode.Off;
-                _originallyWasEnabled[i] = renderer.enabled;
-                _originallyHadShadows[i] = shouldRender;
-                renderer.shadowCastingMode = ShadowCastingMode.ShadowsOnly;
-                if (renderer.forceRenderingOff == shouldRender) renderer.forceRenderingOff = !shouldRender; // TODO: Eval if check is needed
-            }
-            _shadowsOnlyActive = true;
-
-            s_SetShadowsOnly.End();
-        }
-        else if (_shadowsOnlyActive && !rendersBothPlayerLayers)
-        {
-            s_UndoShadowsOnly.Begin();
-
-            int sourceCount = _allSourceRenderers.Count;
-            var sourceRenderers = _allSourceRenderers;
-            for (int i = 0; i < sourceCount; i++)
-            {
-                Renderer renderer = sourceRenderers[i];
-                if (!IsRendererValid(renderer)) continue;
-                
-                renderer.shadowCastingMode = _originallyHadShadows[i] ? ShadowCastingMode.On : ShadowCastingMode.Off;
-                if (renderer.forceRenderingOff == _originallyWasEnabled[i]) renderer.forceRenderingOff = !_originallyWasEnabled[i]; // TODO: Eval if check is needed
-            }
-            _shadowsOnlyActive = false;
-
-            s_UndoShadowsOnly.End();
-        }
-        
-        // Handle UI culling material changes
-        if (isOurUiCamera && !_uiCullingActive && rendersOurCloneLayer)
-        {
-            s_SetUiCulling.Begin();
-
-            int standardCount = _standardRenderers.Count;
-            var standardClones = _standardClones;
-            var cullingMaterials = _cullingMaterials;
-            for (int i = 0; i < standardCount; i++) 
-                standardClones[i].sharedMaterials = cullingMaterials[i];
-            
-            int skinnedCount = _skinnedRenderers.Count;
-            var skinnedClones = _skinnedClones;
-            for (int i = 0; i < skinnedCount; i++)
-                skinnedClones[i].sharedMaterials = cullingMaterials[i + standardCount];
-            
-            _uiCullingActive = true;
-
-            s_SetUiCulling.End();
-        }
-        else if (!isOurUiCamera && _uiCullingActive)
-        {
-            s_UndoUiCulling.Begin();
-
-            int standardCount = _standardRenderers.Count;
-            var standardClones = _standardClones;
-            var localMaterials = _localMaterials;
-            for (int i = 0; i < standardCount; i++) 
-                standardClones[i].sharedMaterials = localMaterials[i];
-            
-            int skinnedCount = _skinnedRenderers.Count;
-            var skinnedClones = _skinnedClones;
-            for (int i = 0; i < skinnedCount; i++)
-                skinnedClones[i].sharedMaterials = localMaterials[i + standardCount];
-            
-            _uiCullingActive = false;
-
-            s_UndoUiCulling.End();
-        }
-        
-        s_MyOnPreRender.End();
+        if (Setting_CopyBlendShapes && AvatarCloneTestMod.EntryCopyBlendShapes.Value)
+            SyncBlendShapes();
     }
-
+    
+    private void OnDestroy()
+    {
+        // Likely a Unity bug with where we can touch shadowCastingMode & forceRenderingOff
+#if !UNITY_EDITOR
+        Camera.onPreCull -= MyOnPreCull;
+#else
+        Camera.onPreRender -= MyOnPreCull;
+#endif
+    }
+    
     #endregion Unity Events
 }

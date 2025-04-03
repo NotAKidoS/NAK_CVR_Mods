@@ -39,7 +39,6 @@ internal static class CameraLogic
             
             if (_state) _storedCamMask = _desktopCam.cullingMask;
             _desktopCam.cullingMask = _state ? 0 : _storedCamMask;
-            _uiCam.cullingMask = _state ? _uiCam.cullingMask & ~(1 << CVRLayers.PlayerClone) : _uiCam.cullingMask | (1 << CVRLayers.PlayerClone);
             _thirdPersonCam.gameObject.SetActive(_state);
         }
     }
@@ -73,6 +72,9 @@ internal static class CameraLogic
         
         ThirdPerson.Logger.Msg("Copying active camera settings & components.");
         CVRTools.CopyToDestCam(activePlayerCam, _thirdPersonCam, true);
+        
+        // Remove PlayerClone
+        _thirdPersonCam.cullingMask &= ~(1 << CVRLayers.PlayerClone);
 
         if (!CheckIsRestricted()) 
             return;

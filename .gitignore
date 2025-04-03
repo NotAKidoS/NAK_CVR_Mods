@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# NAK
+.Experimental/
+
 # Nstrip & ManagedLibs stuff
 NStrip.exe
 .ManagedLibs/*.dll

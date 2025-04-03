@@ -2,17 +2,21 @@
 using ABI.Scripting.CVRSTL.Client;
 using System.Diagnostics;
 using MTJobSystem;
+using UnityEngine;
 
 namespace NAK.CVRLuaToolsExtension;
 
 public static class CVRLuaClientBehaviourExtensions
 {
     internal static readonly Dictionary<CVRLuaClientBehaviour, bool> _isRestarting = new();
+    private static string PersistentDataPath;
 
     #region Public Methods
     
     public static void Restart(this CVRLuaClientBehaviour behaviour)
     {
+        PersistentDataPath ??= Application.persistentDataPath; // needs to be set on main
+        
         if (_isRestarting.TryGetValue(behaviour, out bool isRestarting) && isRestarting)
         {
             CVRLuaToolsExtensionMod.Logger.Warning($"Restart is already in progress for {behaviour.ScriptName}.");
@@ -105,7 +109,7 @@ public static class CVRLuaClientBehaviourExtensions
         behaviour.LogInfo("[CVRLuaToolsExtension] Resetting script...\n");
 
         behaviour.script = null;
-        behaviour.script = LuaScriptFactory.ForLuaBehaviour(behaviour, boundObjectEntries, behaviour.gameObject, behaviour.transform);
+        behaviour.script = LuaScriptFactory.ForLuaBehaviour(behaviour, boundObjectEntries, behaviour.gameObject, behaviour.transform, PersistentDataPath);
                 
         behaviour.InitTimerIfNeeded(); // only null if crashed prior
         behaviour.script.AttachDebugger(behaviour.timer); // reattach the debugger
