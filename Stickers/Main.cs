@@ -39,12 +39,15 @@ public class StickerMod : MelonMod
         if (StickerSystem.Instance == null) 
             return;
 
-        if (Input.mouseScrollDelta.y != 0f
-            && Cursor.lockState == CursorLockMode.Locked // prevent scrolling while in menus
-            && !CVRInputManager.Instance.zoom) // prevent scrolling while using scroll zoom
-            StickerSystem.Instance.SelectedStickerSlot += (int)Input.mouseScrollDelta.y;
+        if (StickerSystem.Instance.IsInStickerMode)
+        {
+            if (Input.mouseScrollDelta.y != 0f
+                && Cursor.lockState == CursorLockMode.Locked // prevent scrolling while in menus
+                && !CVRInputManager.Instance.zoom) // prevent scrolling while using scroll zoom
+                StickerSystem.Instance.SelectedStickerSlot += (int)Input.mouseScrollDelta.y;
         
-        StickerSystem.Instance.UpdateStickerPreview(); // flashy flash
+            StickerSystem.Instance.UpdateStickerPreview(); // flashy flash
+        }
         
         if (!ModSettings.Entry_UsePlaceBinding.Value) 
             return;
