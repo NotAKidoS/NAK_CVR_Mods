@@ -1,8 +1,8 @@
 {
   "_id": 232,
   "name": "Stickers",
-  "modversion": "1.0.8",
-  "gameversion": "2024r177",
+  "modversion": "1.0.9",
+  "gameversion": "2025r179",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS, SketchFoxsky",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r41/Stickers.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/Stickers.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/Stickers/",
-  "changelog": "- Added world restriction via `[DisableStickers]` GameObject (thx Sketch).\n- Added sticker placement preview.\n- Fixed stickers being hit by VR switch shader replacement.\n- Fixed Desktop Sticker placement bind firing when a text field was focused.\n- **This version is not backwards compatible with previous versions over network.**",
+  "changelog": "- Fixes for 2025r179",
   "embedcolor": "#f61963"
 }
