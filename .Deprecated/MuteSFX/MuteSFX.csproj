@@ -5,7 +5,7 @@
     <None Remove="SFX\sfx_unmute.wav" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SFX\sfx_mute.wav" />
-    <EmbeddedResource Include="SFX\sfx_unmute.wav" />
+    <Content Include="SFX\sfx_mute.wav" />
+    <Content Include="SFX\sfx_unmute.wav" />
   </ItemGroup>
 </Project>
