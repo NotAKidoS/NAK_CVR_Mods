@@ -1,8 +1,8 @@
 {
-  "_id": -1,
+  "_id": 226,
   "name": "AvatarQueueSystemTweaks",
-  "modversion": "1.0.0",
-  "gameversion": "2024r175",
+  "modversion": "1.0.1",
+  "gameversion": "2025r179",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r36/AvatarQueueSystemTweaks.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/AvatarQueueSystemTweaks.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AvatarQueueSystemTweaks/",
-  "changelog": "- Initial Release",
+  "changelog": "- Recompiled for 2025r179",
   "embedcolor": "#f61963"
 }
