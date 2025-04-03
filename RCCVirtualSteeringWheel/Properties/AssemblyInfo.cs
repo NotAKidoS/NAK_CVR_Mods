@@ -28,6 +28,6 @@ using NAK.RCCVirtualSteeringWheel.Properties;
 namespace NAK.RCCVirtualSteeringWheel.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.3";
+    public const string Version = "1.0.4";
     public const string Author = "NotAKidoS";
 }
