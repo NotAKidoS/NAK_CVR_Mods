@@ -1,8 +1,8 @@
 {
   "_id": 162,
   "name": "SmootherRay",
-  "modversion": "1.0.5",
-  "gameversion": "2024r176",
+  "modversion": "1.0.6",
+  "gameversion": "2025r177",
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r40/SmootherRay.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/SmootherRay.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmootherRay/",
-  "changelog": "- Fixed for 2024r176.\n- Rebranded to SmootherRayer due to native implementation now existing and sucking.",
+  "changelog": "- Fixes for 2025r179",
   "embedcolor": "#f61963"
 }

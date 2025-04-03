@@ -51,7 +51,7 @@ public class SmootherRayMod : MelonMod
     {
         Logger = LoggerInstance;
         ApplyPatches(typeof(PlayerSetup_Patches));
-        ApplyPatches(typeof(ControllerRay_Patches));
+        ApplyPatches(typeof(ControllerSmoothing_Patches));
     }
 
     private void ApplyPatches(Type type)
@@ -82,12 +82,12 @@ public class SmootherRayMod : MelonMod
         }
     }
 
-    internal static class ControllerRay_Patches
+    internal static class ControllerSmoothing_Patches
     {
         // SmootherRay
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(ControllerRay), nameof(ControllerRay.SmoothRay))]
-        private static bool Prefix_ControllerRay_SmoothRay(ref ControllerRay __instance)
+        [HarmonyPatch(typeof(ControllerSmoothing), nameof(ControllerSmoothing.OnAppliedPoses))]
+        private static bool Prefix_ControllerSmoothing_OnAppliedPoses(ref ControllerSmoothing __instance)
             => !EntryEnabled.Value; // SmootherRay method enforces identity local pos when disabled, so we skip it
     }
     
