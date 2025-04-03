@@ -39,10 +39,8 @@ namespace NAK.ShareBubbles.Impl
                 Name = infoResponse.Name,
                 ImageUrl = infoResponse.ImageUrl,
                 AuthorId = infoResponse.User.Id,
-                IsPublic = infoResponse.Published,
-                
-                // Permit access if Public, Owned, or (CANNOT DO PRIVATE & SHARED CAUSE API DOESNT GIVE)
-                IsPermitted = infoResponse.Published || infoResponse.User.Id == MetaPort.Instance.ownerId,
+                IsPublic = infoResponse.IsPublished,
+                IsPermitted = infoResponse.Permitted,
             };
 
             downloadedTexture = await ImageCache.GetImageAsync(details.ImageUrl);
