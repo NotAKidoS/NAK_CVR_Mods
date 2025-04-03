@@ -53,6 +53,7 @@ public class SteeringWheelRoot : MonoBehaviour
             BoxCollider collider = pickup.AddComponent<BoxCollider>();
             collider.size = steeringWheelBounds.size;
             collider.center = steeringWheelBounds.center;
+            collider.isTrigger = true;
 
             wheelPickup = pickup.AddComponent<SteeringWheelPickup>();
             wheelPickup.root = wheel;
