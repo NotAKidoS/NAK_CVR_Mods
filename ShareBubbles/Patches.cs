@@ -35,7 +35,7 @@ internal static class PlayerSetup_Patches
 internal static class ControllerRay_Patches
 {
      [HarmonyPostfix]
-     [HarmonyPatch(typeof(ControllerRay), nameof(ControllerRay.DeleteSpawnable))]
+     [HarmonyPatch(typeof(ControllerRay), nameof(ControllerRay.HandleSpawnableClicked))]
      public static void Postfix_ControllerRay_DeleteSpawnable(ref ControllerRay __instance)
      {
          if (!__instance._interactDown)
