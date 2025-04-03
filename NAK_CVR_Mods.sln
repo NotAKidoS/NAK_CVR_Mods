@@ -7,11 +7,12 @@ EndProject
 EndProject
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathCamDisabler", "PathCamDisabler\PathCamDisabler.csproj", "{98169FD2-5CEB-46D1-A320-D7E06F82C9E0}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortableCameraAdditions", "PortableCameraAdditions\PortableCameraAdditions.csproj", "{C4DAFE9D-C79B-4417-9B7D-B7327999DA4C}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropUndoButton", "PropUndoButton\PropUndoButton.csproj", "{FBFDB717-F81E-4C06-ACF9-A0F3FFDCDE00}"
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThirdPerson", "ThirdPerson\ThirdPerson.csproj", "{675CEC0E-3E8A-4970-98EA-9B79277A7252}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MuteSFX", "MuteSFX\MuteSFX.csproj", "{77D222FC-4AEC-4672-A87A-B860B4C39E17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortableCameraAdditions", "PortableCameraAdditions\PortableCameraAdditions.csproj", "{C4DAFE9D-C79B-4417-9B7D-B7327999DA4C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropUndoButton", "PropUndoButton\PropUndoButton.csproj", "{FBFDB717-F81E-4C06-ACF9-A0F3FFDCDE00}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThirdPerson", "ThirdPerson\ThirdPerson.csproj", "{675CEC0E-3E8A-4970-98EA-9B79277A7252}"
 EndProject
 EndProject
 EndProject
@@ -32,8 +33,11 @@ EndProject
 EndProject
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeepVelocityOnExitFlight", "KeepVelocityOnExitFlight\KeepVelocityOnExitFlight.csproj", "{0BB3D187-BBBA-4C58-B246-102342BE5E8C}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASTExtension", "ASTExtension\ASTExtension.csproj", "{6580AA87-6A95-438E-A5D3-70E583CCD77B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarQueueSystemTweaks", "AvatarQueueSystemTweaks\AvatarQueueSystemTweaks.csproj", "{D178E422-283B-4FB3-89A6-AA4FB9F87E2F}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomSpawnPoint", "CustomSpawnPoint\CustomSpawnPoint.csproj", "{51CA34CA-7684-4819-AC9E-89DFAD63E9AB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stickers", "Stickers\Stickers.csproj", "{E5F54B3E-A676-4DD5-A6DB-73AFA54BEC5E}"
@@ -97,10 +101,6 @@ Global
 		{EE552804-30B1-49CF-BBDE-3B312895AFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE552804-30B1-49CF-BBDE-3B312895AFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE552804-30B1-49CF-BBDE-3B312895AFF7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{77D222FC-4AEC-4672-A87A-B860B4C39E17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77D222FC-4AEC-4672-A87A-B860B4C39E17}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77D222FC-4AEC-4672-A87A-B860B4C39E17}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77D222FC-4AEC-4672-A87A-B860B4C39E17}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
