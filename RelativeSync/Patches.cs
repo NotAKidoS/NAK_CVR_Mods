@@ -6,6 +6,7 @@ using ABI.CCK.Components;
 using HarmonyLib;
 using NAK.RelativeSync.Components;
 using NAK.RelativeSync.Networking;
+using UnityEngine;
 
 namespace NAK.RelativeSync.Patches;
 
@@ -26,20 +27,6 @@ internal static class PuppetMasterPatches
     private static void Postfix_PuppetMaster_Start(ref PuppetMaster __instance)
     {
         __instance.AddComponentIfMissing<RelativeSyncController>();
-    }
-
-    private static bool ShouldProcessAvatarVisibility { get; set; }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(PuppetMaster), nameof(PuppetMaster.ProcessAvatarVisibility))]
-    private static bool Prefix_PuppetMaster_ProcessAvatarVisibility()
-        => ShouldProcessAvatarVisibility;
-
-    public static void ForceProcessAvatarVisibility(PuppetMaster puppetMaster)
-    {
-        ShouldProcessAvatarVisibility = true;
-        puppetMaster.ProcessAvatarVisibility();
-        ShouldProcessAvatarVisibility = false;
     }
 }
 
@@ -104,16 +91,18 @@ internal static class NetIKController_Patches
     {
         if (!RelativeSyncManager.NetIkControllersToRelativeSyncControllers.TryGetValue(__instance,
                 out RelativeSyncController syncController))
-        {
-            // Process visibility only after applying network IK
-            PuppetMasterPatches.ForceProcessAvatarVisibility(__instance._puppetMaster);
             return;
-        }
         
         // Apply relative sync after the network IK has been applied
         syncController.OnPostNetIkControllerLateUpdate();
-        
-        // Process visibility after we have moved the remote player
-        PuppetMasterPatches.ForceProcessAvatarVisibility(__instance._puppetMaster);
+    }
+    
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(NetIKController), nameof(NetIKController.GetLocalPlayerPosition))]
+    private static bool Prefix_NetIKController_GetLocalPlayerPosition(ref NetIKController __instance, ref Vector3 __result)
+    {
+        // why is the original method so bad
+        __result = PlayerSetup.Instance.activeCam.transform.position;
+        return false;
     }
 }

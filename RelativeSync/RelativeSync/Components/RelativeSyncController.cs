@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core.Player;
+using ABI_RC.Systems.Movement;
 using UnityEngine;
 
 namespace NAK.RelativeSync.Components;
@@ -62,7 +63,7 @@ public class RelativeSyncController : MonoBehaviour
         Animator animator = puppetMaster._animator;
         if (animator == null)
             return;
-
+        
         Transform avatarTransform = animator.transform;
         Transform hipTrans = (animator.avatar != null && animator.isHuman)
             ? animator.GetBoneTransform(HumanBodyBones.Hips) : null;
@@ -97,6 +98,11 @@ public class RelativeSyncController : MonoBehaviour
             hipTrans.position = transform.position + transform.rotation * relativeHipPos;
             hipTrans.rotation = transform.rotation * relativeHipRot;
         }
+        
+        // Reprocess the root distance so we don't fuck avatar distance hider
+        NetIKController netIkController = puppetMaster.netIkController;
+        netIkController._rootDistance = Vector3.Distance((netIkController._collider.transform.position + netIkController._collider.center), 
+                                            netIkController.GetLocalPlayerPosition()) - (netIkController._collider.radius + BetterBetterCharacterController.Instance.Radius);
     }
 
     private void ApplyRelativeRotation(Transform avatarTransform, Transform hipTransform, float lerp)
