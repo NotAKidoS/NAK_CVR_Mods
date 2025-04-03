@@ -2,12 +2,10 @@
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Networking.Jobs;
 using ABI_RC.Core.Player;
-using ABI_RC.Systems.Movement;
 using ABI.CCK.Components;
 using HarmonyLib;
 using NAK.RelativeSync.Components;
 using NAK.RelativeSync.Networking;
-using UnityEngine;
 
 namespace NAK.RelativeSync.Patches;
 
@@ -19,7 +17,6 @@ internal static class PlayerSetupPatches
     {
         __instance.AddComponentIfMissing<RelativeSyncMonitor>();
     }
-
 }
 
 internal static class PuppetMasterPatches
@@ -29,6 +26,20 @@ internal static class PuppetMasterPatches
     private static void Postfix_PuppetMaster_Start(ref PuppetMaster __instance)
     {
         __instance.AddComponentIfMissing<RelativeSyncController>();
+    }
+
+    private static bool ShouldProcessAvatarVisibility { get; set; }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(PuppetMaster), nameof(PuppetMaster.ProcessAvatarVisibility))]
+    private static bool Prefix_PuppetMaster_ProcessAvatarVisibility()
+        => ShouldProcessAvatarVisibility;
+
+    public static void ForceProcessAvatarVisibility(PuppetMaster puppetMaster)
+    {
+        ShouldProcessAvatarVisibility = true;
+        puppetMaster.ProcessAvatarVisibility();
+        ShouldProcessAvatarVisibility = false;
     }
 }
 
@@ -85,29 +96,24 @@ internal static class CVRSpawnablePatches
     }
 }
 
-internal static class BetterBetterCharacterControllerPatches
+internal static class NetIKController_Patches
 {
-    private static bool _noInterpolation;
-    internal static bool NoInterpolation
-    {
-        get => _noInterpolation;
-        set
-        {
-            _noInterpolation = value;
-            if (_rigidbody == null) return;
-            _rigidbody.interpolation = value ? RigidbodyInterpolation.None : _initialInterpolation;
-        }
-    }
-    
-    private static Rigidbody _rigidbody;
-    private static RigidbodyInterpolation _initialInterpolation;
-    
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(BetterBetterCharacterController), nameof(BetterBetterCharacterController.Start))]
-    private static void Postfix_BetterBetterCharacterController_Update(ref BetterBetterCharacterController __instance)
+    [HarmonyPatch(typeof(NetIKController), nameof(NetIKController.LateUpdate))]
+    private static void Postfix_NetIKController_LateUpdate(ref NetIKController __instance)
     {
-        _rigidbody = __instance.GetComponent<Rigidbody>();
-        _initialInterpolation = _rigidbody.interpolation;
-        NoInterpolation = _noInterpolation; // get initial value as patch runs later than settings init
+        if (!RelativeSyncManager.NetIkControllersToRelativeSyncControllers.TryGetValue(__instance,
+                out RelativeSyncController syncController))
+        {
+            // Process visibility only after applying network IK
+            PuppetMasterPatches.ForceProcessAvatarVisibility(__instance._puppetMaster);
+            return;
+        }
+        
+        // Apply relative sync after the network IK has been applied
+        syncController.OnPostNetIkControllerLateUpdate();
+        
+        // Process visibility after we have moved the remote player
+        PuppetMasterPatches.ForceProcessAvatarVisibility(__instance._puppetMaster);
     }
 }

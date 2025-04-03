@@ -23,11 +23,7 @@ internal static class ModSettings
     private static readonly MelonPreferences_Entry<bool> ExpSyncedObjectHack =
         Category.CreateEntry("ExpSyncedObjectHack", true,
             "Exp Spawnable Sync Fix", description: "Forces CVRSpawnable to update position in FixedUpdate. May help reduce local jitter on synced movement parents.");
-    
-    private static readonly MelonPreferences_Entry<bool> ExpNoInterpolationOnBBCC =
-        Category.CreateEntry("ExpNoInterpolationOnBBCC", true,
-            "Exp Disable Interpolation on BBCC", description: "Disable interpolation on Better Better Character Controller. May help reduce local jitter on synced movement parents.");
-    
+
     #endregion Melon Preferences
     
     internal static void Initialize()
@@ -43,6 +39,5 @@ internal static class ModSettings
         ModNetwork.Debug_NetworkInbound = DebugLogInbound.Value;
         ModNetwork.Debug_NetworkOutbound = DebugLogOutbound.Value;
         Patches.CVRSpawnablePatches.UseHack = ExpSyncedObjectHack.Value;
-        Patches.BetterBetterCharacterControllerPatches.NoInterpolation = ExpNoInterpolationOnBBCC.Value;
     }
 }

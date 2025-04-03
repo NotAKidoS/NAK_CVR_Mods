@@ -11,6 +11,7 @@ public static class RelativeSyncManager
     
     public static readonly Dictionary<int, RelativeSyncMarker> RelativeSyncTransforms = new();
     public static readonly Dictionary<string, RelativeSyncController> RelativeSyncControllers = new();
+    public static readonly Dictionary<NetIKController, RelativeSyncController> NetIkControllersToRelativeSyncControllers = new();
 
     public static void ApplyRelativeSync(string userId, int target, Vector3 position, Vector3 rotation)
     {

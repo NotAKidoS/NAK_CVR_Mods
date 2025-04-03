@@ -26,14 +26,29 @@ public class RelativeSyncController : MonoBehaviour
 
         _userId = puppetMaster._playerDescriptor.ownerId;
         RelativeSyncManager.RelativeSyncControllers.Add(_userId, this);
+        RelativeSyncManager.NetIkControllersToRelativeSyncControllers.Add(puppetMaster.netIkController, this);
     }
 
     private void OnDestroy()
     {
         RelativeSyncManager.RelativeSyncControllers.Remove(_userId);
+
+        if (puppetMaster == null
+            || puppetMaster.netIkController == null)
+        {
+            // remove by value ?
+            foreach (var kvp in RelativeSyncManager.NetIkControllersToRelativeSyncControllers)
+            {
+                if (kvp.Value != this) continue;
+                RelativeSyncManager.NetIkControllersToRelativeSyncControllers.Remove(kvp.Key);
+                break;
+            }
+            return;
+        }
+        RelativeSyncManager.NetIkControllersToRelativeSyncControllers.Remove(puppetMaster.netIkController);
     }
 
-    private void LateUpdate()
+    internal void OnPostNetIkControllerLateUpdate()
     {
         // if (puppetMaster._isHidden)
         //     return;

@@ -17,10 +17,7 @@ public class RelativeSyncMod : MelonMod
         
         // Experimental sync hack
         ApplyPatches(typeof(CVRSpawnablePatches));
-        
-        // Experimental no interpolation on Better Better Character Controller
-        ApplyPatches(typeof(BetterBetterCharacterControllerPatches));
-        
+
         // Send relative sync update after network root data update
         ApplyPatches(typeof(NetworkRootDataUpdatePatches));
         
@@ -31,6 +28,9 @@ public class RelativeSyncMod : MelonMod
         // Add components if missing (for relative sync markers)
         ApplyPatches(typeof(CVRSeatPatches));
         ApplyPatches(typeof(CVRMovementParentPatches));
+        
+        // So we run after the client moves the remote player
+        ApplyPatches(typeof(NetIKController_Patches));
     }
     
     private void ApplyPatches(Type type)
