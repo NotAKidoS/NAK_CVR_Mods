@@ -2,8 +2,8 @@
   {
     "_id": 16,
     "name": "ThirdPerson",
-    "modversion": "1.0.9",
-    "gameversion": "2024r175",
+    "modversion": "1.1.1",
+    "gameversion": "2025r179",
     "loaderversion": "0.6.1",
     "modtype": "Mod",
     "author": "Davi & NotAKidoS",
@@ -14,9 +14,9 @@
       "third person"
     ],
     "requirements": [],
-    "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r26/ThirdPerson.dll",
+    "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Fixed an issue where VR Switching without using ThirdPerson prior would incorrectly set the Desktop camera culling mask to 0\n- Fixed an NRE when checking CVRWorld zoom rule when no CVRWorld instance was found\n- Prevented head hiding from persisting into third person while Avatar Overrender Ui is enabled",
+    "changelog": "- Recompiled for 2025r179",
     "embedcolor": "#F61961"
   }
 ]

@@ -4,7 +4,6 @@ using MelonLoader;
 using System.Reflection;
 using static NAK.ThirdPerson.CameraLogic;
 using ABI_RC.Core;
-using ABI_RC.Core.Player.TransformHider;
 
 namespace NAK.ThirdPerson;
 
