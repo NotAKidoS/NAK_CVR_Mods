@@ -3,117 +3,61 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CVRGizmos", "CVRGizmos\CVRGizmos.csproj", "{CF9BC79E-4FB6-429A-8C19-DF31F040BD4A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FuckToes", "FuckToes\FuckToes.csproj", "{79B2A7C4-348D-4A8E-94D1-BA22FDD5FEED}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GestureLock", "GestureLock\GestureLock.csproj", "{45A65AEB-4BFC-4E47-B181-BBB43BD81283}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PathCamDisabler", "PathCamDisabler\PathCamDisabler.csproj", "{98169FD2-5CEB-46D1-A320-D7E06F82C9E0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PortableCameraAdditions", "PortableCameraAdditions\PortableCameraAdditions.csproj", "{C4DAFE9D-C79B-4417-9B7D-B7327999DA4C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropUndoButton", "PropUndoButton\PropUndoButton.csproj", "{FBFDB717-F81E-4C06-ACF9-A0F3FFDCDE00}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ThirdPerson", "ThirdPerson\ThirdPerson.csproj", "{675CEC0E-3E8A-4970-98EA-9B79277A7252}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FOVAdjustment", "FOVAdjustment\FOVAdjustment.csproj", "{EE552804-30B1-49CF-BBDE-3B312895AFF7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MuteSFX", "MuteSFX\MuteSFX.csproj", "{77D222FC-4AEC-4672-A87A-B860B4C39E17}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBoxExtensions", "ChatBoxExtensions\ChatBoxExtensions.csproj", "{0E1DD746-33A1-4179-AE70-8FB83AC40ABC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhysicsGunMod", "PhysicsGunMod\PhysicsGunMod.csproj", "{F94DDB73-9041-4F5C-AD43-6960701E8417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nevermind", "Nevermind\Nevermind.csproj", "{AC4857DD-F6D9-436D-A3EE-D148A518E642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShadowCloneFallback", "ShadowCloneFallback\ShadowCloneFallback.csproj", "{69AF3C10-1BB1-4746-B697-B5A81D78C8D9}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StopClosingMyMenuOnWorldLoad", "StopClosingMyMenuOnWorldLoad\StopClosingMyMenuOnWorldLoad.csproj", "{9FA83514-13F8-412C-9790-C2B750E0E7E7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelativeSync", "RelativeSync\RelativeSync.csproj", "{B48C8F19-9451-4EE2-999F-82C0033CDE2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptingSpoofer", "ScriptingSpoofer\ScriptingSpoofer.csproj", "{6B4396C7-B451-4FFD-87B6-3ED8377AC308}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaTTS", "LuaTTS\LuaTTS.csproj", "{24A069F4-4D69-4ABD-AA16-77765469245B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LazyPrune", "LazyPrune\LazyPrune.csproj", "{8FA6D481-5801-4E4C-822E-DE561155D22B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReconnectionSystemFix", "ReconnectionSystemFix\ReconnectionSystemFix.csproj", "{05C427DD-1261-4AAD-B316-A551FC126F2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AASDefaultProfileFix", "AASDefaultProfileFix\AASDefaultProfileFix.csproj", "{C6794B18-E785-4F91-A517-3A2A8006E008}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OriginShift", "OriginShift\OriginShift.csproj", "{F381F604-9C16-4870-AD49-4BD7CA3F36DC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScrollFlight", "ScrollFlight\ScrollFlight.csproj", "{1B5D7DCB-01A4-4988-8B25-211948AEED76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portals", "Portals\Portals.csproj", "{BE9629C2-8461-481C-B267-1B8A1805DCD7}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PropLoadingHexagon", "PropLoadingHexagon\PropLoadingHexagon.csproj", "{642A2BC7-C027-4F8F-969C-EF0F867936FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IKSimulatedRootAngleFix", "IKSimulatedRootAngleFix\IKSimulatedRootAngleFix.csproj", "{D11214B0-94FE-4008-8D1B-3DC8614466B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DropPropTweak", "DropPropTweak\DropPropTweak.csproj", "{2CC1F7C6-A953-4008-8C10-C7592EB401E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VisualCloneFix", "VisualCloneFix\VisualCloneFix.csproj", "{39915C4C-B555-4CB9-890F-26DE1388BC2E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InteractionTest", "InteractionTest\InteractionTest.csproj", "{7C675E64-0A2D-4B34-B6D1-5D6AA369A520}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeepVelocityOnExitFlight", "KeepVelocityOnExitFlight\KeepVelocityOnExitFlight.csproj", "{0BB3D187-BBBA-4C58-B246-102342BE5E8C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASTExtension", "ASTExtension\ASTExtension.csproj", "{6580AA87-6A95-438E-A5D3-70E583CCD77B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarQueueSystemTweaks", "AvatarQueueSystemTweaks\AvatarQueueSystemTweaks.csproj", "{D178E422-283B-4FB3-89A6-AA4FB9F87E2F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomSpawnPoint", "CustomSpawnPoint\CustomSpawnPoint.csproj", "{51CA34CA-7684-4819-AC9E-89DFAD63E9AB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVRLuaToolsExtension", "CVRLuaToolsExtension\CVRLuaToolsExtension.csproj", "{FE6BA6EC-2C11-49E1-A2FB-13F2A1C9E7F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stickers", "Stickers\Stickers.csproj", "{E5F54B3E-A676-4DD5-A6DB-73AFA54BEC5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartReticle", "SmartReticle\SmartReticle.csproj", "{3C992D0C-9729-438E-800C-496B7EFFFB25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhereAmIPointing", "WhereAmIPointing\WhereAmIPointing.csproj", "{E285BCC9-D953-4066-8FA2-97EA28EB348E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarScaleMod", "AvatarScaleMod\AvatarScaleMod.csproj", "{A38E687F-8B6B-499E-ABC9-BD95C53DD391}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmootherRay", "SmootherRay\SmootherRay.csproj", "{99F9D60D-9A2D-4DBE-AA52-13D8A0838696}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaNetworkVariables", "LuaNetworkVariables\LuaNetworkVariables.csproj", "{A3D97D1A-3099-49C5-85AD-D8C79CC5FDE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SearchWithSpacesFix", "SearchWithSpacesFix\SearchWithSpacesFix.csproj", "{0640B2BF-1EF5-4FFE-A144-0368748FC48B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ComponentMonitor", "ComponentMonitor\ComponentMonitor.csproj", "{FC91FFFE-1E0A-4F59-8802-BFF99152AD07}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShareBubbles", "ShareBubbles\ShareBubbles.csproj", "{ADD6205B-67A4-4BA8-8BED-DF7D0E857A6A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MutualMute", "MutualMute\MutualMute.csproj", "{6E315182-CC9F-4F62-8385-5E26EFA3B98A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BullshitWatcher", "BullshitWatcher\BullshitWatcher.csproj", "{09238300-4583-45C6-A997-025CBDC44C24}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LegacyContentMitigation", "LegacyContentMitigation\LegacyContentMitigation.csproj", "{21FDAB94-5014-488D-86C7-A366F1902B24}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCCVirtualSteeringWheel", "RCCVirtualSteeringWheel\RCCVirtualSteeringWheel.csproj", "{4A378F81-3805-41E8-9565-A8A89A8C00D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterContentLoading", "BetterContentLoading\BetterContentLoading.csproj", "{FFCF6FA8-4F38-415E-AC2D-B576FFD5FED5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraExperiments", "CameraExperiments\CameraExperiments.csproj", "{71CBD7CC-C787-4796-B05E-4F3BC3C28B48}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RemoteAvatarDisablingCameraOnFirstFrameFix", "RemoteAvatarDisablingCameraOnFirstFrameFix\RemoteAvatarDisablingCameraOnFirstFrameFix.csproj", "{42E626F7-9A7E-4F55-B02C-16EB56E2B540}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvatarCloneTest", "AvatarCloneTest\AvatarCloneTest.csproj", "{8BF2CBBF-6DAB-4D7A-87E0-AE643D6019AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckOffUICamera", "FuckOffUICamera\FuckOffUICamera.csproj", "{262A8AE0-E610-405F-B4EC-DB714FB54C00}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomRichPresence", "CustomRichPresence\CustomRichPresence.csproj", "{E5F07862-5715-470D-B324-19BDEBB2AA4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckMagicaCloth2", "FuckMagicaCloth2\FuckMagicaCloth2.csproj", "{21B591A0-F6E5-4645-BF2D-4E71F47394A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperAwesomeMod", "SuperAwesomeMod\SuperAwesomeMod.csproj", "{F093BDE5-1824-459E-B86E-B9F79B548E58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlToUnlockMouse", "ControlToUnlockMouse\ControlToUnlockMouse.csproj", "{EDA96974-0BEA-404B-8EED-F19CCA2C95A8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzCurls", ".DepricatedMods\EzCurls\EzCurls.csproj", "{ED2CAA2D-4E49-4636-86C4-367D0CDC3572}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
