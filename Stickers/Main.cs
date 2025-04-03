@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core;
+using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.InputManagement;
@@ -51,7 +52,8 @@ public class StickerMod : MelonMod
         if (!Input.GetKeyDown((KeyCode)ModSettings.Entry_PlaceBinding.Value)) 
             return;
 
-        if (CVRInputManager.Instance.textInputFocused)
+        if (CVRInputManager.Instance.textInputFocused
+            || ViewManager.Instance.textInputFocused) // BRUH
             return; // prevent placing stickers while typing
         
         StickerSystem.Instance.PlaceStickerFromControllerRay(PlayerSetup.Instance.activeCam.transform);
