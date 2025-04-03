@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Smoothes your controller while the raycast lines are visible.\nThis is a CVR adaptation of a Beat Saber mod: [BeatSaber_SmoothedController](https://github.com/kinsi55/BeatSaber_SmoothedController)\n\n- An option is provided to only smooth when aiming at menus.\n- Smoothing characteristics are completely configurable, but the defaults are basically perfect.\n- Pairs well with the [WhereAmIPointing](https://discord.com/channels/1001388809184870441/1002058238545641542/1282798820073406556) mod.\n\n**Only supports OpenVR, not OpenXR.**\n\n-# NOTE: This disables the shitty built-in Smooth Ray setting when the mod is enabled. Compare both & you'll see why.",
+  "description": "Smoothes your controller while the raycast lines are visible.\nThis is a CVR adaptation of a Beat Saber mod: [BeatSaber_SmoothedController](https://github.com/kinsi55/BeatSaber_SmoothedController)\n\n- An option is provided to only smooth when aiming at menus.\n- Smoothing characteristics are completely configurable, but the defaults are basically perfect.\n\n**Only supports OpenVR, not OpenXR.**\n\n-# NOTE: This disables the shitty built-in Smooth Ray setting when the mod is enabled. Compare both & you'll see why.",
   "searchtags": [
     "vr",
     "ray",
