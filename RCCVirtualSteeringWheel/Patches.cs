@@ -1,4 +1,5 @@
-﻿using ABI_RC.Systems.InputManagement;
+﻿using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Systems.InputManagement;
 using ABI_RC.Systems.Movement;
 using HarmonyLib;
 using NAK.RCCVirtualSteeringWheel.Util;
@@ -39,12 +40,20 @@ internal static class CVRInputManager_Patches
     [HarmonyPatch(typeof(CVRInputManager), nameof(CVRInputManager.UpdateInput))]
     private static void Postfix_CVRInputManager_UpdateInput(ref CVRInputManager __instance)
     {
-        // Steering input is clamped in RCC component
-        if (BetterBetterCharacterController.Instance.IsSittingOnControlSeat()
-            && SteeringWheelRoot.TryGetWheelInput(
-                BetterBetterCharacterController.Instance._lastCvrSeat._carController, out float steeringValue))
-        {
+        BetterBetterCharacterController characterController = BetterBetterCharacterController.Instance;
+        if (!characterController._isSitting)
+            return; // Must be sitting
+        
+        CVRSeat cvrSeat = characterController._lastCvrSeat;
+        if (!cvrSeat
+            || !cvrSeat.lockControls)
+            return; // Must be a driver seat
+
+        RCC_CarControllerV3 carController = characterController._lastCvrSeat._carController;
+        if (!carController)
+            return; // Specific to RCC
+          
+        if (SteeringWheelRoot.TryGetWheelInput(carController, out float steeringValue))
             __instance.steering = steeringValue;
-        }
     }
 }
