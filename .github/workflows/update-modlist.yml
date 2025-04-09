@@ -3,7 +3,7 @@ name: Update Mod List
 on:
   push:
     paths:
-      - 'scripts/update_modlist.py'
+      - 'update-modlist.js'
       - '.github/workflows/update-modlist.yml'
       - 'README.md'
       - '**/README.md'
@@ -17,13 +17,13 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          python-version: '3.x'
+          node-version: '20'
 
       - name: Run mod list updater
-        run: python scripts/update_modlist.py
+        run: node update-modlist.js
 
       - name: Commit and push changes
         run: |
