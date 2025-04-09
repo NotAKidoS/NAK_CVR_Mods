@@ -29,10 +29,14 @@ function extractDescription(readmePath) {
       }
     }
     
-    // If we found a header, try to get the third line after it
-    if (headerIndex !== -1 && headerIndex + 2 < lines.length) {
-      const description = lines[headerIndex + 2].trim();
-      return description || 'No description available';
+    // If we found a header, look for the first non-empty line after it
+    if (headerIndex !== -1) {
+      for (let i = headerIndex + 1; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line && !line.startsWith('#')) {
+          return line;
+        }
+      }
     }
     
     return 'No description available';
