@@ -4,32 +4,32 @@
 
 ### Released Mods
 
-| Name | Download |
-|------|----------|
-| [ASTExtension](ASTExtension/README.md) | [Download](ASTExtension/ASTExtension.zip) |
-| [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | [Download](AvatarQueueSystemTweaks/AvatarQueueSystemTweaks.zip) |
-| [CustomRichPresence](CustomRichPresence/README.md) | [Download](CustomRichPresence/CustomRichPresence.zip) |
-| [CustomSpawnPoint](CustomSpawnPoint/README.md) | [Download](CustomSpawnPoint/CustomSpawnPoint.zip) |
-| [FuckToes](FuckToes/README.md) | [Download](FuckToes/FuckToes.zip) |
-| [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | [Download](KeepVelocityOnExitFlight/KeepVelocityOnExitFlight.zip) |
-| [LazyPrune](LazyPrune/README.md) | [Download](LazyPrune/LazyPrune.zip) |
-| [PropLoadingHexagon](PropLoadingHexagon/README.md) | [Download](PropLoadingHexagon/PropLoadingHexagon.zip) |
-| [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | [Download](RCCVirtualSteeringWheel/RCCVirtualSteeringWheel.zip) |
-| [RelativeSync](RelativeSync/README.md) | [Download](RelativeSync/RelativeSync.zip) |
-| [ShareBubbles](ShareBubbles/README.md) | [Download](ShareBubbles/ShareBubbles.zip) |
-| [SmootherRay](SmootherRay/README.md) | [Download](SmootherRay/SmootherRay.zip) |
-| [Stickers](Stickers/README.md) | [Download](Stickers/Stickers.zip) |
-| [ThirdPerson](ThirdPerson/README.md) | [Download](ThirdPerson/ThirdPerson.zip) |
+| Name | Description | Download |
+|------|-------------|----------|
+| [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | [Download](ASTExtension/ASTExtension.zip) |
+| [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | [Download](AvatarQueueSystemTweaks/AvatarQueueSystemTweaks.zip) |
+| [CustomRichPresence](CustomRichPresence/README.md) | Gives the Drop Prop button more utility by allowing you to drop props in the air. | [Download](CustomRichPresence/CustomRichPresence.zip) |
+| [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](CustomSpawnPoint/CustomSpawnPoint.zip) |
+| [FuckToes](FuckToes/README.md) | No description available | [Download](FuckToes/FuckToes.zip) |
+| [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | [Download](KeepVelocityOnExitFlight/KeepVelocityOnExitFlight.zip) |
+| [LazyPrune](LazyPrune/README.md) | Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection. | [Download](LazyPrune/LazyPrune.zip) |
+| [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | [Download](PropLoadingHexagon/PropLoadingHexagon.zip) |
+| [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component. | [Download](RCCVirtualSteeringWheel/RCCVirtualSteeringWheel.zip) |
+| [RelativeSync](RelativeSync/README.md) | Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network. | [Download](RelativeSync/RelativeSync.zip) |
+| [ShareBubbles](ShareBubbles/README.md) | Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network. | [Download](ShareBubbles/ShareBubbles.zip) |
+| [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | [Download](SmootherRay/SmootherRay.zip) |
+| [Stickers](Stickers/README.md) | Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network. | [Download](Stickers/Stickers.zip) |
+| [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | [Download](ThirdPerson/ThirdPerson.zip) |
 
 ### Experimental Mods
 
-| Name | Download |
-|------|----------|
-| [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | [Download](.Experimental/CVRLuaToolsExtension/CVRLuaToolsExtension.zip) |
-| [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | [Download](.Experimental/LuaNetworkVariables/LuaNetworkVariables.zip) |
-| [LuaTTS](.Experimental/LuaTTS/README.md) | [Download](.Experimental/LuaTTS/LuaTTS.zip) |
-| [OriginShift](.Experimental/OriginShift/README.md) | [Download](.Experimental/OriginShift/OriginShift.zip) |
-| [ScriptingSpoofer](.Experimental/ScriptingSpoofer/README.md) | [Download](.Experimental/ScriptingSpoofer/ScriptingSpoofer.zip) |
+| Name | Description | Download |
+|------|-------------|----------|
+| [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality. | [Download](.Experimental/CVRLuaToolsExtension/CVRLuaToolsExtension.zip) |
+| [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Simple mod that makes your controller rays always visible when the menus are open. Useful for when you're trying to aim at something in the distance. Also visualizes which ray is being used for menu interaction. | [Download](.Experimental/LuaNetworkVariables/LuaNetworkVariables.zip) |
+| [LuaTTS](.Experimental/LuaTTS/README.md) | Provides access to the built-in text-to-speech (TTS) functionality to lua scripts. Allows you to make the local player speak. | [Download](.Experimental/LuaTTS/LuaTTS.zip) |
+| [OriginShift](.Experimental/OriginShift/README.md) | Experimental mod that allows world origin to be shifted to prevent floating point precision issues. | [Download](.Experimental/OriginShift/OriginShift.zip) |
+| [ScriptingSpoofer](.Experimental/ScriptingSpoofer/README.md) | Prevents **local** scripts from accessing your Username or UserID by spoofing them with random values each session. | [Download](.Experimental/ScriptingSpoofer/ScriptingSpoofer.zip) |
 
 <!-- END MOD LIST -->
 
