@@ -1,0 +1,34 @@
+name: Update Mod List in README
+
+on:
+  push:
+    paths:
+      - '**/README.md'
+      - '.github/workflows/update-modlist.yml'
+  workflow_dispatch:
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install gray-matter
+
+      - name: Generate mod list
+        run: node .github/scripts/update-modlist.js
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "[NAK_CVR_Mods] Update mod list in README" || echo "No changes to commit"
+          git push
