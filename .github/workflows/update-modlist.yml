@@ -3,7 +3,7 @@ name: Update Mod List
 on:
   push:
     paths:
-      - 'update-modlist.js'
+      - '.github/scripts/update-modlist.js'
       - '.github/workflows/update-modlist.yml'
       - 'README.md'
       - '**/README.md'
@@ -23,7 +23,7 @@ jobs:
           node-version: '20'
 
       - name: Run mod list updater
-        run: node update-modlist.js
+        run: node .github/scripts/update-modlist.js
 
       - name: Commit and push changes
         run: |
