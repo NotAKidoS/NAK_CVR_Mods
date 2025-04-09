@@ -15,6 +15,33 @@ function getModFolders(baseDir) {
     .filter(dir => fs.existsSync(path.join(dir, 'README.md')));
 }
 
+function extractDescription(readmePath) {
+  try {
+    const content = fs.readFileSync(readmePath, 'utf8');
+    const lines = content.split('\n');
+    
+    // Find the first header (# something)
+    let headerIndex = -1;
+    for (let i = 0; i < lines.length; i++) {
+      if (lines[i].trim().startsWith('# ')) {
+        headerIndex = i;
+        break;
+      }
+    }
+    
+    // If we found a header, try to get the third line after it
+    if (headerIndex !== -1 && headerIndex + 2 < lines.length) {
+      const description = lines[headerIndex + 2].trim();
+      return description || 'No description available';
+    }
+    
+    return 'No description available';
+  } catch (error) {
+    console.error(`Error reading ${readmePath}:`, error);
+    return 'No description available';
+  }
+}
+
 function formatTable(mods, baseDir) {
   if (mods.length === 0) return '';
 
@@ -22,14 +49,17 @@ function formatTable(mods, baseDir) {
     const modName = path.basename(modPath);
     const readmeLink = path.join(modPath, 'README.md');
     const zipLink = path.join(modPath, `${modName}.zip`);
-    return `| [${modName}](${readmeLink}) | [Download](${zipLink}) |`;
+    const readmePath = path.join(modPath, 'README.md');
+    const description = extractDescription(readmePath);
+    
+    return `| [${modName}](${readmeLink}) | ${description} | [Download](${zipLink}) |`;
   });
 
   return [
     `### ${baseDir === EXPERIMENTAL ? 'Experimental Mods' : 'Released Mods'}`,
     '',
-    '| Name | Download |',
-    '|------|----------|',
+    '| Name | Description | Download |',
+    '|------|-------------|----------|',
     ...rows,
     ''
   ].join('\n');
