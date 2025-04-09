@@ -2,42 +2,34 @@
 
 <!-- BEGIN MOD LIST -->
 
-## Released Mods
+### Released Mods
 
-| Mod Name                     | README                                                 | Download                                                                                            | Description                                                        |
-|------------------------------|--------------------------------------------------------|-----------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
-| AASDefaultProfileFix         | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AASDefaultProfileFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/AASDefaultProfileFix.dll)               | Fixes the Default AAS profile not being applied.                   |
-| ASTExtension                 | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ASTExtension) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ASTExtension.dll)                         | Avatar scaling gesture & persistance on existing avatars.          |
-| AvatarQueueSystemTweaks       | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/AvatarQueueSystemTweaks) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/AvatarQueueSystemTweaks.dll)             | Tweaks to improve the avatar queuing system.                       |
-| ChatBoxExtensions            | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ChatBoxExtensions) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ChatBoxExtensions.dll)                    | Adds some chat commands to the ChatBox mod.                        |
-| CustomSpawnPoint             | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CustomSpawnPoint) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/CustomSpawnPoint.dll)                     | Allows setting custom spawn points in worlds.                      |
-| CVRGizmos                    | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/CVRGizmos) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/CVRGizmos.dll)                           | Adds runtime gizmos to common CCK components.                      |
-| DropPropTweak                | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/DropPropTweak) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/DropPropTweak.dll)                       | Allows you to drop props in the air.                               |
-| FOVAdjustment                | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/FOVAdjustment) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/FOVAdjustment.dll)                    | Makes CVR_DesktopCameraController default FOV configurable.        |
-| HeadLookLockingInputFix       | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/HeadLookLockingInputFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/HeadLookLockingInputFix.dll)             | Fixes head look locking input issues.                              |
-| IKAdjustments                | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKAdjustments) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/IKAdjustments.dll)                       | Allows grabbing IK points for manual adjustment.                   |
-| IKSimulatedRootAngleFix      | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/IKSimulatedRootAngleFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/IKSimulatedRootAngleFix.dll)            | Fixes Desktop & HalfBody root angle issues.                        |
-| KeepVelocityOnExitFlight     | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/KeepVelocityOnExitFlight) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/KeepVelocityOnExitFlight.dll)           | Keeps the player's velocity when exiting flight mode.              |
-| LazyPrune                    | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/LazyPrune) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/LazyPrune.dll)                           | Prevents loaded objects from immediately unloading.                |
-| LuaTTS                       | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/LuaTTS) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/LuaTTS.dll)                              | Adds Text-to-Speech (TTS) functionality through Lua.               |
-| MoreMenuOptions              | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MoreMenuOptions) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/MoreMenuOptions.dll)                    | Exposes some menu placement configuration options.                 |
-| MuteSFX                      | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/MuteSFX) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/MuteSFX.dll)                             | Adds an audio cue for muting and unmuting.                         |
-| OriginShift                  | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/OriginShift) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/OriginShift.dll)                         | Shifts the world origin to avoid precision issues.                 |
-| PathCamDisabler              | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PathCamDisabler) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PathCamDisabler.dll)               | Adds option to disable the Path Camera Controller keybinds.        |
-| PortableCameraAdditions      | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PortableCameraAdditions) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PortableCameraAdditions.dll) | Adds a few basic settings to the Portable Camera.                  |
-| PropLoadingHexagon           | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropLoadingHexagon) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PropLoadingHexagon.dll)                 | Adds a hexagon indicator to downloading props.                     |
-| PropUndoButton               | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/PropUndoButton) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/PropUndoButton.dll)                 | CTRL+Z to undo latest spawned prop.                                |
-| ReconnectionSystemFix        | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ReconnectionSystemFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ReconnectionSystemFix.dll)              | Prevents recreating and reloading all remote players.              |
-| RelativeSync                 | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/RelativeSync) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/RelativeSync.dll)                       | Relative sync for Movement Parent & Chairs.                        |
-| ScrollFlight                 | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ScrollFlight) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ScrollFlight.dll)                        | Scroll-wheel to adjust flight speed in Desktop.                    |
-| ShadowCloneFallback          | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ShadowCloneFallback) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ShadowCloneFallback.dll)               | Exposes a toggle for the Fallback Shadow Clone.                    |
-| SmartReticle                 | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SmartReticle) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/SmartReticle.dll)                         | Makes the reticle only appear when hovering interactables.         |
-| Stickers                     | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/Stickers) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/Stickers.dll)                             | Allows you to place small images on any surface.                   |
-| StopClosingMyMenuOnWorldLoad | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/StopClosingMyMenuOnWorldLoad)| [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/StopClosingMyMenuOnWorldLoad.dll)   | Prevents your menu from being closed when a world is loaded.       |
-| SwitchToDesktopOnSteamVRExit | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/SwitchToDesktopOnSteamVRExit)| [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/SwitchToDesktopOnSteamVRExit.dll)   | Initiates a VR Switch to Desktop when SteamVR is exited.           |
-| ThirdPerson                  | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ThirdPerson.dll)                       | Allows you to go into third person view.                           |
-| VisualCloneFix               | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/VisualCloneFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/VisualCloneFix.dll)                      | Fixes the Visual Clone system.                                     |
-| WhereAmIPointing              | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/WhereAmIPointing) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/WhereAmIPointing.dll)                    | Makes your controller rays always visible when the menus are open. |
+| Name | Download |
+|------|----------|
+| [ASTExtension](ASTExtension/README.md) | [Download](ASTExtension/ASTExtension.zip) |
+| [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | [Download](AvatarQueueSystemTweaks/AvatarQueueSystemTweaks.zip) |
+| [CustomRichPresence](CustomRichPresence/README.md) | [Download](CustomRichPresence/CustomRichPresence.zip) |
+| [CustomSpawnPoint](CustomSpawnPoint/README.md) | [Download](CustomSpawnPoint/CustomSpawnPoint.zip) |
+| [FuckToes](FuckToes/README.md) | [Download](FuckToes/FuckToes.zip) |
+| [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | [Download](KeepVelocityOnExitFlight/KeepVelocityOnExitFlight.zip) |
+| [LazyPrune](LazyPrune/README.md) | [Download](LazyPrune/LazyPrune.zip) |
+| [PropLoadingHexagon](PropLoadingHexagon/README.md) | [Download](PropLoadingHexagon/PropLoadingHexagon.zip) |
+| [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | [Download](RCCVirtualSteeringWheel/RCCVirtualSteeringWheel.zip) |
+| [RelativeSync](RelativeSync/README.md) | [Download](RelativeSync/RelativeSync.zip) |
+| [ShareBubbles](ShareBubbles/README.md) | [Download](ShareBubbles/ShareBubbles.zip) |
+| [SmootherRay](SmootherRay/README.md) | [Download](SmootherRay/SmootherRay.zip) |
+| [Stickers](Stickers/README.md) | [Download](Stickers/Stickers.zip) |
+| [ThirdPerson](ThirdPerson/README.md) | [Download](ThirdPerson/ThirdPerson.zip) |
+
+### Experimental Mods
+
+| Name | Download |
+|------|----------|
+| [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | [Download](.Experimental/CVRLuaToolsExtension/CVRLuaToolsExtension.zip) |
+| [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | [Download](.Experimental/LuaNetworkVariables/LuaNetworkVariables.zip) |
+| [LuaTTS](.Experimental/LuaTTS/README.md) | [Download](.Experimental/LuaTTS/LuaTTS.zip) |
+| [OriginShift](.Experimental/OriginShift/README.md) | [Download](.Experimental/OriginShift/OriginShift.zip) |
+| [ScriptingSpoofer](.Experimental/ScriptingSpoofer/README.md) | [Download](.Experimental/ScriptingSpoofer/ScriptingSpoofer.zip) |
 
 <!-- END MOD LIST -->
 
