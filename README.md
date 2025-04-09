@@ -1,5 +1,7 @@
 ## NotAKids ChilloutVR Mods
 
+<!-- BEGIN MOD LIST -->
+
 ## Released Mods
 
 | Mod Name                     | README                                                 | Download                                                                                            | Description                                                        |
@@ -36,6 +38,8 @@
 | ThirdPerson                  | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/ThirdPerson) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/ThirdPerson.dll)                       | Allows you to go into third person view.                           |
 | VisualCloneFix               | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/VisualCloneFix) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/VisualCloneFix.dll)                      | Fixes the Visual Clone system.                                     |
 | WhereAmIPointing              | [README](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/tree/main/WhereAmIPointing) | [Download](https://github.com/NotAKidOnSteam/NAK_CVR_Mods/releases/latest/download/WhereAmIPointing.dll)                    | Makes your controller rays always visible when the menus are open. |
+
+<!-- END MOD LIST -->
 
 # How To Install
 
