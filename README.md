@@ -26,7 +26,7 @@
 | Name | Description | Download |
 |------|-------------|----------|
 | [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality. | [Download](.Experimental/CVRLuaToolsExtension/CVRLuaToolsExtension.zip) |
-| [CustomRichPresence](.Experimental/CustomRichPresence/README.md) | Gives the Drop Prop button more utility by allowing you to drop props in the air. | [Download](.Experimental/CustomRichPresence/CustomRichPresence.zip) |
+| [CustomRichPresence](.Experimental/CustomRichPresence/README.md) | Lets you customize the Steam & Discord rich presence messages & values. | [Download](.Experimental/CustomRichPresence/CustomRichPresence.zip) |
 | [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Simple mod that makes your controller rays always visible when the menus are open. Useful for when you're trying to aim at something in the distance. Also visualizes which ray is being used for menu interaction. | [Download](.Experimental/LuaNetworkVariables/LuaNetworkVariables.zip) |
 | [LuaTTS](.Experimental/LuaTTS/README.md) | Provides access to the built-in text-to-speech (TTS) functionality to lua scripts. Allows you to make the local player speak. | [Download](.Experimental/LuaTTS/LuaTTS.zip) |
 | [OriginShift](.Experimental/OriginShift/README.md) | Experimental mod that allows world origin to be shifted to prevent floating point precision issues. | [Download](.Experimental/OriginShift/OriginShift.zip) |
