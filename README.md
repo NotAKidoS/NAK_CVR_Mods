@@ -8,7 +8,6 @@
 |------|-------------|----------|
 | [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | [Download](ASTExtension/ASTExtension.zip) |
 | [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | [Download](AvatarQueueSystemTweaks/AvatarQueueSystemTweaks.zip) |
-| [CustomRichPresence](CustomRichPresence/README.md) | Gives the Drop Prop button more utility by allowing you to drop props in the air. | [Download](CustomRichPresence/CustomRichPresence.zip) |
 | [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](CustomSpawnPoint/CustomSpawnPoint.zip) |
 | [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in HalfbodyIK. | [Download](FuckToes/FuckToes.zip) |
 | [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | [Download](KeepVelocityOnExitFlight/KeepVelocityOnExitFlight.zip) |
@@ -20,12 +19,14 @@
 | [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | [Download](SmootherRay/SmootherRay.zip) |
 | [Stickers](Stickers/README.md) | Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network. | [Download](Stickers/Stickers.zip) |
 | [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | [Download](ThirdPerson/ThirdPerson.zip) |
+| [YouAreMyPropNowWeAreHavingSoftTacosLater](YouAreMyPropNowWeAreHavingSoftTacosLater/README.md) | Lets you bring held & attached props through world loads. | [Download](YouAreMyPropNowWeAreHavingSoftTacosLater/YouAreMyPropNowWeAreHavingSoftTacosLater.zip) |
 
 ### Experimental Mods
 
 | Name | Description | Download |
 |------|-------------|----------|
 | [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality. | [Download](.Experimental/CVRLuaToolsExtension/CVRLuaToolsExtension.zip) |
+| [CustomRichPresence](.Experimental/CustomRichPresence/README.md) | Gives the Drop Prop button more utility by allowing you to drop props in the air. | [Download](.Experimental/CustomRichPresence/CustomRichPresence.zip) |
 | [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Simple mod that makes your controller rays always visible when the menus are open. Useful for when you're trying to aim at something in the distance. Also visualizes which ray is being used for menu interaction. | [Download](.Experimental/LuaNetworkVariables/LuaNetworkVariables.zip) |
 | [LuaTTS](.Experimental/LuaTTS/README.md) | Provides access to the built-in text-to-speech (TTS) functionality to lua scripts. Allows you to make the local player speak. | [Download](.Experimental/LuaTTS/LuaTTS.zip) |
 | [OriginShift](.Experimental/OriginShift/README.md) | Experimental mod that allows world origin to be shifted to prevent floating point precision issues. | [Download](.Experimental/OriginShift/OriginShift.zip) |
