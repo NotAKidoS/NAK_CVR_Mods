@@ -1,6 +1,6 @@
-# DropPropTweak
+# Custom Rich Presence
 
-Gives the Drop Prop button more utility by allowing you to drop props in the air.
+Lets you customize the Steam & Discord rich presence messages & values.
 
 ---
 
