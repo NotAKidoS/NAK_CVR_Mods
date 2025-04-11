@@ -52,11 +52,11 @@ function formatTable(mods, baseDir) {
   let rows = mods.map(modPath => {
     const modName = path.basename(modPath);
     const readmeLink = path.join(modPath, 'README.md');
-    const zipLink = path.join(modPath, `${modName}.zip`);
+    const dllLink = path.join(modPath, `${modName}.dll`);
     const readmePath = path.join(modPath, 'README.md');
     const description = extractDescription(readmePath);
     
-    return `| [${modName}](${readmeLink}) | ${description} | [Download](${zipLink}) |`;
+    return `| [${modName}](${readmeLink}) | ${description} | [Download](${dllLink}) |`;
   });
 
   return [
