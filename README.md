@@ -6,19 +6,19 @@
 
 | Name | Description | Download |
 |------|-------------|----------|
-| [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | No Download |
-| [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | No Download |
-| [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | No Download |
+| [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ASTExtension.dll) |
+| [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/AvatarQueueSystemTweaks.dll) |
+| [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/CustomSpawnPoint.dll) |
 | [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in HalfbodyIK. | No Download |
-| [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | No Download |
-| [LazyPrune](LazyPrune/README.md) | Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection. | No Download |
-| [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | No Download |
-| [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component. | No Download |
-| [RelativeSync](RelativeSync/README.md) | Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network. | No Download |
-| [ShareBubbles](ShareBubbles/README.md) | Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network. | No Download |
-| [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | No Download |
-| [Stickers](Stickers/README.md) | Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network. | No Download |
-| [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | No Download |
+| [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/KeepVelocityOnExitFlight.dll) |
+| [LazyPrune](LazyPrune/README.md) | Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/LazyPrune.dll) |
+| [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/PropLoadingHexagon.dll) |
+| [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/RCCVirtualSteeringWheel.dll) |
+| [RelativeSync](RelativeSync/README.md) | Relative sync for Movement Parent & Chairs. Requires both users to have the mod installed. Synced over Mod Network. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/RelativeSync.dll) |
+| [ShareBubbles](ShareBubbles/README.md) | Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ShareBubbles.dll) |
+| [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/SmootherRay.dll) |
+| [Stickers](Stickers/README.md) | Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/Stickers.dll) |
+| [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ThirdPerson.dll) |
 | [YouAreMyPropNowWeAreHavingSoftTacosLater](YouAreMyPropNowWeAreHavingSoftTacosLater/README.md) | Lets you bring held & attached props through world loads. | No Download |
 
 ### Experimental Mods
