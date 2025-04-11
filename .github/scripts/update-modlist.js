@@ -1,10 +1,56 @@
 const fs = require('fs');
 const path = require('path');
+const https = require('https');
+
+// Configuration
 const ROOT = '.';
 const EXPERIMENTAL = '.Experimental';
 const README_PATH = 'README.md';
 const MARKER_START = '<!-- BEGIN MOD LIST -->';
 const MARKER_END = '<!-- END MOD LIST -->';
+const REPO_OWNER = process.env.REPO_OWNER || 'NotAKidoS';
+const REPO_NAME = process.env.REPO_NAME || 'NAK_CVR_Mods';
+
+// Function to get latest release info from GitHub API
+async function getLatestRelease() {
+  return new Promise((resolve, reject) => {
+    const options = {
+      hostname: 'api.github.com',
+      path: `/repos/${REPO_OWNER}/${REPO_NAME}/releases/latest`,
+      method: 'GET',
+      headers: {
+        'User-Agent': 'Node.js GitHub Release Checker',
+        'Accept': 'application/vnd.github.v3+json'
+      }
+    };
+
+    const req = https.request(options, (res) => {
+      let data = '';
+      
+      res.on('data', (chunk) => {
+        data += chunk;
+      });
+      
+      res.on('end', () => {
+        if (res.statusCode === 200) {
+          try {
+            resolve(JSON.parse(data));
+          } catch (e) {
+            reject(new Error(`Failed to parse GitHub API response: ${e.message}`));
+          }
+        } else {
+          reject(new Error(`GitHub API request failed with status code: ${res.statusCode}`));
+        }
+      });
+    });
+    
+    req.on('error', (e) => {
+      reject(new Error(`GitHub API request error: ${e.message}`));
+    });
+    
+    req.end();
+  });
+}
 
 function getModFolders(baseDir) {
   const entries = fs.readdirSync(baseDir, { withFileTypes: true });
@@ -45,37 +91,69 @@ function extractDescription(readmePath) {
   }
 }
 
-function checkIfDllExists(modPath, modName) {
-  const dllPath = path.join(modPath, `${modName}.dll`);
-  return fs.existsSync(dllPath);
-}
-
-function formatTable(mods, baseDir) {
+async function formatTable(mods, baseDir) {
   if (mods.length === 0) return '';
   
-  let rows = mods.map(modPath => {
-    const modName = path.basename(modPath);
-    const readmeLink = path.join(modPath, 'README.md');
-    const readmePath = path.join(modPath, 'README.md');
-    const description = extractDescription(readmePath);
+  try {
+    // Get the latest release info from GitHub
+    const latestRelease = await getLatestRelease();
+    const releaseAssets = latestRelease.assets || [];
     
-    // Check if DLL exists and format download cell accordingly
-    const hasDll = checkIfDllExists(modPath, modName);
-    const downloadCell = hasDll 
-      ? `[Download](${path.join(modPath, `${modName}.dll`)})`
-      : 'No Download';
-   
-    return `| [${modName}](${readmeLink}) | ${description} | ${downloadCell} |`;
-  });
-  
-  return [
-    `### ${baseDir === EXPERIMENTAL ? 'Experimental Mods' : 'Released Mods'}`,
-    '',
-    '| Name | Description | Download |',
-    '|------|-------------|----------|',
-    ...rows,
-    ''
-  ].join('\n');
+    // Create a map of available files in the release
+    const availableFiles = {};
+    releaseAssets.forEach(asset => {
+      availableFiles[asset.name] = asset.browser_download_url;
+    });
+    
+    let rows = mods.map(modPath => {
+      const modName = path.basename(modPath);
+      const readmeLink = path.join(modPath, 'README.md');
+      const readmePath = path.join(modPath, 'README.md');
+      const description = extractDescription(readmePath);
+      
+      // Check if the DLL exists in the latest release
+      const dllFilename = `${modName}.dll`;
+      let downloadSection;
+      
+      if (availableFiles[dllFilename]) {
+        downloadSection = `[Download](${availableFiles[dllFilename]})`;
+      } else {
+        downloadSection = 'No Download';
+      }
+      
+      return `| [${modName}](${readmeLink}) | ${description} | ${downloadSection} |`;
+    });
+    
+    return [
+      `### ${baseDir === EXPERIMENTAL ? 'Experimental Mods' : 'Released Mods'}`,
+      '',
+      '| Name | Description | Download |',
+      '|------|-------------|----------|',
+      ...rows,
+      ''
+    ].join('\n');
+  } catch (error) {
+    console.error('Error fetching release information:', error);
+    
+    // Fallback to showing "No Download" for all mods if we can't fetch release info
+    let rows = mods.map(modPath => {
+      const modName = path.basename(modPath);
+      const readmeLink = path.join(modPath, 'README.md');
+      const readmePath = path.join(modPath, 'README.md');
+      const description = extractDescription(readmePath);
+      
+      return `| [${modName}](${readmeLink}) | ${description} | No Download |`;
+    });
+    
+    return [
+      `### ${baseDir === EXPERIMENTAL ? 'Experimental Mods' : 'Released Mods'}`,
+      '',
+      '| Name | Description | Download |',
+      '|------|-------------|----------|',
+      ...rows,
+      ''
+    ].join('\n');
+  }
 }
 
 function updateReadme(modListSection) {
@@ -86,12 +164,22 @@ function updateReadme(modListSection) {
   fs.writeFileSync(README_PATH, newReadme);
 }
 
-const mainMods = getModFolders(ROOT).filter(dir => !dir.startsWith(EXPERIMENTAL));
-const experimentalMods = getModFolders(EXPERIMENTAL);
+async function main() {
+  try {
+    const mainMods = getModFolders(ROOT).filter(dir => !dir.startsWith(EXPERIMENTAL));
+    const experimentalMods = getModFolders(EXPERIMENTAL);
+    
+    const mainModsTable = await formatTable(mainMods, ROOT);
+    const experimentalModsTable = await formatTable(experimentalMods, EXPERIMENTAL);
+    
+    const tableContent = [mainModsTable, experimentalModsTable].join('\n');
+    updateReadme(tableContent);
+    
+    console.log('README.md updated successfully!');
+  } catch (error) {
+    console.error('Error updating README:', error);
+    process.exit(1);
+  }
+}
 
-const tableContent = [
-  formatTable(mainMods, ROOT),
-  formatTable(experimentalMods, EXPERIMENTAL)
-].join('\n');
-
-updateReadme(tableContent);
+main();
