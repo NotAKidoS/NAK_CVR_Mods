@@ -10,7 +10,7 @@
 | [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | [Download](AvatarQueueSystemTweaks/AvatarQueueSystemTweaks.zip) |
 | [CustomRichPresence](CustomRichPresence/README.md) | Gives the Drop Prop button more utility by allowing you to drop props in the air. | [Download](CustomRichPresence/CustomRichPresence.zip) |
 | [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](CustomSpawnPoint/CustomSpawnPoint.zip) |
-| [FuckToes](FuckToes/README.md) | No description available | [Download](FuckToes/FuckToes.zip) |
+| [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in HalfbodyIK. | [Download](FuckToes/FuckToes.zip) |
 | [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | [Download](KeepVelocityOnExitFlight/KeepVelocityOnExitFlight.zip) |
 | [LazyPrune](LazyPrune/README.md) | Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection. | [Download](LazyPrune/LazyPrune.zip) |
 | [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | [Download](PropLoadingHexagon/PropLoadingHexagon.zip) |
