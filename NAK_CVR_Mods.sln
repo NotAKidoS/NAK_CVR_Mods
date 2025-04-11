@@ -54,6 +54,8 @@ EndProject
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCCVirtualSteeringWheel", "RCCVirtualSteeringWheel\RCCVirtualSteeringWheel.csproj", "{4A378F81-3805-41E8-9565-A8A89A8C00D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YouAreMyPropNowWeAreHavingSoftTacosLater", "YouAreMyPropNowWeAreHavingSoftTacosLater\YouAreMyPropNowWeAreHavingSoftTacosLater.csproj", "{8DA821CC-F911-4FCB-8C29-5EF3D76A5F76}"
+EndProject
 EndProject
 EndProject
 EndProject
@@ -289,6 +291,10 @@ Global
 		{ED2CAA2D-4E49-4636-86C4-367D0CDC3572}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ED2CAA2D-4E49-4636-86C4-367D0CDC3572}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ED2CAA2D-4E49-4636-86C4-367D0CDC3572}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DA821CC-F911-4FCB-8C29-5EF3D76A5F76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DA821CC-F911-4FCB-8C29-5EF3D76A5F76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DA821CC-F911-4FCB-8C29-5EF3D76A5F76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DA821CC-F911-4FCB-8C29-5EF3D76A5F76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
