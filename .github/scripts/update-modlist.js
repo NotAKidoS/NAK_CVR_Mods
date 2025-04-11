@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-
 const ROOT = '.';
 const EXPERIMENTAL = '.Experimental';
 const README_PATH = 'README.md';
@@ -19,7 +18,7 @@ function extractDescription(readmePath) {
   try {
     const content = fs.readFileSync(readmePath, 'utf8');
     const lines = content.split('\n');
-    
+   
     // Find the first header (# something)
     let headerIndex = -1;
     for (let i = 0; i < lines.length; i++) {
@@ -28,7 +27,7 @@ function extractDescription(readmePath) {
         break;
       }
     }
-    
+   
     // If we found a header, look for the first non-empty line after it
     if (headerIndex !== -1) {
       for (let i = headerIndex + 1; i < lines.length; i++) {
@@ -38,7 +37,7 @@ function extractDescription(readmePath) {
         }
       }
     }
-    
+   
     return 'No description available';
   } catch (error) {
     console.error(`Error reading ${readmePath}:`, error);
@@ -46,19 +45,29 @@ function extractDescription(readmePath) {
   }
 }
 
+function checkIfDllExists(modPath, modName) {
+  const dllPath = path.join(modPath, `${modName}.dll`);
+  return fs.existsSync(dllPath);
+}
+
 function formatTable(mods, baseDir) {
   if (mods.length === 0) return '';
-
+  
   let rows = mods.map(modPath => {
     const modName = path.basename(modPath);
     const readmeLink = path.join(modPath, 'README.md');
-    const dllLink = path.join(modPath, `${modName}.dll`);
     const readmePath = path.join(modPath, 'README.md');
     const description = extractDescription(readmePath);
     
-    return `| [${modName}](${readmeLink}) | ${description} | [Download](${dllLink}) |`;
+    // Check if DLL exists and format download cell accordingly
+    const hasDll = checkIfDllExists(modPath, modName);
+    const downloadCell = hasDll 
+      ? `[Download](${path.join(modPath, `${modName}.dll`)})`
+      : 'No Download';
+   
+    return `| [${modName}](${readmeLink}) | ${description} | ${downloadCell} |`;
   });
-
+  
   return [
     `### ${baseDir === EXPERIMENTAL ? 'Experimental Mods' : 'Released Mods'}`,
     '',
@@ -73,7 +82,6 @@ function updateReadme(modListSection) {
   const readme = fs.readFileSync(README_PATH, 'utf8');
   const before = readme.split(MARKER_START)[0];
   const after = readme.split(MARKER_END)[1];
-
   const newReadme = `${before}${MARKER_START}\n\n${modListSection}\n${MARKER_END}${after}`;
   fs.writeFileSync(README_PATH, newReadme);
 }
