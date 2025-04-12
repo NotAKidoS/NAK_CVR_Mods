@@ -9,6 +9,7 @@
 | [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ASTExtension.dll) |
 | [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/AvatarQueueSystemTweaks.dll) |
 | [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/CustomSpawnPoint.dll) |
+| [DoubleTapJumpToExitSeat](DoubleTapJumpToExitSeat/README.md) | Literally the mod name. | No Download |
 | [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in HalfbodyIK. | No Download |
 | [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/KeepVelocityOnExitFlight.dll) |
 | [LazyPrune](LazyPrune/README.md) | Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/LazyPrune.dll) |
