@@ -21,6 +21,25 @@ namespace NAK.YouAreMyPropNowWeAreHavingSoftTacosLater;
 
 public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
 {
+    #region Melon Preferences
+
+    public static readonly MelonPreferences_Category Category =
+        MelonPreferences.CreateCategory(nameof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod));
+
+    public static readonly MelonPreferences_Entry<bool> EntryTrackPickups =
+        Category.CreateEntry("track_pickups", true, display_name: "Track Pickups", description: "Should pickups be tracked?");
+    
+    public static readonly MelonPreferences_Entry<bool> EntryTrackAttachments =
+        Category.CreateEntry("track_attachments", true, display_name: "Track Attachments", description: "Should attachments be tracked?");
+
+    public static readonly MelonPreferences_Entry<bool> EntryTrackSeats =
+        Category.CreateEntry("track_seats", true, display_name: "Track Seats", description: "Should seats be tracked?");
+    
+    public static readonly MelonPreferences_Entry<bool> EntryOnlySpawnedByMe =
+        Category.CreateEntry("only_spawned_by_me", true, display_name: "Only Spawned By Me", description: "Should only props spawned by me be tracked?");
+
+    #endregion Melon Preferences
+    
     #region Melon Events
     
     public override void OnInitializeMelon()
@@ -58,6 +77,24 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         );
         
         #endregion CVRAttachment Patches
+
+        #region CVRSeat Patches
+        
+        HarmonyInstance.Patch(
+            typeof(CVRSeat).GetMethod(nameof(CVRSeat.SitDown), 
+                BindingFlags.Public | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRSeatSitDown),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+        
+        HarmonyInstance.Patch(
+            typeof(CVRSeat).GetMethod(nameof(CVRSeat.ExitSeat), 
+                BindingFlags.Public | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRSeatExitSeat),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+
+        #endregion CVRSeat Patches
         
         #region CVRSyncHelper Patches
         
@@ -129,26 +166,41 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
 
     private static void OnCVRPickupObjectOnGrab(CVRPickupObject __instance)
     {
-        if (!GetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
+        if (!EntryTrackPickups.Value) return;
+        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
         if (!_heldPropData.Contains(propData)) _heldPropData.Add(propData);
     }
     
     private static void OnCVRPickupObjectOnDrop(CVRPickupObject __instance)
     {
-        if (!GetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
+        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
         if (_heldPropData.Contains(propData)) _heldPropData.Remove(propData);
     }
     
     private static void OnCVRAttachmentAttachInternal(CVRAttachment __instance)
     {
-        if (!GetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
+        if (!EntryTrackAttachments.Value) return;
+        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
         if (!_heldPropData.Contains(propData)) _heldPropData.Add(propData);
     }
     
     private static void OnCVRAttachmentDeAttach(CVRAttachment __instance)
     {
         if (!__instance._isAttached) return; // Can invoke DeAttach without being attached
-        if (!GetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
+        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
+        if (_heldPropData.Contains(propData)) _heldPropData.Remove(propData);
+    }
+    
+    private static void OnCVRSeatSitDown(CVRSeat __instance)
+    {
+        if (!EntryTrackSeats.Value) return;
+        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
+        if (!_heldPropData.Contains(propData)) _heldPropData.Add(propData);
+    }
+    
+    private static void OnCVRSeatExitSeat(CVRSeat __instance)
+    {
+        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
         if (_heldPropData.Contains(propData)) _heldPropData.Remove(propData);
     }
 
@@ -161,7 +213,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         if (type != DownloadTask.ObjectType.Prop) return true; // Only care about props
      
         // toAttach is our instanceId, lets find the propData
-        if (!GetPropDataById(toAttach, out CVRSyncHelper.PropData newPropData)) return true;
+        if (!TryGetPropDataById(toAttach, out CVRSyncHelper.PropData newPropData)) return true;
         
         // Check if this is a prop we requested to spawn
         Vector3 identity = GetIdentityKeyFromPropData(newPropData);
@@ -307,9 +359,14 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     
     #region Util
 
-    private static bool GetPropData(CVRSpawnable spawnable, out CVRSyncHelper.PropData propData)
+    private static bool TryGetPropData(CVRSpawnable spawnable, out CVRSyncHelper.PropData propData)
     {
         if (spawnable == null)
+        {
+            propData = null;
+            return false;
+        }
+        if (EntryOnlySpawnedByMe.Value && !spawnable.IsMine())
         {
             propData = null;
             return false;
@@ -324,7 +381,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         return false;
     }
     
-    private static bool GetPropDataById(string instanceId, out CVRSyncHelper.PropData propData)
+    private static bool TryGetPropDataById(string instanceId, out CVRSyncHelper.PropData propData)
     {
         foreach (CVRSyncHelper.PropData data in CVRSyncHelper.Props)
         {
