@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using ABI_RC.Core.InteractionSystem;
-using ABI_RC.Core.Savior;
 using ABI_RC.Systems.InputManagement;
 using ABI_RC.Systems.Movement;
 using HarmonyLib;
@@ -11,16 +10,6 @@ namespace NAK.DoubleTapJumpToExitSeat;
 
 public class DoubleTapJumpToExitSeatMod : MelonMod
 {
-    #region Melon Preferences
-
-    public static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(DoubleTapJumpToExitSeatMod));
-
-    public static readonly MelonPreferences_Entry<bool> EntryOnlyInVR =
-        Category.CreateEntry("only_in_vr", false, display_name: "Only In VR", description: "Should this behaviour only be active in VR?");
-
-    #endregion Melon Preferences
-    
     #region Melon Events
     
     public override void OnInitializeMelon()
@@ -54,8 +43,8 @@ public class DoubleTapJumpToExitSeatMod : MelonMod
 
     #region Harmony Patches
     
-    private static float lastJumpTime = -1f;
-    private static bool wasJumping;
+    private static float _lastJumpTime = -1f;
+    private static bool _wasJumping;
     
     private static bool OnPreCVRSeatUpdate(CVRSeat __instance)
     {
@@ -63,18 +52,18 @@ public class DoubleTapJumpToExitSeatMod : MelonMod
         
         // Crazy?
         bool jumped = CVRInputManager.Instance.jump;
-        bool justJumped = jumped && !wasJumping;
-        wasJumping = jumped;
-        if (justJumped && (!EntryOnlyInVR.Value || MetaPort.Instance.isUsingVr))
+        bool justJumped = jumped && !_wasJumping;
+        _wasJumping = jumped;
+        if (justJumped)
         {
             float t = Time.time;
-            if (t - lastJumpTime <= BetterBetterCharacterController.DoubleJumpFlightTimeOut)
+            if (t - _lastJumpTime <= BetterBetterCharacterController.DoubleJumpFlightTimeOut)
             {
-                lastJumpTime = -1f;
+                _lastJumpTime = -1f;
                 __instance.ExitSeat();
                 return false;
             }
-            lastJumpTime = t;
+            _lastJumpTime = t;
         }
         
         // Double update this frame (this ensures Extrapolate / Every Frame Updated objects are seated correctly)

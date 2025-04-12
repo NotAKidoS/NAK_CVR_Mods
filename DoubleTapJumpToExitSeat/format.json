@@ -6,7 +6,7 @@
   "loaderversion": "0.6.1",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Literally the mod name.",
+  "description": "Replaces seat exit controls with a double-tap of the jump button, avoiding accidental exits from joystick drift or opening the menu.",
   "searchtags": [
     "double",
     "jump",

@@ -1,6 +1,6 @@
 # DoubleTapJumpToExitSeat
 
-Literally the mod name.
+Replaces seat exit controls with a double-tap of the jump button, avoiding accidental exits from joystick drift or opening the menu.
 
 ---
 
