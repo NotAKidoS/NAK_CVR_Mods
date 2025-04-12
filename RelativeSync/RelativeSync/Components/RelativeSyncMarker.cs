@@ -12,18 +12,35 @@ public class RelativeSyncMarker : MonoBehaviour
 
     public bool IsComponentActive 
         => _component.isActiveAndEnabled;
-    
+
     public bool ApplyRelativePosition = true;
     public bool ApplyRelativeRotation = true;
     public bool OnlyApplyRelativeHeading;
-    
+
     private MonoBehaviour _component;
-    
+
     private void Start()
     {
+        RegisterWithManager();
+        ConfigureForPotentialMovementParent();
+    }
+
+    private void OnDestroy()
+    {
+        RelativeSyncManager.RelativeSyncTransforms.Remove(pathHash);
+    }
+
+    public void OnHavingSoftTacosNow()
+        => RegisterWithManager();
+
+    private void RegisterWithManager()
+    {
+        // Remove old hash in case this is a re-registration
+        RelativeSyncManager.RelativeSyncTransforms.Remove(pathHash);
+
         string path = GetGameObjectPath(transform);
         int hash = path.GetHashCode();
-        
+
         // check if it already exists (this **should** only matter in worlds)
         if (RelativeSyncManager.RelativeSyncTransforms.ContainsKey(hash))
         {
@@ -34,18 +51,11 @@ public class RelativeSyncMarker : MonoBehaviour
                 return;
             }
         }
-        
+
         pathHash = hash;
         RelativeSyncManager.RelativeSyncTransforms.Add(hash, this);
-
-        ConfigureForPotentialMovementParent();
     }
 
-    private void OnDestroy()
-    {
-        RelativeSyncManager.RelativeSyncTransforms.Remove(pathHash);
-    }
-    
     private void ConfigureForPotentialMovementParent()
     {
         if (!gameObject.TryGetComponent(out CVRMovementParent movementParent))
@@ -54,20 +64,20 @@ public class RelativeSyncMarker : MonoBehaviour
             return;
         }
         _component = movementParent;
-        
+
         // TODO: a refactor may be needed to handle the orientation mode being animated
-        
+
         // respect orientation mode & gravity zone
         ApplyRelativeRotation = movementParent.orientationMode == CVRMovementParent.OrientationMode.RotateWithParent;
         OnlyApplyRelativeHeading = movementParent.GetComponent<GravityZone>() == null;
     }
-    
+
     private static string GetGameObjectPath(Transform transform)
     {
         // props already have a unique instance identifier at root
         // worlds uhhhh, dont duplicate the same thing over and over thx
         // avatars on remote/local client have diff path, we need to account for it -_-
-        
+
         string path = transform.name;
         while (transform.parent != null)
         {
@@ -79,21 +89,21 @@ public class RelativeSyncMarker : MonoBehaviour
                 path = MetaPort.Instance.ownerId + "/" + path;
                 break;
             } // remote player object root is already player guid
-            
+
             path = transform.name + "/" + path;
         }
-        
+
         return path;
     }
-    
-    private bool FindAvailableHash(ref int hash)
+
+    private static bool FindAvailableHash(ref int hash)
     {
         for (int i = 0; i < 16; i++)
         {
             hash += 1;
             if (!RelativeSyncManager.RelativeSyncTransforms.ContainsKey(hash)) return true;
         }
-        
+
         // failed to find a hash in 16 tries, dont care
         return false;
     }
