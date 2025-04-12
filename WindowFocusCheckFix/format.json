@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "WindowFocusCheckFix",
+  "modversion": "1.0.0",
+  "gameversion": "2025r179",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes window focus check on specific Linux distribution. ????!??!?!\n",
+  "searchtags": [
+    "prop",
+    "spawn",
+    "friend",
+    "load"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/WindowFocusCheckFix.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/WindowFocusCheckFix/",
+  "changelog": "- Initial Release",
+  "embedcolor": "#00FFFF"
+}
