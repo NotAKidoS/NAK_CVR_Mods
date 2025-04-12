@@ -20,6 +20,7 @@
 | [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/SmootherRay.dll) |
 | [Stickers](Stickers/README.md) | Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/Stickers.dll) |
 | [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ThirdPerson.dll) |
+| [WindowFocusCheckFix](WindowFocusCheckFix/README.md) | Fixes window focus check on specific Linux distribution. ????!??!?! | No Download |
 | [YouAreMyPropNowWeAreHavingSoftTacosLater](YouAreMyPropNowWeAreHavingSoftTacosLater/README.md) | Lets you bring held & attached props through world loads. | No Download |
 
 ### Experimental Mods
