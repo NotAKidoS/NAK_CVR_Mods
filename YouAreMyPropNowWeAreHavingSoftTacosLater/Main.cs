@@ -231,6 +231,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         // Apply new prop data to the spawnable
         newPropData.Spawnable = originalPropData.Spawnable;
         newPropData.Wrapper = originalPropData.Wrapper;
+        newPropData.Wrapper.BroadcastMessage("OnHavingSoftTacosNow", SendMessageOptions.DontRequireReceiver); // support with RelativeSync
         newPropData.Wrapper.name = $"p+{newPropData.ObjectId}~{newPropData.InstanceId}";
         
         // Copy sync values
