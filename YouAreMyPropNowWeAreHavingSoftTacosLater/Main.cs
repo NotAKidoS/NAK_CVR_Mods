@@ -23,19 +23,19 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
 {
     #region Melon Preferences
 
-    public static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod));
+    private static readonly MelonPreferences_Category Category =
+        MelonPreferences.CreateCategory(nameof(YouAreMyPropNowWeAreHavingSoftTacosLater));
 
-    public static readonly MelonPreferences_Entry<bool> EntryTrackPickups =
+    private static readonly MelonPreferences_Entry<bool> EntryTrackPickups =
         Category.CreateEntry("track_pickups", true, display_name: "Track Pickups", description: "Should pickups be tracked?");
     
-    public static readonly MelonPreferences_Entry<bool> EntryTrackAttachments =
+    private static readonly MelonPreferences_Entry<bool> EntryTrackAttachments =
         Category.CreateEntry("track_attachments", true, display_name: "Track Attachments", description: "Should attachments be tracked?");
 
-    public static readonly MelonPreferences_Entry<bool> EntryTrackSeats =
+    private static readonly MelonPreferences_Entry<bool> EntryTrackSeats =
         Category.CreateEntry("track_seats", true, display_name: "Track Seats", description: "Should seats be tracked?");
     
-    public static readonly MelonPreferences_Entry<bool> EntryOnlySpawnedByMe =
+    private static readonly MelonPreferences_Entry<bool> EntryOnlySpawnedByMe =
         Category.CreateEntry("only_spawned_by_me", true, display_name: "Only Spawned By Me", description: "Should only props spawned by me be tracked?");
 
     #endregion Melon Preferences
