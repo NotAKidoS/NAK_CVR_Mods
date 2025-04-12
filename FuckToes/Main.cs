@@ -3,23 +3,22 @@ using ABI_RC.Systems.IK;
 using MelonLoader;
 using RootMotion.FinalIK;
 using System.Reflection;
+using ABI_RC.Core;
 
 namespace NAK.FuckToes;
 
 public class FuckToesMod : MelonMod
 {
-    private static MelonLogger.Instance Logger;
-
     #region Melon Preferences
 
     private static readonly MelonPreferences_Category Category =
-        MelonPreferences.CreateCategory(nameof(FuckToesMod));
+        MelonPreferences.CreateCategory(nameof(FuckToes));
 
     private static readonly MelonPreferences_Entry<bool> EntryEnabledVR =
-        Category.CreateEntry("Enabled in HalfBody", true, description: "Nuke VRIK toes when in Halfbody.");
+        Category.CreateEntry("use_in_halfbody", true, display_name:"No Toes in Halfbody", description: "Nuke VRIK toes when in Halfbody.");
 
     private static readonly MelonPreferences_Entry<bool> EntryEnabledFBT =
-        Category.CreateEntry("Enabled in FBT", true, description: "Nuke VRIK toes when in FBT.");
+        Category.CreateEntry("use_in_fbt", true, display_name:"No Toes in Fullbody", description: "Nuke VRIK toes when in FBT.");
 
     #endregion Melon Preferences
 
@@ -27,10 +26,10 @@ public class FuckToesMod : MelonMod
     
     public override void OnInitializeMelon()
     {
-        Logger = LoggerInstance;
         HarmonyInstance.Patch(
             typeof(VRIK).GetMethod(nameof(VRIK.AutoDetectReferences)),
-            prefix: new HarmonyLib.HarmonyMethod(typeof(FuckToesMod).GetMethod(nameof(OnVRIKAutoDetectReferences_Prefix), BindingFlags.NonPublic | BindingFlags.Static))
+            prefix: new HarmonyLib.HarmonyMethod(typeof(FuckToesMod).GetMethod(nameof(OnVRIKAutoDetectReferences_Prefix), 
+                BindingFlags.NonPublic | BindingFlags.Static))
         );
     }
     
@@ -43,13 +42,12 @@ public class FuckToesMod : MelonMod
         try
         {
             // Must be PlayerLocal layer and in VR
-            if (__instance.gameObject.layer != 8 
+            if (__instance.gameObject.layer != CVRLayers.PlayerLocal
                 || !MetaPort.Instance.isUsingVr)
                 return;
 
             switch (IKSystem.Instance.BodySystem.FullBodyActive)
             {
-                
                 case false when !EntryEnabledVR.Value: // Not in FBT, and not enabled, perish
                 case true when !EntryEnabledFBT.Value: // In FBT, and not enabled in fbt, perish
                     return;
@@ -61,8 +59,8 @@ public class FuckToesMod : MelonMod
         }
         catch (Exception e)
         {
-            Logger.Error($"Error during the patched method {nameof(OnVRIKAutoDetectReferences_Prefix)}");
-            Logger.Error(e);
+            MelonLogger.Error($"Error during the patched method {nameof(OnVRIKAutoDetectReferences_Prefix)}");
+            MelonLogger.Error(e);
         }
     }
     
