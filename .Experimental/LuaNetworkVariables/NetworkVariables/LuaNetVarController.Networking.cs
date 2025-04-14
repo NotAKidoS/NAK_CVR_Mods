@@ -1,7 +1,6 @@
 ﻿using ABI_RC.Core.Savior;
 using ABI_RC.Systems.ModNetwork;
 using MoonSharp.Interpreter;
-using Unity.Services.Authentication.Internal;
 
 namespace NAK.LuaNetVars
 {
@@ -66,7 +65,7 @@ namespace NAK.LuaNetVars
             msg.Read(out int argsCount);
 
             DateTime lastInvokeTime = _eventTracker.GetLastInvokeTimeForSender(eventName, senderId);
-            LuaEventContext context = LuaEventContext.Create(senderId, lastInvokeTime);
+            LuaEventContext context = LuaEventContext.Create(false, senderId, lastInvokeTime);
 
             // Update tracking
             _eventTracker.UpdateInvokeTime(eventName, senderId);
@@ -187,7 +186,7 @@ namespace NAK.LuaNetVars
         {
             string senderId = MetaPort.Instance.ownerId;
             DateTime lastInvokeTime = _eventTracker.GetLastInvokeTimeForSender(eventName, senderId);
-            LuaEventContext context = LuaEventContext.Create(senderId, lastInvokeTime);
+            LuaEventContext context = LuaEventContext.Create(true, senderId, lastInvokeTime);
 
             // Update tracking
             _eventTracker.UpdateInvokeTime(eventName, senderId);
@@ -199,6 +198,32 @@ namespace NAK.LuaNetVars
             InvokeLuaEvent(eventName, argsWithContext);
 
             using ModNetworkMessage modMsg = new(ModNetworkID);
+            modMsg.Write((byte)MessageType.LuaEvent);
+            modMsg.Write(eventName);
+            modMsg.Write(args.Length);
+
+            foreach (DynValue arg in args)
+                SerializeDynValue(modMsg, arg);
+
+            modMsg.Send();
+        }
+
+        internal void SendLuaEventToUser(string eventName, string userId, DynValue[] args)
+        {
+            string senderId = MetaPort.Instance.ownerId;
+            DateTime lastInvokeTime = _eventTracker.GetLastInvokeTimeForSender(eventName, senderId);
+            LuaEventContext context = LuaEventContext.Create(true, senderId, lastInvokeTime);
+
+            // Update tracking
+            _eventTracker.UpdateInvokeTime(eventName, senderId);
+
+            var argsWithContext = new DynValue[args.Length + 1];
+            argsWithContext[0] = DynValue.FromObject(_luaClientBehaviour.script, context.ToLuaTable(_luaClientBehaviour.script));
+            Array.Copy(args, 0, argsWithContext, 1, args.Length);
+
+            InvokeLuaEvent(eventName, argsWithContext);
+
+            using ModNetworkMessage modMsg = new(ModNetworkID, userId);
             modMsg.Write((byte)MessageType.LuaEvent);
             modMsg.Write(eventName);
             modMsg.Write(args.Length);

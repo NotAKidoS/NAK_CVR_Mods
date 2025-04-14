@@ -1,12 +1,11 @@
 ﻿using ABI_RC.Core.Base;
 using ABI.Scripting.CVRSTL.Common;
 using JetBrains.Annotations;
-using NAK.LuaNetVars;
 using MoonSharp.Interpreter;
 
 namespace NAK.LuaNetVars.Modules;
 
-[PublicAPI] // Indicates that this class is used and should not be considered unused
+[PublicAPI]
 public class LuaNetModule : BaseScriptedStaticWrapper
 {
     public const string MODULE_ID = "NetworkModule";
@@ -100,6 +99,25 @@ public class LuaNetModule : BaseScriptedStaticWrapper
         }
 
         _controller.SendLuaEvent(eventName, args);
+    }
+    
+    /// <summary>
+    /// Sends a Lua event to other clients.
+    /// </summary>
+    /// <param name="eventName">The name of the event to send.</param>
+    /// <param name="args">Optional arguments to send with the event.</param>
+    public void SendLuaEventToUser(string eventName, string userId, params DynValue[] args)
+    {
+        CheckIfCanAccessMethod(nameof(SendLuaEventToUser), false,
+            CVRLuaEnvironmentContext.CLIENT, CVRLuaObjectContext.ALL_BUT_EVENTS, CVRLuaOwnerContext.ANY);
+
+        if (_controller == null)
+        {
+            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            return;
+        }
+
+        _controller.SendLuaEventToUser(eventName, userId, args);
     }
 
     /// <summary>

@@ -18,24 +18,22 @@ public class LuaNetVarsMod : MelonMod
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
-        
         ApplyPatches(typeof(Patches.LuaScriptFactory_Patches));
-        ApplyPatches(typeof(Patches.CVRSyncHelper_Patches));
     }
     
-    public override void OnUpdate()
-    {
-        // if (Input.GetKeyDown(KeyCode.F1))
-        // {
-        //     PlayerSetup.Instance.DropProp("be0b5acc-a987-48dc-a28b-62bd912fe3a0");
-        // }
-        //
-        // if (Input.GetKeyDown(KeyCode.F2))
-        // {
-        //     GameObject go = new("TestSyncedObject");
-        //     go.AddComponent<TestSyncedObject>();
-        // }
-    }
+    // public override void OnUpdate()
+    // {
+    //     // if (Input.GetKeyDown(KeyCode.F1))
+    //     // {
+    //     //     PlayerSetup.Instance.DropProp("be0b5acc-a987-48dc-a28b-62bd912fe3a0");
+    //     // }
+    //     //
+    //     // if (Input.GetKeyDown(KeyCode.F2))
+    //     // {
+    //     //     GameObject go = new("TestSyncedObject");
+    //     //     go.AddComponent<TestSyncedObject>();
+    //     // }
+    // }
 
     #endregion Melon Events
     

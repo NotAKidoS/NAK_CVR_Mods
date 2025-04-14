@@ -5,6 +5,7 @@ using ABI.CCK.Components;
 using ABI.Scripting.CVRSTL.Common;
 using MoonSharp.Interpreter;
 using UnityEngine;
+using Coroutine = UnityEngine.Coroutine;
 
 namespace NAK.LuaNetVars;
 
@@ -26,21 +27,23 @@ public partial class LuaNetVarController : MonoBehaviour
     private bool _requestInitialSync;
     private CVRSpawnable _spawnable;
     private CVRObjectSync _objectSync;
-
+    
+    private bool _isInitialized;
+    private Coroutine _syncCoroutine;
+    
     #region Unity Events
     
     private void Awake()
-    {
-        if (!Initialize())
-            return;
-        
-        // TODO: a manager script should be in charge of this
-        // TODO: disabling object will kill coroutine
-        StartCoroutine(SendVariableUpdatesCoroutine());
-    }
-
+        => _isInitialized = Initialize();
+    
     private void OnDestroy()
         => Cleanup();
+
+    private void OnEnable()
+        => StartStopVariableUpdatesCoroutine(true);
+    
+    private void OnDisable()
+        => StartStopVariableUpdatesCoroutine(false);
     
     #endregion Unity Events
 
@@ -102,9 +105,16 @@ public partial class LuaNetVarController : MonoBehaviour
         _hashes.Remove(_uniquePathHash);
     }
 
+    private void StartStopVariableUpdatesCoroutine(bool start)
+    {
+        if (_syncCoroutine != null) StopCoroutine(_syncCoroutine);
+        _syncCoroutine = null;
+        if (start) _syncCoroutine = StartCoroutine(SendVariableUpdatesCoroutine());
+    }
+    
     private System.Collections.IEnumerator SendVariableUpdatesCoroutine()
     {
-        while (true)
+        while (isActiveAndEnabled)
         {
             yield return new WaitForSeconds(0.1f);
             if (IsSyncOwner()) SendVariableUpdates();

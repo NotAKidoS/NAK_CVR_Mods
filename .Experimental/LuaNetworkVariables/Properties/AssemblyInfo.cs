@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.LuaNetVars),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/WhereAmIPointing"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/LuaNetworkVariables"
 )]
 
 [assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
@@ -27,6 +27,6 @@ using System.Reflection;
 namespace NAK.LuaNetVars.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }
