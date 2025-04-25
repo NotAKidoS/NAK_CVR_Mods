@@ -101,10 +101,10 @@ public class ConfigureCalibrationPoseMod : MelonMod
                     break;
                 case CalibrationPose.RacushSit:
                     for (int i = 0; i < RacushSitMuscles.Length; i++)
-                        ikSystem.ApplyMuscleValue((MuscleIndex) i, RacushSitMuscles[i], ref muscles);
+                        ikSystem.ApplyMuscleValue((MuscleIndex)i, RacushSitMuscles[i], ref muscles);
                     break;
             }
-            
+
             humanPose.bodyPosition = Vector3.up;
             humanPose.bodyRotation = Quaternion.identity;
         }
@@ -439,8 +439,8 @@ public class ConfigureCalibrationPoseMod : MelonMod
         0.8105f,
         0.8105f
     ];
-    
-    private static readonly float[] RacushSitMuscles =
+
+    public static readonly float[] RacushSitMuscles =
     [
         0.0000f,
         0.0000f,
@@ -463,40 +463,40 @@ public class ConfigureCalibrationPoseMod : MelonMod
         0.0000f,
         0.0000f,
         0.0000f,
-        -0.7500f,
-        -0.0002f,
-        0.1599f,
-        -0.1500f,
+       -0.7600f,
         0.1000f,
+        0.0600f,
+       -0.1800f,
+       -0.0991f,
         0.1300f,
-        -0.0001f,
+        0.0001f,
         0.0000f,
-        -0.7500f,
-        -0.0002f,
-        0.1599f,
-        -0.1500f,
+       -0.7600f,
         0.1000f,
+        0.0600f,
+       -0.1800f,
+       -0.0991f,
         0.1300f,
-        -0.0001f,
+        0.0001f,
         0.0000f,
         0.0000f,
         0.0000f,
         0.3927f,
-        0.3114f,
-        0.0805f,
+        0.3115f,
+        0.0931f,
         0.9650f,
-        -0.0536f,
-        0.0024f,
-        0.0005f,
+       -0.0662f,
+        0.0026f,
+        0.0006f,
         0.0000f,
         0.0000f,
-        0.3928f,
-        0.3114f,
-        0.0805f,
+        0.3927f,
+        0.3115f,
+        0.0931f,
         0.9650f,
-        -0.0536f,
-        0.0024f,
-        0.0005f,
+       -0.0662f,
+        0.0026f,
+        0.0006f,
         0.0000f,
         0.0000f,
         0.0000f,
