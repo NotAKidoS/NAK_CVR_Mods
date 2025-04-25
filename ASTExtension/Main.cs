@@ -121,7 +121,8 @@ public class ASTExtensionMod : MelonMod
 
     private void OnLocalAvatarLoad()
     {
-        if (!FindSupportedParameter(out string parameterName))
+        _currentAvatarSupported = FindSupportedParameter(out string parameterName);
+        if (!_currentAvatarSupported)
             return;
         
         if (!AttemptCalibrateParameter(parameterName, out float minHeight, out float maxHeight, out float modifier))
