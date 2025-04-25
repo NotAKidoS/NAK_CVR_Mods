@@ -1,6 +1,7 @@
 ﻿using ABI.CCK.Components;
 using ABI.Scripting.CVRSTL.Client;
 using System.Diagnostics;
+using ABI_RC.Scripting.Persistence;
 using MTJobSystem;
 using UnityEngine;
 
@@ -108,8 +109,11 @@ public static class CVRLuaClientBehaviourExtensions
         behaviour._startupMessageQueue.Clear(); // will be repopulated
         behaviour.LogInfo("[CVRLuaToolsExtension] Resetting script...\n");
 
+        // remove the script from the persistence manager, as the storage needs to be reinitialized
+        PersistenceManager.HandleUnsubscribe(behaviour.Storage, behaviour.script, behaviour.Context.ParentContent.ContentType, behaviour.Context.AssetID);
+            
         behaviour.script = null;
-        behaviour.script = LuaScriptFactory.ForLuaBehaviour(behaviour, boundObjectEntries, behaviour.gameObject, behaviour.transform, PersistentDataPath);
+        behaviour.script = LuaScriptFactory.ForLuaBehaviour(behaviour, boundObjectEntries, behaviour.gameObject, behaviour.transform);
                 
         behaviour.InitTimerIfNeeded(); // only null if crashed prior
         behaviour.script.AttachDebugger(behaviour.timer); // reattach the debugger
