@@ -8,9 +8,10 @@
 |------|-------------|----------|
 | [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ASTExtension.dll) |
 | [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/AvatarQueueSystemTweaks.dll) |
+| [ConfigureCalibrationPose](ConfigureCalibrationPose/README.md) | Select FBT calibration pose. | No Download |
 | [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/CustomSpawnPoint.dll) |
 | [DoubleTapJumpToExitSeat](DoubleTapJumpToExitSeat/README.md) | Replaces seat exit controls with a double-tap of the jump button, avoiding accidental exits from joystick drift or opening the menu. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/DoubleTapJumpToExitSeat.dll) |
-| [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in Halfbody or Fullbody. | No Download |
+| [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in Halfbody or Fullbody. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/FuckToes.dll) |
 | [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/KeepVelocityOnExitFlight.dll) |
 | [LazyPrune](LazyPrune/README.md) | Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/LazyPrune.dll) |
 | [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/PropLoadingHexagon.dll) |
