@@ -60,6 +60,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleTapJumpToExitSeat", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FuckToes", "FuckToes\FuckToes.csproj", "{751E4140-2F4D-4550-A4A9-65ABA9F7893A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LuaNetworkVariables", ".Experimental\LuaNetworkVariables\LuaNetworkVariables.csproj", "{6E7857D9-07AC-419F-B111-0DB0348D1C92}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TouchySquishy", ".Blackbox\TouchySquishy\TouchySquishy.csproj", "{FF4BF0E7-698D-49A0-96E9-0E2646FEAFFA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CVRLuaToolsExtension", ".Experimental\CVRLuaToolsExtension\CVRLuaToolsExtension.csproj", "{3D221A25-007F-4764-98CD-CEEF2EB92165}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigureCalibrationPose", "ConfigureCalibrationPose\ConfigureCalibrationPose.csproj", "{31667A36-D069-4708-9DCA-E3446009941B}"
+EndProject
 EndProject
 EndProject
 EndProject
@@ -307,6 +315,22 @@ Global
 		{751E4140-2F4D-4550-A4A9-65ABA9F7893A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{751E4140-2F4D-4550-A4A9-65ABA9F7893A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{751E4140-2F4D-4550-A4A9-65ABA9F7893A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E7857D9-07AC-419F-B111-0DB0348D1C92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E7857D9-07AC-419F-B111-0DB0348D1C92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E7857D9-07AC-419F-B111-0DB0348D1C92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E7857D9-07AC-419F-B111-0DB0348D1C92}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF4BF0E7-698D-49A0-96E9-0E2646FEAFFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF4BF0E7-698D-49A0-96E9-0E2646FEAFFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF4BF0E7-698D-49A0-96E9-0E2646FEAFFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF4BF0E7-698D-49A0-96E9-0E2646FEAFFA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D221A25-007F-4764-98CD-CEEF2EB92165}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D221A25-007F-4764-98CD-CEEF2EB92165}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D221A25-007F-4764-98CD-CEEF2EB92165}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D221A25-007F-4764-98CD-CEEF2EB92165}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31667A36-D069-4708-9DCA-E3446009941B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31667A36-D069-4708-9DCA-E3446009941B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31667A36-D069-4708-9DCA-E3446009941B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31667A36-D069-4708-9DCA-E3446009941B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

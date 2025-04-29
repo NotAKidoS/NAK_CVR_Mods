@@ -1,4 +1,5 @@
 ﻿using ABI_RC.Core.Networking;
+using ABI_RC.Core.Player;
 using DarkRift;
 using UnityEngine;
 
@@ -9,7 +10,9 @@ public static partial class ModNetwork
     #region Private Methods
 
     private static bool CanSendModNetworkMessage()
-        => _isSubscribedToModNetwork && IsConnectedToGameNetwork();
+        => _isSubscribedToModNetwork 
+           && IsConnectedToGameNetwork()
+           && CVRPlayerManager.Instance.NetworkPlayers.Count > 0; // No need to send if there are no players
     
     private static bool IsConnectedToGameNetwork()
     {
