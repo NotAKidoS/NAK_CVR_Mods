@@ -28,13 +28,13 @@ function Start()
 
     -- Registers "ButtonClickedEvent" as a networked event. This provides context alongside the arguments passed.
     NetworkModule:RegisterEventCallback("ButtonClickedEvent", function(context, message)
-        print("ButtonClickedEvent triggered by " .. tostring(context.senderName) .. " with message: " .. tostring(message))
+        print("ButtonClickedEvent triggered by " .. tostring(context.SenderName) .. " with message: " .. tostring(message))
         print("Context details:")
-        print("  senderId: " .. tostring(context.senderId))
-        print("  senderName: " .. tostring(context.senderName))
-        print("  lastInvokeTime: " .. tostring(context.lastInvokeTime))
-        print("  timeSinceLastInvoke: " .. tostring(context.timeSinceLastInvoke))
-        print("  isLocal: " .. tostring(context.isLocal))
+        print("  SenderId: " .. tostring(context.SenderId))
+        print("  SenderName: " .. tostring(context.SenderName))
+        print("  LastInvokeTime: " .. tostring(context.LastInvokeTime))
+        print("  TimeSinceLastInvoke: " .. tostring(context.TimeSinceLastInvoke))
+        print("  IsLocal: " .. tostring(context.IsLocal))
     end)
 
     -- Secondry example
@@ -63,7 +63,7 @@ end
 -- Listener Functions --
 
 function OnCoolEventOccured(context, value, value2)
-    print("CoolEvent triggered by " .. tostring(context.senderName))
+    print("CoolEvent triggered by " .. tostring(context.SenderName))
     print("Received values: " .. tostring(value) .. ", " .. tostring(value2))
     print("Context details:")
     print("  SenderId: " .. tostring(context.SenderId))
