@@ -2,9 +2,9 @@
 using MelonLoader;
 using UnityEngine;
 
-namespace NAK.LuaNetVars;
+namespace NAK.LuaNetworkVariables;
 
-public class LuaNetVarsMod : MelonMod
+public class LuaNetworkVariablesMod : MelonMod
 {
     internal static MelonLogger.Instance Logger;
     

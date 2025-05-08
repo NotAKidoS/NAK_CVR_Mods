@@ -3,7 +3,7 @@ using ABI.Scripting.CVRSTL.Common;
 using JetBrains.Annotations;
 using MoonSharp.Interpreter;
 
-namespace NAK.LuaNetVars.Modules;
+namespace NAK.LuaNetworkVariables.Modules;
 
 [PublicAPI]
 public class LuaNetModule : BaseScriptedStaticWrapper
@@ -37,7 +37,7 @@ public class LuaNetModule : BaseScriptedStaticWrapper
 
         if (_controller == null)
         {
-            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            LuaNetworkVariablesMod.Logger.Error("LuaNetVarController is null.");
             return;
         }
 
@@ -56,7 +56,7 @@ public class LuaNetModule : BaseScriptedStaticWrapper
 
         if (_controller == null)
         {
-            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            LuaNetworkVariablesMod.Logger.Error("LuaNetVarController is null.");
             return;
         }
 
@@ -75,7 +75,7 @@ public class LuaNetModule : BaseScriptedStaticWrapper
 
         if (_controller == null)
         {
-            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            LuaNetworkVariablesMod.Logger.Error("LuaNetVarController is null.");
             return;
         }
 
@@ -94,7 +94,7 @@ public class LuaNetModule : BaseScriptedStaticWrapper
 
         if (_controller == null)
         {
-            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            LuaNetworkVariablesMod.Logger.Error("LuaNetVarController is null.");
             return;
         }
 
@@ -113,7 +113,7 @@ public class LuaNetModule : BaseScriptedStaticWrapper
 
         if (_controller == null)
         {
-            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            LuaNetworkVariablesMod.Logger.Error("LuaNetVarController is null.");
             return;
         }
 
@@ -130,7 +130,7 @@ public class LuaNetModule : BaseScriptedStaticWrapper
 
         if (_controller == null)
         {
-            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            LuaNetworkVariablesMod.Logger.Error("LuaNetVarController is null.");
             return false;
         }
 
@@ -144,7 +144,7 @@ public class LuaNetModule : BaseScriptedStaticWrapper
 
         if (_controller == null)
         {
-            LuaNetVarsMod.Logger.Error("LuaNetVarController is null.");
+            LuaNetworkVariablesMod.Logger.Error("LuaNetVarController is null.");
             return string.Empty;
         }
 

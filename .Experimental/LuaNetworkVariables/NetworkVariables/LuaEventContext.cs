@@ -2,7 +2,7 @@
 using MoonSharp.Interpreter;
 using ABI_RC.Core.Player;
 
-namespace NAK.LuaNetVars;
+namespace NAK.LuaNetworkVariables;
 
 public struct LuaEventContext
 {

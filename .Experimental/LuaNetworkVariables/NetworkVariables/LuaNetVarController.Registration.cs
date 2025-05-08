@@ -1,6 +1,6 @@
 ﻿using MoonSharp.Interpreter;
 
-namespace NAK.LuaNetVars;
+namespace NAK.LuaNetworkVariables;
 
 public partial class LuaNetVarController
 {
@@ -8,7 +8,7 @@ public partial class LuaNetVarController
     {
         if (_registeredNetworkVars.ContainsKey(varName))
         {
-            LuaNetVarsMod.Logger.Warning($"Network variable {varName} already registered!");
+            LuaNetworkVariablesMod.Logger.Warning($"Network variable {varName} already registered!");
             return;
         }
 
@@ -18,7 +18,7 @@ public partial class LuaNetVarController
         RegisterGetterFunction(varName);
         RegisterSetterFunction(varName);
 
-        LuaNetVarsMod.Logger.Msg($"Registered network variable {varName}");
+        LuaNetworkVariablesMod.Logger.Msg($"Registered network variable {varName}");
     }
 
     private void RegisterGetterFunction(string varName)
@@ -38,7 +38,7 @@ public partial class LuaNetVarController
             var newValue = args[0];
             if (!IsSupportedDynValue(newValue))
             {
-                LuaNetVarsMod.Logger.Error($"Unsupported DynValue type: {newValue.Type} for variable {varName}");
+                LuaNetworkVariablesMod.Logger.Error($"Unsupported DynValue type: {newValue.Type} for variable {varName}");
                 return DynValue.Nil;
             }
 
@@ -68,10 +68,10 @@ public partial class LuaNetVarController
         if (!ValidateCallback(callback) || !ValidateNetworkVar(varName)) return;
 
         if (_registeredNotifyCallbacks.ContainsKey(varName))
-            LuaNetVarsMod.Logger.Warning($"Overwriting notify callback for {varName}");
+            LuaNetworkVariablesMod.Logger.Warning($"Overwriting notify callback for {varName}");
 
         _registeredNotifyCallbacks[varName] = callback;
-        LuaNetVarsMod.Logger.Msg($"Registered notify callback for {varName}");
+        LuaNetworkVariablesMod.Logger.Msg($"Registered notify callback for {varName}");
     }
 
     internal void RegisterEventCallback(string eventName, DynValue callback)
@@ -79,23 +79,23 @@ public partial class LuaNetVarController
         if (!ValidateCallback(callback)) return;
 
         if (_registeredEventCallbacks.ContainsKey(eventName))
-            LuaNetVarsMod.Logger.Warning($"Overwriting event callback for {eventName}");
+            LuaNetworkVariablesMod.Logger.Warning($"Overwriting event callback for {eventName}");
 
         _registeredEventCallbacks[eventName] = callback;
-        LuaNetVarsMod.Logger.Msg($"Registered event callback for {eventName}");
+        LuaNetworkVariablesMod.Logger.Msg($"Registered event callback for {eventName}");
     }
 
     private bool ValidateCallback(DynValue callback)
     {
         if (callback?.Function != null) return true;
-        LuaNetVarsMod.Logger.Error("Passed DynValue must be a function");
+        LuaNetworkVariablesMod.Logger.Error("Passed DynValue must be a function");
         return false;
     }
 
     private bool ValidateNetworkVar(string varName)
     {
         if (_registeredNetworkVars.ContainsKey(varName)) return true;
-        LuaNetVarsMod.Logger.Error($"Attempted to register notify callback for non-registered variable {varName}.");
+        LuaNetworkVariablesMod.Logger.Error($"Attempted to register notify callback for non-registered variable {varName}.");
         return false;
     }
 }

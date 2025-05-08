@@ -1,4 +1,4 @@
-﻿namespace NAK.LuaNetVars;
+﻿namespace NAK.LuaNetworkVariables;
 
 internal class LuaEventTracker
 {

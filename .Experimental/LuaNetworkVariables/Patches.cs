@@ -2,9 +2,9 @@
 using ABI.Scripting.CVRSTL.Common;
 using HarmonyLib;
 using MoonSharp.Interpreter;
-using NAK.LuaNetVars.Modules;
+using NAK.LuaNetworkVariables.Modules;
 
-namespace NAK.LuaNetVars.Patches;
+namespace NAK.LuaNetworkVariables.Patches;
 
 internal static class LuaScriptFactory_Patches
 {

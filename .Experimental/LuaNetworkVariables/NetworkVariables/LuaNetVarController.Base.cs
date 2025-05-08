@@ -7,7 +7,7 @@ using MoonSharp.Interpreter;
 using UnityEngine;
 using Coroutine = UnityEngine.Coroutine;
 
-namespace NAK.LuaNetVars;
+namespace NAK.LuaNetworkVariables;
 
 public partial class LuaNetVarController : MonoBehaviour
 {
@@ -58,13 +58,13 @@ public partial class LuaNetVarController : MonoBehaviour
 
         if (ModNetworkID.Length > ModNetworkManager.MaxMessageIdLength)
         {
-            LuaNetVarsMod.Logger.Error($"ModNetworkID ({ModNetworkID}) exceeds max length of {ModNetworkManager.MaxMessageIdLength} characters!");
+            LuaNetworkVariablesMod.Logger.Error($"ModNetworkID ({ModNetworkID}) exceeds max length of {ModNetworkManager.MaxMessageIdLength} characters!");
             return false;
         }
         
         _hashes.Add(_uniquePathHash);
         ModNetworkManager.Subscribe(ModNetworkID, OnMessageReceived);
-        LuaNetVarsMod.Logger.Msg($"Registered LuaNetVarController with ModNetworkID: {ModNetworkID}");
+        LuaNetworkVariablesMod.Logger.Msg($"Registered LuaNetVarController with ModNetworkID: {ModNetworkID}");
         
         switch (_luaClientBehaviour.Context.objContext)
         {
@@ -101,7 +101,7 @@ public partial class LuaNetVarController : MonoBehaviour
             return;
         
         ModNetworkManager.Unsubscribe(ModNetworkID);
-        LuaNetVarsMod.Logger.Msg($"Unsubscribed LuaNetVarController with ModNetworkID: {ModNetworkID}");
+        LuaNetworkVariablesMod.Logger.Msg($"Unsubscribed LuaNetVarController with ModNetworkID: {ModNetworkID}");
         _hashes.Remove(_uniquePathHash);
     }
 

@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Systems.ModNetwork;
 using MoonSharp.Interpreter;
 
-namespace NAK.LuaNetVars;
+namespace NAK.LuaNetworkVariables;
 
 public partial class LuaNetVarController
 {
@@ -24,7 +24,7 @@ public partial class LuaNetVarController
             case DataType.Nil:
                 return DynValue.Nil;
             default:
-                LuaNetVarsMod.Logger.Error($"Unsupported data type received: {dataType}");
+                LuaNetworkVariablesMod.Logger.Error($"Unsupported data type received: {dataType}");
                 return DynValue.Nil;
         }
     }
@@ -49,7 +49,7 @@ public partial class LuaNetVarController
                 msg.Write((byte)DataType.Nil);
                 break;
             default:
-                LuaNetVarsMod.Logger.Error($"Unsupported DynValue type: {value.Type}");
+                LuaNetworkVariablesMod.Logger.Error($"Unsupported DynValue type: {value.Type}");
                 msg.Write((byte)DataType.Nil);
                 break;
         }

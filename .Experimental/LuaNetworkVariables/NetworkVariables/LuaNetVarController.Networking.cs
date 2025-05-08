@@ -2,7 +2,7 @@
 using ABI_RC.Systems.ModNetwork;
 using MoonSharp.Interpreter;
 
-namespace NAK.LuaNetVars
+namespace NAK.LuaNetworkVariables
 {
     public partial class LuaNetVarController
     {
@@ -46,7 +46,7 @@ namespace NAK.LuaNetVars
             msg.Read(out string varName);
             DynValue newValue = DeserializeDynValue(msg);
 
-            LuaNetVarsMod.Logger.Msg($"Received LuaVariable update: {varName} = {newValue}");
+            LuaNetworkVariablesMod.Logger.Msg($"Received LuaVariable update: {varName} = {newValue}");
 
             if (_registeredNetworkVars.TryGetValue(varName, out DynValue var))
             {
@@ -54,7 +54,7 @@ namespace NAK.LuaNetVars
             }
             else
             {
-                LuaNetVarsMod.Logger.Warning($"Received update for unregistered variable {varName}");
+                LuaNetworkVariablesMod.Logger.Warning($"Received update for unregistered variable {varName}");
             }
         }
 
@@ -79,7 +79,7 @@ namespace NAK.LuaNetVars
                 args[i + 1] = DeserializeDynValue(msg);
             }
 
-            LuaNetVarsMod.Logger.Msg($"Received LuaEvent: {eventName} from {context.SenderName} with {argsCount} args");
+            LuaNetworkVariablesMod.Logger.Msg($"Received LuaEvent: {eventName} from {context.SenderName} with {argsCount} args");
 
             InvokeLuaEvent(eventName, args);
         }
@@ -98,7 +98,7 @@ namespace NAK.LuaNetVars
                 }
                 else
                 {
-                    LuaNetVarsMod.Logger.Warning($"Received sync for unregistered variable {varName}");
+                    LuaNetworkVariablesMod.Logger.Warning($"Received sync for unregistered variable {varName}");
                 }
             }
         }
@@ -121,7 +121,7 @@ namespace NAK.LuaNetVars
             }
             else
             {
-                LuaNetVarsMod.Logger.Warning($"No registered callback for event {eventName}");
+                LuaNetworkVariablesMod.Logger.Warning($"No registered callback for event {eventName}");
             }
         }
 
@@ -159,7 +159,7 @@ namespace NAK.LuaNetVars
             }
             modMsg.Send();
             
-            LuaNetVarsMod.Logger.Msg($"Sent variable sync to {userId}");
+            LuaNetworkVariablesMod.Logger.Msg($"Sent variable sync to {userId}");
         }
         
         private void RequestVariableSync()
@@ -167,7 +167,7 @@ namespace NAK.LuaNetVars
             using ModNetworkMessage modMsg = new(ModNetworkID);
             modMsg.Write((byte)MessageType.RequestSync);
             modMsg.Send();
-            LuaNetVarsMod.Logger.Msg("Requested variable sync");
+            LuaNetworkVariablesMod.Logger.Msg("Requested variable sync");
         }
 
         // private DynValue SendLuaEventCallback(ScriptExecutionContext context, CallbackArguments args)

@@ -1,7 +1,7 @@
 ﻿using ABI_RC.Core.Savior;
 using UnityEngine;
 
-namespace NAK.LuaNetVars;
+namespace NAK.LuaNetworkVariables;
 
 public partial class LuaNetVarController
 {
@@ -13,10 +13,10 @@ public partial class LuaNetVarController
         // Check if it already exists (this **should** only matter in worlds)
         if (_hashes.Contains(hash))
         {
-            LuaNetVarsMod.Logger.Warning($"Duplicate RelativeSyncMarker found at path {path}");
+            LuaNetworkVariablesMod.Logger.Warning($"Duplicate RelativeSyncMarker found at path {path}");
             if (!FindAvailableHash(ref hash)) // Super lazy fix idfc
             {
-                LuaNetVarsMod.Logger.Error($"Failed to find available hash for RelativeSyncMarker after 16 tries! {path}");
+                LuaNetworkVariablesMod.Logger.Error($"Failed to find available hash for RelativeSyncMarker after 16 tries! {path}");
                 return false;
             }
         }

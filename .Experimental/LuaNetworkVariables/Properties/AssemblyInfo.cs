@@ -1,17 +1,17 @@
-﻿using NAK.LuaNetVars.Properties;
+﻿using NAK.LuaNetworkVariables.Properties;
 using MelonLoader;
 using System.Reflection;
 
 [assembly: AssemblyVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyFileVersion(AssemblyInfoParams.Version)]
 [assembly: AssemblyInformationalVersion(AssemblyInfoParams.Version)]
-[assembly: AssemblyTitle(nameof(NAK.LuaNetVars))]
+[assembly: AssemblyTitle(nameof(NAK.LuaNetworkVariables))]
 [assembly: AssemblyCompany(AssemblyInfoParams.Author)]
-[assembly: AssemblyProduct(nameof(NAK.LuaNetVars))]
+[assembly: AssemblyProduct(nameof(NAK.LuaNetworkVariables))]
 
 [assembly: MelonInfo(
-    typeof(NAK.LuaNetVars.LuaNetVarsMod),
-    nameof(NAK.LuaNetVars),
+    typeof(NAK.LuaNetworkVariables.LuaNetworkVariablesMod),
+    nameof(NAK.LuaNetworkVariables),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
     downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/LuaNetworkVariables"
@@ -24,9 +24,9 @@ using System.Reflection;
 [assembly: MelonAuthorColor(255, 158, 21, 32)] // red
 [assembly: HarmonyDontPatchAll]
 
-namespace NAK.LuaNetVars.Properties;
+namespace NAK.LuaNetworkVariables.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.1";
+    public const string Version = "1.0.2";
     public const string Author = "NotAKidoS";
 }

@@ -1,6 +1,77 @@
-# WhereAmIPointing
+# LuaNetworkVariables
 
-Simple mod that makes your controller rays always visible when the menus are open. Useful for when you're trying to aim at something in the distance. Also visualizes which ray is being used for menu interaction.
+Adds a simple module for creating network variables & events *kinda* similar to Garry's Mod.
+
+Example Usage:
+```lua
+-- Requires UnityEngine and NetworkModule
+UnityEngine = require("UnityEngine")
+NetworkModule = require("NetworkModule")
+
+-- Unity Events --
+
+function Start()
+
+    if NetworkModule == nil then
+        print("NetworkModule did not load.")
+        return
+    end
+
+    -- Registers "AvatarHeight" as a network variable
+    -- This creates Get and Set functions (GetAvatarHeight() and SetAvatarHeight())
+    NetworkModule:RegisterNetworkVar("AvatarHeight")
+
+    -- Registers a callback for when "AvatarHeight" is changed.
+    NetworkModule:RegisterNotifyCallback("AvatarHeight", function(varName, oldValue, newValue)
+        print(varName .. " changed from " .. tostring(oldValue) .. " to " .. tostring(newValue))
+    end)
+
+    -- Registers "ButtonClickedEvent" as a networked event. This provides context alongside the arguments passed.
+    NetworkModule:RegisterEventCallback("ButtonClickedEvent", function(context, message)
+        print("ButtonClickedEvent triggered by " .. tostring(context.senderName) .. " with message: " .. tostring(message))
+        print("Context details:")
+        print("  senderId: " .. tostring(context.senderId))
+        print("  senderName: " .. tostring(context.senderName))
+        print("  lastInvokeTime: " .. tostring(context.lastInvokeTime))
+        print("  timeSinceLastInvoke: " .. tostring(context.timeSinceLastInvoke))
+        print("  isLocal: " .. tostring(context.isLocal))
+    end)
+
+    -- Secondry example
+    NetworkModule:RegisterEventCallback("CoolEvent", OnCoolEventOccured)
+end
+
+function Update()
+    if not NetworkModule:IsSyncOwner() then
+        return
+    end
+
+    SetAvatarHeight(PlayerAPI.LocalPlayer:GetViewPointPosition().y)
+end
+
+-- Global Functions --
+
+function SendClickEvent()
+    NetworkModule:SendLuaEvent("ButtonClickedEvent", "The button was clicked!")
+    print("Sent ButtonClickedEvent")
+end
+
+function SendCoolEvent()
+    NetworkModule:SendLuaEvent("CoolEvent", 1, 2)
+end
+
+-- Listener Functions --
+
+function OnCoolEventOccured(context, value, value2)
+    print("CoolEvent triggered by " .. tostring(context.senderName))
+    print("Received values: " .. tostring(value) .. ", " .. tostring(value2))
+    print("Context details:")
+    print("  SenderId: " .. tostring(context.SenderId))
+    print("  LastInvokeTime: " .. tostring(context.LastInvokeTime))
+    print("  TimeSinceLastInvoke: " .. tostring(context.TimeSinceLastInvoke))
+    print("  IsLocal: " .. tostring(context.IsLocal))
+end
+```
 
 ---
 
