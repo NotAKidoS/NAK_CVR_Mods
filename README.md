@@ -29,7 +29,7 @@
 |------|-------------|----------|
 | [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality. | No Download |
 | [CustomRichPresence](.Experimental/CustomRichPresence/README.md) | Lets you customize the Steam & Discord rich presence messages & values. | No Download |
-| [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Simple mod that makes your controller rays always visible when the menus are open. Useful for when you're trying to aim at something in the distance. Also visualizes which ray is being used for menu interaction. | No Download |
+| [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Adds a simple module for creating network variables & events *kinda* similar to Garry's Mod. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/LuaNetworkVariables.dll) |
 | [LuaTTS](.Experimental/LuaTTS/README.md) | Provides access to the built-in text-to-speech (TTS) functionality to lua scripts. Allows you to make the local player speak. | No Download |
 | [OriginShift](.Experimental/OriginShift/README.md) | Experimental mod that allows world origin to be shifted to prevent floating point precision issues. | No Download |
 | [ScriptingSpoofer](.Experimental/ScriptingSpoofer/README.md) | Prevents **local** scripts from accessing your Username or UserID by spoofing them with random values each session. | No Download |
