@@ -13,7 +13,6 @@ internal static class CameraLogic
     private static float _dist;
     private static float _scale = 1f;
     private static Camera _thirdPersonCam;
-    private static Camera _uiCam;
     private static Camera _desktopCam;
     private static int _storedCamMask;
     private static CameraFovClone _cameraFovClone;
@@ -51,11 +50,10 @@ internal static class CameraLogic
         
         _cameraFovClone = _thirdPersonCam.gameObject.AddComponent<CameraFovClone>();
 
-        _desktopCam = PlayerSetup.Instance.desktopCamera.GetComponent<Camera>();
+        _desktopCam = PlayerSetup.Instance.desktopCam;
         _cameraFovClone.targetCamera = _desktopCam;
 
         _thirdPersonCam.transform.SetParent(_desktopCam.transform);
-        _uiCam = _desktopCam.transform.Find("_UICamera").GetComponent<Camera>();
 
         RelocateCam(CameraLocation.Default);
 
@@ -66,15 +64,15 @@ internal static class CameraLogic
 
     internal static void CopyPlayerCamValues()
     {
-        Camera activePlayerCam = PlayerSetup.Instance.GetActiveCamera().GetComponent<Camera>();
-        if (_thirdPersonCam == null || activePlayerCam == null) 
+        Camera activePlayerCam = PlayerSetup.Instance.activeCam;
+        if (!_thirdPersonCam || !activePlayerCam) 
             return;
         
         ThirdPerson.Logger.Msg("Copying active camera settings & components.");
-        CVRTools.CopyToDestCam(activePlayerCam, _thirdPersonCam, true);
+        CVRTools.CopyToDestCam(activePlayerCam, _thirdPersonCam);
         
         // Remove PlayerClone
-        _thirdPersonCam.cullingMask &= ~(1 << CVRLayers.PlayerClone);
+        // _thirdPersonCam.cullingMask &= ~(1 << CVRLayers.PlayerClone);
 
         if (!CheckIsRestricted()) 
             return;
@@ -116,9 +114,9 @@ internal static class CameraLogic
     
     private static void ResetDist() => _dist = 0;
     internal static void ScrollDist(float sign) { _dist += sign * 0.25f; RelocateCam(CurrentLocation); }
-    internal static void AdjustScale(float height) { _scale = height; RelocateCam(CurrentLocation); }
+    internal static void AdjustScale(float avatarScaleRelation) { _scale = avatarScaleRelation; RelocateCam(CurrentLocation); }
     internal static void CheckVRMode() { if (MetaPort.Instance.isUsingVr) State = false; }
 
     private static bool CheckIsRestricted()
-        => CVRWorld.Instance != null && !CVRWorld.Instance.enableZoom;
+        => CVRWorld.Instance && !CVRWorld.Instance.enableZoom;
 }

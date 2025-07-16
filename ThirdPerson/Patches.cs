@@ -32,6 +32,6 @@ internal static class Patches
     //Copy camera settings & postprocessing components
     private static void OnPostWorldStart() => CopyPlayerCamValues();
     //Adjust camera distance with height as modifier
-    private static void OnScaleAdjusted(float height) => AdjustScale(height);
+    private static void OnScaleAdjusted(ref float ____avatarScaleRelation) => AdjustScale(____avatarScaleRelation);
     private static void OnConfigureHudAffinity() => CheckVRMode();
 }
