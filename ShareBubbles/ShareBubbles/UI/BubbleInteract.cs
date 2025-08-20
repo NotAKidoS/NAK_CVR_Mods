@@ -1,6 +1,8 @@
 ﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.InteractionSystem.Base;
 using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
+using ABI_RC.Systems.InputManagement;
 using UnityEngine;
 
 namespace NAK.ShareBubbles.UI;
@@ -9,10 +11,22 @@ namespace NAK.ShareBubbles.UI;
 // Must be added manually by ShareBubble creation...
 public class BubbleInteract : Interactable
 {
-    public override bool IsInteractableWithinRange(Vector3 sourcePos)
+    public override bool IsInteractable
     {
-        return Vector3.Distance(transform.position, sourcePos) < 1.5f;
+        get
+        {
+            if (ViewManager.Instance.IsAnyMenuOpen)
+                return true;
+            
+            if (!MetaPort.Instance.isUsingVr
+                && CVRInputManager.Instance.unlockMouse)
+                return true;
+                
+            return false;
+        }
     }
+
+    public override bool IsInteractableWithinRange(Vector3 sourcePos) => true;
 
     public override void OnInteractDown(InteractionContext context, ControllerRay controllerRay)
     {

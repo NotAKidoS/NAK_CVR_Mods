@@ -1,9 +1,9 @@
 {
   "_id": 244,
   "name": "ShareBubbles",
-  "modversion": "1.0.5",
-  "gameversion": "2025r179",
-  "loaderversion": "0.6.1",
+  "modversion": "1.1.6",
+  "gameversion": "2025r80",
+  "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS, Exterrata, Noachi, RaidShadowLily, Tejler, Luc",
   "description": "Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network.\n### Features:\n- Can drop Share Bubbles linking to **any** Avatar or Prop page.\n  - Share Bubbles can grant Permanent or Temporary shares to your **Private** Content if configured.\n- Adds basic in-game Share Management:\n  - Directly share content to users within the current instance.\n  - Revoke granted or received content shares.\n### Important:\nThe claiming of content shares through Share Bubbles will likely fail if you do not allow content shares from non-friends in your ABI Account settings!\n\n-# More information can be found on the [README](https://github.com/NotAKidoS/NAK_CVR_Mods/blob/main/ShareBubbles/README.md).",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ShareBubbles.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r47/ShareBubbles.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ShareBubbles/",
-  "changelog": "- Fixes for 2025r179\n- Fixed Public/Private text on bubble not being correct\n- Fixed bubble displaying as locked or not claimed despite being shared the content if it was private and not owned by you",
+  "changelog": "- Fixes for 2025r180",
   "embedcolor": "#f61963"
 }

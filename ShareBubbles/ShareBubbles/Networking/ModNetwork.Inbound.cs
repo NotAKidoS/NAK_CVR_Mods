@@ -1,7 +1,7 @@
-﻿using ABI_RC.Core.Networking.IO.Social;
+﻿using ABI_RC.Core.Networking.API;
+using ABI_RC.Core.Networking.IO.Social;
 using ABI_RC.Core.Savior;
 using ABI_RC.Systems.ModNetwork;
-using NAK.ShareBubbles.API;
 using UnityEngine;
 
 namespace NAK.ShareBubbles.Networking;

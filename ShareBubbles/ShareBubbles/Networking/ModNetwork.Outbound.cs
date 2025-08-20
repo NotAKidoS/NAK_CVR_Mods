@@ -1,5 +1,5 @@
-﻿using ABI_RC.Systems.ModNetwork;
-using NAK.ShareBubbles.API;
+﻿using ABI_RC.Core.Networking.API;
+using ABI_RC.Systems.ModNetwork;
 using UnityEngine;
 
 namespace NAK.ShareBubbles.Networking;

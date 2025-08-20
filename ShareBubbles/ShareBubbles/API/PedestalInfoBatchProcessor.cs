@@ -1,6 +1,5 @@
 ﻿using ABI_RC.Core.Networking.API;
 using ABI_RC.Core.Networking.API.Responses;
-using NAK.ShareBubbles.API.Responses;
 
 namespace NAK.ShareBubbles.API;
 
@@ -34,6 +33,8 @@ public static class PedestalInfoBatchProcessor
             { PedestalType.Prop, false }
         };
     
+    // This breaks compile accepting this change.
+    // ReSharper disable once ChangeFieldTypeToSystemThreadingLock
     private static readonly object _lock = new();
     private const float BATCH_DELAY = 2f;
 

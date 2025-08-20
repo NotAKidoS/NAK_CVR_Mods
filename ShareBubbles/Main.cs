@@ -28,7 +28,7 @@ public class ShareBubblesMod : MelonMod
         
         LoadAssetBundle();
     }
-
+    
     public override void OnApplicationQuit()
     {
         ModNetwork.Unsubscribe();
