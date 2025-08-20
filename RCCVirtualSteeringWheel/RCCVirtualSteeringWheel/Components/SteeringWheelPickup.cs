@@ -26,8 +26,8 @@ public class SteeringWheelPickup : Pickupable
     
     public override void OnUseDown(InteractionContext context) { }
     public override void OnUseUp(InteractionContext context) { }
-    public override void OnFlingTowardsTarget(Vector3 target) { }
-
+    public override void FlingTowardsTarget(ControllerRay controllerRay) { }
+    
     public override void OnGrab(InteractionContext context, Vector3 grabPoint) {
         if (ControllerRay?.pivotPoint != null)
             root.StartTrackingTransform(ControllerRay.transform);
