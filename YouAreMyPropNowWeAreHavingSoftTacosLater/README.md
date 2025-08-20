@@ -1,8 +1,11 @@
 # YouAreMyPropNowWeAreHavingSoftTacosLater
 
-Lets you bring held & attached props through world loads.
+Lets you bring held, attached, and occupied props through world loads. This is configurable in the mod settings.
 
 https://youtu.be/9P6Jeh-VN58?si=eXTPGyKB_0wq1gZO
+
+There is special logic in place for bringing air vehicles through world loads. 
+If above the ground you will be placed up to 20m above the spawnpoint of the next world.
 
 ## Examples
 https://fixupx.com/NotAKidoS/status/1910545346922422675
