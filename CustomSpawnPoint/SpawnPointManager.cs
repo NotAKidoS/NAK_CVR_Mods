@@ -41,20 +41,20 @@ internal static class SpawnPointManager
     {
             while (ViewManager.Instance == null)
                 yield return null;
-            while (ViewManager.Instance.gameMenuView == null)
+            while (ViewManager.Instance.cohtmlView == null)
                 yield return null;
-            while (ViewManager.Instance.gameMenuView.Listener == null)
+            while (ViewManager.Instance.cohtmlView.Listener == null)
                 yield return null;
 
             ViewManager.Instance.OnUiConfirm.AddListener(OnClearSpawnpointConfirm);
-            ViewManager.Instance.gameMenuView.Listener.FinishLoad += (_) =>
+            ViewManager.Instance.cohtmlView.Listener.FinishLoad += (_) =>
             {
-                ViewManager.Instance.gameMenuView.View._view.ExecuteScript(spawnpointJs);
+                ViewManager.Instance.cohtmlView.View._view.ExecuteScript(spawnpointJs);
             };
-            ViewManager.Instance.gameMenuView.Listener.ReadyForBindings += () =>
+            ViewManager.Instance.cohtmlView.Listener.ReadyForBindings += () =>
             {
                 // listen for setting the spawn point on our custom button
-                ViewManager.Instance.gameMenuView.View.BindCall("NAKCallSetSpawnpoint", SetSpawnPoint);
+                ViewManager.Instance.cohtmlView.View.BindCall("NAKCallSetSpawnpoint", SetSpawnPoint);
             };
             
             // create our custom spawn point object
@@ -179,7 +179,7 @@ internal static class SpawnPointManager
 
     private static void UpdateMenuButtonState(bool hasSpawnpoint, bool isInWorld)
     {
-            ViewManager.Instance.gameMenuView.View.TriggerEvent("NAKUpdateSpawnpointStatus", hasSpawnpoint.ToString(), isInWorld.ToString());
+            ViewManager.Instance.cohtmlView.View.TriggerEvent("NAKUpdateSpawnpointStatus", hasSpawnpoint.ToString(), isInWorld.ToString());
         }
 
     private static void ClearCurrentWorldState()
