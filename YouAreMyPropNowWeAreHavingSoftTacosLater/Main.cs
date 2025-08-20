@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Reflection;
+using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.IO;
 using ABI_RC.Core.Networking;
 using ABI_RC.Core.Networking.API.Responses;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Util;
+using ABI_RC.Core.Util.Encryption;
 using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.Movement;
 using ABI.CCK.Components;
@@ -64,7 +66,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         #region CVRAttachment Patches
         
         HarmonyInstance.Patch( // Cannot compile when using nameof
-            typeof(CVRAttachment).GetMethod("\u003CAttachInternal\u003Eg__DoAttachmentSetup\u007C43_0", 
+            typeof(CVRAttachment).GetMethod(nameof(CVRAttachment.DoAttachmentSetup), 
                 BindingFlags.NonPublic | BindingFlags.Instance),
             postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRAttachmentAttachInternal),
                 BindingFlags.NonPublic | BindingFlags.Static))
@@ -95,6 +97,17 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         );
 
         #endregion CVRSeat Patches
+        
+        #region CVRSpawnable Patches
+        
+        HarmonyInstance.Patch(
+            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnDestroy), 
+                BindingFlags.Public | BindingFlags.Instance),
+            prefix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnSpawnableOnDestroy),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+
+        #endregion CVRSpawnable Patches
         
         #region CVRSyncHelper Patches
         
@@ -147,12 +160,28 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
 
     #region Harmony Patches
     
-    private static readonly List<CVRSyncHelper.PropData> _heldPropData = new();
+    [Flags] private enum HeldPropState { None = 0, Pickup = 1, Attachment = 2, Seat = 3 }
+    
+    private static readonly Dictionary<CVRSyncHelper.PropData, HeldPropState> _heldPropStates = new();
+    
+    private static void AddHeldPropState(CVRSyncHelper.PropData propData, HeldPropState state)
+    {
+        if (!_heldPropStates.TryAdd(propData, state)) _heldPropStates[propData] |= state;
+    }
+    
+    private static void RemoveHeldPropState(CVRSyncHelper.PropData propData, HeldPropState state)
+    {
+        if (!_heldPropStates.TryGetValue(propData, out HeldPropState currentState)) return;
+        currentState &= ~state;
+        if (currentState == HeldPropState.None) _heldPropStates.Remove(propData);
+        else _heldPropStates[propData] = currentState;
+    }
+    
     private static GameObject _persistantPropsContainer;
     private static GameObject GetOrCreatePropsContainer()
     {
-        if (_persistantPropsContainer != null) return _persistantPropsContainer;
-        _persistantPropsContainer = new("[NAK] PersistantProps");
+        if (_persistantPropsContainer) return _persistantPropsContainer;
+        _persistantPropsContainer = new("YouAreMyPropNowWeAreHavingSoftTacosLater");
         _persistantPropsContainer.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
         _persistantPropsContainer.transform.localScale = Vector3.one;
         Object.DontDestroyOnLoad(_persistantPropsContainer);
@@ -168,47 +197,50 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     {
         if (!EntryTrackPickups.Value) return;
         if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        if (!_heldPropData.Contains(propData)) _heldPropData.Add(propData);
+        AddHeldPropState(propData, HeldPropState.Pickup);
     }
     
     private static void OnCVRPickupObjectOnDrop(CVRPickupObject __instance)
     {
         if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        if (_heldPropData.Contains(propData)) _heldPropData.Remove(propData);
+        RemoveHeldPropState(propData, HeldPropState.Pickup);
     }
     
     private static void OnCVRAttachmentAttachInternal(CVRAttachment __instance)
     {
         if (!EntryTrackAttachments.Value) return;
         if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        if (!_heldPropData.Contains(propData)) _heldPropData.Add(propData);
+        AddHeldPropState(propData, HeldPropState.Attachment);
     }
     
     private static void OnCVRAttachmentDeAttach(CVRAttachment __instance)
     {
         if (!__instance._isAttached) return; // Can invoke DeAttach without being attached
         if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        if (_heldPropData.Contains(propData)) _heldPropData.Remove(propData);
+        RemoveHeldPropState(propData, HeldPropState.Attachment);
     }
     
     private static void OnCVRSeatSitDown(CVRSeat __instance)
     {
         if (!EntryTrackSeats.Value) return;
         if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        if (!_heldPropData.Contains(propData)) _heldPropData.Add(propData);
+        AddHeldPropState(propData, HeldPropState.Seat);
     }
     
     private static void OnCVRSeatExitSeat(CVRSeat __instance)
     {
         if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        if (_heldPropData.Contains(propData)) _heldPropData.Remove(propData);
+        RemoveHeldPropState(propData, HeldPropState.Seat);
+    }
+    
+    private static void OnSpawnableOnDestroy(CVRSpawnable __instance)
+    {
+        if (!TryGetPropData(__instance, out CVRSyncHelper.PropData propData)) return;
+        _heldPropStates.Remove(propData);
     }
 
     // ReSharper disable UnusedParameter.Local
-    private static bool OnCVRDownloadManagerQueueTask(string assetId, DownloadTask.ObjectType type, string assetUrl, string fileId, long fileSize, string fileKey, string toAttach,
-        string fileHash = null, UgcTagsData tagsData = null, CVRLoadingAvatarController loadingAvatarController = null,
-        bool joinOnComplete = false, bool isHomeRequested = false, int compatibilityVersion = 0, int encryptionAlgorithm = 0,
-        string spawnerId = null)
+    private static bool OnCVRDownloadManagerQueueTask(AssetManagement.UgcMetadata metadata, DownloadTask.ObjectType type, string assetUrl, string fileId, string toAttach, CVRLoadingAvatarController loadingAvatarController = null, bool joinOnComplete = false, bool isHomeRequested = false, CompatibilityVersions compatibilityVersion = CompatibilityVersions.NotSpi, CVREncryptionRouter.EncryptionAlgorithm encryptionAlgorithm = CVREncryptionRouter.EncryptionAlgorithm.Gen1, string spawnerId = null)
     {
         if (type != DownloadTask.ObjectType.Prop) return true; // Only care about props
      
@@ -219,14 +251,20 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         Vector3 identity = GetIdentityKeyFromPropData(newPropData);
         if (!_keyToPropData.Remove(identity, out CVRSyncHelper.PropData originalPropData)) return true;
         
-        // Remove original prop data from held
-        if (_heldPropData.Contains(originalPropData)) _heldPropData.Remove(originalPropData);
+        // Remove original prop data from held, cache states
+        HeldPropState heldState = HeldPropState.None;
+        if (_heldPropStates.ContainsKey(originalPropData))
+        {
+            heldState = _heldPropStates[originalPropData];
+            _heldPropStates.Remove(originalPropData);
+        }
         
         // If original prop data is null spawn a new prop i guess :(
-        if (originalPropData.Spawnable == null) return true;
+        if (!originalPropData.Spawnable) return true;
         
         // Add the new prop data to our held props in place of the old one
-        if (!_heldPropData.Contains(newPropData)) _heldPropData.Add(newPropData);
+        // if (!_heldPropData.Contains(newPropData)) _heldPropData.Add(newPropData);
+        _heldPropStates.TryAdd(newPropData, heldState);
         
         // Apply new prop data to the spawnable
         newPropData.Spawnable = originalPropData.Spawnable;
@@ -255,7 +293,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         for (var index = CVRSyncHelper.Props.Count - 1; index >= 0; index--)
         {
             CVRSyncHelper.PropData prop = CVRSyncHelper.Props[index];
-            if (prop.Spawnable != null && _heldPropData.Contains(prop))
+            if (prop.Spawnable && _heldPropStates.ContainsKey(prop))
                 continue; // Do not recycle props that are valid & held
 
             DeleteOrRecycleProp(prop);
@@ -269,7 +307,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     {
         if (!_ignoreNextSeatExit) return true;
         _ignoreNextSeatExit = false;
-        if (BetterBetterCharacterController.Instance._lastCvrSeat == null) return true; // run original
+        if (!BetterBetterCharacterController.Instance._lastCvrSeat) return true; // run original
         return false; // dont run if there is a chair & we skipped it
     }
 
@@ -282,16 +320,16 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     private void OnWorldLoad(string _)
     {
         CVRWorld worldInstance = CVRWorld.Instance;
-        if (worldInstance != null && !worldInstance.allowSpawnables)
+        if (worldInstance && !worldInstance.allowSpawnables)
         {
-            foreach (CVRSyncHelper.PropData prop in _heldPropData) DeleteOrRecycleProp(prop); // Delete all props we kept
+            foreach (CVRSyncHelper.PropData prop in _heldPropStates.Keys) DeleteOrRecycleProp(prop); // Delete all props we kept
             return;
         }
 
-        for (var index = _heldPropData.Count - 1; index >= 0; index--)
+        for (var index = _heldPropStates.Count - 1; index >= 0; index--)
         {
-            CVRSyncHelper.PropData prop = _heldPropData[index];
-            if (prop.Spawnable == null)
+            CVRSyncHelper.PropData prop = _heldPropStates.ElementAt(index).Key;
+            if (!prop.Spawnable)
             {
                 DeleteOrRecycleProp(prop);
                 return;
@@ -324,9 +362,9 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     private static void OnWorldUnload(string _)
     {
         // Prevent deleting of our held props on scene destruction
-        foreach (CVRSyncHelper.PropData prop in _heldPropData)
+        foreach (CVRSyncHelper.PropData prop in _heldPropStates.Keys)
         {
-            if (prop.Spawnable == null) continue;
+            if (!prop.Spawnable) continue;
             PlacePropInPersistantPropsContainer(prop.Spawnable);
             _spawnablePositionStack.Push(new SpawnablePositionContainer(prop.Spawnable));
         }
@@ -341,9 +379,9 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     {
         // Request the server to respawn our props by GUID, and add a secret key to the propData to identify it
 
-        foreach (CVRSyncHelper.PropData prop in _heldPropData)
+        foreach (CVRSyncHelper.PropData prop in _heldPropStates.Keys)
         {
-            if (prop.Spawnable == null) continue;
+            if (!prop.Spawnable) continue;
             
             // Generate a new identity key for the prop (this is used to identify the prop when we respawn it)
             Vector3 identityKey = new(Random.Range(0, 1000), Random.Range(0, 1000), Random.Range(0, 1000));
@@ -362,7 +400,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
 
     private static bool TryGetPropData(CVRSpawnable spawnable, out CVRSyncHelper.PropData propData)
     {
-        if (spawnable == null)
+        if (!spawnable)
         {
             propData = null;
             return false;
@@ -408,9 +446,9 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     
     private static void DeleteOrRecycleProp(CVRSyncHelper.PropData prop)
     {
-        if (prop.Spawnable == null) prop.Recycle();
+        if (!prop.Spawnable) prop.Recycle();
         else prop.Spawnable.Delete();
-        if (_heldPropData.Contains(prop)) _heldPropData.Remove(prop);
+        _heldPropStates.Remove(prop);
     }
     
     private static void SpawnPropFromGuid(string propGuid, Vector3 position, Vector3 rotation, Vector3 identityKey)
@@ -518,7 +556,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
             for (int i = 0; i < _spawnable.subSyncs.Count; i++)
             {
                 Transform subSyncTransform = _spawnable.subSyncs[i].transform;
-                if (subSyncTransform == null) continue;
+                if (!subSyncTransform) continue;
 
                 Vector3 subWorldPos = playerTransform.TransformPoint(_posOffsets[i + 1]);
                 subWorldPos.y += _heightOffset;
