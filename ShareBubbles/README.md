@@ -28,7 +28,8 @@ While viewing content details of an item shared *to you* by another player, you 
 
 Access Control is only available for **Private Content** and serves as a way to share content in-game.
 
-**Note:** Session Access requires the game to be running to revoke access once you or the claimant leaves the instance. If the game is closed unexpectedly, the claimant will keep the content until you next launch the game and connect to an online instance.
+**Note:** Session Access requires the game to be running to revoke access once you or the claimant leaves the instance. 
+If the game is closed unexpectedly, the claimant will keep the content until you next launch the game and connect to an online instance.
 
 ## Credits
 - Noachi - the bubble
