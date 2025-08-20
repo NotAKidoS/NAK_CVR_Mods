@@ -1,7 +1,6 @@
 ﻿using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util.Object_Behaviour;
-using System.Collections;
 using ABI_RC.Core;
 using ABI.CCK.Components;
 using UnityEngine;
@@ -42,10 +41,8 @@ internal static class CameraLogic
         }
     }
     
-    internal static IEnumerator SetupCamera()
+    internal static void SetupCamera()
     {
-        yield return new WaitUntil(() => PlayerSetup.Instance);
-        
         _thirdPersonCam = new GameObject("ThirdPersonCameraObj", typeof(Camera)).GetComponent<Camera>();
         
         _cameraFovClone = _thirdPersonCam.gameObject.AddComponent<CameraFovClone>();

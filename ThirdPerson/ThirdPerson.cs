@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using ABI_RC.Systems.GameEventSystem;
+using MelonLoader;
 using UnityEngine;
 using static NAK.ThirdPerson.CameraLogic;
 
@@ -13,7 +14,7 @@ public class ThirdPerson : MelonMod
         Logger = LoggerInstance;
         
         Patches.Apply(HarmonyInstance);
-        MelonCoroutines.Start(SetupCamera());
+        CVRGameEventSystem.Initialization.OnPlayerSetupStart.AddListener(SetupCamera);
     }
     
     public override void OnUpdate()
