@@ -2,9 +2,9 @@
   {
     "_id": 16,
     "name": "ThirdPerson",
-    "modversion": "1.1.2",
-    "gameversion": "2025r179",
-    "loaderversion": "0.6.1",
+    "modversion": "1.1.3",
+    "gameversion": "2025r180",
+    "loaderversion": "0.7.2",
     "modtype": "Mod",
     "author": "Davi & NotAKidoS",
     "description": "Allows you to go into third person view by pressing Ctrl + T to toggle and Ctrl + Y to cycle modes.",
@@ -16,7 +16,7 @@
     "requirements": [],
     "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/ThirdPerson.dll",
     "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ThirdPerson",
-    "changelog": "- Adjusted the local player scaled event patch to work both on Stable and Nightly (r179 & r180)",
+    "changelog": "- Fixes for r180",
     "embedcolor": "#F61961"
   }
 ]
