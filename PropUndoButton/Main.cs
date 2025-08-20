@@ -16,17 +16,17 @@ namespace NAK.PropUndoButton;
 
 public class PropUndoButton : MelonMod
 {
-    public static readonly MelonPreferences_Category Category =
+    private static readonly MelonPreferences_Category Category =
         MelonPreferences.CreateCategory(nameof(PropUndoButton));
 
-    public static readonly MelonPreferences_Entry<bool> EntryEnabled =
+    private static readonly MelonPreferences_Entry<bool> EntryEnabled =
         Category.CreateEntry("Enabled", true, description: "Toggle Undo Prop Button.");
 
-    public static readonly MelonPreferences_Entry<bool> EntryUseSFX =
+    private static readonly MelonPreferences_Entry<bool> EntryUseSFX =
         Category.CreateEntry("Use SFX", true,
             description: "Toggle audio queues for prop spawn, undo, redo, and warning.");
 
-    internal static List<DeletedProp> deletedProps = new();
+    private static readonly List<DeletedProp> deletedProps = [];
 
     // audio clip names, InterfaceAudio adds "PropUndo_" prefix
     private const string sfx_spawn = "PropUndo_sfx_spawn";
@@ -92,11 +92,11 @@ public class PropUndoButton : MelonMod
             if (!File.Exists(clipPath))
             {
                 // read the clip data from embedded resources
-                byte[] clipData = null;
+                byte[] clipData;
                 var resourceName = "PropUndoButton.SFX." + clipName;
                 using (Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
                 {
-                    clipData = new byte[stream.Length];
+                    clipData = new byte[stream!.Length];
                     stream.Read(clipData, 0, clipData.Length);
                 }
 

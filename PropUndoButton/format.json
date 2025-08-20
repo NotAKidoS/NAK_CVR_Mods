@@ -1,9 +1,9 @@
 {
   "_id": 147,
   "name": "PropUndoButton",
-  "modversion": "1.0.3",
-  "gameversion": "2025r179",
-  "loaderversion": "0.6.1",
+  "modversion": "1.0.4",
+  "gameversion": "2025r180",
+  "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "**CTRL+Z** to undo latest spawned prop. **CTRL+SHIFT+Z** to redo deleted prop.\nIncludes optional SFX for prop spawn, undo, redo, warn, and deny, which can be disabled in settings.\n\nYou can replace the sfx in 'ChilloutVR\\ChilloutVR_Data\\StreamingAssets\\Cohtml\\UIResources\\GameUI\\mods\\PropUndo\\audio'.",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/PropUndoButton.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r47/PropUndoButton.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PropUndoButton/",
-  "changelog": "- Recompiled for 2025r179",
+  "changelog": "- Fixes for 2025r180",
   "embedcolor": "#00FFFF"
 }
