@@ -6,7 +6,7 @@
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Lets you bring held, attached, and occupied props through world loads. This is configurable in the mod settings.\nhttps://youtu.be/9P6Jeh-VN58?si=eXTPGyKB_0wq1gZO\n\nThere is special logic in place for bringing air vehicles through world loads. If above the ground you will be placed up to 10m above the spawnpoint of the next world.",
+  "description": "Lets you bring held, attached, and occupied props through world loads. This is configurable in the mod settings.\nhttps://youtu.be/9P6Jeh-VN58?si=eXTPGyKB_0wq1gZO\n\nThere is special logic in place for bringing air vehicles through world loads. If above the ground you will be placed up to 20m above the spawnpoint of the next world.",
   "searchtags": [
     "prop",
     "spawn",
