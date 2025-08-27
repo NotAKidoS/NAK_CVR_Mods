@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "RelativeSyncJitterFix",
+  "modversion": "1.0.0",
+  "gameversion": "2025r180",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Relative sync jitter fix is the single harmony patch that could not make it into the native release of RelativeSync.\nChanges when props apply their incoming sync data to be before the character controller simulation.",
+  "searchtags": [
+    "relative",
+    "sync",
+    "movement",
+    "chair"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r47/RelativeSyncJitterFix.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/RelativeSyncJitterFix/",
+  "changelog": "- Removed RelativeSync except for a single harmony patch",
+  "embedcolor": "#f61963"
+}
