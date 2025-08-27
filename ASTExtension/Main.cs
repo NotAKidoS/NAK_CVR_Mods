@@ -81,7 +81,7 @@ public class ASTExtensionMod : MelonMod
         );
         
         HarmonyInstance.Patch(
-            typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.ClearAvatar),
+            typeof(PlayerBase).GetMethod(nameof(PlayerBase.ClearAvatar),
                 BindingFlags.Public | BindingFlags.Instance),
             prefix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnClearAvatar),
                 BindingFlags.NonPublic | BindingFlags.Static))
@@ -112,8 +112,11 @@ public class ASTExtensionMod : MelonMod
         Instance.OnLocalAvatarLoad();
     }
     
-    private static void OnClearAvatar(ref CVRAvatar ____avatarDescriptor)
-        => Instance.OnLocalAvatarClear(____avatarDescriptor);
+    private static void OnClearAvatar(ref PlayerBase __instance)
+    {
+        if (!__instance.IsLocalPlayer) return;
+        Instance.OnLocalAvatarClear(__instance.AvatarDescriptor);
+    }
 
     #endregion Harmony Patches
     
@@ -227,7 +230,7 @@ public class ASTExtensionMod : MelonMod
     {
         parameterName = null;
         
-        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.animatorManager;
+        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.AnimatorManager;
         if (!animatorManager.IsInitialized)
         {
             Logger.Error("AnimatorManager is not initialized!");
@@ -254,7 +257,7 @@ public class ASTExtensionMod : MelonMod
         maxHeight = 0f;
         modifier = 1f;
         
-        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.animatorManager;
+        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.AnimatorManager;
         if (!animatorManager.IsInitialized)
         {
             Logger.Error("AnimatorManager is not initialized!");
@@ -319,7 +322,7 @@ public class ASTExtensionMod : MelonMod
         if (!_currentAvatarSupported)
             return;
 
-        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.animatorManager;
+        AvatarAnimatorManager animatorManager = PlayerSetup.Instance.AnimatorManager;
         if (!animatorManager.IsInitialized)
         {
             Logger.Error("AnimatorManager is not initialized!");

@@ -49,7 +49,7 @@ public static partial class BtkUiAddon
         if (!CVRPlayerManager.Instance.GetPlayerPuppetMaster(_selectedPlayer, out PuppetMaster player))
             return;
         
-        if (player._avatar == null)
+        if (!player.IsAvatarLoaded)
             return;
 
         float height = player.netIkController.GetRemoteHeight();
@@ -64,8 +64,8 @@ public static partial class BtkUiAddon
         if (!CVRPlayerManager.Instance.GetPlayerPuppetMaster(_selectedPlayer, out PuppetMaster player))
             return;
         
-        AvatarAnimatorManager localAnimator = PlayerSetup.Instance.animatorManager;
-        AvatarAnimatorManager remoteAnimator = player.animatorManager;
+        AvatarAnimatorManager localAnimator = PlayerSetup.Instance.AnimatorManager;
+        AvatarAnimatorManager remoteAnimator = player.AnimatorManager;
         if (!localAnimator.IsInitialized 
             || !remoteAnimator.IsInitialized)
             return;
