@@ -73,8 +73,8 @@ public class DoubleTapJumpToExitSeatMod : MelonMod
         // Steal sync
         if (__instance.lockControls)
         {
-            if (__instance._spawnable != null) __instance._spawnable.ForceUpdate(4);
-            if (__instance._objectSync != null) __instance._objectSync.ForceUpdate(4);
+            if (__instance._spawnable) __instance._spawnable.ForceUpdate(4);
+            if (__instance._objectSync) __instance._objectSync.ForceUpdate(4);
         }
 
         return false; // don't call original method
