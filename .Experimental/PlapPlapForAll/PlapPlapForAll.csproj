@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <None Remove="Resources\plap plap.assets" />
+    <EmbeddedResource Include="Resources\plap plap.assets" />
+  </ItemGroup>
+</Project>
