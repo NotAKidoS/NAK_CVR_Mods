@@ -10,10 +10,10 @@ $cvrDefaultPath = "C:\Program Files (x86)\Steam\steamapps\common\ChilloutVR"
 # $cvrDefaultPath = "E:\temp\CVR_Experimental"
 
 # Array with the dlls to strip
-$dllsToStrip = @('Assembly-CSharp.dll','Assembly-CSharp-firstpass.dll','AVProVideo.Runtime.dll', 'Unity.TextMeshPro.dll', 'MagicaCloth.dll', 'MagicaClothV2.dll', 'ECM2.dll', 'TheClapper.dll', 'MTJobSystem.dll')
+$dllsToStrip = @('Assembly-CSharp.dll','Assembly-CSharp-firstpass.dll','AVProVideo.Runtime.dll', 'Unity.TextMeshPro.dll', 'MagicaCloth.dll', 'MagicaClothV2.dll', 'ECM2.dll', 'DarkRift.dll', 'DarkRift.Client.dll', 'MTJobSystem.dll')
 
 # Array with the mods to grab
-$modNames = @("BTKUILib", "BTKSAImmersiveHud", "PortableMirrorMod", "VRBinding", "TheClapper")
+$modNames = @("BTKUILib")
 
 # Array with dlls to ignore from ManagedLibs
 $cvrManagedLibNamesToIgnore = @("netstandard", "Mono.Cecil", "Unity.Burst.Cecil")
