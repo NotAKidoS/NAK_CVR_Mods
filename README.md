@@ -7,17 +7,15 @@
 | Name | Description | Download |
 |------|-------------|----------|
 | [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ASTExtension.dll) |
-| [AvatarQueueSystemTweaks](AvatarQueueSystemTweaks/README.md) | Small tweaks to the Avatar Queue System. | No Download |
 | [ConfigureCalibrationPose](ConfigureCalibrationPose/README.md) | Select FBT calibration pose. | No Download |
 | [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/CustomSpawnPoint.dll) |
 | [DoubleTapJumpToExitSeat](DoubleTapJumpToExitSeat/README.md) | Replaces seat exit controls with a double-tap of the jump button, avoiding accidental exits from joystick drift or opening the menu. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/DoubleTapJumpToExitSeat.dll) |
 | [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in Halfbody or Fullbody. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/FuckToes.dll) |
-| [KeepVelocityOnExitFlight](KeepVelocityOnExitFlight/README.md) | Keeps the player's velocity when exiting flight mode. Makes it possible to fling yourself like in Garry's Mod. | No Download |
-| [LazyPrune](LazyPrune/README.md) | Prevents loaded objects from immediately unloading on destruction. Should prevent needlessly unloading & reloading all avatars/props on world rejoin or GS reconnection. | No Download |
 | [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PropLoadingHexagon.dll) |
 | [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/RCCVirtualSteeringWheel.dll) |
 | [RelativeSyncJitterFix](RelativeSyncJitterFix/README.md) | Relative sync jitter fix is the single harmony patch that could not make it into the native release of RelativeSync. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/RelativeSyncJitterFix.dll) |
 | [ShareBubbles](ShareBubbles/README.md) | Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ShareBubbles.dll) |
+| [ShowPlayerInSelfMirror](ShowPlayerInSelfMirror/README.md) | Adds an option in the Quick Menu selected player page to show the target player's avatar in your self mirror. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ShowPlayerInSelfMirror.dll) |
 | [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/SmootherRay.dll) |
 | [Stickers](Stickers/README.md) | Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network. | No Download |
 | [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ThirdPerson.dll) |
@@ -28,6 +26,7 @@
 
 | Name | Description | Download |
 |------|-------------|----------|
+| [ByeByePerformanceThankYouAMD](.Experimental/ByeByePerformanceThankYouAMD/README.md) | Fixes search terms that use spaces. | No Download |
 | [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality. | No Download |
 | [CustomRichPresence](.Experimental/CustomRichPresence/README.md) | Lets you customize the Steam & Discord rich presence messages & values. | No Download |
 | [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Adds a simple module for creating network variables & events *kinda* similar to Garry's Mod. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/LuaNetworkVariables.dll) |
