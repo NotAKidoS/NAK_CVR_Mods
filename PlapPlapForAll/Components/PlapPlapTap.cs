@@ -83,9 +83,9 @@ public sealed class PlapPlapTap : MonoBehaviour
         tap.RecomputeMode();
         tap.SyncLightState();
 
-        PlapPlapForAllMod.Logger.Msg(
-            $"PlapPlapTap created for orifice '{dpsOrifice.type}' using light '{dpsOrifice.basis.name}'. " +
-            $"Dynamic: {tap._dynamic}, Initial Mode: {tap._mode}");
+        // PlapPlapForAllMod.Logger.Msg(
+        //     $"PlapPlapTap created for orifice '{dpsOrifice.type}' using light '{dpsOrifice.basis.name}'. " +
+        //     $"Dynamic: {tap._dynamic}, Initial Mode: {tap._mode}");
 
         tap._hasInitialized = true;
         
@@ -244,7 +244,7 @@ public sealed class PlapPlapTap : MonoBehaviour
 
         SetAudioMode(_mode);
         
-        PlapPlapForAllMod.Logger.Msg($"PlapPlapTap applying mode {_mode}");
+        // PlapPlapForAllMod.Logger.Msg($"PlapPlapTap applying mode {_mode}");
     }
 
     private readonly struct Rule(PlapPlapAudioMode mode, HumanBodyBones? bone, int boneWeight, params string[] keywords)
