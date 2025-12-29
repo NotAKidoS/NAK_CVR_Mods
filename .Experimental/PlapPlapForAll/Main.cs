@@ -67,8 +67,8 @@ public class PlapPlapForAllMod : MelonMod
         if (dpsOrifices.Count != 0)
         {
             // Log found orifices
-            Logger.Msg($"Found {dpsOrifices.Count} DPS orifices on avatar '{avatarObject.name}' for player '{player.PlayerUsername}':");
-            foreach (DPSOrifice dpsOrifice in dpsOrifices) Logger.Msg($"- Orifice Type: {dpsOrifice.type}, DPS Light: {dpsOrifice.dpsLight.name}, Normal Light: {(dpsOrifice.normalLight != null ? dpsOrifice.normalLight.name : "None")}");
+            // Logger.Msg($"Found {dpsOrifices.Count} DPS orifices on avatar '{avatarObject.name}' for player '{player.PlayerUsername}':");
+            // foreach (DPSOrifice dpsOrifice in dpsOrifices) Logger.Msg($"- Orifice Type: {dpsOrifice.type}, DPS Light: {dpsOrifice.dpsLight.name}, Normal Light: {(dpsOrifice.normalLight != null ? dpsOrifice.normalLight.name : "None")}");
         
             // Configure PlapPlap for each orifice
             Animator avatarAnimator = player.Animator;

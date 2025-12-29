@@ -139,8 +139,8 @@ public static class DPS
 
             fixRoot.Register(render, dpsRoot, length);
 
-            PlapPlapForAllMod.Logger.Msg(
-                $"Added shared DPS penetrator light for mesh '{render.name}' in object '{rootObject.name}'.");
+            // PlapPlapForAllMod.Logger.Msg(
+            //     $"Added shared DPS penetrator light for mesh '{render.name}' in object '{rootObject.name}'.");
         }
     }
 }

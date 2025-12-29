@@ -35,9 +35,10 @@ public sealed class SkinnedDickFixRoot : MonoBehaviour
                 Array.Copy(old, _entries, old.Length);
             }
 
+            // TODO: Noachi said light should be at base, but i am too lazy to test it now
             GameObject lightObj = new("[PlapPlapForAllMod] Auto DPS Tip Light");
             lightObj.transform.SetParent(dpsRoot, false);
-            lightObj.transform.localPosition = new Vector3(0f, 0f, length * 0.5f); // Noachi said should be at base
+            lightObj.transform.localPosition = new Vector3(0f, 0f, length * 0.5f);
             lightObj.SetActive(false); // Initially off
 
             Light l = lightObj.AddComponent<Light>();
