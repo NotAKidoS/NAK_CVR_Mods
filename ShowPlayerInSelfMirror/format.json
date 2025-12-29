@@ -1,0 +1,23 @@
+﻿{
+  "_id": -1,
+  "name": "ShowPlayerInSelfMirror",
+  "modversion": "1.0.0",
+  "gameversion": "2025r181",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Adds an option in the Quick Menu selected player page to show the target player's avatar in your self mirror.\n\nProbably useful for only showing specific people in your mirror while in a puddle of many.",
+  "searchtags": [
+    "player",
+    "mirror",
+    "clone",
+    "show"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ShowPlayerInSelfMirror.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ShowPlayerInSelfMirror/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

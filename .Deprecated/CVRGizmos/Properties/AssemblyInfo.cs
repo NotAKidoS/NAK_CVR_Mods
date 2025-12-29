@@ -17,7 +17,7 @@ using System.Reflection;
     downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CVRGizmos"
 )]
 
-[assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
+[assembly: MelonGame("ChilloutVR", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 

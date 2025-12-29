@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Core.Networking.API;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.UI;
 using ABI_RC.Core.UI.UIRework.Managers;
@@ -200,7 +202,7 @@ public class TinyboardMod : MelonMod
         if (__instance is not CVRKeyboardPositionHelper { IsMenuOpen: true }) return;
         
         // Check if the open source was an open menu
-        KeyboardManager.OpenSource? openSource = KeyboardManager.Instance._keyboardOpenSource;
+        KeyboardManager.OpenSource? openSource = KeyboardManager.Instance.KeyboardOpenSource;
 
         MenuPositionHelperBase menuPositionHelper;
         switch (openSource)

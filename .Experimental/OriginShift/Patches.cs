@@ -6,11 +6,9 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Util;
 using ABI_RC.Systems.Camera;
 using ABI_RC.Systems.Communications.Networking;
-using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.Movement;
 using ABI.CCK.Components;
 using DarkRift;
-using ECM2;
 using HarmonyLib;
 using NAK.OriginShift.Components;
 using NAK.OriginShift.Hacks;
@@ -129,7 +127,7 @@ internal static class PortableCameraPatches
     [HarmonyPatch(typeof(PortableCamera), nameof(PortableCamera.Start))]
     private static void Postfix_PortableCamera_Start(ref PortableCamera __instance)
     {
-        __instance.cameraComponent.AddComponentIfMissing<OriginShiftOcclusionCullingDisabler>();
+        __instance.CameraComponent.AddComponentIfMissing<OriginShiftOcclusionCullingDisabler>();
     }
 }
 
@@ -140,17 +138,6 @@ internal static class PathingCameraPatches
     private static void Postfix_CVRPathCamController_Start(ref CVRPathCamController __instance)
     {
         __instance.cam.AddComponentIfMissing<OriginShiftOcclusionCullingDisabler>();
-    }
-}
-
-internal static class Comms_ClientPatches
-{
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(Comms_Client), nameof(Comms_Client.SetPosition))]
-    private static void Prefix_Comms_Client_GetPlayerMovementData(ref Vector3 listenerPosition)
-    {
-        if (OriginShiftManager.CompatibilityMode) // adjust root position back to absolute world position
-            listenerPosition = OriginShiftManager.GetAbsolutePosition(listenerPosition);
     }
 }
 
@@ -180,15 +167,11 @@ internal static class CVRSyncHelperPatches
 
     [HarmonyPrefix] // outbound spawn prop
     [HarmonyPatch(typeof(CVRSyncHelper), nameof(CVRSyncHelper.SpawnProp))]
-    private static void Prefix_CVRSyncHelper_SpawnProp(ref float posX, ref float posY, ref float posZ)
+    private static void Prefix_CVRSyncHelper_SpawnProp(ref Vector3 position)
     {
         if (OriginShiftManager.CompatibilityMode) // adjust root position back to absolute world position
         {
-            Vector3 position = new(posX, posY, posZ); // imagine not using Vector3
             position = OriginShiftManager.GetAbsolutePosition(position);
-            posX = position.x;
-            posY = position.y;
-            posZ = position.z;
         }
     }
 

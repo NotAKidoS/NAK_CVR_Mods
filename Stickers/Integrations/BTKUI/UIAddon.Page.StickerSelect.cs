@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using BTKUILib;
+﻿using BTKUILib;
 using BTKUILib.UIObjects;
 using BTKUILib.UIObjects.Components;
 using MTJobSystem;

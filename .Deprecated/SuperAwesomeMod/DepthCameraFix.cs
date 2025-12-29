@@ -3,22 +3,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine;
-using UnityEngine.Rendering;
-
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine;
-using UnityEngine.Rendering;
-
 [RequireComponent(typeof(Camera))]
 public class DepthTextureFix : MonoBehaviour
 {

@@ -2,13 +2,9 @@
 using ABI_RC.Core.Networking.IO.Instancing;
 using ABI_RC.Core.UI;
 using ABI_RC.Systems.GameEventSystem;
-using JetBrains.Annotations;
 using NAK.Stickers.Networking;
 using NAK.Stickers.Utilities;
-using System.EnterpriseServices;
-using UnityEngine;
-using MelonLoader;
-using UnityEngine.ProBuilder.MeshOperations;
+using ABI.CCK.Components;
 using NAK.Stickers.Integrations;
 
 namespace NAK.Stickers;
@@ -50,7 +46,7 @@ public partial class StickerSystem
         
         CVRGameEventSystem.Player.OnJoinEntity.AddListener(Instance.OnPlayerJoined);
         CVRGameEventSystem.Player.OnLeaveEntity.AddListener(Instance.OnPlayerLeft);
-        SchedulerSystem.AddJob(Instance.OnUpdate, 10f, -1);
+        BetterScheduleSystem.AddJob(Instance.OnUpdate, 10f, -1);
         LoadAllImagesAtStartup();
     }
 
@@ -66,7 +62,8 @@ public partial class StickerSystem
 
     private void OnWorldLoad()
     {
-        IsRestrictedInstance = GameObject.Find("[DisableStickers]") != null;
+        CVRDataStore worldDS = CVRWorld.Instance.DataStore;
+        // IsRestrictedInstance = worldDS && worldDS.GetValue<bool>("StickersMod-ForceDisable");
         if (IsRestrictedInstance) StickerMod.Logger.Msg("Stickers are restricted by the world author.");
         BTKUIAddon.OnStickerRestrictionUpdated(IsRestrictedInstance);
     }

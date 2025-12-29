@@ -16,7 +16,7 @@ internal class PortableCameraPatches
     }
 
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(PortableCamera), nameof(PortableCamera.OnWorldLoaded))]
+    [HarmonyPatch(typeof(PortableCamera), nameof(PortableCamera.CopyRefCamValues))]
     private static void Postfix_PortableCamera_OnWorldLoaded(Camera refCamera)
     {
         VisualMods.CameraAdditions.Instance?.OnWorldLoaded(refCamera);

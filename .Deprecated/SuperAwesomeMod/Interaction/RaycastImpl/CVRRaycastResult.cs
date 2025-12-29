@@ -1,8 +1,6 @@
 ﻿using ABI_RC.Core.InteractionSystem.Base;
 using ABI_RC.Core.UI;
-using NAK.SuperAwesomeMod.Components;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ABI_RC.Core.Player.Interaction.RaycastImpl
@@ -19,6 +17,7 @@ namespace ABI_RC.Core.Player.Interaction.RaycastImpl
         // Main raycast hit info
         public RaycastHit hit;
         public RaycastHit? waterHit;        // Only valid if hitWater is true
+        public Vector2 hitScreenPoint;      // Screen coordinates of the hit
     
         // Specific hit components
         public Pickupable hitPickupable;

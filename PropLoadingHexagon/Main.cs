@@ -244,7 +244,7 @@ public class PropLoadingHexagonMod : MelonMod
                 loadingObject = Object.Instantiate(loadingHexPrefab, Vector3.zero, Quaternion.identity, loadingHexContainer.transform);
                 loadingHexComponent = loadingObject.GetComponent<LoadingHexagonController>();
                 
-                float avatarHeight = PlayerSetup.Instance._avatarHeight;
+                float avatarHeight = PlayerSetup.Instance.AvatarHeight;
                 Transform hexTransform = loadingObject.transform;
                 hexTransform.localScale = Vector3.one * avatarHeight / 4f; // scale modifier
                 hexTransform.GetChild(0).position = Vector3.up * avatarHeight / 2f; // position modifier

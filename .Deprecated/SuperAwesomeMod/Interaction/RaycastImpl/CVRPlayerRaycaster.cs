@@ -1,9 +1,7 @@
 ﻿using ABI_RC.Core.InteractionSystem.Base;
 using ABI_RC.Core.UI;
 using ABI.CCK.Components;
-using NAK.SuperAwesomeMod.Components;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace ABI_RC.Core.Player.Interaction.RaycastImpl
@@ -108,7 +106,8 @@ namespace ABI_RC.Core.Player.Interaction.RaycastImpl
             // Check if there are pickups or interactables in immediate proximity
             if ((flags & RaycastFlags.ProximityInteract) != 0)
             {
-                ProcessProximityHits(ray, ref result); // TODO: Offset origin to center of palm based on hand type
+                Ray proximityRay = GetProximityRayFromImpl();
+                ProcessProximityHits(proximityRay, ref result);
                 if (result.isProximityHit) 
                     return result;
             }
@@ -150,7 +149,7 @@ namespace ABI_RC.Core.Player.Interaction.RaycastImpl
             int proximityHits = Physics.SphereCastNonAlloc(
                 ray.origin,
                 RAYCAST_SPHERE_RADIUS,
-                Vector3.up,
+                ray.direction,
                 _hits,
                 0.001f,
                 _layerMask,
@@ -313,6 +312,7 @@ namespace ABI_RC.Core.Player.Interaction.RaycastImpl
                 result.hitInteractable = _workingInteractable;
                 hitValidComponent = true;
             }
+            
             if (_workingGameObject.TryGetComponent(out _workingPickupable) 
                 && _workingPickupable.CanPickup
                 && IsCVRPickupableWithinRange(_workingPickupable, hit))
@@ -343,6 +343,7 @@ namespace ABI_RC.Core.Player.Interaction.RaycastImpl
         #region Protected Methods
         
         protected abstract Ray GetRayFromImpl();
+        protected abstract Ray GetProximityRayFromImpl();
 
         #endregion Protected Methods
         
@@ -375,10 +376,10 @@ namespace ABI_RC.Core.Player.Interaction.RaycastImpl
             return hit.distance <= pickupable.MaxGrabDistance;
         }
         
-        private static bool IsCVRCanvasWrapperWithinRange(CVRCanvasWrapper canvasWrapper, RaycastHit hit)
-        {
-            return hit.distance <= canvasWrapper.MaxInteractDistance;
-        }
+        // private static bool IsCVRCanvasWrapperWithinRange(CVRCanvasWrapper canvasWrapper, RaycastHit hit)
+        // {
+        //     return hit.distance <= canvasWrapper.MaxInteractDistance;
+        // }
 
         #endregion Utility Because Original Methods Are Broken
     }

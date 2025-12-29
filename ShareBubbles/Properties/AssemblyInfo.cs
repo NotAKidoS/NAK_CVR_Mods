@@ -27,6 +27,6 @@ using NAK.ShareBubbles.Properties;
 namespace NAK.ShareBubbles.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.1.6";
-    public const string Author = "NotAKidoS, Exterrata, Noachi, RaidShadowLily, Tejler";
+    public const string Version = "1.1.7";
+    public const string Author = "NotAKidoS, Exterrata, Noachi, RaidShadowLily, Tejler, Luc";
 }

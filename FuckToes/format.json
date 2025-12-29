@@ -1,9 +1,9 @@
 {
   "_id": 129,
   "name": "FuckToes",
-  "modversion": "1.0.4",
-  "gameversion": "2025r179",
-  "loaderversion": "0.6.1",
+  "modversion": "1.0.5",
+  "gameversion": "2025r181",
+  "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "Prevents VRIK from using toe bones in HalfBody or FBT.\n\nVRIK calculates weird center of mass when toes are mapped, so it is sometimes desired to unmap toes to prevent an avatars feet from resting far back.\n\nPlease see the [README](https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckToes/README.md) for relevant imagery detailing the problem.",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/FuckToes.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/FuckToes.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckToes/",
-  "changelog": "- Recompiled for 2025r179",
+  "changelog": "- Rebuilt for CVR 2025r181",
   "embedcolor": "#f61963"
 }

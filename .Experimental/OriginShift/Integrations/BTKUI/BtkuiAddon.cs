@@ -1,6 +1,6 @@
 ﻿using ABI_RC.Core.Player;
-using BTKUILib;
-using BTKUILib.UIObjects;
+using ABI_RC.Systems.UI.UILib;
+using ABI_RC.Systems.UI.UILib.UIObjects;
 using NAK.OriginShift;
 
 namespace NAK.OriginShiftMod.Integrations;

@@ -18,7 +18,7 @@ using System.Reflection;
     downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/OriginShift"
 )]
 
-[assembly: MelonGame("Alpha Blend Interactive", "ChilloutVR")]
+[assembly: MelonGame("ChilloutVR", "ChilloutVR")]
 [assembly: MelonPlatform(MelonPlatformAttribute.CompatiblePlatforms.WINDOWS_X64)]
 [assembly: MelonPlatformDomain(MelonPlatformDomainAttribute.CompatibleDomains.MONO)]
 [assembly: MelonColor(255, 125, 126, 129)]
@@ -28,7 +28,7 @@ using System.Reflection;
 namespace NAK.OriginShift.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.0";
+    public const string Version = "1.0.1";
     public const string Author = "NotAKidoS";
 }
 #endif

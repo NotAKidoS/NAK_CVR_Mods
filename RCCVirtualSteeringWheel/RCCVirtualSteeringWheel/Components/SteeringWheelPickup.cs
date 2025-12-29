@@ -17,6 +17,7 @@ public class SteeringWheelPickup : Pickupable
     public override bool IsAutoHold => false;
     public override bool IsObjectRotationAllowed => false;
     public override bool IsObjectPushPullAllowed => false;
+    public override bool IsTelepathicGrabAllowed => false;
     public override bool IsObjectUseAllowed => false;
     public override bool CanPickup => IsPickupable && !IsPickedUp && MetaPort.Instance.isUsingVr;
     

@@ -1,8 +1,8 @@
 {
   "_id": 244,
   "name": "ShareBubbles",
-  "modversion": "1.1.6",
-  "gameversion": "2025r180",
+  "modversion": "1.1.7",
+  "gameversion": "2025r181",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS, Exterrata, Noachi, RaidShadowLily, Tejler, Luc",
@@ -17,8 +17,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r47/ShareBubbles.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ShareBubbles.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ShareBubbles/",
-  "changelog": "- Fixes for 2025r180",
+  "changelog": "- Updated for CVR 2025r181",
   "embedcolor": "#f61963"
 }

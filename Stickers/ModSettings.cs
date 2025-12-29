@@ -59,6 +59,12 @@ public static class ModSettings
     internal static readonly MelonPreferences_Entry<bool> Entry_FriendsOnly =
         Category.CreateEntry("friends_only", false, "Friends Only", "Only allow friends to use stickers.");
 
+	internal static readonly MelonPreferences_Entry<StickerSize> Entry_StickerSize =
+        Category.CreateEntry("sticker_size", StickerSize.Chonk, "Sticker Size", "The size of the sticker when placed.");
+    
+    internal static readonly MelonPreferences_Entry<float> Entry_StickerOpacity =
+        Category.CreateEntry("opacity", 1f, "Opacity", "The opacity of the sticker when placed.");
+
     #endregion Stickers Mod Settings
     
     #region Debug Settings

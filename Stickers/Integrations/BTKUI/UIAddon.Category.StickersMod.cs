@@ -96,6 +96,9 @@ public static partial class BTKUIAddon
     
     public static void OnStickerRestrictionUpdated(bool isRestricted = false) //TODO: add Icon changing, Bono needs to expose the value first.
     {
+        if (_rootPage == null || _placeStickersButton == null)
+            return;
+        
         if (isRestricted)
         {
             _rootPage.MenuSubtitle = "Stickers... are sadly disabled in this world.";

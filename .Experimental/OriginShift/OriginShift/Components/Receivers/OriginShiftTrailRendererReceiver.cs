@@ -18,7 +18,7 @@ public class OriginShiftTrailRendererReceiver : MonoBehaviour
             _trailRenderers = GetComponentsInChildren<TrailRenderer>(true);
             if (_trailRenderers.Length == 0)
             {
-                OriginShiftMod.Logger.Error("OriginShiftTrailRendererReceiver: No TrailRenderers found on GameObject: " + gameObject.name, this);
+                // OriginShiftMod.Logger.Error("OriginShiftTrailRendererReceiver: No TrailRenderers found on GameObject: " + gameObject.name, this);
                 enabled = false;
             }
         }

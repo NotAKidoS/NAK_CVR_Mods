@@ -110,6 +110,8 @@ public static partial class ModNetwork
         msg.Read(out Vector3 position);
         msg.Read(out Vector3 forward);
         msg.Read(out Vector3 up);
+        msg.Read(out int size);
+        msg.Read(out float opacity);
 
         if (!StickerSystem.Instance.HasTextureHash(msg.Sender, textureHash))
         {
@@ -117,7 +119,7 @@ public static partial class ModNetwork
             StickerSystem.Instance.ClearStickersForPlayer(msg.Sender, stickerSlot); // Ensure no exploit
         }
 
-        StickerSystem.Instance.OnStickerPlaceReceived(msg.Sender, stickerSlot, position, forward, up);
+        StickerSystem.Instance.OnStickerPlaceReceived(msg.Sender, stickerSlot, position, forward, up, (StickerSize)size, opacity);
     }
 
     private static void HandleClearSticker(ModNetworkMessage msg)

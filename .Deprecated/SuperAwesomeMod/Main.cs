@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
+using ABI_RC.Core.Base;
 using ABI_RC.Core.Base.Jobs;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
-using ABI_RC.Core.Player.Interaction.RaycastImpl;
-using ABI_RC.Core.Util.AssetFiltering;
-using ABI.CCK.Components;
 using HarmonyLib;
 using MelonLoader;
-using NAK.SuperAwesomeMod.Components;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace NAK.SuperAwesomeMod;
 
@@ -33,13 +32,13 @@ public class SuperAwesomeModMod : MelonMod
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         
-        // patch SharedFilter.ProcessCanvas
-        HarmonyInstance.Patch(
-            typeof(SharedFilter).GetMethod(nameof(SharedFilter.ProcessCanvas),
-                BindingFlags.Public | BindingFlags.Static),
-            postfix: new HarmonyMethod(typeof(SuperAwesomeModMod).GetMethod(nameof(OnProcessCanvas),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
+        // // patch SharedFilter.ProcessCanvas
+        // HarmonyInstance.Patch(
+        //     typeof(SharedFilter).GetMethod(nameof(SharedFilter.ProcessCanvas),
+        //         BindingFlags.Public | BindingFlags.Static),
+        //     postfix: new HarmonyMethod(typeof(SuperAwesomeModMod).GetMethod(nameof(OnProcessCanvas),
+        //         BindingFlags.NonPublic | BindingFlags.Static))
+        // );
         
         LoggerInstance.Msg("SuperAwesomeModMod! OnInitializeMelon! :D");
     }
@@ -53,29 +52,43 @@ public class SuperAwesomeModMod : MelonMod
     
     private static void OnPlayerSetupStart()
     {
-        CVRRaycastDebugManager.Initialize(PlayerSetup.Instance.desktopCam);
+        // CVRRaycastDebugManager.Initialize(PlayerSetup.Instance.desktopCam);
+        // UEMenuHelper.Create();
     }
     
     private static void OnShitLoaded(Component c, List<Task> asyncTasks = null, Scene? scene = null)
     {
-        if (c == null)
+        if (!c)
             return;
 
-        if (c.gameObject == null)
+        if (!c.gameObject)
             return;
 
         if (c.gameObject.scene.buildIndex > 0)
             return;
 
-        if ((scene != null)
-            && (c.gameObject.scene != scene))
+        if ((scene != null) && (c.gameObject.scene != scene))
             return;
-        
-        if (c is Canvas canvas) canvas.gameObject.AddComponent<CVRCanvasWrapper>();
+
+        if (c is InputField input)
+        {
+            input.AddComponentIfMissing<InputFocusIntentDetector>();
+        }
+
+        if (c is TMPro.TMP_InputField tmpInput)
+        {
+            tmpInput.AddComponentIfMissing<InputFocusIntentDetector>();
+        }
     }
 
-    private static void OnProcessCanvas(string collectionId, Canvas canvas)
+    public class InputFocusIntentDetector : MonoBehaviour, IPointerClickHandler
     {
-        canvas.gameObject.AddComponent<CVRCanvasWrapper>();
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (TryGetComponent(out TMPro.TMP_InputField input) && input.isActiveAndEnabled)
+                ViewManager.Instance.openMenuKeyboard(input);
+            else if (TryGetComponent(out InputField inputField) && inputField.isActiveAndEnabled)
+                ViewManager.Instance.openMenuKeyboard(inputField);
+        }
     }
 }

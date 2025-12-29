@@ -12,11 +12,11 @@ internal static class Patches
     internal static void Apply(HarmonyLib.Harmony harmony)
     {
         harmony.Patch(
-            typeof(CVRWorld).GetMethod(nameof(CVRWorld.SetDefaultCamValues), BindingFlags.NonPublic | BindingFlags.Instance),
+            typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.SetDefaultCamValues), BindingFlags.Public | BindingFlags.Instance),
             postfix: typeof(Patches).GetMethod(nameof(OnPostWorldStart), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
          );
         harmony.Patch(
-            typeof(CVRWorld).GetMethod(nameof(CVRWorld.CopyRefCamValues), BindingFlags.NonPublic | BindingFlags.Instance),
+            typeof(PlayerSetup).GetMethod(nameof(PlayerSetup.CopyRefCamValues), BindingFlags.Public | BindingFlags.Instance),
             postfix: typeof(Patches).GetMethod(nameof(OnPostWorldStart), BindingFlags.NonPublic | BindingFlags.Static).ToNewHarmonyMethod()
          );
         harmony.Patch(

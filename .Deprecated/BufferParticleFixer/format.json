@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "SearchWithSpacesFix",
+  "modversion": "1.0.0",
+  "gameversion": "2024r177",
+  "loaderversion": "0.6.1",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Fixes search terms that include spaces.",
+  "searchtags": [
+    "search",
+    "spaces",
+    "fix",
+    "meow"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r42/SearchWithSpacesFix.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SearchWithSpacesFix/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

@@ -142,14 +142,12 @@ public class SmootherRayer : MonoBehaviour
         if (!_isEnabled)
             return; // only care about setting being enabled
         
-        ray._enableSmoothRay = false; // ensure built-in smoothing is disabled
-        
         if (MetaPort.Instance.settings.GetSettingsBool("ControlSmoothRaycast")) 
             return; // disable saved setting once
         
         SmootherRayMod.Logger.Msg("Built-in SmootherRay setting found to be enabled. Disabling built-in SmootherRay implementation in favor of modded implementation.");
         MetaPort.Instance.settings.SetSettingsBool("ControlSmoothRaycast", false);
-        ViewManager.SetGameSettingBool("ControlSmoothRaycast", false); 
+        // ViewManager.SetGameSettingBool("ControlSmoothRaycast", false); 
         // ^ did you know the game doesn't even use this method native...
     }
     

@@ -25,23 +25,23 @@ public class CameraAdditions
     {
         Instance = this;
 
-        __instance.@interface.AddAndGetHeader(null, typeof(CameraAdditions), "Additional Settings");
+        __instance.@interface.AddAndGetHeader(null, nameof(CameraAdditions), "Additional Settings");
 
         //Basic Settings
 
         PortableCameraSetting setting_CopyWorldNearClip = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Bool);
         setting_CopyWorldNearClip.BoolChanged = new Action<bool>(value => UpdateCameraSettingBool("CopyNearClip", value));
-        setting_CopyWorldNearClip.SettingName = "CopyNearClip";
+        setting_CopyWorldNearClip.SettingIdentifier = "CopyNearClip";
         setting_CopyWorldNearClip.DisplayName = "Copy World Near Clip";
-        setting_CopyWorldNearClip.OriginType = typeof(CameraAdditions);
+        setting_CopyWorldNearClip.OriginType = nameof(CameraAdditions);
         setting_CopyWorldNearClip.DefaultValue = true;
         setting_CopyWorldNearClip.Load();
 
         PortableCameraSetting setting_CopyWorldFarClip = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Bool);
         setting_CopyWorldFarClip.BoolChanged = new Action<bool>(value => UpdateCameraSettingBool("CopyFarClip", value));
-        setting_CopyWorldFarClip.SettingName = "CopyFarClip";
+        setting_CopyWorldFarClip.SettingIdentifier = "CopyFarClip";
         setting_CopyWorldFarClip.DisplayName = "Copy World Far Clip";
-        setting_CopyWorldFarClip.OriginType = typeof(CameraAdditions);
+        setting_CopyWorldFarClip.OriginType = nameof(CameraAdditions);
         setting_CopyWorldFarClip.DefaultValue = true;
         setting_CopyWorldFarClip.Load();
 
@@ -49,10 +49,10 @@ public class CameraAdditions
 
         PortableCameraSetting setting_Orthographic = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Bool);
         setting_Orthographic.BoolChanged = new Action<bool>(value => UpdateCameraSettingBool("Orthographic", value));
-        setting_Orthographic.SettingName = "Orthographic";
+        setting_Orthographic.SettingIdentifier = "Orthographic";
         setting_Orthographic.DisplayName = "Orthographic";
         setting_Orthographic.isExpertSetting = true;
-        setting_Orthographic.OriginType = typeof(CameraAdditions);
+        setting_Orthographic.OriginType = nameof(CameraAdditions);
         setting_Orthographic.DefaultValue = false;
         setting_Orthographic.Load();
 
@@ -60,10 +60,10 @@ public class CameraAdditions
 
         setting_NearClip = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Float);
         setting_NearClip.FloatChanged = new Action<float>(value => UpdateCameraSettingFloat("NearClip", value));
-        setting_NearClip.SettingName = "NearClip";
+        setting_NearClip.SettingIdentifier = "NearClip";
         setting_NearClip.DisplayName = "Near Clip Plane";
         setting_NearClip.isExpertSetting = true;
-        setting_NearClip.OriginType = typeof(CameraAdditions);
+        setting_NearClip.OriginType = nameof(CameraAdditions);
         setting_NearClip.DefaultValue = 0.01f;
         setting_NearClip.MinValue = 0.001f;
         setting_NearClip.MaxValue = 5000f;
@@ -71,10 +71,10 @@ public class CameraAdditions
 
         setting_FarClip = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Float);
         setting_FarClip.FloatChanged = new Action<float>(value => UpdateCameraSettingFloat("FarClip", value));
-        setting_FarClip.SettingName = "FarClip";
+        setting_FarClip.SettingIdentifier = "FarClip";
         setting_FarClip.DisplayName = "Far Clip Plane";
         setting_FarClip.isExpertSetting = true;
-        setting_FarClip.OriginType = typeof(CameraAdditions);
+        setting_FarClip.OriginType = nameof(CameraAdditions);
         setting_FarClip.DefaultValue = 1000f;
         setting_FarClip.MinValue = 0.002f;
         setting_FarClip.MaxValue = 5000f;
@@ -84,10 +84,10 @@ public class CameraAdditions
 
         setting_OrthographicSize = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Float);
         setting_OrthographicSize.FloatChanged = new Action<float>(value => UpdateCameraSettingFloat("OrthographicSize", value));
-        setting_OrthographicSize.SettingName = "OrthographicSize";
+        setting_OrthographicSize.SettingIdentifier = "OrthographicSize";
         setting_OrthographicSize.DisplayName = "Orthographic Size";
         setting_OrthographicSize.isExpertSetting = true;
-        setting_OrthographicSize.OriginType = typeof(CameraAdditions);
+        setting_OrthographicSize.OriginType = nameof(CameraAdditions);
         setting_OrthographicSize.DefaultValue = 5f;
         setting_OrthographicSize.MinValue = 0.01f;
         setting_OrthographicSize.MaxValue = 150f;
@@ -95,10 +95,10 @@ public class CameraAdditions
 
         setting_OrthographicNearClip = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Float);
         setting_OrthographicNearClip.FloatChanged = new Action<float>(value => UpdateCameraSettingFloat("OrthographicNearClip", value));
-        setting_OrthographicNearClip.SettingName = "OrthographicNearClip";
+        setting_OrthographicNearClip.SettingIdentifier = "OrthographicNearClip";
         setting_OrthographicNearClip.DisplayName = "Orthographic Near";
         setting_OrthographicNearClip.isExpertSetting = true;
-        setting_OrthographicNearClip.OriginType = typeof(CameraAdditions);
+        setting_OrthographicNearClip.OriginType = nameof(CameraAdditions);
         setting_OrthographicNearClip.DefaultValue = 0.001f;
         setting_OrthographicNearClip.MinValue = -5000f;
         setting_OrthographicNearClip.MaxValue = 5000f;
@@ -106,10 +106,10 @@ public class CameraAdditions
 
         setting_OrthographicFarClip = __instance.@interface.AddAndGetSetting(PortableCameraSettingType.Float);
         setting_OrthographicFarClip.FloatChanged = new Action<float>(value => UpdateCameraSettingFloat("OrthographicFarClip", value));
-        setting_OrthographicFarClip.SettingName = "OrthographicFarClip";
+        setting_OrthographicFarClip.SettingIdentifier = "OrthographicFarClip";
         setting_OrthographicFarClip.DisplayName = "Orthographic Far";
         setting_OrthographicFarClip.isExpertSetting = true;
-        setting_OrthographicFarClip.OriginType = typeof(CameraAdditions);
+        setting_OrthographicFarClip.OriginType = nameof(CameraAdditions);
         setting_OrthographicFarClip.DefaultValue = 1000f;
         setting_OrthographicFarClip.MinValue = -5000f;
         setting_OrthographicFarClip.MaxValue = 5000f;
@@ -147,7 +147,7 @@ public class CameraAdditions
     private void UpdateOrthographicMode()
     {
         if (PortableCamera.Instance != null)
-            PortableCamera.Instance.cameraComponent.orthographic = orthographicMode;
+            PortableCamera.Instance.CameraComponent.orthographic = orthographicMode;
         
         if (orthographicMode)
         {
@@ -198,23 +198,23 @@ public class CameraAdditions
                 //Camera Settings
                 case "NearClip":
                     if (!orthographicMode)
-                        PortableCamera.Instance.cameraComponent.nearClipPlane = value;
+                        PortableCamera.Instance.CameraComponent.nearClipPlane = value;
                     break;
                 case "FarClip":
                     if (!orthographicMode)
-                        PortableCamera.Instance.cameraComponent.farClipPlane = value;
+                        PortableCamera.Instance.CameraComponent.farClipPlane = value;
                     break;
                 //Orthographic Mode
                 case "OrthographicSize":
-                    PortableCamera.Instance.cameraComponent.orthographicSize = value;
+                    PortableCamera.Instance.CameraComponent.orthographicSize = value;
                     break;
                 case "OrthographicNearClip":
                     if (orthographicMode)
-                        PortableCamera.Instance.cameraComponent.nearClipPlane = value;
+                        PortableCamera.Instance.CameraComponent.nearClipPlane = value;
                     break;
                 case "OrthographicFarClip":
                     if (orthographicMode)
-                        PortableCamera.Instance.cameraComponent.farClipPlane = value;
+                        PortableCamera.Instance.CameraComponent.farClipPlane = value;
                     break;
             }
         }

@@ -14,7 +14,7 @@ using System.Reflection;
     nameof(NAK.PropUndoButton),
     AssemblyInfoParams.Version,
     AssemblyInfoParams.Author,
-    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/UndoPropButton"
+    downloadLink: "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PropUndoButton"
 )]
 
 [assembly: MelonGame("ChilloutVR", "ChilloutVR")]
@@ -27,6 +27,6 @@ using System.Reflection;
 namespace NAK.PropUndoButton.Properties;
 internal static class AssemblyInfoParams
 {
-    public const string Version = "1.0.4";
+    public const string Version = "1.0.5";
     public const string Author = "NotAKidoS";
 }

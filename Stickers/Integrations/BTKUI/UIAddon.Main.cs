@@ -3,7 +3,6 @@ using BTKUILib.UIObjects;
 using NAK.Stickers.Networking;
 using NAK.Stickers.Utilities;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace NAK.Stickers.Integrations;
 
@@ -50,10 +49,10 @@ public static partial class BTKUIAddon
     {
         _rootPage = new Page(ModSettings.ModName, ModSettings.SM_SettingsCategory, true, "Stickers-Puzzle") // sticker icon will be left blank as it is updated on world join, AFTER Icon value is exposed..
         {
-            MenuTitle = ModSettings.SM_SettingsCategory,
+            MenuTitle = ModSettings.SM_SettingsCategory + $" (Network Version v{ModNetwork.NetworkVersion})",
             MenuSubtitle = "", // left this blank as it is defined when the world loads
         };
-
+        
         _rootPageElementID = _rootPage.ElementID;
         
         QuickMenuAPI.OnTabChange += OnTabChange;

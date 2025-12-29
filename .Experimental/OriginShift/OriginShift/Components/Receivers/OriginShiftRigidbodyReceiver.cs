@@ -15,7 +15,7 @@ public class OriginShiftRigidbodyReceiver : MonoBehaviour
             _rigidbody = GetComponentInChildren<Rigidbody>();
             if (_rigidbody == null)
             {
-                OriginShiftMod.Logger.Error("OriginShiftRigidbodyReceiver: No Rigidbody found on GameObject: " + gameObject.name, this);
+                // OriginShiftMod.Logger.Error("OriginShiftRigidbodyReceiver: No Rigidbody found on GameObject: " + gameObject.name, this);
                 enabled = false;
             }
         }

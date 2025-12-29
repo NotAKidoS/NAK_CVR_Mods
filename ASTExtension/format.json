@@ -1,8 +1,8 @@
 {
   "_id": 223,
   "name": "ASTExtension",
-  "modversion": "1.0.4",
-  "gameversion": "2025r180",
+  "modversion": "1.0.5",
+  "gameversion": "2025r181",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -17,8 +17,8 @@
   "requirements": [
     "BTKUILib"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r47/ASTExtension.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ASTExtension.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ASTExtension/",
-  "changelog": "- Fixes for 2025r180",
+  "changelog": "- Rebuilt for CVR 2025r181",
   "embedcolor": "#f61963"
 }

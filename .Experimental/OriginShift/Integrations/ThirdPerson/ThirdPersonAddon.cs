@@ -29,6 +29,7 @@ public static class ThirdPersonAddon
     private static IEnumerator FixThirdPersonCompatibility()
     {
         yield return null; // wait a frame for the camera to be setup
+        yield return null; // wait a frame for the camera to be setup
         GameObject thirdPersonCameraObj = GameObject.Find("_PLAYERLOCAL/[CameraRigDesktop]/Camera/ThirdPersonCameraObj");
         thirdPersonCameraObj.AddComponentIfMissing<OriginShiftOcclusionCullingDisabler>();
     }

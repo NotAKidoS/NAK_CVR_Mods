@@ -64,8 +64,8 @@ public partial class StickerSystem
 
     #region Sticker Callbacks
 
-    public void OnStickerPlaceReceived(string playerId, int stickerSlot, Vector3 position, Vector3 forward, Vector3 up)
-        => AttemptPlaceSticker(playerId, position, forward, up, alignWithNormal: true, stickerSlot);
+    public void OnStickerPlaceReceived(string playerId, int stickerSlot, Vector3 position, Vector3 forward, Vector3 up, StickerSize size, float opacity)
+        => AttemptPlaceSticker(playerId, size, opacity, position, forward, up, alignWithNormal: true, stickerSlot);
 
     public void OnStickerClearReceived(string playerId, int stickerSlot)
         => ClearStickersForPlayer(playerId, stickerSlot);

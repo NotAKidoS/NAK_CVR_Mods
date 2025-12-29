@@ -1,8 +1,6 @@
 ﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.InteractionSystem.Base;
-using ABI_RC.Systems.InputManagement;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace ABI_RC.Core.Player.Interaction
 {

@@ -26,7 +26,7 @@
 //
 //     #region Constants
 //
-//     private const string ModId = "MelonMod.NAK.RelativeSync";
+//     private const string ModId = "MelonMod.NAK.RelativeSyncJitterFix";
 //
 //     #endregion
 //

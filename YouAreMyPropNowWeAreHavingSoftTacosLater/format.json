@@ -1,8 +1,8 @@
 {
   "_id": 262,
   "name": "YouAreMyPropNowWeAreHavingSoftTacosLater",
-  "modversion": "1.0.0",
-  "gameversion": "2025r180",
+  "modversion": "1.0.1",
+  "gameversion": "2025r181",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r47/YouAreMyPropNowWeAreHavingSoftTacosLater.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/YouAreMyPropNowWeAreHavingSoftTacosLater.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/YouAreMyPropNowWeAreHavingSoftTacosLater/",
-  "changelog": "- Initial release",
+  "changelog": "- Updated for CVR 2025r181",
   "embedcolor": "#f61963"
 }

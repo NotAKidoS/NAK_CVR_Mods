@@ -1,5 +1,4 @@
 ﻿using ABI_RC.Core;
-using ABI_RC.Core.IO;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -118,7 +117,7 @@ namespace NAK.Stickers
                 _previewMaterial.mainTexture = texture;
         }
 
-        public void Place(RaycastHit hit, Vector3 forwardDirection, Vector3 upDirection, int spawnerIndex = 0)
+        public void Place(RaycastHit hit, Vector3 forwardDirection, Vector3 upDirection, int spawnerIndex = 0, StickerSize size = StickerSize.Chonk, float opacity = 1f)
         {
             if (spawnerIndex < 0 || spawnerIndex >= _decalSpawners.Length)
             {
@@ -138,12 +137,14 @@ namespace NAK.Stickers
             
             _lastPlacedPosition = hit.point;
             LastPlacedTime = Time.time;
-
+            
+            float sizeScale = size.GetSizeModifier();
+            
             // Add decal to the specified spawner
             _decalSpawners[spawnerIndex].AddDecal(
                 _lastPlacedPosition, Quaternion.LookRotation(forwardDirection, upDirection),
                 hitGO,
-                DECAL_SIZE, DECAL_SIZE, 1f, 1f, 0f, rootObject);
+                DECAL_SIZE * sizeScale, DECAL_SIZE * sizeScale, 1f, opacity, 0f, rootObject);
         }
 
         public void Clear()
@@ -233,7 +234,7 @@ namespace NAK.Stickers
         private int _previewSpawnerIndex = -1;
         private float _flashTime;
         
-        public void PlacePreview(RaycastHit hit, Vector3 forwardDirection, Vector3 upDirection, int spawnerIndex = 0)
+        public void PlacePreview(RaycastHit hit, Vector3 forwardDirection, Vector3 upDirection, int spawnerIndex = 0, StickerSize size = StickerSize.Chonk)
         {
             if (spawnerIndex < 0 || spawnerIndex >= _decalSpawners.Length)
             {
@@ -252,10 +253,12 @@ namespace NAK.Stickers
                 || hitGO.GetComponentInParent<Rigidbody>() != null) // movable
                 rootObject = hitGO.transform;
 
+            float sizeScale = size.GetSizeModifier();
+            
             _previewDecalSpawner.AddDecal(
                 hit.point, Quaternion.LookRotation(forwardDirection, upDirection),
                 hitGO,
-                DECAL_SIZE, DECAL_SIZE, 1f, 1f, 0f, rootObject);
+                DECAL_SIZE * sizeScale, DECAL_SIZE * sizeScale, 1f, 1f, 0f, rootObject);
         }
 
         public void UpdatePreview(int spawnerIndex)

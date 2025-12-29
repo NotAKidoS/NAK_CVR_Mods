@@ -18,7 +18,7 @@ public class OriginShiftParticleSystemReceiver : MonoBehaviour
             _particleSystems = GetComponentsInChildren<ParticleSystem>(true);
             if (_particleSystems.Length == 0)
             {
-                OriginShiftMod.Logger.Error("OriginShiftParticleSystemReceiver: No ParticleSystems found on GameObject: " + gameObject.name, this);
+                // OriginShiftMod.Logger.Error("OriginShiftParticleSystemReceiver: No ParticleSystems found on GameObject: " + gameObject.name, this);
                 enabled = false;
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using ABI_RC.Core.AudioEffects;
 using ABI_RC.Core.Networking;
+using ABI_RC.Core.Networking.GameServer;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util;
 using ABI_RC.Systems.InputManagement.InputModules;
@@ -35,11 +36,16 @@ public class PropUndoButton : MelonMod
     private const string sfx_warn = "PropUndo_sfx_warn";
     private const string sfx_deny = "PropUndo_sfx_deny";
 
-    private const int redoHistoryLimit = 20; // amount that can be in history at once
+    private static int maxPropsPerUser = 20;
+    
+    // Amount that can be in history at once.
+    private static readonly int redoHistoryLimit = Mathf.Max(maxPropsPerUser, CVRSyncHelper.MyPropCount);
     private const int redoTimeoutLimit = 120; // seconds
 
     public override void OnInitializeMelon()
     {
+        GSInfoHandler.OnGSInfoUpdate += OnGSInfoUpdate;
+        
         HarmonyInstance.Patch( // delete my props in reverse order for redo
             typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.DeleteMyProps)),
             new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnDeleteMyProps),
@@ -61,7 +67,7 @@ public class PropUndoButton : MelonMod
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
         HarmonyInstance.Patch( // desktop input patch so we don't run in menus/gui
-            typeof(CVRInputModule_Keyboard).GetMethod(nameof(CVRInputModule_Keyboard.UpdateInput)),
+            typeof(CVRInputModule_Keyboard).GetMethod(nameof(CVRInputModule_Keyboard.Update_Binds)),
             postfix: new HarmonyMethod(typeof(PropUndoButton).GetMethod(nameof(OnUpdateInput),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
@@ -73,7 +79,7 @@ public class PropUndoButton : MelonMod
 
         SetupDefaultAudioClips();
     }
-
+    
     private void SetupDefaultAudioClips()
     {
         // PropUndo and audio folders do not exist, create them if dont exist yet
@@ -111,6 +117,12 @@ public class PropUndoButton : MelonMod
         }
     }
 
+    private void OnGSInfoUpdate(GSInfoUpdate update, GSInfoChanged changed)
+    {
+        if (changed == GSInfoChanged.MaxPropsPerUser)
+            maxPropsPerUser = update.MaxPropsPerUser;
+    }
+    
     private static void OnWorldLoad()
     {
         deletedProps.Clear();
@@ -296,9 +308,9 @@ public class PropUndoButton : MelonMod
                && NetworkManager.Instance.GameNetwork.ConnectionState == ConnectionState.Connected;
     }
 
-    public static bool IsAtPropLimit(int limit = 21)
+    public static bool IsAtPropLimit()
     {
-        return GetAllPropsByOwnerId().Count >= limit;
+        return GetAllPropsByOwnerId().Count >= maxPropsPerUser;
     }
 
     private static CVRSyncHelper.PropData GetPropByInstanceIdAndOwnerId(string instanceId)

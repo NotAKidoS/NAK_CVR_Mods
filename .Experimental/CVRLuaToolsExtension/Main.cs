@@ -4,7 +4,6 @@ using ABI.CCK.Components;
 using HarmonyLib;
 using MelonLoader;
 using NAK.CVRLuaToolsExtension.NamedPipes;
-using UnityEngine;
 
 namespace NAK.CVRLuaToolsExtension;
 

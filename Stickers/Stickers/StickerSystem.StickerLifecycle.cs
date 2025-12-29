@@ -51,15 +51,15 @@ public partial class StickerSystem
 
     private bool PlaceStickerSelf(Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true)
     {
-        if (!AttemptPlaceSticker(PlayerLocalId, position, forward, up, alignWithNormal, SelectedStickerSlot))
+        if (!AttemptPlaceSticker(PlayerLocalId, ModSettings.Entry_StickerSize.Value, ModSettings.Entry_StickerOpacity.Value, position, forward, up, alignWithNormal, SelectedStickerSlot))
             return false; // failed
         
         // placed, now network
-        ModNetwork.SendPlaceSticker(SelectedStickerSlot, position, forward, up);
+        ModNetwork.SendPlaceSticker(SelectedStickerSlot, position, forward, up, ModSettings.Entry_StickerSize.Value, ModSettings.Entry_StickerOpacity.Value);
         return true;
     }
     
-    private bool AttemptPlaceSticker(string playerId, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0, bool isPreview = false)
+    private bool AttemptPlaceSticker(string playerId, StickerSize size, float opacity, Vector3 position, Vector3 forward, Vector3 up, bool alignWithNormal = true, int stickerSlot = 0, bool isPreview = false)
     {
         // if the world contained a gameobject with the [DisableStickers] name and restricted the instance disable stickers!
         if (IsRestrictedInstance)
@@ -81,11 +81,11 @@ public partial class StickerSystem
 
         if (isPreview)
         {
-            stickerData.PlacePreview(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot);
+            stickerData.PlacePreview(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot, size);
             return true;
         }
         
-        stickerData.Place(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot);
+        stickerData.Place(hit, alignWithNormal ? -hit.normal : forward, up, stickerSlot, size, opacity);
         stickerData.PlayAudio();
         return true;
     }
@@ -173,7 +173,7 @@ public partial class StickerSystem
     
     public void PlaceStickerPreview(Vector3 position, Vector3 forward, Vector3 up)
     {
-        AttemptPlaceSticker(PlayerLocalId, position, forward, up, true, SelectedStickerSlot, true);
+        AttemptPlaceSticker(PlayerLocalId, ModSettings.Entry_StickerSize.Value, ModSettings.Entry_StickerOpacity.Value, position, forward, up, true, SelectedStickerSlot, true);
     }
 
     public void UpdateStickerPreview()

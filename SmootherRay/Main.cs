@@ -1,5 +1,4 @@
-﻿using System;
-using ABI_RC.Core.InteractionSystem;
+﻿using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using HarmonyLib;
 using MelonLoader;

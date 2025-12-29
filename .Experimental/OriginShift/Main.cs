@@ -1,13 +1,9 @@
 ﻿#if !UNITY_EDITOR
-using System.Globalization;
-using ABI_RC.Core.UI;
 using ABI_RC.Core.Util.AssetFiltering;
-using ABI_RC.Systems.Movement;
 using MelonLoader;
 using NAK.OriginShift.Components;
 using NAK.OriginShiftMod.Integrations;
 using OriginShift.Integrations;
-using UnityEngine;
 
 namespace NAK.OriginShift;
 
@@ -36,7 +32,6 @@ public class OriginShiftMod : MelonMod
         
         // Compatibility Mode
         ApplyPatches(typeof(Patches.PlayerSetupPatches)); // net ik, camera occlusion culling
-        ApplyPatches(typeof(Patches.Comms_ClientPatches)); // voice pos
         ApplyPatches(typeof(Patches.CVRSyncHelperPatches)); // spawnable pos
         ApplyPatches(typeof(Patches.PuppetMasterPatches)); // remote player pos
         ApplyPatches(typeof(Patches.CVRObjectSyncPatches)); // remote object pos

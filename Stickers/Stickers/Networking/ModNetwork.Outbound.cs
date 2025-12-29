@@ -36,7 +36,7 @@ public static partial class ModNetwork
     
     #region Outbound Methods
 
-    public static void SendPlaceSticker(int stickerSlot, Vector3 position, Vector3 forward, Vector3 up)
+    public static void SendPlaceSticker(int stickerSlot, Vector3 position, Vector3 forward, Vector3 up, StickerSize size, float opacity)
     {
         if (!_isSubscribedToModNetwork)
             return;
@@ -51,6 +51,8 @@ public static partial class ModNetwork
         modMsg.Write(position);
         modMsg.Write(forward);
         modMsg.Write(up);
+        modMsg.Write((int)size);
+        modMsg.Write(opacity);
         modMsg.Send();
 
         LoggerOutbound($"PlaceSticker: Slot: {stickerSlot}, Hash: {_textureStorage[stickerSlot].textureHash}, Position: {position}, Forward: {forward}, Up: {up}");

@@ -1,9 +1,9 @@
 {
   "_id": 162,
   "name": "SmootherRay",
-  "modversion": "1.0.6",
-  "gameversion": "2025r177",
-  "loaderversion": "0.6.1",
+  "modversion": "1.0.8",
+  "gameversion": "2025r181",
+  "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
   "description": "Smoothes your controller while the raycast lines are visible.\nThis is a CVR adaptation of a Beat Saber mod: [BeatSaber_SmoothedController](https://github.com/kinsi55/BeatSaber_SmoothedController)\n\n- An option is provided to only smooth when aiming at menus.\n- Smoothing characteristics are completely configurable, but the defaults are basically perfect.\n\n**Only supports OpenVR, not OpenXR.**\n\n-# NOTE: This disables the shitty built-in Smooth Ray setting when the mod is enabled. Compare both & you'll see why.",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r46/SmootherRay.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/SmootherRay.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmootherRay/",
-  "changelog": "- Fixes for 2025r179",
+  "changelog": "- Rebuilt for CVR 2025r181",
   "embedcolor": "#f61963"
 }
