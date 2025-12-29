@@ -112,6 +112,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Experimental", "Experimenta
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlapPlapForAll", ".Experimental\PlapPlapForAll\PlapPlapForAll.csproj", "{1DE6CF9F-996E-459B-9129-D76245001F5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlapPlapForAll", "PlapPlapForAll\PlapPlapForAll.csproj", "{B467F55B-55C4-44E7-83EF-E6ABC9225A90}"
+EndProject
 EndProject
 EndProject
 EndProject
@@ -455,6 +457,10 @@ Global
 		{1DE6CF9F-996E-459B-9129-D76245001F5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DE6CF9F-996E-459B-9129-D76245001F5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DE6CF9F-996E-459B-9129-D76245001F5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B467F55B-55C4-44E7-83EF-E6ABC9225A90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B467F55B-55C4-44E7-83EF-E6ABC9225A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B467F55B-55C4-44E7-83EF-E6ABC9225A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B467F55B-55C4-44E7-83EF-E6ABC9225A90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "PlapPlapForAll",
+  "modversion": "1.0.0",
+  "gameversion": "2025r181",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS, Noachi",
+  "description": "Penetrator SFX mod which adds Noach's PlapPlap prefab to any detected DPS setup on avatars that do not already have it.\n\n**Requirements:**\n- The avatar must have DPS lights\n- The avatar must not already have Noach's PlapPlap prefab\n- The avatar must be tagged Suggestive or Explicit\n- Mature content must be enabled in the user's settings\n- The avatar must be worn by a friend or the local user\n\nSFX are driven by the Avatar Audio slider. \n\nIf you have a setup which does not function correctly with this mod, I can *try* to look into it, but no guarantees.",
+  "searchtags": [
+    "dps",
+    "plapplap",
+    "penetrator",
+    "sfx"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PlapPlapForAll.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PlapPlapForAll/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

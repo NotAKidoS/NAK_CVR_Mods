@@ -1,7 +1,9 @@
 ﻿using ABI_RC.Core;
+using ABI_RC.Core.Networking.API.Responses;
 using ABI_RC.Core.Networking.IO.Social;
 using MelonLoader;
 using ABI_RC.Core.Player;
+using ABI_RC.Core.Savior;
 using ABI_RC.Systems.GameEventSystem;
 using ABI.CCK.Components;
 using UnityEngine;
@@ -54,6 +56,15 @@ public class PlapPlapForAllMod : MelonMod
     {
         // Enforcing friends with benefits
         if (!Friends.FriendsWith(player.PlayerId))
+            return;
+        
+        // Ensure the avatar is NSFW
+        UgcContentTags tags = player.AvatarMetadata.TagsData;
+        if (tags is { Suggestive: false, Explicit: false })
+            return;
+        
+        // Ensure mature content is allowed by user settings
+        if (!MetaPort.Instance.matureContentAllowed)
             return;
         
         // Scan for DPS setups
