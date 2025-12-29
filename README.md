@@ -11,6 +11,7 @@
 | [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/CustomSpawnPoint.dll) |
 | [DoubleTapJumpToExitSeat](DoubleTapJumpToExitSeat/README.md) | Replaces seat exit controls with a double-tap of the jump button, avoiding accidental exits from joystick drift or opening the menu. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/DoubleTapJumpToExitSeat.dll) |
 | [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in Halfbody or Fullbody. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/FuckToes.dll) |
+| [PlapPlapForAll](PlapPlapForAll/README.md) | Penetrator SFX mod which adds Noach's PlapPlap prefab to any detected DPS setup on avatars that do not already have it. | No Download |
 | [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PropLoadingHexagon.dll) |
 | [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/RCCVirtualSteeringWheel.dll) |
 | [RelativeSyncJitterFix](RelativeSyncJitterFix/README.md) | Relative sync jitter fix is the single harmony patch that could not make it into the native release of RelativeSync. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/RelativeSyncJitterFix.dll) |
@@ -32,7 +33,6 @@
 | [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Adds a simple module for creating network variables & events *kinda* similar to Garry's Mod. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/LuaNetworkVariables.dll) |
 | [LuaTTS](.Experimental/LuaTTS/README.md) | Provides access to the built-in text-to-speech (TTS) functionality to lua scripts. Allows you to make the local player speak. | No Download |
 | [OriginShift](.Experimental/OriginShift/README.md) | Experimental mod that allows world origin to be shifted to prevent floating point precision issues. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/OriginShift.dll) |
-| [PlapPlapForAll](.Experimental/PlapPlapForAll/README.md) | Adds Noach's PlapPlap prefab to any detected DPS setups on avatars. | No Download |
 | [ScriptingSpoofer](.Experimental/ScriptingSpoofer/README.md) | Prevents **local** scripts from accessing your Username or UserID by spoofing them with random values each session. | No Download |
 
 <!-- END MOD LIST -->
