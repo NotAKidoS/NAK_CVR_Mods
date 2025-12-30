@@ -37,7 +37,7 @@ public class OriginShiftMod : MelonMod
         ApplyPatches(typeof(Patches.CVRObjectSyncPatches)); // remote object pos
         
         ApplyPatches(typeof(Patches.DbJobsAvatarManagerPatches)); // dynamic bones
-        ApplyPatches(typeof(Patches.CVRPortalManagerPatches)); // portals
+        ApplyPatches(typeof(Patches.AbstractPortalControllerPatches)); // portals
         ApplyPatches(typeof(Patches.RCC_SkidmarksManagerPatches)); // skidmarks
         ApplyPatches(typeof(Patches.CVRPickupObjectPatches)); // pickup object respawn height
         

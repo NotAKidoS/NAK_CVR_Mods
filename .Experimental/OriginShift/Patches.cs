@@ -7,6 +7,7 @@ using ABI_RC.Core.Util;
 using ABI_RC.Systems.Camera;
 using ABI_RC.Systems.Communications.Networking;
 using ABI_RC.Systems.Movement;
+using ABI_RC.Systems.PortalsV2;
 using ABI.CCK.Components;
 using DarkRift;
 using HarmonyLib;
@@ -250,19 +251,22 @@ internal static class DbJobsAvatarManagerPatches
     }
 }
 
-// CVRPortalManager
-internal static class CVRPortalManagerPatches
+// AbstractPortalController
+internal static class AbstractPortalControllerPatches
 {
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(CVRPortalManager), nameof(CVRPortalManager.Start))]
-    private static void Postfix_CVRPortalManager_Start(ref CVRPortalManager __instance)
+    [HarmonyPatch(typeof(AbstractPortalController), nameof(AbstractPortalController.Setup))]
+    private static void Postfix_AbstractPortalManager_Setup(ref AbstractPortalController __instance)
     {
+        if (__instance.PortalSoul.portalType == PortalType.World)
+            return; // only care about user portals
+        
         // parent portal to the object below it using a physics cast
         Transform portalTransform = __instance.transform;
         Vector3 origin = portalTransform.position;
         Vector3 direction = Vector3.down;
         if (Physics.Raycast(origin, direction, out RaycastHit hit, 0.5f)) 
-            portalTransform.SetParent(hit.transform);
+            portalTransform.SetParent(hit.transform, true);
     }
 }
 
