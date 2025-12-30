@@ -64,8 +64,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigureCalibrationPose", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperAwesomeMod", ".Deprecated\SuperAwesomeMod\SuperAwesomeMod.csproj", "{11417BE7-7C4F-40D9-9FCB-467C7B3DCF66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OriginShift", ".Experimental\OriginShift\OriginShift.csproj", "{A891F616-D163-4B1D-99E4-17C49810D3E4}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatBubbles", "ChatBubbles\ChatBubbles.csproj", "{6981A299-1743-4342-9F20-B8FC0263C54D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InDepthLogging", ".Blackbox\InDepthLogging\InDepthLogging.csproj", "{544C21EF-51EF-4947-BBED-26A6794A71D7}"
@@ -113,6 +111,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlapPlapForAll", ".Experimental\PlapPlapForAll\PlapPlapForAll.csproj", "{1DE6CF9F-996E-459B-9129-D76245001F5F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlapPlapForAll", "PlapPlapForAll\PlapPlapForAll.csproj", "{B467F55B-55C4-44E7-83EF-E6ABC9225A90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OriginShift", ".Experimental\OriginShift\OriginShift.csproj", "{CE2F1DF8-347D-4AAF-870C-8F2A97FDC308}"
 EndProject
 EndProject
 EndProject
@@ -369,10 +369,6 @@ Global
 		{11417BE7-7C4F-40D9-9FCB-467C7B3DCF66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{11417BE7-7C4F-40D9-9FCB-467C7B3DCF66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{11417BE7-7C4F-40D9-9FCB-467C7B3DCF66}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A891F616-D163-4B1D-99E4-17C49810D3E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A891F616-D163-4B1D-99E4-17C49810D3E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A891F616-D163-4B1D-99E4-17C49810D3E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A891F616-D163-4B1D-99E4-17C49810D3E4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6981A299-1743-4342-9F20-B8FC0263C54D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6981A299-1743-4342-9F20-B8FC0263C54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6981A299-1743-4342-9F20-B8FC0263C54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -461,6 +457,10 @@ Global
 		{B467F55B-55C4-44E7-83EF-E6ABC9225A90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B467F55B-55C4-44E7-83EF-E6ABC9225A90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B467F55B-55C4-44E7-83EF-E6ABC9225A90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE2F1DF8-347D-4AAF-870C-8F2A97FDC308}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE2F1DF8-347D-4AAF-870C-8F2A97FDC308}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE2F1DF8-347D-4AAF-870C-8F2A97FDC308}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE2F1DF8-347D-4AAF-870C-8F2A97FDC308}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -478,5 +478,6 @@ Global
 		{A19BF0EC-70C3-49D0-B278-02807669F240} = {FF8CA700-BB6F-45FD-AEB6-CCAEACE50B0F}
 		{7CE6B276-A25C-4B7B-B99D-AD52C6B48E5B} = {FF8CA700-BB6F-45FD-AEB6-CCAEACE50B0F}
 		{1DE6CF9F-996E-459B-9129-D76245001F5F} = {B8FAD767-CB47-4112-8AFC-8620A51B946A}
+		{CE2F1DF8-347D-4AAF-870C-8F2A97FDC308} = {B8FAD767-CB47-4112-8AFC-8620A51B946A}
 	EndGlobalSection
 EndGlobal
