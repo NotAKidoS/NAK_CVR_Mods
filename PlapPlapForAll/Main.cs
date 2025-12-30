@@ -48,11 +48,11 @@ public class PlapPlapForAllMod : MelonMod
     }
     
     private static void OnLocalAvatarLoaded(CVRAvatar avatar) 
-        => OnAvatarLoaded(PlayerSetup.Instance, avatar.gameObject);
+        => OnAvatarLoaded(PlayerSetup.Instance, avatar);
     private static void OnRemoteAvatarLoaded(CVRPlayerEntity playerEntity, CVRAvatar avatar)
-        => OnAvatarLoaded(playerEntity.PuppetMaster, avatar.gameObject);
+        => OnAvatarLoaded(playerEntity.PuppetMaster, avatar);
 
-    private static void OnAvatarLoaded(PlayerBase player, GameObject avatarObject)
+    private static void OnAvatarLoaded(PlayerBase player, CVRAvatar avatar)
     {
         // Enforcing friends with benefits
         if (!Friends.FriendsWith(player.PlayerId))
@@ -60,12 +60,16 @@ public class PlapPlapForAllMod : MelonMod
         
         // Ensure the avatar is NSFW
         UgcContentTags tags = player.AvatarMetadata.TagsData;
-        if (tags is { Suggestive: false, Explicit: false })
+        if (tags is { Suggestive: false, Explicit: false } // Main tags
+            && !avatar.TagHandledByAdvancedTagging(CVRAvatarAdvancedTaggingEntry.Tags.Suggestive) // Advanced tags
+            && !avatar.TagHandledByAdvancedTagging(CVRAvatarAdvancedTaggingEntry.Tags.Explicit))
             return;
         
         // Ensure mature content is allowed by user settings
         if (!MetaPort.Instance.matureContentAllowed)
             return;
+        
+        GameObject avatarObject = avatar.gameObject;
         
         // Scan for DPS setups
         if (!DPS.ScanForDPS(avatarObject, out List<DPSOrifice> dpsOrifices, out bool foundPenetrator))
