@@ -119,7 +119,7 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         );
         
         #endregion CVRSyncHelper Patches
-
+ 
         #region CVRDownloadManager Patches
 
         HarmonyInstance.Patch(
@@ -240,7 +240,16 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     }
 
     // ReSharper disable UnusedParameter.Local
-    private static bool OnCVRDownloadManagerQueueTask(AssetManagement.UgcMetadata metadata, DownloadTask.ObjectType type, string assetUrl, string fileId, string toAttach, CVRLoadingAvatarController loadingAvatarController = null, bool joinOnComplete = false, bool isHomeRequested = false, CompatibilityVersions compatibilityVersion = CompatibilityVersions.NotSpi, CVREncryptionRouter.EncryptionAlgorithm encryptionAlgorithm = CVREncryptionRouter.EncryptionAlgorithm.Gen1, string spawnerId = null)
+    private static bool OnCVRDownloadManagerQueueTask(
+        AssetManagement.UgcMetadata metadata,
+        DownloadTask.ObjectType type,
+        string assetUrl,
+        string fileId,
+        string toAttach,
+        CVRLoadingAvatarController loadingAvatarController = null,
+        bool joinOnComplete = false,
+        bool isHomeRequested = false,
+        string spawnerId = null)
     {
         if (type != DownloadTask.ObjectType.Prop) return true; // Only care about props
      
