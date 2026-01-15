@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "DesktopInteractions",
+  "modversion": "1.0.0",
+  "gameversion": "2025r181",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Adds IK-driven hand gestures to your avatar in Desktop: earpiece grab (GMOD-style) when typing in ChatBox, and binocular cupping when zooming. Both gestures are toggleable in settings.",
+  "searchtags": [
+    "gmod",
+    "typing",
+    "zooming",
+    "desktop"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/DesktopInteractions.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DesktopInteractions/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
