@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using ABI_RC.Core.InteractionSystem;
+using ABI_RC.Core.Savior;
 using ABI_RC.Systems.InputManagement;
 using ABI_RC.Systems.Movement;
 using HarmonyLib;
@@ -25,6 +26,8 @@ public class ESCBothMenusMod : MelonMod
 
     private static void OnPreViewManagerUpdate()
     {
+        if (MetaPort.Instance.isUsingVr) return;
+        
         if (CVRInputManager.Instance.mainMenuButton
             && !BetterBetterCharacterController.Instance.IsSittingOnControlSeat())
         {
