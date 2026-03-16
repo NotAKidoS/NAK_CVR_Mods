@@ -1,0 +1,23 @@
+{
+  "_id": 219,
+  "name": "ScrollFlight",
+  "modversion": "1.0.5",
+  "gameversion": "2025r181",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Scroll-wheel to adjust flight speed in Desktop. Stole idea from Luc.",
+  "searchtags": [
+    "flight",
+    "scroll",
+    "speed",
+    "modifier"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ScrollFlight.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ScrollFlight/",
+  "changelog": "- Rebuilt for CVR 2025r181",
+  "embedcolor": "#f61963"
+}
