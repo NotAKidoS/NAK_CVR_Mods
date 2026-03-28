@@ -1,0 +1,26 @@
+{
+  "_id": -1,
+  "name": "PropsButBetter",
+  "modversion": "1.0.0",
+  "gameversion": "2026r181",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Prop quality-of-life suite. Adds a few new ways to interact with and manage Props.\n### Whats included:\n\n- **A unified Prop List**\n  - Browse All Props, Your Props, or Session history in a clean, cyclable list.\n- **Smarter Prop Selection**\n  - Clicking a Prop opens the Quick Menu with quick actions and useful info.\n- **Undo / Redo for Props**\n  - Fix mistakes instantly without having to clear all.\n  - Desktop: CTRL+Z / CTRL+SHIFT+Z\n  - VR: Dedicated Undo / Redo buttons in the Props Quick Menu tab.\n- **Subtle Prop SFX**\n  - Clean audio feedback when Props are spawned, removed, or respawned by you.\n- **Placement Visualizer**\n  - Preview props before you've placed them while in Prop Select mode.\n\n-# Desktop undo/redo keybinds, Prop SFX, and placement visualizer are configurable in Melon Preferences.",
+  "searchtags": [
+    "prop",
+    "qol",
+    "undo",
+    "redo",
+    "sounds",
+    "spawn",
+    "list"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PropsButBetter.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PropsButBetter/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

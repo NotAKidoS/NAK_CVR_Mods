@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <None Remove="Resources\plap plap.assets" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SFX\sfx_deny.wav" />
+    <EmbeddedResource Include="Resources\SFX\sfx_redo.wav" />
+    <EmbeddedResource Include="Resources\SFX\sfx_spawn.wav" />
+    <EmbeddedResource Include="Resources\SFX\sfx_undo.wav" />
+    <EmbeddedResource Include="Resources\SFX\sfx_warn.wav" />
+    <None Remove="Resources\reload.png" />
+    <EmbeddedResource Include="Resources\reload.png" />
+    <None Remove="Resources\remove.png" />
+    <EmbeddedResource Include="Resources\remove.png" />
+    <None Remove="Resources\select.png" />
+    <EmbeddedResource Include="Resources\select.png" />
+    <None Remove="Resources\redo.png" />
+    <EmbeddedResource Include="Resources\redo.png" />
+    <None Remove="Resources\undo.png" />
+    <EmbeddedResource Include="Resources\undo.png" />
+    <None Remove="Resources\rubiks-cube.png" />
+    <EmbeddedResource Include="Resources\rubiks-cube.png" />
+    <None Remove="Resources\wand.png" />
+    <EmbeddedResource Include="Resources\wand.png" />
+    <None Remove="Resources\rubiks-cube-clock.png" />
+    <EmbeddedResource Include="Resources\rubiks-cube-clock.png" />
+    <None Remove="Resources\rubiks-cube-star.png" />
+    <EmbeddedResource Include="Resources\rubiks-cube-star.png" />
+    <None Remove="Resources\rubiks-cube-eye.png" />
+    <EmbeddedResource Include="Resources\rubiks-cube-eye.png" />
+    <None Remove="Resources\placeholder.png" />
+    <EmbeddedResource Include="Resources\placeholder.png" />
+  </ItemGroup>
+</Project>
