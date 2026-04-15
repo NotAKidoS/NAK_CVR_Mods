@@ -6,25 +6,26 @@
 
 | Name | Description | Download |
 |------|-------------|----------|
-| [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ASTExtension.dll) |
+| [ASTExtension](ASTExtension/README.md) | Extension mod for [Avatar Scale Tool](https://github.com/NotAKidoS/AvatarScaleTool): | No Download |
+| [ChatBoxHud](ChatBoxHud/README.md) | Shows nearby ChatBox messages directly on your HUD so you can read them comfortably in VR without breaking your neck. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r49/ChatBoxHud.dll) |
 | [ConfigureCalibrationPose](ConfigureCalibrationPose/README.md) | Select FBT calibration pose. | No Download |
-| [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/CustomSpawnPoint.dll) |
-| [DesktopInteractions](DesktopInteractions/README.md) | Adds IK-driven hand gestures to your avatar in Desktop: earpiece grab (GMOD-style) when typing in ChatBox, and binocular cupping when zooming. Both gestures are toggleable in settings. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/DesktopInteractions.dll) |
-| [DoubleTapJumpToExitSeat](DoubleTapJumpToExitSeat/README.md) | Replaces seat exit controls with a double-tap of the jump button, avoiding accidental exits from joystick drift or opening the menu. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/DoubleTapJumpToExitSeat.dll) |
-| [ESCBothMenus](ESCBothMenus/README.md) | Makes the Quick Menu appear when pressing ESC in Desktop. Pressing twice will open straight to Main Menu. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ESCBothMenus.dll) |
-| [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in Halfbody or Fullbody. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/FuckToes.dll) |
-| [PlapPlapForAll](PlapPlapForAll/README.md) | Penetrator SFX mod which adds Noach's PlapPlap prefab to any detected DPS setup on avatars that do not already have it. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PlapPlapForAll.dll) |
-| [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PropLoadingHexagon.dll) |
-| [PropsButBetter](PropsButBetter/README.md) | Prop quality-of-life suite. Adds a few new ways to interact with and manage Props. | No Download |
-| [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/RCCVirtualSteeringWheel.dll) |
-| [RelativeSyncJitterFix](RelativeSyncJitterFix/README.md) | Relative sync jitter fix is the single harmony patch that could not make it into the native release of RelativeSync. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/RelativeSyncJitterFix.dll) |
-| [ShareBubbles](ShareBubbles/README.md) | Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ShareBubbles.dll) |
-| [ShowPlayerInSelfMirror](ShowPlayerInSelfMirror/README.md) | Adds an option in the Quick Menu selected player page to show the target player's avatar in your self mirror. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ShowPlayerInSelfMirror.dll) |
-| [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/SmootherRay.dll) |
+| [CustomSpawnPoint](CustomSpawnPoint/README.md) | Replaces the unused Images button in the World Details page with a button to set a custom spawn point. | No Download |
+| [DesktopInteractions](DesktopInteractions/README.md) | Adds IK-driven hand gestures to your avatar in Desktop: earpiece grab (GMOD-style) when typing in ChatBox, and binocular cupping when zooming. Both gestures are toggleable in settings. | No Download |
+| [DoubleTapJumpToExitSeat](DoubleTapJumpToExitSeat/README.md) | Replaces seat exit controls with a double-tap of the jump button, avoiding accidental exits from joystick drift or opening the menu. | No Download |
+| [ESCBothMenus](ESCBothMenus/README.md) | Makes the Quick Menu appear when pressing ESC in Desktop. Pressing twice will open straight to Main Menu. | No Download |
+| [FuckToes](FuckToes/README.md) | Prevents VRIK from autodetecting toes in Halfbody or Fullbody. | No Download |
+| [PlapPlapForAll](PlapPlapForAll/README.md) | Penetrator SFX mod which adds Noach's PlapPlap prefab to any detected DPS setup on avatars that do not already have it. | No Download |
+| [PropLoadingHexagon](PropLoadingHexagon/README.md) | https://github.com/NotAKidoS/NAK_CVR_Mods/assets/37721153/a892c765-71c1-47f3-a781-bdb9b60ba117 | No Download |
+| [PropsButBetter](PropsButBetter/README.md) | Prop quality-of-life suite. Adds a few new ways to interact with and manage Props. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r49/PropsButBetter.dll) |
+| [RCCVirtualSteeringWheel](RCCVirtualSteeringWheel/README.md) | Allows you to physically grab rigged RCC steering wheels in VR to provide steering input. No explicit setup required other than defining the Steering Wheel transform within the RCC component. | No Download |
+| [RelativeSyncJitterFix](RelativeSyncJitterFix/README.md) | Relative sync jitter fix is the single harmony patch that could not make it into the native release of RelativeSync. | No Download |
+| [ShareBubbles](ShareBubbles/README.md) | Share Bubbles! Allows you to drop down bubbles containing Avatars & Props. Requires both users to have the mod installed. Synced over Mod Network. | No Download |
+| [ShowPlayerInSelfMirror](ShowPlayerInSelfMirror/README.md) | Adds an option in the Quick Menu selected player page to show the target player's avatar in your self mirror. | No Download |
+| [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | No Download |
 | [Stickers](Stickers/README.md) | Stickers! Allows you to place small images on any surface. Requires both users to have the mod installed. Synced over Mod Network. | No Download |
-| [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ThirdPerson.dll) |
-| [Tinyboard](Tinyboard/README.md) | Makes the keyboard small and smart. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/Tinyboard.dll) |
-| [YouAreMyPropNowWeAreHavingSoftTacosLater](YouAreMyPropNowWeAreHavingSoftTacosLater/README.md) | Lets you bring held, attached, and occupied props through world loads. This is configurable in the mod settings. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/YouAreMyPropNowWeAreHavingSoftTacosLater.dll) |
+| [ThirdPerson](ThirdPerson/README.md) | Original repo: https://github.com/oestradiol/CVR-Mods | No Download |
+| [Tinyboard](Tinyboard/README.md) | Makes the keyboard small and smart. | No Download |
+| [YouAreMyPropNowWeAreHavingSoftTacosLater](YouAreMyPropNowWeAreHavingSoftTacosLater/README.md) | Lets you bring held, attached, and occupied props through world loads. This is configurable in the mod settings. | No Download |
 
 ### Experimental Mods
 
@@ -33,9 +34,9 @@
 | [ByeByePerformanceThankYouAMD](.Experimental/ByeByePerformanceThankYouAMD/README.md) | Fixes search terms that use spaces. | No Download |
 | [CVRLuaToolsExtension](.Experimental/CVRLuaToolsExtension/README.md) | Extension mod for [CVRLuaTools](https://github.com/NotAKidoS/CVRLuaTools) Hot Reload functionality. | No Download |
 | [CustomRichPresence](.Experimental/CustomRichPresence/README.md) | Lets you customize the Steam & Discord rich presence messages & values. | No Download |
-| [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Adds a simple module for creating network variables & events *kinda* similar to Garry's Mod. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/LuaNetworkVariables.dll) |
+| [LuaNetworkVariables](.Experimental/LuaNetworkVariables/README.md) | Adds a simple module for creating network variables & events *kinda* similar to Garry's Mod. | No Download |
 | [LuaTTS](.Experimental/LuaTTS/README.md) | Provides access to the built-in text-to-speech (TTS) functionality to lua scripts. Allows you to make the local player speak. | No Download |
-| [OriginShift](.Experimental/OriginShift/README.md) | Experimental mod that allows world origin to be shifted to prevent floating point precision issues. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/OriginShift.dll) |
+| [OriginShift](.Experimental/OriginShift/README.md) | Experimental mod that allows world origin to be shifted to prevent floating point precision issues. | No Download |
 | [ScriptingSpoofer](.Experimental/ScriptingSpoofer/README.md) | Prevents **local** scripts from accessing your Username or UserID by spoofing them with random values each session. | No Download |
 
 <!-- END MOD LIST -->
