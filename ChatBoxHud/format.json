@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "ChatBoxHud",
+  "modversion": "1.0.0",
+  "gameversion": "2026r181",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Shows nearby ChatBox messages directly on your HUD so you can read them comfortably in VR without breaking your neck.",
+  "searchtags": [
+    "chat",
+    "box",
+    "hud",
+    "indicator",
+    "captions"
+  ],
+  "requirements": [
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r49/ChatBoxHud.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ChatBoxHud/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
