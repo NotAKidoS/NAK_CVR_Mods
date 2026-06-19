@@ -180,6 +180,10 @@
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\MeshBakerCore.dll</HintPath>
             <Private>False</Private>
         </Reference>
+        <Reference Include="Meta.XR.BuildingBlocks.AIBlocks">
+            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Meta.XR.BuildingBlocks.AIBlocks.dll</HintPath>
+            <Private>False</Private>
+        </Reference>
         <Reference Include="Meta.XR.BuildingBlocks">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Meta.XR.BuildingBlocks.dll</HintPath>
             <Private>False</Private>
@@ -198,10 +202,6 @@
         </Reference>
         <Reference Include="Meta.XR.MultiplayerBlocks.Shared">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Meta.XR.MultiplayerBlocks.Shared.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Microsoft.Win32.Registry">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Microsoft.Win32.Registry.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="Mono.Security">
@@ -358,10 +358,6 @@
         </Reference>
         <Reference Include="System.Numerics">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\System.Numerics.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="System.Runtime.CompilerServices.Unsafe">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="System.Runtime">
@@ -614,10 +610,6 @@
         </Reference>
         <Reference Include="Unity.XR.MockHMD">
             <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.MockHMD.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Unity.XR.Oculus">
-            <HintPath>$(MsBuildThisFileDirectory)\.ManagedLibs\Unity.XR.Oculus.dll</HintPath>
             <Private>False</Private>
         </Reference>
         <Reference Include="Unity.XR.OpenVR">

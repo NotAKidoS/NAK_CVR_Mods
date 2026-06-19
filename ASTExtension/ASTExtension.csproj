@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <RootNamespace>ASTExtension</RootNamespace>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BTKUILib">
-      <HintPath>..\.ManagedLibs\BTKUILib.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
+    <None Remove="Resources\ASM_Icon_AvatarHeightCopy.png" />
     <EmbeddedResource Include="Resources\ASM_Icon_AvatarHeightCopy.png" />
+    <None Remove="Resources\CopyAvatarAASAlt.png" />
+    <EmbeddedResource Include="Resources\CopyAvatarAASAlt.png" />
   </ItemGroup>
 </Project>

@@ -58,15 +58,19 @@ public class PlapPlapForAllMod : MelonMod
         if (!Friends.FriendsWith(player.PlayerId))
             return;
         
+        // AdvTags check mask
+        CVRAvatarAdvancedTaggingEntry.Tags findTags = 0;
+        findTags |= CVRAvatarAdvancedTaggingEntry.Tags.Explicit;
+        findTags |= CVRAvatarAdvancedTaggingEntry.Tags.Suggestive;
+        
         // Ensure the avatar is NSFW
         UgcContentTags tags = player.AvatarMetadata.TagsData;
         if (tags is { Suggestive: false, Explicit: false } // Main tags
-            && !avatar.TagHandledByAdvancedTagging(CVRAvatarAdvancedTaggingEntry.Tags.Suggestive) // Advanced tags
-            && !avatar.TagHandledByAdvancedTagging(CVRAvatarAdvancedTaggingEntry.Tags.Explicit))
+            && !HasAdvTags(avatar.advancedTaggingList, findTags)) // Advanced tags
             return;
         
         // Ensure mature content is allowed by user settings
-        if (!MetaPort.Instance.matureContentAllowed)
+        if (!MetaPort.Instance.MatureContentPermitted)
             return;
         
         GameObject avatarObject = avatar.gameObject;
@@ -100,6 +104,19 @@ public class PlapPlapForAllMod : MelonMod
                 );
             }
         }
+    }
+    
+    private static bool HasAdvTags(
+        List<CVRAvatarAdvancedTaggingEntry> list,
+        CVRAvatarAdvancedTaggingEntry.Tags findTags)
+    {
+        foreach (CVRAvatarAdvancedTaggingEntry entry in list)
+        {
+            // If entry is dead or no tags are blocked, go to next entry
+            if (entry == null || (entry.tags & findTags) == 0) continue;
+            return true;
+        }
+        return false;
     }
     
     /* Asset Bundle Loading */

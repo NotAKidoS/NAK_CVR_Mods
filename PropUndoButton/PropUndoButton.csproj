@@ -1,12 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
-
-    <ItemGroup>
-        <EmbeddedResource Include="SFX\sfx_deny.wav"/>
-        <EmbeddedResource Include="SFX\sfx_redo.wav"/>
-        <EmbeddedResource Include="SFX\sfx_spawn.wav"/>
-        <EmbeddedResource Include="SFX\sfx_undo.wav"/>
-        <EmbeddedResource Include="SFX\sfx_warn.wav"/>
-    </ItemGroup>
-
-</Project>
+<Project Sdk="Microsoft.NET.Sdk" />

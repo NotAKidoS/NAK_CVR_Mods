@@ -1,14 +1,17 @@
 ﻿using System.Reflection;
+using ABI_RC.Core;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core.Util;
 using ABI_RC.Core.Util.AnimatorManager;
+using ABI_RC.Systems.IK;
 using ABI_RC.Systems.InputManagement;
 using ABI.CCK.Components;
 using HarmonyLib;
 using MelonLoader;
 using NAK.ASTExtension.Extensions;
+using NAK.Contacts;
 using UnityEngine;
 
 namespace NAK.ASTExtension;
@@ -74,8 +77,8 @@ public class ASTExtensionMod : MelonMod
         );
         
         HarmonyInstance.Patch(
-            typeof(ColliderTools).GetMethod(nameof(ColliderTools.PlaceDefaultPointers),
-                BindingFlags.Public | BindingFlags.Static),
+            typeof(IKSystem).GetMethod(nameof(IKSystem.OnAvatarInitialized),
+                BindingFlags.Public | BindingFlags.Instance),
             postfix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnSetupAvatar),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
@@ -86,17 +89,8 @@ public class ASTExtensionMod : MelonMod
             prefix: new HarmonyMethod(typeof(ASTExtensionMod).GetMethod(nameof(OnClearAvatar),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
-        
-        InitializeIntegration("BTKUILib", Integrations.BtkUiAddon.Initialize);
-    }
 
-    private static void InitializeIntegration(string modName, Action integrationAction)
-    {
-        if (RegisteredMelons.All(it => it.Info.Name != modName))
-            return;
-
-        Logger.Msg($"Initializing {modName} integration.");
-        integrationAction.Invoke();
+        Integrations.BtkUiAddon.Initialize();
     }
     
     #endregion Melon Events
@@ -106,9 +100,8 @@ public class ASTExtensionMod : MelonMod
     private static void OnGestureRecogniserInitialized()
         => Instance.InitializeScaleGesture();
 
-    private static void OnSetupAvatar(bool isLocalPlayer)
+    private static void OnSetupAvatar()
     {
-        if (!isLocalPlayer) return;
         Instance.OnLocalAvatarLoad();
     }
     

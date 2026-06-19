@@ -15,11 +15,24 @@ public class CustomSpawnPointMod : MelonMod
         
         SpawnPointManager.Init();
         
-        HarmonyInstance.Patch( // listen for world details page request
-            typeof(ViewManager).GetMethod(nameof(ViewManager.RequestWorldDetailsPage)),
-            new HarmonyMethod(typeof(CustomSpawnPointMod).GetMethod(nameof(OnRequestWorldDetailsPage),
+        HarmonyInstance.Patch(
+            typeof(ViewManager).GetMethod(nameof(ViewManager.Start),
+                BindingFlags.NonPublic | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(CustomSpawnPointMod).GetMethod(nameof(OnViewManagerStart),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
+        
+        HarmonyInstance.Patch( // listen for world details page request
+            typeof(ViewManager).GetMethod(nameof(ViewManager.RequestWorldDetailsPage),
+                BindingFlags.Public | BindingFlags.Instance),
+            postfix: new HarmonyMethod(typeof(CustomSpawnPointMod).GetMethod(nameof(OnRequestWorldDetailsPage),
+                BindingFlags.NonPublic | BindingFlags.Static))
+        );
+    }
+
+    private static void OnViewManagerStart()
+    {
+        SpawnPointManager.OnViewManagerStart();
     }
     
     private static void OnRequestWorldDetailsPage(string worldId)

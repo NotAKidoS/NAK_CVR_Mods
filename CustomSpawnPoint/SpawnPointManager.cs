@@ -31,39 +31,35 @@ internal static class SpawnPointManager
 
     internal static void Init()
     {
-            LoadSpawnpoints();
-            CVRGameEventSystem.World.OnLoad.AddListener(OnWorldLoaded);
-            CVRGameEventSystem.World.OnUnload.AddListener(OnWorldUnloaded);
-            MelonLoader.MelonCoroutines.Start(WaitMainMenuUi());
-        }
+        LoadSpawnpoints();
+        CVRGameEventSystem.World.OnLoad.AddListener(OnWorldLoaded);
+        CVRGameEventSystem.World.OnUnload.AddListener(OnWorldUnloaded);
+        CVRGameEventSystem.Initialization.OnPlayerSetupStart.AddListener(OnPlayerSetupStart);
+    }
 
-    private static System.Collections.IEnumerator WaitMainMenuUi()
+    private static void OnPlayerSetupStart()
     {
-            while (ViewManager.Instance == null)
-                yield return null;
-            while (ViewManager.Instance.cohtmlView == null)
-                yield return null;
-            while (ViewManager.Instance.cohtmlView.Listener == null)
-                yield return null;
+        // create our custom spawn point object
+        GameObject customSpawnPointObject = new("[CustomSpawnPoint]");
+        Object.DontDestroyOnLoad(customSpawnPointObject);
 
-            ViewManager.Instance.OnUiConfirm.AddListener(OnClearSpawnpointConfirm);
-            ViewManager.Instance.cohtmlView.Listener.FinishLoad += (_) =>
-            {
-                ViewManager.Instance.cohtmlView.View._view.ExecuteScript(spawnpointJs);
-            };
-            ViewManager.Instance.cohtmlView.Listener.ReadyForBindings += () =>
-            {
-                // listen for setting the spawn point on our custom button
-                ViewManager.Instance.cohtmlView.View.BindCall("NAKCallSetSpawnpoint", SetSpawnPoint);
-            };
-            
-            // create our custom spawn point object
-            GameObject customSpawnPointObject = new("[CustomSpawnPoint]");
-            Object.DontDestroyOnLoad(customSpawnPointObject);
-
-            // add to array so we can easily replace worlds spawn points
-            customSpawnPointsArray = new[] { customSpawnPointObject };
-        }
+        // add to array so we can easily replace worlds spawn points
+        customSpawnPointsArray = new[] { customSpawnPointObject };
+    }
+    
+    internal static void OnViewManagerStart()
+    {
+        ViewManager.Instance.OnUiConfirm.AddListener(OnClearSpawnpointConfirm);
+        ViewManager.Instance.cohtmlView.Listener.FinishLoad += (_) =>
+        {
+            ViewManager.Instance.cohtmlView.View._view.ExecuteScript(spawnpointJs);
+        };
+        ViewManager.Instance.cohtmlView.Listener.ReadyForBindings += () =>
+        {
+            // listen for setting the spawn point on our custom button
+            ViewManager.Instance.cohtmlView.View.BindCall("NAKCallSetSpawnpoint", SetSpawnPoint);
+        };
+    }
 
     #endregion Initialization
         

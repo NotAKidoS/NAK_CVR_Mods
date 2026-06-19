@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "DefaultDynamicBoneWind",
+  "modversion": "1.0.0",
+  "gameversion": "2025r181-hf2",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Enables Wind Zone influence on Dynamic Bones by default.",
+  "searchtags": [
+    "dynamic",
+    "bone",
+    "wind",
+    "zone"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/DefaultDynamicBoneWind.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DefaultDynamicBoneWind/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

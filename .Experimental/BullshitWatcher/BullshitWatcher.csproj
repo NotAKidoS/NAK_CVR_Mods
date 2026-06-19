@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>ASTExtension</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BTKUILib">
+      <HintPath>..\.ManagedLibs\BTKUILib.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+</Project>

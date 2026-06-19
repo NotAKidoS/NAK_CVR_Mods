@@ -264,7 +264,7 @@ public class ChatBoxHudMod : MelonMod
         if (EntryUsePlayerColors.Value)
         {
             PlayerColors pc = PlayerColorsManager.GetPlayerColors(playerId);
-            hex = "#" + ColorUtility.ToHtmlStringRGB(pc.PrimaryColor);
+            hex = "#" + ColorUtility.ToHtmlStringRGB(pc.EmissionColor);
         }
         else hex = Friends.FriendsWith(playerId) ? "#4FC3F7" : "#E0E0E0";
 

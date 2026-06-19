@@ -4,6 +4,7 @@ using ABI_RC.Core.Savior;
 using ABI_RC.Systems.ChatBox;
 using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.IK;
+using ABI_RC.Systems.Movement;
 using ABI.CCK.Components;
 using HarmonyLib;
 using MelonLoader;
@@ -109,7 +110,7 @@ public class DesktopInteractionsMod : MelonMod
         if (MetaPort.Instance.isUsingVr) return;
         
         bool isTyping = EntryTypingGesture.Value && ChatBoxManager.Instance.LocalPlayerBubble.IsTypingIndicatorActive;
-        bool isZooming = EntryZoomGesture.Value && CVR_DesktopCameraController.GetCurrentZoomModifier() > 0.25f;
+        bool isZooming = EntryZoomGesture.Value && BetterBetterCharacterController.Instance.CharacterLook.GetCurrentZoomModifier() > 0.25f;
 
         _leftArmController.SetInfluence(10, isTyping, _calibratedEarIKTargetTransform);
         _leftArmController.SetInfluence(5, isZooming, _calibratedLeftEyeIKTargetTransform);

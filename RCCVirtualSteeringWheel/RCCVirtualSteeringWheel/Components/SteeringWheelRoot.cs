@@ -95,7 +95,7 @@ public class SteeringWheelRoot : MonoBehaviour
 
     private void Start()
     {
-        ActiveWheels.TryAdd(_carController, this);
+        ActiveWheels.Add(_carController, this);
         InitializeWheel();
     }
 

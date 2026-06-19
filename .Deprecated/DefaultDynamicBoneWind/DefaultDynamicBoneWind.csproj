@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>YouAreMineNow</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Plugins\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Tomlet">
+      <HintPath>Plugins\Tomlet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

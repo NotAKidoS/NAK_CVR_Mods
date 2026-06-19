@@ -1,10 +1,10 @@
 # PlapPlapForAll
 
-Penetrator SFX mod which adds Noach's PlapPlap prefab to any detected DPS setup on avatars that do not already have it.
+Penetrator SFX mod which adds Noachi's PlapPlap prefab to any detected DPS setup on avatars that do not already have it.
 
 **Requirements:**
 - The avatar must have DPS lights
-- The avatar must not already have Noach's PlapPlap prefab
+- The avatar must not already have Noachi's PlapPlap prefab
 - The avatar must be tagged Suggestive or Explicit
 - Mature content must be enabled in the user's settings
 - The avatar must be worn by a friend or the local user

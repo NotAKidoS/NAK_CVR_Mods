@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/Blackbox/">
+    <Project Path=".Blackbox/RConHelper/RConHelper.csproj" />
+  </Folder>
+  <Folder Name="/Experimental/">
+    <Project Path=".Experimental/BullshitWatcher/BullshitWatcher.csproj" />
+    <Project Path=".Experimental/GrabbableChains/GrabbableChains.csproj" />
+    <Project Path=".Experimental/OriginShift/OriginShift.csproj" />
+  </Folder>
+  <Project Path="ASTExtension/ASTExtension.csproj" />
+  <Project Path="AutoAccept/AutoAccept.csproj" />
+  <Project Path="CustomSpawnPoint/CustomSpawnPoint.csproj" />
+  <Project Path="DehumanizePlayers/DehumanizePlayers.csproj" />
+  <Project Path="DesktopInteractions/DesktopInteractions.csproj" />
+  <Project Path="DoubleTapJumpToExitSeat/DoubleTapJumpToExitSeat.csproj" />
+  <Project Path="FuckToes/FuckToes.csproj" />
+  <Project Path="PathCamDisabler/PathCamDisabler.csproj" />
+  <Project Path="PlapPlapForAll/PlapPlapForAll.csproj" />
+  <Project Path="PortableCameraAdditions/PortableCameraAdditions.csproj" />
+  <Project Path="PropUndoButton/PropUndoButton.csproj" />
+  <Project Path="RCCVirtualSteeringWheel/RCCVirtualSteeringWheel.csproj" />
+  <Project Path="RelativeSyncJitterFix/RelativeSyncJitterFix.csproj" />
+  <Project Path="ScrollFlight/ScrollFlight.csproj" />
+  <Project Path="ShareBubbles/ShareBubbles.csproj" />
+  <Project Path="ShowPlayerInSelfMirror/ShowPlayerInSelfMirror.csproj" />
+  <Project Path="SmootherRay/SmootherRay.csproj" />
+  <Project Path="Tinyboard/Tinyboard.csproj" />
+  <Project Path="YouAreMyPropNowWeAreHavingSoftTacosLater/YouAreMyPropNowWeAreHavingSoftTacosLater.csproj" />
+</Solution>
