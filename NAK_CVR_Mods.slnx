@@ -9,6 +9,7 @@
   </Folder>
   <Project Path="ASTExtension/ASTExtension.csproj" />
   <Project Path="AutoAccept/AutoAccept.csproj" />
+  <Project Path="ChatBoxHud/ChatBoxHud.csproj" />
   <Project Path="CustomSpawnPoint/CustomSpawnPoint.csproj" />
   <Project Path="DehumanizePlayers/DehumanizePlayers.csproj" />
   <Project Path="DesktopInteractions/DesktopInteractions.csproj" />
