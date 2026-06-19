@@ -1,11 +1,17 @@
-# Tinyboard
+# AutoAccept
 
-Makes the keyboard small and smart.
+Small invite tweaks to make them less annoying.
 
-Few small tweaks to the keyboard:
-- Shrinks the keyboard to a size that isn't fit for grandma.
-- Adjusts keyboard placement logic to align with the menu that it spawns from.
-- Enforces a title on the keyboard input if one is not found.
+**Features:**
+- Invite Modes in Friends tab:
+  - Ask: Sends the invite to the Messages tab
+  - All: Auto-accepts invites from any friend
+  - Select: Auto-accepts invites from starred friend categories
+  - DND: Silently ignores all incoming invites
+- Added HUD notification on invite receive which displays the senders username
+- Replaced annoying API Response confirmation prompts with simple menu toasts 
+
+-# This mod is intended to be a more flexible alternative to the JoinMe mod.
 
 ---
 

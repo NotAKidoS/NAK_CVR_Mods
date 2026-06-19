@@ -1,23 +1,23 @@
 {
-  "_id": 264,
-  "name": "Tinyboard",
-  "modversion": "1.0.1",
-  "gameversion": "2025r181",
+  "_id": -1,
+  "name": "AutoAccept",
+  "modversion": "1.0.0",
+  "gameversion": "2026r182",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
-  "description": "Few small tweaks to the keyboard:\n- Shrinks the keyboard to a size that isn't fit for grandma.\n- Adjusts keyboard placement logic to align with the menu that it spawns from.\n- Enforces a title on the keyboard input if one is not found.",
+  "description": "Small invite tweaks to make them less annoying.\n\n**Features:**\n- Invite Modes in Friends tab:\n  - Ask: Sends the invite to the Messages tab\n  - All: Auto-accepts invites from any friend\n  - Select: Auto-accepts invites from starred friend categories\n  - DND: Silently ignores all incoming invites\n- Added HUD notification on invite receive which displays the senders username\n- Replaced annoying API Response confirmation prompts with simple menu toasts \n\n-# This mod is intended to be a more flexible alternative to the JoinMe mod.",
   "searchtags": [
-    "keyboard",
-    "menu",
-    "ui",
-    "input"
+    "invites",
+    "joinme",
+    "auto",
+    "request"
   ],
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/Tinyboard.dll",
-  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/Tinyboard/",
-  "changelog": "- Rebuilt for CVR 2025r181",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/AutoAccept.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/AutoAccept/",
+  "changelog": "- Initial release",
   "embedcolor": "#f61963"
 }
