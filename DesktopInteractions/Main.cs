@@ -53,7 +53,7 @@ public class DesktopInteractionsMod : MelonMod
 
     private static void OnPlayerSetupStart()
     {
-        Transform cameraTransform = PlayerSetup.Instance.desktopCamera.transform;
+        Transform cameraTransform = PlayerSetup.Instance.desktopCameraPivot.transform;
 
         _cameraTargetContainerTransform = new GameObject("ScaledTargetsContainer").transform;
         _cameraTargetContainerTransform.SetParent(cameraTransform, false);

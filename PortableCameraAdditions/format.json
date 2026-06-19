@@ -1,8 +1,8 @@
 {
   "_id": 123,
   "name": "PortableCameraAdditions",
-  "modversion": "1.0.7",
-  "gameversion": "2025r181",
+  "modversion": "1.0.8",
+  "gameversion": "2026r182",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -18,8 +18,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PortableCameraAdditions.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/PortableCameraAdditions.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PortableCameraAdditions/",
-  "changelog": "- Rebuilt for CVR 2025r181",
+  "changelog": "- Rebuilt for 2026r182",
   "embedcolor": "#f61963"
 }

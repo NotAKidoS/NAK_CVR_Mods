@@ -1,8 +1,8 @@
 {
-  "_id": -1,
+  "_id": 273,
   "name": "ShowPlayerInSelfMirror",
-  "modversion": "1.0.0",
-  "gameversion": "2025r181",
+  "modversion": "1.0.1",
+  "gameversion": "2026r182",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/ShowPlayerInSelfMirror.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/ShowPlayerInSelfMirror.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/ShowPlayerInSelfMirror/",
-  "changelog": "- Initial release",
+  "changelog": "- Rebuilt for 2026r182",
   "embedcolor": "#f61963"
 }

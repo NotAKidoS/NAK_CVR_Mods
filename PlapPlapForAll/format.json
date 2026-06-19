@@ -1,8 +1,8 @@
 {
   "_id": 274,
   "name": "PlapPlapForAll",
-  "modversion": "1.0.0",
-  "gameversion": "2025r181",
+  "modversion": "1.0.1",
+  "gameversion": "2026r182",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS, Noachi",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r48/PlapPlapForAll.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/PlapPlapForAll.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PlapPlapForAll/",
-  "changelog": "- Initial release",
+  "changelog": "- Fixes for 2026r182",
   "embedcolor": "#f61963"
 }
