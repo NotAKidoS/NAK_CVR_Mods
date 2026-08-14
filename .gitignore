@@ -6,8 +6,7 @@
 # NAK
 .Blackbox/
 
-# Nstrip & ManagedLibs stuff
-NStrip.exe
+# ManagedLibs stuff
 .ManagedLibs/*.dll
 
 # Third party dependencies
@@ -407,6 +406,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 .idea/
-
-# Generated dll dependencies file to copy into the Directory.Build.props
-lib_names.xml
