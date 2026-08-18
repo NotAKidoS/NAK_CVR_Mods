@@ -169,7 +169,8 @@ public sealed class PlapPlapTap : MonoBehaviour
         int bestScore = int.MinValue;
         PlapPlapAudioMode bestMode = PlapPlapAudioMode.Generic;
 
-        for (int r = 0; r < Rules.Length; r++)
+        int rulesLength = Rules.Length;
+        for (int r = 0; r < rulesLength; r++)
         {
             ref readonly Rule rule = ref Rules[r];
             int score = 0;
@@ -183,7 +184,8 @@ public sealed class PlapPlapTap : MonoBehaviour
 
             string lowerName = basisName.ToLowerInvariant();
 
-            for (int k = 0; k < rule.Keywords.Length; k++)
+            int keywordsLength = rule.Keywords.Length;
+            for (int k = 0; k < keywordsLength; k++)
             {
                 string kw = rule.Keywords[k];
                 string lowerKw = kw.ToLowerInvariant();

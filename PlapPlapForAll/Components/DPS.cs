@@ -119,7 +119,7 @@ public static class DPS
         for (int i = 0; i < count; i++)
         {
             Renderer render = allRenderers[i];
-            if (render.gameObject.CompareTag(CVRTags.InternalObject))
+            if (render.CompareTag(CVRTags.InternalObject))
                 continue;
 
             Material mat = render.sharedMaterial;
