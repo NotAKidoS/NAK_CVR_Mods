@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="UnityPaths.props" Condition="Exists('UnityPaths.props')" />
+
+  <PropertyGroup>
+    <UnityPackageDir>$(MSBuildProjectDirectory)\.Unity\com.nak.cleanplates</UnityPackageDir>
+    <BundleFile>$(MSBuildProjectDirectory)\Resources\cleanplates.assets</BundleFile>
+    <Configurations>Debug;Release;Bundle</Configurations>
+    <BuildAssetBundle Condition="'$(BuildAssetBundle)' == '' And '$(Configuration)' == 'Bundle'">true</BuildAssetBundle>
+    <BuildAssetBundle Condition="'$(BuildAssetBundle)' == ''">false</BuildAssetBundle>
+    <NoWarn>$(NoWarn);0649</NoWarn>
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Bundle'">
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove=".Unity\**" />
+    <None Remove=".Unity\**" />
+    <Compile Include="$(UnityPackageDir)\Runtime\**\*.cs" LinkBase="UI" />
+    <Compile Remove="$(UnityPackageDir)\Runtime\*Demo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\cleanplates.assets" />
+    <EmbeddedResource Include="Resources\cleanplates.assets" />
+  </ItemGroup>
+
+  <Target Name="BuildBundle" BeforeTargets="BeforeBuild" Condition="'$(BuildAssetBundle)' == 'true'">
+    <Error Condition="'$(UnityExe)' == ''" Text="UnityPaths.props is missing. Open the Unity project with the com.nak.cleanplates package added, or build Debug/Release to use the committed bundle." />
+    <Error Condition="!Exists('$(UnityExe)')" Text="Unity not found at $(UnityExe). Reopen the Unity project to rewrite UnityPaths.props, or build Debug/Release." />
+    <Error Condition="!Exists('$(UnityProject)')" Text="Unity project not found at $(UnityProject). Reopen the Unity project to rewrite UnityPaths.props, or build Debug/Release." />
+    <Message Importance="high" Text="Building asset bundle through Unity..." />
+    <Exec Command="&quot;$(UnityExe)&quot; -batchmode -nographics -quit -projectPath &quot;$(UnityProject)&quot; -executeMethod NAK.CleanPlates.Build.BundleBuilder.BuildFromCommandLine -bundleOut &quot;$(BundleFile)&quot; -logFile -" />
+  </Target>
+
+</Project>

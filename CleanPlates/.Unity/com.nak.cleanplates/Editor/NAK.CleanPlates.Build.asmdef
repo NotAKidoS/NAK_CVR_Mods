@@ -1,0 +1,11 @@
+{
+  "name": "NAK.CleanPlates.Build",
+  "rootNamespace": "NAK.CleanPlates.Build",
+  "references": [
+    "CleanPlates",
+    "Unity.TextMeshPro"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

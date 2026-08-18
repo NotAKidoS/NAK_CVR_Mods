@@ -1,0 +1,7 @@
+{
+  "name": "com.nak.cleanplates",
+  "version": "1.0.0",
+  "displayName": "CleanPlates",
+  "description": "Nameplate prefabs and their runtime scripts.",
+  "unity": "2021.3"
+}

@@ -3,10 +3,10 @@
 # top-most EditorConfig file
 root = true
 
-# Unix-style newlines with a newline ending every file
+# Unix-style newlines, no blank line at the end of a file
 [*]
 end_of_line = lf
-insert_final_newline = true
+insert_final_newline = false
 
 
 [*.{json,yml,yaml,xml,csproj,props,targets,sln,slnx}]

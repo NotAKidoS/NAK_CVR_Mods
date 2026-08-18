@@ -1,0 +1,8 @@
+{
+  "name": "CleanPlates",
+  "rootNamespace": "NAK.CleanPlates.UI",
+  "references": [
+    "Unity.TextMeshPro"
+  ],
+  "autoReferenced": true
+}
