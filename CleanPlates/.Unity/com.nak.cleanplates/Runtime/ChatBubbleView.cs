@@ -42,11 +42,6 @@ namespace NAK.CleanPlates.UI
         private Color outlineColor = Color.white;
         private float opacity = 1f;
 
-        private void Awake()
-        {
-            text.overflowMode = TextOverflowModes.Ellipsis;
-        }
-
         public void Set(Color color, string message, bool silent, string sourceLabel, bool pointed)
         {
             message = SafeText.Clean(message);

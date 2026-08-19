@@ -8,14 +8,15 @@ using UnityEngine.UI;
 
 namespace NAK.CleanPlates.UI
 {
-    public class NameplateChat : MonoBehaviour
+    public class NameplateChat : MonoBehaviour, ISerializationCallbackReceiver
     {
         [Header("Structure")]
         [SerializeField] private CanvasGroup root;
         [SerializeField] private RectTransform bubblesRoot;
         [SerializeField] private ChatBubbleView[] bubbles; // newest first
         [SerializeField] private CanvasGroup typingGroup;
-        [SerializeField] private GameObject[] typingDots;
+        [SerializeField] private Graphic[] typingDots;
+        [SerializeField] private Color typingNormalColor = new(1f, 1f, 1f, 0.9f);
         [SerializeField] private RoundedHexGraphic typingBackground;
         [SerializeField] private CanvasGroup voiceGroup;
         [SerializeField] private RoundedHexGraphic voiceBackground;
@@ -55,7 +56,6 @@ namespace NAK.CleanPlates.UI
         private readonly List<Message> messages = new();
         private Color accentLeft;
         private Color accentRight;
-        private Color typingNormalColor = Color.white;
         private float opacity = 1f;
         private Color typingBaseColor;
         private Color voiceBaseColor;
@@ -81,36 +81,28 @@ namespace NAK.CleanPlates.UI
         public bool IsVisible => detail > 0f;
         public ChatMessageKind NewestKind => messages.Count > 0 ? messages[0].Kind : ChatMessageKind.Message;
 
-        private Graphic[] typingDotGraphics;
         // One entry per stack position.
         private float[] stackAlphas;
         private float[] stackScales;
 
-        private void Awake()
+        void ISerializationCallbackReceiver.OnBeforeSerialize() { }
+        void ISerializationCallbackReceiver.OnAfterDeserialize()
         {
-            typingGroup.gameObject.SetActive(false);
-            voiceGroup.gameObject.SetActive(false);
-            typingDotGraphics = new Graphic[typingDots.Length];
-            for (int i = 0; i < typingDots.Length; i++)
-                typingDotGraphics[i] = typingDots[i].GetComponent<Graphic>();
-            typingNormalColor = typingDotGraphics[0].color;
-
-            stackAlphas = new float[bubbles.Length];
-            stackScales = new float[bubbles.Length];
-            for (int i = 0; i < bubbles.Length; i++)
+            int count = bubbles?.Length ?? 0;
+            stackAlphas = new float[count];
+            stackScales = new float[count];
+            for (int i = 0; i < count; i++)
             {
                 stackAlphas[i] = Mathf.Pow(stackAlpha, i);
                 stackScales[i] = Mathf.Pow(stackScale, i);
             }
-
-            foreach (var bubble in bubbles) bubble.Clear();
         }
 
         // Typing still shows with the chatbox off, dimmed and silent.
         public void SetTypingMuted(bool muted)
         {
             Color color = muted ? typingMutedColor : typingNormalColor;
-            foreach (Graphic dot in typingDotGraphics) dot.color = color;
+            foreach (Graphic dot in typingDots) dot.color = color;
         }
 
         public void SetPlayerColors(Color primary, Color secondary)
@@ -207,7 +199,7 @@ namespace NAK.CleanPlates.UI
             nextDotTime = Time.time + typingDotInterval;
             dotIndex = 0;
             for (int i = 0; i < typingDots.Length; i++)
-                typingDots[i].SetActive(i == 0);
+                typingDots[i].gameObject.SetActive(i == 0);
         }
 
         public void SetOpacity(float value)
@@ -281,9 +273,9 @@ namespace NAK.CleanPlates.UI
             if (now >= nextDotTime)
             {
                 nextDotTime = now + typingDotInterval;
-                typingDots[dotIndex].SetActive(false);
+                typingDots[dotIndex].gameObject.SetActive(false);
                 dotIndex = (dotIndex + 1) % typingDots.Length;
-                typingDots[dotIndex].SetActive(true);
+                typingDots[dotIndex].gameObject.SetActive(true);
             }
         }
 

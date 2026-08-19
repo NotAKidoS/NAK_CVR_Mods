@@ -385,7 +385,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8246056055577217173
 RectTransform:
   m_ObjectHideFlags: 0
@@ -851,7 +851,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2451008182675713981
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2775,9 +2775,10 @@ MonoBehaviour:
   - {fileID: 584065413208683005}
   typingGroup: {fileID: 4899640561041182530}
   typingDots:
-  - {fileID: 4055132017405648981}
-  - {fileID: 4286423105703727168}
-  - {fileID: 70039608963477252}
+  - {fileID: 3030593937000784166}
+  - {fileID: 4442310646843529764}
+  - {fileID: 2870057155016599562}
+  typingNormalColor: {r: 1, g: 1, b: 1, a: 0.9}
   typingBackground: {fileID: 4276789401661319294}
   voiceGroup: {fileID: 6200228803377671782}
   voiceBackground: {fileID: 6946338062495286037}
@@ -2897,7 +2898,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6291767887137844701
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3072,7 +3073,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8833262229202039878
 RectTransform:
   m_ObjectHideFlags: 0

@@ -1,7 +1,7 @@
 {
   "_id": 290,
   "name": "CleanPlates",
-  "modversion": "1.0.2",
+  "modversion": "1.0.3",
   "gameversion": "2026r182",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
@@ -20,6 +20,6 @@
   ],
   "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/CleanPlates.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/CleanPlates/",
-  "changelog": "- Initial release",
+  "changelog": "- Fixed the first chat message throwing when the plate had not been shown yet\n- Removed Totally Wholesome support as TW is adding mod compat on their side",
   "embedcolor": "#f61963"
 }

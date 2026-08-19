@@ -38,13 +38,6 @@ namespace NAK.CleanPlates.UI
         // The aspect has to be applied here or a hexagon draws squashed.
         private float FarWidth => pillRect.sizeDelta.y * RoundedHexGraphic.ShapeAspect;
 
-        private void Awake()
-        {
-            root.blocksRaycasts = false;
-            root.interactable = false;
-            CapturePill();
-        }
-
         private void CapturePill()
         {
             if (capturedPill) return;

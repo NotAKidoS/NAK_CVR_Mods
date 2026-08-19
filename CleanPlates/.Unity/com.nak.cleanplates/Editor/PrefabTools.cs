@@ -234,11 +234,6 @@ namespace NAK.CleanPlates.Build
             return cell;
         }
 
-        private static void InvokeAwake(Component component)
-            => component.GetType()
-                .GetMethod("Awake", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                ?.Invoke(component, null);
-
         private static void SetupPlate(NAK.CleanPlates.UI.NameplateView view, Permutation permutation)
         {
             DemoUser user = permutation.User;
@@ -259,7 +254,6 @@ namespace NAK.CleanPlates.Build
                 SecondaryColor = user.Secondary,
             };
 
-            InvokeAwake(view);
             view.Bind(data);
             view.SetState(1f, permutation.Collapsed ? 0f : 1f, permutation.Collapsed ? 0f : 1f);
 
@@ -272,7 +266,6 @@ namespace NAK.CleanPlates.Build
                 return;
             }
 
-            InvokeAwake(chat);
             chat.SetPlayerColors(user.Primary, user.Secondary);
             chat.SetBackgroundOpacity(permutation.Opacity);
             chat.SetBubbleScale(1f);
@@ -296,7 +289,6 @@ namespace NAK.CleanPlates.Build
 
         private static void SetupCameraPlate(NAK.CleanPlates.UI.MiniNameplate mini, Permutation permutation)
         {
-            InvokeAwake(mini);
             mini.Bind(permutation.User.Name, permutation.User.Primary, permutation.User.Secondary);
             mini.SetBackgroundOpacity(permutation.Opacity);
             mini.SetState(1f, permutation.Collapsed ? 0f : 1f);
