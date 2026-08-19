@@ -12,7 +12,7 @@ Replaces nameplates, chat bubbles, and camera indicator plates with cleaner ones
 
 **Note:**
 
-The mod respects the native **Graphics - Nameplate Customization** and **Audio & Comms - ChatBox** settings, but also
+The mod respects the native **User Interface - Nameplate Customization** and **Audio & Comms - ChatBox** settings, but also
 has its own preferences in UIExpansionKit. You may need to adjust some native ChatBox settings after installing the mod.
 
 This mod also reimplements the UI part of ChatBox entirely, so some things may not behave identical to native.

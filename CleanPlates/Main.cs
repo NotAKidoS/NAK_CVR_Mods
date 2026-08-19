@@ -54,12 +54,7 @@ public class CleanPlatesMod : MelonMod
 
     internal static readonly MelonPreferences_Entry<bool> Debug_AnchorContributions =
         Category.CreateEntry("debug_anchor_contributions", false, display_name: "Debug Anchor Contributions", description: "Log which renderers are pushing an avatar's nameplate height up.");
-
-    // Testing
-
-    internal static readonly MelonPreferences_Entry<bool> Debug_TWSupport =
-        Category.CreateEntry("debug_tw_support", false, display_name: "Debug Totally Wholesome Support", description: "Move the Totally Wholesome status badge onto the plate.");
-
+    
     public override void OnInitializeMelon()
     {
         Logger = LoggerInstance;
@@ -85,7 +80,6 @@ public class CleanPlatesMod : MelonMod
         SetupPreferences();
 
         PlateManager.Init();
-        TWSupport.Init();
         CleanPlatesNetwork.Init();
         
         ApplyPlateSettings();
@@ -105,7 +99,6 @@ public class CleanPlatesMod : MelonMod
         NameplateView.BackgroundOpacity = Mathf.Clamp01(PlateOpacity.Value / 100f);
         PlateManager.Style = PlateStyle.Value;
         NameplateView.ShowIconSlot = PlateStyle.Value != NameplateStyle.Minimal;
-        TWSupport.Enabled = Debug_TWSupport.Value;
     }
 
     private static void RefreshPlateSettings(bool rebind)
@@ -136,12 +129,7 @@ public class CleanPlatesMod : MelonMod
         PlateScale.OnEntryValueChanged.Subscribe((_, _) => RefreshPlateSettings(false));
         PlateOpacity.OnEntryValueChanged.Subscribe((_, _) => RefreshPlateSettings(true));
         PlateStyle.OnEntryValueChanged.Subscribe((_, _) => RefreshPlateSettings(false));
-        Debug_TWSupport.OnEntryValueChanged.Subscribe((_, _) =>
-        {
-            ApplyPlateSettings();
-            PlateManager.RebuildAll();
-        });
-
+        
         RoundedHexGraphic.SetPreferredShape(PlateShape.Value);
         PlateShape.OnEntryValueChanged.Subscribe((_, value) =>
         {
