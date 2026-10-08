@@ -25,6 +25,7 @@
 | [ShowPlayerInSelfMirror](ShowPlayerInSelfMirror/README.md) | Adds an option in the Quick Menu selected player page to show the target player's avatar in your self mirror. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/ShowPlayerInSelfMirror.dll) |
 | [SmootherRay](SmootherRay/README.md) | Smoothes your controller while the raycast lines are visible. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/SmootherRay.dll) |
 | [Tinyboard](Tinyboard/README.md) | Makes the keyboard small and smart. | [Download](https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/Tinyboard.dll) |
+| [VRCFTHeadTracking](VRCFTHeadTracking/README.md) | Applies head rotation and optional position sent by VRCFT (`v2/Head/Yaw|Pitch|Roll|PosX|PosY|PosZ`) to your avatar head when in Desktop Mode via OSC. | No Download |
 | [YouAreMyPropNowWeAreHavingSoftTacosLater](YouAreMyPropNowWeAreHavingSoftTacosLater/README.md) | Lets you bring held, attached, and occupied props through world loads. This is configurable in the mod settings. | No Download |
 
 ### Experimental Mods
