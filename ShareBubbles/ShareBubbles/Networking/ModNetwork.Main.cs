@@ -9,12 +9,6 @@ public static partial class ModNetwork
     
     private static bool _isSubscribedToModNetwork;
     
-    internal static void Initialize()
-    {
-        // Packs the share bubble data a bit, also makes things just nicer
-        ShareBubbleData.AddConverterForModNetwork();
-    }
-
     internal static void Subscribe()
     {
         ModNetworkManager.Subscribe(ModId, HandleMessageReceived);

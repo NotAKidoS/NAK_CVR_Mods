@@ -24,6 +24,9 @@ public static partial class ModNetwork
         // if (_disallowedForSession.Contains(sender))
         //     return false; // ignore messages from disallowed users
 
+        if (string.IsNullOrEmpty(sender))
+            return false; // unknown sender
+
         if (MetaPort.Instance.blockedUserIds.Contains(sender))
             return false; // ignore messages from blocked users
         
