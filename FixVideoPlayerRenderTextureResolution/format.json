@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "FixVideoPlayerRenderTextureResolution",
+  "modversion": "1.0.0",
+  "gameversion": "2026.3.0",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Resizes the video player projection texture to match the playing video's native resolution. This should remove some blur and rescaling artifacts (makes things slightly sharper).\n\nBy default, the CCK generates a 1080p projection texture, so without this mod, you are scaling most video's to 1080p after internally rendering them at their native resolution.",
+  "searchtags": [
+    "video",
+    "player",
+    "resolution",
+    "texture"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r51/FixVideoPlayerRenderTextureResolution.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FixVideoPlayerRenderTextureResolution/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

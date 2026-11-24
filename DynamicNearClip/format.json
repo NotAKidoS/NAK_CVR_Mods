@@ -1,0 +1,24 @@
+{
+  "_id": -1,
+  "name": "DynamicNearClip",
+  "modversion": "1.0.0",
+  "gameversion": "2026.3.0",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Scales the near clip plane with avatar height so small avatars can get close to things without clipping.\nThe far plane is lowered when needed to keep the near and far ratio in range.",
+  "searchtags": [
+    "near clip",
+    "clipping",
+    "camera",
+    "scale",
+    "avatar"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r51/DynamicNearClip.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/DynamicNearClip/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

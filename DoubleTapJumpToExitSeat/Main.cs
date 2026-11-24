@@ -2,6 +2,7 @@
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Systems.InputManagement;
 using ABI_RC.Systems.Movement;
+using ABI_RC.Systems.SyncedObjects;
 using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
@@ -71,11 +72,7 @@ public class DoubleTapJumpToExitSeatMod : MelonMod
             __instance.MovePlayerToSeat(__instance.vrSitPositionReady ? __instance.vrSitPosition : __instance.transform);
 
         // Steal sync
-        if (__instance.lockControls)
-        {
-            if (__instance._spawnable) __instance._spawnable.ForceUpdate(4);
-            if (__instance._objectSync) __instance._objectSync.ForceUpdate(4);
-        }
+        if (__instance.lockControls) SyncedObjectManager.ClaimSeat(__instance);
 
         return false; // don't call original method
     }
