@@ -6,7 +6,7 @@ namespace NAK.CleanPlates.Network;
 
 public static class CleanPlatesNetwork
 {
-    private const string NetworkVersion = "1.1.0"; // change each time network protocol changes
+    private const string NetworkVersion = "1.2.0"; // change each time network protocol changes
     private const string ModId = $"NAK.CleanPlates:{NetworkVersion}"; // Cannot exceed 32 characters
 
     private static bool _isSubscribedToModNetwork;
@@ -22,7 +22,6 @@ public static class CleanPlatesNetwork
 
     private enum MessageType
     {
-        SignalTTS,
         ProfileUpdate,
     }
 
@@ -37,9 +36,6 @@ public static class CleanPlatesNetwork
 
             switch ((MessageType)msgTypeRaw)
             {
-                case MessageType.SignalTTS:
-                    HandleSignalTTS(sender, msg);
-                    break;
                 case MessageType.ProfileUpdate:
                     PlateManager.RefreshProfile(sender);
                     break;
@@ -62,25 +58,6 @@ public static class CleanPlatesNetwork
         modMsg.Send();
 
         LoggerOutbound("Sending ProfileUpdate message");
-    }
-
-    private static void HandleSignalTTS(string sender, ModNetworkMessage msg)
-    {
-        msg.Read(out float seconds);
-        PlateManager.SetPlayingTts(sender, seconds);
-    }
-    
-    public static void SendSignalTTS(float seconds)
-    {
-        if (!CanSendModNetworkMessage())
-            return;
-
-        using ModNetworkMessage modMsg = new(ModId);
-        modMsg.Write((byte)MessageType.SignalTTS);
-        modMsg.Write(seconds);
-        modMsg.Send();
-
-        LoggerOutbound($"Sending SignalTTS message: {seconds:F2}s");
     }
 
     #region Utility

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace NAK.CleanPlates.UI
 {
-    public class MiniNameplate : MonoBehaviour
+    public class MiniNameplate : MonoBehaviour, IPlateView
     {
         [Header("Structure")]
         [SerializeField] private CanvasGroup root;
@@ -70,7 +70,11 @@ namespace NAK.CleanPlates.UI
             pill.SetAccents(left, right);
         }
 
+        public void SetIcon(Sprite sprite) => iconRoot.GetComponent<UnityEngine.UI.Image>().sprite = sprite;
+
         public void SetAlpha(float alpha) => root.alpha = alpha;
+
+        void IPlateView.SetState(float alpha, float lodBlend, float detailBlend) => SetState(alpha, lodBlend);
 
         public void SetState(float alpha, float blend)
         {

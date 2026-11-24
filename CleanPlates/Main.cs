@@ -1,6 +1,4 @@
-using ABI_RC.Core.Util.AssetFiltering;
 using MelonLoader;
-using NAK.CleanPlates.Helpers;
 using NAK.CleanPlates.Network;
 using NAK.CleanPlates.UI;
 using UnityEngine;
@@ -48,12 +46,6 @@ public class CleanPlatesMod : MelonMod
 
     internal static readonly MelonPreferences_Entry<bool> Debug_ProfileCameraPlates =
         Category.CreateEntry("debug_profile_camera_plates", false, display_name: "Debug Profile Camera Plates", description: "Log timings for the camera indicator plate loop.");
-
-    internal static readonly MelonPreferences_Entry<bool> Debug_ProfileAnchor =
-        Category.CreateEntry("debug_profile_anchor", false, display_name: "Debug Profile Anchor", description: "Log how long measuring an avatar for its nameplate height takes.");
-
-    internal static readonly MelonPreferences_Entry<bool> Debug_AnchorContributions =
-        Category.CreateEntry("debug_anchor_contributions", false, display_name: "Debug Anchor Contributions", description: "Log which renderers are pushing an avatar's nameplate height up.");
     
     public override void OnInitializeMelon()
     {
@@ -65,17 +57,12 @@ public class CleanPlatesMod : MelonMod
             return;
         }
 
-        ApplyPatches(typeof(Patches.CameraIndicatorPlate_Patches));
+        ApplyPatches(typeof(Patches.Comms_AudioTap_Patches));
+        ApplyPatches(typeof(Patches.IndicatorPlate_Patches));
         ApplyPatches(typeof(Patches.PlayerNameplate_Patches));
-        ApplyPatches(typeof(Patches.CVRObjectLoader_Patches));
         ApplyPatches(typeof(Patches.OverheadController_Patches));
-        ApplyPatches(typeof(Patches.NetIKController_Patches));
         ApplyPatches(typeof(Patches.ChatBoxBubbleBehavior_Patches));
-        ApplyPatches(typeof(Patches.CVRPlayerManager_Patches));
         ApplyPatches(typeof(Patches.ViewManager_Patches));
-
-        // Added at bundle load to the prefab, don't let asset filer strip it.
-        SharedFilter.AvatarWhitelist.Add(typeof(NameplateAnchor));
 
         SetupPreferences();
 
@@ -143,17 +130,11 @@ public class CleanPlatesMod : MelonMod
 
         PlateManager.Profile = Debug_ProfilePlates.Value;
         PlateManager.CameraProfile = Debug_ProfileCameraPlates.Value;
-        NameplateAnchorUtility.Profile = Debug_ProfileAnchor.Value;
-        NameplateAnchorUtility.LogContributions = Debug_AnchorContributions.Value;
 
         Debug_ProfilePlates.OnEntryValueChanged.Subscribe((_, value) 
             => PlateManager.Profile = value);
         Debug_ProfileCameraPlates.OnEntryValueChanged.Subscribe((_, value)
             => PlateManager.CameraProfile = value);
-        Debug_ProfileAnchor.OnEntryValueChanged.Subscribe((_, value) 
-            => NameplateAnchorUtility.Profile = value);
-        Debug_AnchorContributions.OnEntryValueChanged.Subscribe((_, value)
-            => NameplateAnchorUtility.LogContributions = value);
 
         SpeakingIndicator.OnEntryValueChanged.Subscribe((_, value)
             => NameplateChat.ShowSpeakerIndicator = value);

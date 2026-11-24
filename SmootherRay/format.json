@@ -1,8 +1,8 @@
 {
   "_id": 162,
   "name": "SmootherRay",
-  "modversion": "1.0.9",
-  "gameversion": "2026r182",
+  "modversion": "1.0.10",
+  "gameversion": "2026.3.0",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/SmootherRay.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r51/SmootherRay.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/SmootherRay/",
-  "changelog": "- Rebuilt for 2026r182",
+  "changelog": "- Rebuilt for 2026.3.0",
   "embedcolor": "#f61963"
 }

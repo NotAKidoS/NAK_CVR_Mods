@@ -1,6 +1,6 @@
 ﻿using ABI_RC.Core.Networking;
-using ABI_RC.Core.Player;
-using DarkRift;
+using ABI_RC.Core.Networking.Garrison;
+using ABI_RC.Systems.ModNetwork;
 using UnityEngine;
 
 namespace NAK.ShareBubbles.Networking;
@@ -12,13 +12,13 @@ public static partial class ModNetwork
     private static bool CanSendModNetworkMessage()
         => _isSubscribedToModNetwork 
            && IsConnectedToGameNetwork()
-           && CVRPlayerManager.Instance.NetworkPlayers.Count > 0; // No need to send if there are no players
+           && ModNetworkManager.TryGetModNetworkId(ModId, out _); // subscription not confirmed yet
     
     private static bool IsConnectedToGameNetwork()
     {
         return NetworkManager.Instance != null
-               && NetworkManager.Instance.GameNetwork != null
-               && NetworkManager.Instance.GameNetwork.ConnectionState == ConnectionState.Connected;
+               && GarrisonConnection.Instance != null
+               && NetworkManager.Instance.IsConnectedToGameNetwork();
     }
     
     /// Checks if a Vector3 is invalid (NaN or Infinity).

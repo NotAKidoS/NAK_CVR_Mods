@@ -1,4 +1,3 @@
-using ABI.CCK.Components;
 using ABI_RC.Core.Networking.API.Responses;
 using ABI_RC.Core.Networking.API;
 using ABI_RC.Core.Networking.IO.Social;
@@ -17,13 +16,10 @@ namespace NAK.CleanPlates;
 // Nameplate subsystem.
 public static partial class PlateManager
 {
-    private const string HeightAdjustmentSettingName = "NameplateCustomizationHeightAdjustment";
     private const string NewUserRank = "New User";
     private const string GroupModeratorRank = "Group Moderator";
     private const string GroupModeratorTag = "Host";
     private const string UnknownUser = "Unknown User";
-    
-    private static NameplateAnchor _localAnchor;
 
     private static bool ShouldDisplayImage(PlayerBase player)
         => _imageVisibility == CVRSettings.CVRSettingsOptionFriends.Always
@@ -37,27 +33,6 @@ public static partial class PlateManager
         RefreshAllIcons(); // FriendsOnly image visibility may have flipped per player
     }
 
-    private static void OnLocalAvatarLoaded(CVRAvatar avatar)
-    {
-        _localAnchor = avatar.gameObject.GetComponent<NameplateAnchor>();
-        SetNameplateAnchor(PlayerSetup.Instance, _localAnchor);
-    }
-    private static void OnLocalAvatarClear(CVRAvatar _)
-    {
-        _localAnchor = null;
-        SetNameplateAnchor(PlayerSetup.Instance, null);
-    }
-
-    private static void OnLocalAvatarHeightScale(float height, float scale)
-    {
-        if (_localAnchor) _localAnchor.UpdateCachedHeightsOnScaleChange();
-    }
-
-    private static void OnRemoteAvatarLoaded(CVRPlayerEntity playerEntity, CVRAvatar avatar)
-        => SetNameplateAnchor(playerEntity.PuppetMaster, avatar.gameObject.GetComponent<NameplateAnchor>());
-    private static void OnRemoteAvatarClear(CVRPlayerEntity playerEntity, CVRAvatar _)
-        => SetNameplateAnchor(playerEntity.PuppetMaster, null);
-    
     private static void OnPlayerLeaveEntity(CVRPlayerEntity playerEntity)
     {
         NameplateIcons.Release(playerEntity.PuppetMaster);
@@ -82,6 +57,7 @@ public static partial class PlateManager
     {
         PlayerBase player = overheadController.playerBase;
         Transform parent = overheadController.canvas.transform;
+        if (!NameplateTheme.Source) NameplateTheme.Source = overheadController.nameplate.usrNameText;
         CreatePlate(player, parent, overheadController);
     }
 
@@ -106,12 +82,9 @@ public static partial class PlateManager
         overheads.Add(entry.ChatHandle);
         ThirdpartySupport.RaisePlateAttached(player, entry.Plate);
         ApplyBubbleSettings(entry.Chat);
+        ApplyMuted(entry);
 
-        if (isLocal)
-        {
-            if (_localAnchor) SetNameplateAnchor(player, _localAnchor);
-        }
-        else
+        if (!isLocal)
         {
             RequestIcon(player);
             FetchPronouns(player);
@@ -290,7 +263,7 @@ public static partial class PlateManager
 
     public static float MaxScale = 20f;
     public static float CollapsedMaxScale = 2f;
-    public static float MaxRevealDistance = 100f;
+    public static float MaxRevealDistance = 200f;
     
     public static float ReadableDistance = 3.5f;
     public static float InspectReadableDistance = 1.75f;
@@ -301,21 +274,20 @@ public static partial class PlateManager
     public static float NearHideDistance = 1.85f;
     public static float NearHideHysteresis = 0.25f;
     
-    public static float RotationDepenetration = 0.15f;
     public static float ScaleSmoothing = 4f;
     public static float TalkStep = 0.03f;
-    public static float FallbackHeight = 1.3f;
     public static int DistanceChecksPerFrame = 10;
     public static int DistanceCheckDivisor = 6;
     public static float TalkAttack = 14f;
     public static float TalkRelease = 5f;
+    public static float PacketSpeakingLevel = 0.5f;
+    public static float TtsHoldSeconds = 0.5f;
     public static float HeightClearance = 0.05f;
-    public static NameplateHeightMode HeightMode;
     public static float CollapseThreshold = 0.5f;
 
-    private static NameplateView PlatePrefab => Style == NameplateStyle.Full
-        ? CleanPlatesMod.CleanPlatesPrefab.GetComponent<Nameplate>()
-        : CleanPlatesMod.CleanPlatesSimplePrefab.GetComponent<SimpleNameplate>();
+    private static GameObject PlatePrefab => Style == NameplateStyle.Full
+        ? CleanPlatesMod.CleanPlatesPrefab
+        : CleanPlatesMod.CleanPlatesSimplePrefab;
     private static readonly List<Entry> entries = new();
     private static readonly Dictionary<PlayerBase, Entry> byPlayer = new();
     private static int scanIndex;
@@ -328,6 +300,16 @@ public static partial class PlateManager
         set => PlateProfiler.Enabled = value;
     }
 
+    // Game job places overhead, lift plate by bottom edge
+    private static NameplateView InstantiatePlate(Transform parent)
+    {
+        NameplateView plate = Object.Instantiate(PlatePrefab, parent, false).GetComponent<NameplateView>();
+        Transform plateTransform = plate.transform;
+        plateTransform.SetLocalPositionAndRotation(
+            new Vector3(0f, plate.BottomExtent * plateTransform.localScale.y, 0f), Quaternion.identity);
+        return plate;
+    }
+
     private static Entry Register(PlayerBase player, Transform parent, NameplateData data)
     {
         if (byPlayer.TryGetValue(player, out Entry existing))
@@ -335,8 +317,7 @@ public static partial class PlateManager
         
         NameplateTheme.EnsureBuilt();
 
-        NameplateView plate = Object.Instantiate(PlatePrefab, parent, false);
-        plate.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        NameplateView plate = InstantiatePlate(parent);
         plate.Bind(data);
         plate.SetState(0f, 0f, 0f);
         plate.Chat.SetPlayerColors(data.PrimaryColor, data.SecondaryColor);
@@ -355,8 +336,7 @@ public static partial class PlateManager
             Player = player,
             Puppet = player as PuppetMaster,
             OverheadController = player.overheadController,
-            ControllerTransform = player.overheadController.transform,
-            PlateTransform = plate.transform
+            Anchor = player.overheadController.transform
         };
         entry.Handle = new OverheadHandle { Entry = entry };
         entry.ChatHandle = new ChatOverheadHandle { Entry = entry };
@@ -408,15 +388,6 @@ public static partial class PlateManager
         return chat != null;
     }
 
-    private static void SetNameplateAnchor(PlayerBase player, NameplateAnchor anchor)
-    {
-        // Avatar events fire for the local player before auth has made one.
-        if (player == null || !byPlayer.TryGetValue(player, out Entry entry)) return;
-
-        entry.HasNameplateAnchor = anchor;
-        entry.NameplateAnchor = anchor;
-    }
-
     private static void OnInspectingChanged(bool inspecting)
     {
         if (!inspecting) return;
@@ -457,8 +428,7 @@ public static partial class PlateManager
             ThirdpartySupport.RaisePlateDetached(e.Player, e.Plate);
             if (e.Plate != null) Object.Destroy(e.Plate.gameObject);
 
-            NameplateView plate = Object.Instantiate(PlatePrefab, e.Parent, false);
-            plate.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            NameplateView plate = InstantiatePlate(e.Parent);
             plate.Bind(e.Data);
             plate.SetState(e.Alpha, e.LodBlend, e.DetailBlend);
             plate.Chat.SetPlayerColors(e.Data.PrimaryColor, e.Data.SecondaryColor);
@@ -467,8 +437,8 @@ public static partial class PlateManager
 
             e.Plate = plate;
             e.Chat = plate.Chat;
-            e.PlateTransform = plate.transform;
-            
+            ApplyMuted(e);
+
             ThirdpartySupport.RaisePlateAttached(e.Player, plate);
             e.AppliedTalk = -1f;
             e.Scale = -1f;
@@ -485,147 +455,5 @@ public static partial class PlateManager
             e.Chat.RefreshHistory();
             e.Dirty = true;
         }
-    }
-
-    private static void TickNameplates()
-    {
-        float dt = _frame.DeltaTime;
-        bool menuOpen = _frame.MenuOpen;
-        bool inspecting = _frame.Inspecting;
-        bool showLocal = _frame.ShowLocal;
-        bool showRemote = _frame.ShowRemote;
-        int count = entries.Count;
-        if (count == 0) return;
-
-        Vector3 localPlayerUp = PlayerSetup.Instance.transform.up;
-
-        int checks = Mathf.Min(count,
-            Mathf.Max(DistanceChecksPerFrame, count / DistanceCheckDivisor));
-        for (int i = 0; i < checks; i++)
-        {
-            scanIndex = (scanIndex + 1) % count;
-            Entry e = entries[scanIndex];
-            if (e.Plate != null)
-                e.Distance = Vector3.Distance(_frame.ObserverPosition, e.GetNameplatePosition(HeightMode, 0f, FallbackHeight));
-        }
-
-        PlateProfiler.Begin();
-        int processed = 0;
-
-        float now = Time.time;
-        float scaleLerp = 1f - Mathf.Exp(-ScaleSmoothing * dt);
-        float fovScale = FovScale.Current;
-        
-        foreach (var e in entries)
-        {
-            if (e.Plate == null) continue;
-
-            bool show = e.IsLocal ? showLocal : showRemote;
-
-            e.NearHidden = NearHide && !e.IsLocal && e.Distance <= NearHideDistance
-                                         + (e.NearHidden ? NearHideHysteresis : 0f);
-
-            bool visible = show && (menuOpen || inspecting || !e.NearHidden)
-                                && (e.Distance <= HideDistance
-                                    || (inspecting && e.Distance <= MaxRevealDistance));
-            bool full = e.Distance < FullDetailDistance;
-
-            float targetAlpha = visible ? Opacity : 0f;
-            float targetBlend = full ? 1f : 0f;
-            float targetDetail = inspecting ? 1f : 0f;
-
-            if (inspecting && now < e.RevealTime)
-            {
-                targetAlpha = e.Alpha;
-                targetBlend = e.LodBlend;
-                targetDetail = e.DetailBlend;
-            }
-
-            float alpha = Mathf.MoveTowards(e.Alpha, targetAlpha, FadeSpeed * dt);
-            float blend = Mathf.MoveTowards(e.LodBlend, targetBlend, LodBlendSpeed * dt);
-            float detail = Mathf.MoveTowards(e.DetailBlend, targetDetail, LodBlendSpeed * dt);
-
-            // Resizing triggers mesh rebuild which is expensive, so we split
-            // into two different dirty flags.
-            
-            if (alpha != e.Alpha) e.AlphaDirty = true;
-            if (blend != e.LodBlend || detail != e.DetailBlend) e.Dirty = true;
-            e.Alpha = alpha;
-            e.LodBlend = blend;
-            e.DetailBlend = detail;
-            
-            bool collapsed = blend < CollapseThreshold;
-            if (collapsed != e.Collapsed)
-            {
-                e.Collapsed = collapsed;
-                ThirdpartySupport.RaisePlateCollapsedChanged(e.Player, collapsed);
-            }
-
-            float talkTarget = Mathf.Clamp01(e.GetCommsSmoothAmplitude());
-            float talkSpeed = talkTarget > e.TalkLevel ? TalkAttack : TalkRelease;
-            e.TalkLevel = Mathf.MoveTowards(e.TalkLevel, talkTarget, talkSpeed * dt);
-
-            e.Chat.SetVoiceLevel(e.TalkLevel);
-            e.Chat.SetDetail(blend);
-            e.Chat.Tick(now);
-            
-            OverheadController controller = e.OverheadController;
-            controller.UpdateActiveState();
-            if (!controller.IsActive)
-            {
-                e.Scale = -1f; // snap on the way back in instead of sliding
-                continue;
-            }
-
-            if (Mathf.Abs(e.TalkLevel - e.AppliedTalk) > TalkStep
-                || (e.TalkLevel == talkTarget && e.TalkLevel != e.AppliedTalk))
-            {
-                e.AppliedTalk = e.TalkLevel;
-                e.Plate.SetTalk(e.TalkLevel); // tints the body graphic, so this is a rebuild
-            }
-
-            if (e.Dirty)
-            {
-                e.Plate.SetState(e.Alpha, e.LodBlend, e.DetailBlend);
-                e.Dirty = false;
-                e.AlphaDirty = false;
-            }
-            else if (e.AlphaDirty)
-            {
-                e.Plate.SetAlpha(e.Alpha);
-                e.AlphaDirty = false;
-            }
-
-            processed++;
-            
-            float growth = Mathf.Clamp(
-                e.Distance * fovScale / (inspecting ? InspectReadableDistance : ReadableDistance),
-                1f, inspecting ? MaxScale : CollapsedMaxScale);
-
-            float targetScale = growth / e.Plate.NameSizeAtLod(blend) * UserScale;
-
-            float scale = e.Scale < 0f
-                ? targetScale
-                : Mathf.Lerp(e.Scale, targetScale, scaleLerp);
-            Transform plateTransform = e.ControllerTransform;
-            if (Mathf.Abs(scale - e.Scale) > 0.001f)
-            {
-                e.Scale = scale;
-                plateTransform.localScale = new Vector3(scale, scale, scale);
-            }
-            
-            Vector3 plateWorld = e.PlateTransform.lossyScale;
-            
-            float offset = HeightClearance + e.Plate.BottomExtent * plateWorld.y;
-
-            float align = Mathf.Abs(Vector3.Dot(localPlayerUp, plateTransform.up));
-            float depenetrate = e.Plate.BodyWidth * plateWorld.x
-                                * RotationDepenetration * (1f - align);
-
-            plateTransform.position = e.GetNameplatePosition(HeightMode,
-                offset + depenetrate, FallbackHeight);
-        }
-
-        PlateProfiler.End(processed, count);
     }
 }

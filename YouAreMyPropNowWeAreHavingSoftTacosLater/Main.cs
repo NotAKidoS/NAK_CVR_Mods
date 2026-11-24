@@ -1,23 +1,19 @@
 ﻿using System.Collections;
 using System.Reflection;
-using ABI_RC.Core.EventSystem;
 using ABI_RC.Core.InteractionSystem;
 using ABI_RC.Core.IO;
-using ABI_RC.Core.Networking;
-using ABI_RC.Core.Networking.API.Responses;
 using ABI_RC.Core.Player;
-using ABI_RC.Core.Util;
-using ABI_RC.Core.Util.Encryption;
+using ABI_RC.Core.PropManagement;
+using ABI_RC.Systems.ContentClones;
 using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.Movement;
 using ABI.CCK.Components;
-using DarkRift;
 using HarmonyLib;
 using MelonLoader;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
+using PropRelationshipState = ABI_RC.Systems.ContentClones.PropRelationshipTracker.PropRelationshipState;
 
 namespace NAK.YouAreMyPropNowWeAreHavingSoftTacosLater;
 
@@ -30,96 +26,40 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
 
     private static readonly MelonPreferences_Entry<bool> EntryTrackPickups =
         Category.CreateEntry("track_pickups", true, display_name: "Track Pickups", description: "Should pickups be tracked?");
-    
+
     private static readonly MelonPreferences_Entry<bool> EntryTrackAttachments =
         Category.CreateEntry("track_attachments", true, display_name: "Track Attachments", description: "Should attachments be tracked?");
 
     private static readonly MelonPreferences_Entry<bool> EntryTrackSeats =
         Category.CreateEntry("track_seats", true, display_name: "Track Seats", description: "Should seats be tracked?");
-    
+
     private static readonly MelonPreferences_Entry<bool> EntryOnlySpawnedByMe =
         Category.CreateEntry("only_spawned_by_me", true, display_name: "Only Spawned By Me", description: "Should only props spawned by me be tracked?");
 
     #endregion Melon Preferences
-    
+
     #region Melon Events
-    
+
     public override void OnInitializeMelon()
     {
-        #region CVRPickupObject Patches
+        #region Props Patches
 
-        HarmonyInstance.Patch(
-            typeof(CVRPickupObject).GetMethod(nameof(CVRPickupObject.OnGrab),
-                BindingFlags.NonPublic | BindingFlags.Instance),
-            postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRPickupObjectOnGrab),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
-        
-        HarmonyInstance.Patch(
-            typeof(CVRPickupObject).GetMethod(nameof(CVRPickupObject.OnDrop), BindingFlags.NonPublic | BindingFlags.Instance),
-            postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRPickupObjectOnDrop),
+        HarmonyInstance.Patch( // Prevent deleting attached props on disconnect
+            typeof(Props).GetMethod(nameof(Props.OnInstanceDisconnected),
+                BindingFlags.NonPublic | BindingFlags.Static),
+            prefix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnPropsOnInstanceDisconnected),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
 
-        #endregion CVRPickupObject Patches
-        
-        #region CVRAttachment Patches
-        
-        HarmonyInstance.Patch( // Cannot compile when using nameof
-            typeof(CVRAttachment).GetMethod(nameof(CVRAttachment.DoAttachmentSetup), 
-                BindingFlags.NonPublic | BindingFlags.Instance),
-            postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRAttachmentAttachInternal),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
-        
-        HarmonyInstance.Patch(
-            typeof(CVRAttachment).GetMethod(nameof(CVRAttachment.DeAttach)),
-            prefix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRAttachmentDeAttach),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
-        
-        #endregion CVRAttachment Patches
-
-        #region CVRSeat Patches
-        
-        HarmonyInstance.Patch(
-            typeof(CVRSeat).GetMethod(nameof(CVRSeat.SitDown), 
-                BindingFlags.Public | BindingFlags.Instance),
-            postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRSeatSitDown),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
-        
-        HarmonyInstance.Patch(
-            typeof(CVRSeat).GetMethod(nameof(CVRSeat.ExitSeat), 
-                BindingFlags.Public | BindingFlags.Instance),
-            postfix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRSeatExitSeat),
+        HarmonyInstance.Patch( // Prevent deleting attached props on scene load
+            typeof(Props).GetMethod(nameof(Props.OnWorldUnload),
+                BindingFlags.NonPublic | BindingFlags.Static),
+            prefix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnPropsOnWorldUnload),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
 
-        #endregion CVRSeat Patches
-        
-        #region CVRSpawnable Patches
-        
-        HarmonyInstance.Patch(
-            typeof(CVRSpawnable).GetMethod(nameof(CVRSpawnable.OnDestroy), 
-                BindingFlags.Public | BindingFlags.Instance),
-            prefix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnSpawnableOnDestroy),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
+        #endregion Props Patches
 
-        #endregion CVRSpawnable Patches
-        
-        #region CVRSyncHelper Patches
-        
-        HarmonyInstance.Patch( // Replaces method, original needlessly ToArray???
-            typeof(CVRSyncHelper).GetMethod(nameof(CVRSyncHelper.ClearProps),
-                BindingFlags.Public | BindingFlags.Static),
-            prefix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnCVRSyncHelperClearProps),
-                BindingFlags.NonPublic | BindingFlags.Static))
-        );
-        
-        #endregion CVRSyncHelper Patches
- 
         #region CVRDownloadManager Patches
 
         HarmonyInstance.Patch(
@@ -139,14 +79,14 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
             prefix: new HarmonyMethod(typeof(YouAreMyPropNowWeAreHavingSoftTacosLaterMod).GetMethod(nameof(OnBetterBetterCharacterControllerSetSitting),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
-        
+
         #endregion BetterBetterCharacterController Patches
-        
+
         #region CVRWorld Game Events
-        
-        CVRGameEventSystem.World.OnLoad.AddListener(OnWorldLoad);
-        CVRGameEventSystem.World.OnUnload.AddListener(OnWorldUnload);
-        
+
+        CVRGameEventSystem.World.OnReady.AddListener(OnWorldReady);
+        CVRGameEventSystem.World.OnWorldUnload.AddListener(OnWorldUnload);
+
         #endregion CVRWorld Game Events
 
         #region Instances Game Events
@@ -155,164 +95,79 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
 
         #endregion Instances Game Events
     }
-    
+
     #endregion Melon Events
 
     #region Harmony Patches
-    
-    [Flags] private enum HeldPropState { None = 0, Pickup = 1, Attachment = 2, Seat = 3 }
-    
-    private static readonly Dictionary<CVRSyncHelper.PropData, HeldPropState> _heldPropStates = new();
-    
-    private static void AddHeldPropState(CVRSyncHelper.PropData propData, HeldPropState state)
-    {
-        if (!_heldPropStates.TryAdd(propData, state)) _heldPropStates[propData] |= state;
-    }
-    
-    private static void RemoveHeldPropState(CVRSyncHelper.PropData propData, HeldPropState state)
-    {
-        if (!_heldPropStates.TryGetValue(propData, out HeldPropState currentState)) return;
-        currentState &= ~state;
-        if (currentState == HeldPropState.None) _heldPropStates.Remove(propData);
-        else _heldPropStates[propData] = currentState;
-    }
-    
-    private static GameObject _persistantPropsContainer;
-    private static GameObject GetOrCreatePropsContainer()
-    {
-        if (_persistantPropsContainer) return _persistantPropsContainer;
-        _persistantPropsContainer = new("YouAreMyPropNowWeAreHavingSoftTacosLater");
-        _persistantPropsContainer.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-        _persistantPropsContainer.transform.localScale = Vector3.one;
-        Object.DontDestroyOnLoad(_persistantPropsContainer);
-        return _persistantPropsContainer;
-    }
-    
-    private static readonly Dictionary<Vector3, CVRSyncHelper.PropData> _keyToPropData = new();
-    private static readonly Stack<SpawnablePositionContainer> _spawnablePositionStack = new();
+
+    private const float HELD_PROP_TIMEOUT = 5f;
+
+    private static readonly List<SpawnablePositionContainer> _heldProps = new();
+    private static bool _placeHeldProps;
     private static bool _ignoreNextSeatExit;
     private static float _heightOffset;
 
-    private static void OnCVRPickupObjectOnGrab(CVRPickupObject __instance)
+    private static void OnPropsOnInstanceDisconnected() => KeepHeldProps(true); // Only server props are deleted
+
+    private static void OnPropsOnWorldUnload() => KeepHeldProps(false);
+
+    private static void KeepHeldProps(bool onlyServerBacked) // Detach attached props from souls
     {
-        if (!EntryTrackPickups.Value) return;
-        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        AddHeldPropState(propData, HeldPropState.Pickup);
-    }
-    
-    private static void OnCVRPickupObjectOnDrop(CVRPickupObject __instance)
-    {
-        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        RemoveHeldPropState(propData, HeldPropState.Pickup);
-    }
-    
-    private static void OnCVRAttachmentAttachInternal(CVRAttachment __instance)
-    {
-        if (!EntryTrackAttachments.Value) return;
-        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        AddHeldPropState(propData, HeldPropState.Attachment);
-    }
-    
-    private static void OnCVRAttachmentDeAttach(CVRAttachment __instance)
-    {
-        if (!__instance._isAttached) return; // Can invoke DeAttach without being attached
-        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        RemoveHeldPropState(propData, HeldPropState.Attachment);
-    }
-    
-    private static void OnCVRSeatSitDown(CVRSeat __instance)
-    {
-        if (!EntryTrackSeats.Value) return;
-        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        AddHeldPropState(propData, HeldPropState.Seat);
-    }
-    
-    private static void OnCVRSeatExitSeat(CVRSeat __instance)
-    {
-        if (!TryGetPropData(__instance.GetComponentInParent<CVRSpawnable>(true), out CVRSyncHelper.PropData propData)) return;
-        RemoveHeldPropState(propData, HeldPropState.Seat);
-    }
-    
-    private static void OnSpawnableOnDestroy(CVRSpawnable __instance)
-    {
-        if (!TryGetPropData(__instance, out CVRSyncHelper.PropData propData)) return;
-        _heldPropStates.Remove(propData);
+        int heldCount = _heldProps.Count;
+
+        foreach (PropSoul prop in Props.All)
+        {
+            if (onlyServerBacked && prop.Kind != PropKind.ServerBacked) continue;
+            if (!prop.Spawnable || !prop.Wrapper) continue;
+            if (!ShouldKeepProp(prop.Spawnable)) continue;
+
+            _heldProps.Add(new SpawnablePositionContainer(prop));
+            Object.DontDestroyOnLoad(prop.Wrapper);
+            prop.Wrapper = null;
+        }
+
+        // Destroy props not respawned in time
+        if (_heldProps.Count != heldCount && !CVRObjectLoader.Instance._isLoadingWorldToJoin)
+            StartWorldLoadTimer();
     }
 
-    // ReSharper disable UnusedParameter.Local
-    private static bool OnCVRDownloadManagerQueueTask(
-        AssetManagement.UgcMetadata metadata,
-        DownloadTask.ObjectType type,
-        string assetUrl,
-        string fileId,
-        string toAttach,
-        CVRLoadingAvatarController loadingAvatarController = null,
-        bool joinOnComplete = false,
-        bool isHomeRequested = false,
-        string spawnerId = null)
+    private static bool OnCVRDownloadManagerQueueTask(DownloadTask.ObjectType type, string toAttach)
     {
         if (type != DownloadTask.ObjectType.Prop) return true; // Only care about props
-     
-        // toAttach is our instanceId, lets find the propData
-        if (!TryGetPropDataById(toAttach, out CVRSyncHelper.PropData newPropData)) return true;
-        
+
+        // toAttach is our instanceId, lets find the prop
+        if (!Props.TryGet(toAttach, out PropSoul prop) || !prop.IsSpawnedByMe) return true;
+
         // Check if this is a prop we requested to spawn
-        Vector3 identity = GetIdentityKeyFromPropData(newPropData);
-        if (!_keyToPropData.Remove(identity, out CVRSyncHelper.PropData originalPropData)) return true;
-        
-        // Remove original prop data from held, cache states
-        HeldPropState heldState = HeldPropState.None;
-        if (_heldPropStates.ContainsKey(originalPropData))
-        {
-            heldState = _heldPropStates[originalPropData];
-            _heldPropStates.Remove(originalPropData);
-        }
-        
-        // If original prop data is null spawn a new prop i guess :(
-        if (!originalPropData.Spawnable) return true;
-        
-        // Add the new prop data to our held props in place of the old one
-        // if (!_heldPropData.Contains(newPropData)) _heldPropData.Add(newPropData);
-        _heldPropStates.TryAdd(newPropData, heldState);
-        
-        // Apply new prop data to the spawnable
-        newPropData.Spawnable = originalPropData.Spawnable;
-        newPropData.Wrapper = originalPropData.Wrapper;
-        newPropData.Wrapper.BroadcastMessage("OnHavingSoftTacosNow", SendMessageOptions.DontRequireReceiver); // support with RelativeSyncJitterFix
-        newPropData.Wrapper.name = $"p+{newPropData.ObjectId}~{newPropData.InstanceId}";
-        
-        // Copy sync values
-        Array.Copy(newPropData.CustomFloats, originalPropData.CustomFloats, newPropData.CustomFloatsAmount);
-        
-        CVRSyncHelper.ApplyPropValuesSpawn(newPropData);
-        
+        int index = _heldProps.FindIndex(container => container.ObjectId == prop.ObjectId);
+        if (index < 0) return true;
+
+        SpawnablePositionContainer container = _heldProps[index];
+        _heldProps.RemoveAt(index);
+
+        // If original prop is null spawn a new prop i guess :(
+        if (!container.Spawnable) return true;
+
+        // Original prop replaces download
+        prop.Wrapper = container.Wrapper;
+        prop.Wrapper.BroadcastMessage("OnHavingSoftTacosNow", SendMessageOptions.DontRequireReceiver); // support with RelativeSyncJitterFix
+        prop.Wrapper.name = prop.InstanceId;
+
         // Place the prop in the additive content scene
-        PlacePropInAdditiveContentScene(newPropData.Spawnable);
+        PlacePropInAdditiveContentScene(prop.Wrapper);
 
-        // Clear old data so Recycle() doesn't delete our prop
-        originalPropData.Spawnable = null;
-        originalPropData.Wrapper = null;
-        originalPropData.Recycle();
-        
-        return false;
-    }
-    
-    private static bool OnCVRSyncHelperClearProps() // Prevent deleting of our held props on scene load
-    {
-        for (var index = CVRSyncHelper.Props.Count - 1; index >= 0; index--)
-        {
-            CVRSyncHelper.PropData prop = CVRSyncHelper.Props[index];
-            if (prop.Spawnable && _heldPropStates.ContainsKey(prop))
-                continue; // Do not recycle props that are valid & held
+        container.Spawnable.SpawnedByMe = true;
+        Props.OnInstanceAttached(prop.InstanceId, container.Spawnable);
+        CVRGameEventSystem.Spawnable.OnPropSpawned.Invoke(prop.SpawnedBy, prop);
 
-            DeleteOrRecycleProp(prop);
-        }
+        // Content clone died with old soul
+        if (PropRelationshipTracker._propRelationshipStates.TryGetValue(container.Spawnable, out PropRelationshipState state))
+            PropRelationshipTracker.OnPropRelationshipStateChanged?.Invoke(container.Spawnable, state, state);
 
-        CVRSyncHelper.MySpawnedPropInstanceIds.Clear();
         return false;
     }
 
-    private static bool OnBetterBetterCharacterControllerSetSitting(bool isSitting, CVRSeat cvrSeat = null, bool callExitSeat = true)
+    private static bool OnBetterBetterCharacterControllerSetSitting()
     {
         if (!_ignoreNextSeatExit) return true;
         _ignoreNextSeatExit = false;
@@ -323,164 +178,142 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
     #endregion Harmony Patches
 
     #region Game Events
-    
-    private object _worldLoadTimer;
 
-    private void OnWorldLoad(string _)
+    private static object _worldLoadTimer;
+
+    private static void OnWorldReady(string _)
     {
         CVRWorld worldInstance = CVRWorld.Instance;
         if (worldInstance && !worldInstance.allowSpawnables)
         {
-            foreach (CVRSyncHelper.PropData prop in _heldPropStates.Keys) DeleteOrRecycleProp(prop); // Delete all props we kept
+            DeleteHeldProps(); // Delete all props we kept
             return;
         }
 
-        for (var index = _heldPropStates.Count - 1; index >= 0; index--)
+        PlaceHeldProps();
+
+        // Destroy props not respawned in time
+        StartWorldLoadTimer();
+    }
+
+    private static void StartWorldLoadTimer()
+    {
+        StopWorldLoadTimer();
+        _worldLoadTimer = MelonCoroutines.Start(DestroyHeldPropsInFive());
+    }
+
+    private static void StopWorldLoadTimer()
+    {
+        if (_worldLoadTimer == null) return;
+        MelonCoroutines.Stop(_worldLoadTimer);
+        _worldLoadTimer = null;
+    }
+
+    private static IEnumerator DestroyHeldPropsInFive()
+    {
+        yield return new WaitForSeconds(HELD_PROP_TIMEOUT);
+        _worldLoadTimer = null;
+        DeleteHeldProps(); // no more chances
+    }
+
+    private static void OnWorldUnload(string _, CVRObjectLoader.WorldLoadIntent __)
+    {
+        StopWorldLoadTimer();
+
+        // Determine which props to keep
+        for (int i = _heldProps.Count - 1; i >= 0; i--)
         {
-            CVRSyncHelper.PropData prop = _heldPropStates.ElementAt(index).Key;
-            if (!prop.Spawnable)
+            SpawnablePositionContainer container = _heldProps[i];
+            if (container.Spawnable && ShouldKeepProp(container.Spawnable))
             {
-                DeleteOrRecycleProp(prop);
-                return;
+                container.SaveOffsets();
+                continue;
             }
 
-            // apply positions
-            int stackCount = _spawnablePositionStack.Count;
-            for (int i = stackCount - 1; i >= 0; i--) _spawnablePositionStack.Pop().ReapplyOffsets();
+            DeleteOrRecycleProp(container);
+            _heldProps.RemoveAt(i);
         }
-        
-        // Start a timer, and anything that did not load within 3 seconds will be destroyed
-        if (_worldLoadTimer != null)
-        {
-            MelonCoroutines.Stop(_worldLoadTimer);
-            _worldLoadTimer = null;
-        }
-        _worldLoadTimer = MelonCoroutines.Start(DestroyPersistantPropContainerInFive());
-        _ignoreNextSeatExit = true; // just in case we are in a car / vehicle
-    }
 
-    private IEnumerator DestroyPersistantPropContainerInFive()
-    {
-        yield return new WaitForSeconds(3f);
-        _worldLoadTimer = null;
-        Object.Destroy(_persistantPropsContainer);
-        _persistantPropsContainer = null;
-        _keyToPropData.Clear(); // no more chances
-    }
-    
-    private static void OnWorldUnload(string _)
-    {
-        // Prevent deleting of our held props on scene destruction
-        foreach (CVRSyncHelper.PropData prop in _heldPropStates.Keys)
-        {
-            if (!prop.Spawnable) continue;
-            PlacePropInPersistantPropsContainer(prop.Spawnable);
-            _spawnablePositionStack.Push(new SpawnablePositionContainer(prop.Spawnable));
-        }
+        _placeHeldProps = true;
 
         // Likely in a vehicle
-        _heightOffset = BetterBetterCharacterController.Instance._lastCvrSeat != null 
+        CVRSeat seat = BetterBetterCharacterController.Instance._lastCvrSeat;
+        _heightOffset = seat != null
             ? GetHeightOffsetFromPlayer()
             : 0f;
+
+        // World load kicks us out of seat
+        CVRSpawnable seatSpawnable = seat != null ? seat.GetComponentInParent<CVRSpawnable>(true) : null;
+        _ignoreNextSeatExit = seatSpawnable && ShouldKeepProp(seatSpawnable);
     }
 
     private static void OnInstanceConnected(string _)
     {
-        // Request the server to respawn our props by GUID, and add a secret key to the propData to identify it
+        // Can connect before world ready event
+        PlaceHeldProps();
 
-        foreach (CVRSyncHelper.PropData prop in _heldPropStates.Keys)
+        // Respawn props by GUID, original prop replaces download
+        for (int i = _heldProps.Count - 1; i >= 0; i--)
         {
-            if (!prop.Spawnable) continue;
-            
-            // Generate a new identity key for the prop (this is used to identify the prop when we respawn it)
-            Vector3 identityKey = new(Random.Range(0, 1000), Random.Range(0, 1000), Random.Range(0, 1000));
-            _keyToPropData.Add(identityKey, prop);
-            
-            SpawnPropFromGuid(prop.ObjectId,
-                new Vector3(prop.PositionX, prop.PositionY, prop.PositionZ),
-                new Vector3(prop.RotationX, prop.RotationY, prop.RotationZ),
-                identityKey);
+            SpawnablePositionContainer container = _heldProps[i];
+            if (container.Spawnable && PropUserActions.CanSpawn(container.ObjectId, out string _))
+            {
+                Transform spawnableTransform = container.Spawnable.transform;
+                if (PropNetwork.RequestSpawn(container.ObjectId,
+                        spawnableTransform.position - new Vector3(0f, container.Spawnable.spawnHeight, 0f),
+                        spawnableTransform.rotation))
+                    continue;
+            }
+
+            DeleteOrRecycleProp(container);
+            _heldProps.RemoveAt(i);
         }
     }
 
     #endregion Game Events
-    
+
     #region Util
 
-    private static bool TryGetPropData(CVRSpawnable spawnable, out CVRSyncHelper.PropData propData)
+    private static bool ShouldKeepProp(CVRSpawnable spawnable)
     {
-        if (!spawnable)
-        {
-            propData = null;
-            return false;
-        }
-        if (EntryOnlySpawnedByMe.Value && !spawnable.IsMine())
-        {
-            propData = null;
-            return false;
-        }
-        foreach (CVRSyncHelper.PropData data in CVRSyncHelper.Props)
-        {
-            if (data.InstanceId != spawnable.instanceId) continue;
-            propData = data;
-            return true;
-        }
-        propData = null;
-        return false;
-    }
-    
-    private static bool TryGetPropDataById(string instanceId, out CVRSyncHelper.PropData propData)
-    {
-        foreach (CVRSyncHelper.PropData data in CVRSyncHelper.Props)
-        {
-            if (data.InstanceId != instanceId) continue;
-            propData = data;
-            return true;
-        }
-        propData = null;
-        return false;
+        PropSoul prop = spawnable.PropSoul;
+        if (prop is not { Kind: PropKind.ServerBacked or PropKind.LocalOnly }) return false;
+        if (EntryOnlySpawnedByMe.Value && !prop.IsSpawnedByMe) return false;
+
+        if (!PropRelationshipTracker._propRelationshipStates.TryGetValue(spawnable, out PropRelationshipState state)) return false;
+        if (!EntryTrackPickups.Value) state &= ~PropRelationshipState.Pickup;
+        if (!EntryTrackAttachments.Value) state &= ~PropRelationshipState.Attachment;
+        if (!EntryTrackSeats.Value) state &= ~PropRelationshipState.Seat;
+        return state != PropRelationshipState.None;
     }
 
-    private static void PlacePropInAdditiveContentScene(CVRSpawnable spawnable)
+    private static void PlaceHeldProps()
     {
-        spawnable.transform.parent.SetParent(null); // Unparent from the prop container
-        SceneManager.MoveGameObjectToScene(spawnable.transform.parent.gameObject, 
-            SceneManager.GetSceneByName(CVRObjectLoader.AdditiveContentSceneName));
+        if (!_placeHeldProps) return;
+        _placeHeldProps = false;
+
+        // apply positions
+        foreach (SpawnablePositionContainer container in _heldProps)
+            if (container.Spawnable) container.ReapplyOffsets();
     }
-    
-    private static void PlacePropInPersistantPropsContainer(CVRSpawnable spawnable)
+
+    private static void PlacePropInAdditiveContentScene(GameObject wrapper)
     {
-        spawnable.transform.parent.SetParent(GetOrCreatePropsContainer().transform);
+        Scene scene = SceneManager.GetSceneByName(CVRObjectLoader.AdditiveContentSceneName);
+        if (scene.isLoaded) SceneManager.MoveGameObjectToScene(wrapper, scene);
     }
-    
-    private static void DeleteOrRecycleProp(CVRSyncHelper.PropData prop)
+
+    private static void DeleteOrRecycleProp(SpawnablePositionContainer container)
     {
-        if (!prop.Spawnable) prop.Recycle();
-        else prop.Spawnable.Delete();
-        _heldPropStates.Remove(prop);
+        if (container.Wrapper) Object.Destroy(container.Wrapper);
     }
-    
-    private static void SpawnPropFromGuid(string propGuid, Vector3 position, Vector3 rotation, Vector3 identityKey)
+
+    private static void DeleteHeldProps()
     {
-        using DarkRiftWriter darkRiftWriter = DarkRiftWriter.Create();
-        darkRiftWriter.Write(propGuid);
-        darkRiftWriter.Write(position.x);
-        darkRiftWriter.Write(position.y);
-        darkRiftWriter.Write(position.z);
-        darkRiftWriter.Write(rotation.x);
-        darkRiftWriter.Write(rotation.y);
-        darkRiftWriter.Write(rotation.z);
-        darkRiftWriter.Write(identityKey.x); // for scale, but unused by CVR
-        darkRiftWriter.Write(identityKey.y); // we will use this to identify our prop
-        darkRiftWriter.Write(identityKey.z); // and recycle existing instance if it exists
-        darkRiftWriter.Write(0f); // if not zero, prop spawn will be rejected by gs
-        using Message message = Message.Create(10050, darkRiftWriter);
-        NetworkManager.Instance.GameNetwork.SendMessage(message, SendMode.Reliable);
+        foreach (SpawnablePositionContainer container in _heldProps) DeleteOrRecycleProp(container);
+        _heldProps.Clear();
     }
-    
-    private static Vector3 GetIdentityKeyFromPropData(CVRSyncHelper.PropData propData)
-        => new(propData.ScaleX, propData.ScaleY, propData.ScaleZ);
-    
+
     private const int WORLD_RAYCAST_LAYER_MASK =
         (1 << 0) | // Default
         (1 << 16) | (1 << 17) | (1 << 18) | (1 << 19) |
@@ -514,37 +347,47 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
         float offset = playerPos.y - closestPoint.y;
         return Mathf.Clamp(offset, 0f, 20f);
     }
-    
+
     #endregion Util
 
     #region Helper Classes
 
-    private readonly struct SpawnablePositionContainer
+    private class SpawnablePositionContainer
     {
-        private readonly CVRSpawnable _spawnable;
+        public readonly string ObjectId;
+        public readonly CVRSpawnable Spawnable;
+        public readonly GameObject Wrapper;
+
         private readonly Vector3[] _posOffsets;
         private readonly Quaternion[] _rotOffsets;
 
-        public SpawnablePositionContainer(CVRSpawnable spawnable)
+        public SpawnablePositionContainer(PropSoul prop)
         {
-            _spawnable = spawnable;
-            
-            int syncedTransforms = 1 + _spawnable.subSyncs.Count; // root + subSyncs
+            ObjectId = prop.ObjectId;
+            Spawnable = prop.Spawnable;
+            Wrapper = prop.Wrapper;
+
+            int syncedTransforms = 1 + Spawnable.subSyncs.Count; // root + subSyncs
 
             _posOffsets = new Vector3[syncedTransforms];
             _rotOffsets = new Quaternion[syncedTransforms];
 
+            SaveOffsets();
+        }
+
+        public void SaveOffsets()
+        {
             Transform playerTransform = PlayerSetup.Instance.transform;
 
             // Save root offset relative to player
-            Transform _spawnableTransform = _spawnable.transform;
-            _posOffsets[0] = playerTransform.InverseTransformPoint(_spawnableTransform.position);
-            _rotOffsets[0] = Quaternion.Inverse(playerTransform.rotation) * _spawnableTransform.rotation;
+            Transform spawnableTransform = Spawnable.transform;
+            _posOffsets[0] = playerTransform.InverseTransformPoint(spawnableTransform.position);
+            _rotOffsets[0] = Quaternion.Inverse(playerTransform.rotation) * spawnableTransform.rotation;
 
             // Save subSync offsets relative to player
-            for (int i = 0; i < _spawnable.subSyncs.Count; i++)
+            for (int i = 0; i < Spawnable.subSyncs.Count; i++)
             {
-                Transform subSyncTransform = _spawnable.subSyncs[i].transform;
+                Transform subSyncTransform = Spawnable.subSyncs[i].transform;
                 if (subSyncTransform == null) continue;
                 _posOffsets[i + 1] = playerTransform.InverseTransformPoint(subSyncTransform.position);
                 _rotOffsets[i + 1] = Quaternion.Inverse(playerTransform.rotation) * subSyncTransform.rotation;
@@ -558,13 +401,13 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
             // Reapply to root
             Vector3 rootWorldPos = playerTransform.TransformPoint(_posOffsets[0]);
             rootWorldPos.y += _heightOffset;
-            _spawnable.transform.position = rootWorldPos;
-            _spawnable.transform.rotation = playerTransform.rotation * _rotOffsets[0];
+            Spawnable.transform.position = rootWorldPos;
+            Spawnable.transform.rotation = playerTransform.rotation * _rotOffsets[0];
 
             // Reapply to subSyncs
-            for (int i = 0; i < _spawnable.subSyncs.Count; i++)
+            for (int i = 0; i < Spawnable.subSyncs.Count; i++)
             {
-                Transform subSyncTransform = _spawnable.subSyncs[i].transform;
+                Transform subSyncTransform = Spawnable.subSyncs[i].transform;
                 if (!subSyncTransform) continue;
 
                 Vector3 subWorldPos = playerTransform.TransformPoint(_posOffsets[i + 1]);
@@ -572,11 +415,6 @@ public class YouAreMyPropNowWeAreHavingSoftTacosLaterMod : MelonMod
                 subSyncTransform.position = subWorldPos;
                 subSyncTransform.rotation = playerTransform.rotation * _rotOffsets[i + 1];
             }
-
-            // hack
-            _spawnable.needsUpdate = true;
-            _spawnable.UpdateSubSyncValues();
-            _spawnable.sendUpdate();
         }
     }
 

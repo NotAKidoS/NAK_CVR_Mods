@@ -1,8 +1,8 @@
 {
   "_id": 129,
   "name": "FuckToes",
-  "modversion": "1.0.6",
-  "gameversion": "2026r182",
+  "modversion": "1.0.7",
+  "gameversion": "2026.3.0",
   "loaderversion": "0.7.2",
   "modtype": "Mod",
   "author": "NotAKidoS",
@@ -16,8 +16,8 @@
   "requirements": [
     "None"
   ],
-  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r50/FuckToes.dll",
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r51/FuckToes.dll",
   "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/FuckToes/",
-  "changelog": "- Rebuilt for 2026r182",
+  "changelog": "- Fixes for 2026.3.0",
   "embedcolor": "#f61963"
 }

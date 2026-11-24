@@ -395,7 +395,7 @@ public class ShareBubbleManager
 
     private static (float, float) GetBubbleHeightAndScale()
     {
-        float targetHeight = 0.5f * PlayerSetup.Instance.GetAvatarHeight();
+        float targetHeight = 0.5f * PlayerSetup.Instance.AvatarHeight;
         float scaleModifier = PlayerSetup.Instance.GetPlaySpaceScale() * 1.8f;
         return (targetHeight, scaleModifier);
     }

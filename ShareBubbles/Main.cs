@@ -17,7 +17,6 @@ public class ShareBubblesMod : MelonMod
         ShareBubbleManager.Initialize();
         TempShareManager.Initialize();
         
-        ModNetwork.Initialize();
         ModNetwork.Subscribe();
         
         //ModSettings.Initialize();
