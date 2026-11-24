@@ -28,7 +28,7 @@ public class FuckToesMod : MelonMod
     {
         HarmonyInstance.Patch(
             typeof(VRIK).GetMethod(nameof(VRIK.AutoDetectReferences)),
-            prefix: new HarmonyLib.HarmonyMethod(typeof(FuckToesMod).GetMethod(nameof(OnVRIKAutoDetectReferences_Prefix), 
+            postfix: new HarmonyLib.HarmonyMethod(typeof(FuckToesMod).GetMethod(nameof(OnVRIKAutoDetectReferences_Postfix), 
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
     }
@@ -37,7 +37,7 @@ public class FuckToesMod : MelonMod
 
     #region Harmony Patches
     
-    private static void OnVRIKAutoDetectReferences_Prefix(ref VRIK __instance)
+    private static void OnVRIKAutoDetectReferences_Postfix(ref VRIK __instance)
     {
         try
         {
@@ -59,7 +59,7 @@ public class FuckToesMod : MelonMod
         }
         catch (Exception e)
         {
-            MelonLogger.Error($"Error during the patched method {nameof(OnVRIKAutoDetectReferences_Prefix)}");
+            MelonLogger.Error($"Error during the patched method {nameof(OnVRIKAutoDetectReferences_Postfix)}");
             MelonLogger.Error(e);
         }
     }
