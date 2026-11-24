@@ -1,0 +1,10 @@
+{
+  "name": "NAK.PortableVideoPlayer.Build",
+  "rootNamespace": "NAK.PortableVideoPlayer.Build",
+  "references": [
+    "PortableVideoPlayer"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ]
+}

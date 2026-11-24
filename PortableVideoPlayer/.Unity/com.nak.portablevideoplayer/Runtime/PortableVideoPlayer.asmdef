@@ -1,0 +1,9 @@
+{
+  "name": "PortableVideoPlayer",
+  "rootNamespace": "NAK.PortableVideoPlayer.UI",
+  "references": [
+    "Unity.TextMeshPro",
+    "UnityEngine.UI"
+  ],
+  "autoReferenced": true
+}

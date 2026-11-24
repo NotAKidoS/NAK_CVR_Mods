@@ -1,0 +1,7 @@
+{
+  "name": "com.nak.portablevideoplayer",
+  "version": "1.0.0",
+  "displayName": "PortableVideoPlayer",
+  "description": "Portable video player prefab and its runtime view script.",
+  "unity": "2021.3"
+}

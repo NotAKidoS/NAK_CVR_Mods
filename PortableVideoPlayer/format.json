@@ -1,0 +1,23 @@
+{
+  "_id": -1,
+  "name": "PortableVideoPlayer",
+  "modversion": "1.0.0",
+  "gameversion": "2026.3.0",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Simple pop-out video player screen. Can be found in the Misc tab in Quick Menu. It's main feature is being able to overrender the world.\n\nMade this forever ago because someone sat in front of me during a movie, trialed it for a native feature, left it to rot on a branch, and then revived it as a mod because someone sat in front of me during a movie... again.",
+  "searchtags": [
+    "video",
+    "player",
+    "portable",
+    "remote"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r51/PortableVideoPlayer.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/PortableVideoPlayer/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}

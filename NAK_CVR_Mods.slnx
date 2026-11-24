@@ -30,6 +30,7 @@
   <Project Path="PathCamDisabler/PathCamDisabler.csproj" />
   <Project Path="PlapPlapForAll/PlapPlapForAll.csproj" />
   <Project Path="PortableCameraAdditions/PortableCameraAdditions.csproj" />
+  <Project Path="PortableVideoPlayer/PortableVideoPlayer.csproj" />
   <Project Path="PrivatePortalsHack/PrivatePortalsHack.csproj" />
   <Project Path="PropFunctions/PropFunctions.csproj" />
   <Project Path="PropUndoButton/PropUndoButton.csproj" />
