@@ -25,7 +25,7 @@
   <Project Path="DoubleTapJumpToExitSeat/DoubleTapJumpToExitSeat.csproj" />
   <Project Path="DynamicNearClip/DynamicNearClip.csproj" />
   <Project Path="FuckToes/FuckToes.csproj" />
-  <Project Path="FuckWarmNightsVideoPlayer/FuckWarmNightsVideoPlayer.csproj" />
+  <Project Path="FixVideoPlayerRenderTextureResolution/FixVideoPlayerRenderTextureResolution.csproj" />
   <Project Path="NoisyProps/NoisyProps.csproj" />
   <Project Path="PathCamDisabler/PathCamDisabler.csproj" />
   <Project Path="PlapPlapForAll/PlapPlapForAll.csproj" />
