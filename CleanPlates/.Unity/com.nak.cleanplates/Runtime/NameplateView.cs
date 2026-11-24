@@ -8,9 +8,16 @@ using UnityEngine.UI;
 
 namespace NAK.CleanPlates.UI
 {
+    // Driven by manager on every plate
+    public interface IPlateView
+    {
+        void SetAlpha(float alpha);
+        void SetState(float alpha, float lodBlend, float detailBlend);
+    }
+
     // Shared by both plate styles, and the prefabs reference these serialized names by
     // hand.
-    public abstract class NameplateView : MonoBehaviour
+    public abstract class NameplateView : MonoBehaviour, IPlateView
     {
         [Header("Structure")]
         [SerializeField] protected CanvasGroup root;

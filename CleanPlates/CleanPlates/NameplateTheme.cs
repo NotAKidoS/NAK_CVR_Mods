@@ -29,48 +29,32 @@ internal static class NameplateTheme
     internal static Material GraphicMaterialFor(bool local)
         => EnsureBuilt() ? local ? _localGraphicMaterial : _graphicMaterial : null;
 
+    // Game nameplate text themes every plate
+    internal static TMP_Text Source;
+
     internal static bool EnsureBuilt()
     {
         if (_built) return true;
 
-        // ReSharper disable twice ShaderLabShaderReferenceNotResolved
+        // ReSharper disable once ShaderLabShaderReferenceNotResolved
         Shader billboardShader = Shader.Find("Alpha Blend Interactive/BillboardFacing");
-        Shader billboardTextShader = Shader.Find("Alpha Blend Interactive/TextMeshPro/Mobile/Distance Field-BillboardFacing");
+        TMP_FontAsset font = Source ? Source.font : null;
+        Material nativeText = Source ? Source.fontSharedMaterial : null;
 
-        TMP_FontAsset[] fonts = Resources.FindObjectsOfTypeAll<TMP_FontAsset>();
-        TMP_FontAsset font = fonts.FirstOrDefault(f => f.name == "NotoSans-Regular SDF HUD");
-        TMP_FontAsset billboardFont = fonts.FirstOrDefault(f => f.name == "LiberationSans SDF BillboardFacing");
-
-        if (font == null || billboardFont == null || billboardShader == null || billboardTextShader == null)
+        if (font == null || nativeText == null || billboardShader == null)
         {
             if (!_warned)
                 CleanPlatesMod.Logger.Warning(
-                    $"Game resources missing. Noto: {font != null}, Liberation: {billboardFont != null}, " +
-                    $"Billboard: {billboardShader != null}, BillboardText: {billboardTextShader != null}");
+                    $"Game resources missing. Font: {font != null}, Text: {nativeText != null}, Billboard: {billboardShader != null}");
             _warned = true;
             return false;
         }
 
-        // Glyph coverage from Noto, billboarding and fade values from Liberation.
-        // The client does not shit a billboarding NotoSans font so we need to build our
-        // own here. This was a fucking pain in the ass to figure out without editor...
-        Material atlas = font.material;
-        Material preset = new(billboardFont.material)
+        Material preset = new(nativeText)
         {
-            name = font.name + " (Billboard)",
-            shader = billboardTextShader,
+            name = font.name + " (CleanPlates)",
             renderQueue = PlayerNameplate.RenderQueue
         };
-
-        preset.SetTexture(ShaderUtilities.ID_MainTex, font.atlasTexture);
-        preset.SetFloat(ShaderUtilities.ID_GradientScale, atlas.GetFloat(ShaderUtilities.ID_GradientScale));
-        preset.SetFloat(ShaderUtilities.ID_TextureWidth, atlas.GetFloat(ShaderUtilities.ID_TextureWidth));
-        preset.SetFloat(ShaderUtilities.ID_TextureHeight, atlas.GetFloat(ShaderUtilities.ID_TextureHeight));
-        preset.SetFloat(ShaderUtilities.ID_WeightNormal, atlas.GetFloat(ShaderUtilities.ID_WeightNormal));
-        preset.SetFloat(ShaderUtilities.ID_WeightBold, atlas.GetFloat(ShaderUtilities.ID_WeightBold));
-        preset.SetFloat(ShaderUtilities.ID_ScaleRatio_A, atlas.GetFloat(ShaderUtilities.ID_ScaleRatio_A));
-        preset.SetFloat(ShaderUtilities.ID_ScaleRatio_B, atlas.GetFloat(ShaderUtilities.ID_ScaleRatio_B));
-        preset.SetFloat(ShaderUtilities.ID_ScaleRatio_C, atlas.GetFloat(ShaderUtilities.ID_ScaleRatio_C));
 
         Material graphicMaterial = new(billboardShader)
         {

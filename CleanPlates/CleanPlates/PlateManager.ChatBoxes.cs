@@ -23,49 +23,11 @@ public static partial class PlateManager
     public static string MentionCloseTag = "</b></color>";
     public static bool LocalTypingSound = false;
 
-    // Cap for TTS icon so it can't get stuck on forever.
-    public static float MaxTtsSeconds = 60f;
-
     internal static string MentionTag = string.Empty;
 
-    // Control characters break the bubble and HUD, so for the greater good, we are
-    // intercepting all messages and sanitizing them (native bug).
-    private static ChatBoxAPI.InterceptorResult MutateChatBoxMessageForTheGreaterGood(ChatBoxAPI.ChatBoxMessage message)
-    {
-        message.Message = SafeText.Clean(message.Message);
-        return ChatBoxAPI.InterceptorResult.Ignore;
-    }
-
-    private static void OnMessageSent(ChatBoxAPI.ChatBoxMessage message)
-        => OnMessageReceived(message);
+    // Game shows own messages on OnMessageReceived, only typing is local
     private static void OnIsTypingSent(ChatBoxAPI.ChatBoxTyping typing)
         => OnIsTypingReceived(typing);
-
-    private static void OnTTSAudioStarted(AudioSource _, AudioClip clip)
-    {
-        float seconds = clip != null ? clip.length : 0f;
-        seconds += 1f; // Buffer for processing delay & smoothed amplitude
-        MelonCoroutines.Start(SendSignalTTSDelayed(seconds));
-        if (!TryGetChat(PlayerSetup.Instance, out NameplateChat chat)) return;
-        chat.SetPlayingTts(Mathf.Clamp(seconds, 0f, MaxTtsSeconds));
-    }
-
-    private static IEnumerator SendSignalTTSDelayed(float seconds)
-    {
-        // Tries to delay by comms delay. Probably iffy but gives an OK result...
-        if (Comms_Manager.IsClientConnected)
-        {
-            const float bufferSeconds = 0.03f;
-            const float maxDelaySeconds = 1f;
-            float delaySeconds = Mathf.Clamp(
-                (Comms_Manager.Instance.Client.Ping / 1000f) + bufferSeconds,
-                0f,
-                maxDelaySeconds
-            );
-            yield return new WaitForSecondsRealtime(delaySeconds);
-        }
-        CleanPlatesNetwork.SendSignalTTS(seconds);
-    }
 
     private static void ApplyBubbleSettings(NameplateChat chat)
     {
@@ -73,6 +35,23 @@ public static partial class PlateManager
         chat.SetBubbleScale(ChatBoxBubbleBehavior.SettingBubbleSize);
     }
     
+    private static void RefreshMuted(string userId)
+    {
+        if (CVRPlayerManager.Instance.TryGetPlayerBase(userId, out PlayerBase player)
+            && byPlayer.TryGetValue(player, out Entry entry))
+            ApplyMuted(entry);
+    }
+
+    // Muted or turned down to nothing
+    private static void ApplyMuted(Entry entry)
+    {
+        if (entry.IsLocal) return;
+
+        CVRSelfModerationManager moderation = MetaPort.Instance.SelfModerationManager;
+        string userId = entry.Player.PlayerId;
+        entry.Chat.SetMuted(moderation.GetUserMute(userId) || moderation.GetUserVolume(userId) <= 0f);
+    }
+
     // The typing indicator will always show unless self moderation hides it.
     // This is so you can tell if someone is trying to communicate with you.
     private static bool ShouldShowTyping(string userGuid, ChatBoxAPI.MessageSource source, out bool muted)
@@ -96,26 +75,6 @@ public static partial class PlateManager
         return true;
     }
 
-    // PlayNotificationSound gives us no volume control >:(
-    private static void PlaySound(ChatBoxManager.NotificationType type, AudioClipField clip, Vector3 position, float volume)
-    {
-        if (!InterfaceAudio.Instance.TryGetClip(clip, out AudioClip audioClip)) return;
-
-        ChatBoxManager manager = ChatBoxManager.Instance;
-        AudioSource source = type == ChatBoxManager.NotificationType.Global
-            ? manager.globalAudioSource
-            : manager.localAudioSource;
-        source.transform.position = position;
-        source.PlayOneShot(audioClip, volume);
-    }
-
-    public static void SetPlayingTts(string senderGuid, float seconds)
-    {
-        if (!CVRPlayerManager.Instance.TryGetPlayerBase(senderGuid, out PlayerBase player)) return;
-        if (!TryGetChat(player, out NameplateChat chat)) return;
-        chat.SetPlayingTts(Mathf.Clamp(seconds, 0f, MaxTtsSeconds));
-    }
-
     private static void OnIsTypingReceived(ChatBoxAPI.ChatBoxTyping typing)
     {
         if (!ShouldShowTyping(typing.SenderGuid, typing.Source, out bool muted)) return;
@@ -134,14 +93,13 @@ public static partial class PlateManager
         if (isLocal && !LocalTypingSound) return;
         if (!chat.IsVisible) return;
 
-        PlaySound(ChatBoxManager.NotificationType.Local, AudioClipField.ChatBoxTyping,
-            chat.transform.position, isLocal ? LocalSoundVolume : 1f);
+        ChatBoxManager.Instance.PlayNotificationSound(ChatBoxManager.NotificationType.Local,
+            AudioClipField.ChatBoxTyping, chat.transform.position, isLocal ? LocalSoundVolume : 1f);
     }
 
     private static void OnMessageReceived(ChatBoxAPI.ChatBoxMessage message)
     {
         if (!message.DisplayOnChatBox) return;
-        if (SafeText.IsBlank(message.Message)) return;
         if (!ChatBoxManager.ShouldShowMessage(message.SenderGuid, message.Source)) return;
         bool isLocal = message.SenderGuid == MetaPort.Instance.ownerId;
         if (!CVRPlayerManager.Instance.TryGetPlayerBase(message.SenderGuid, out PlayerBase player)) return;
@@ -170,8 +128,8 @@ public static partial class PlateManager
         // No sound for a bubble that is collapsed out of view, the message still
         // queues up for whenever they wander back into range.
         if (chat.IsVisible)
-            PlaySound(ChatBoxManager.NotificationType.Local, AudioClipField.ChatBoxMessage,
-                chat.transform.position, isLocal ? LocalSoundVolume : 1f);
+            ChatBoxManager.Instance.PlayNotificationSound(ChatBoxManager.NotificationType.Local,
+                AudioClipField.ChatBoxMessage, chat.transform.position, isLocal ? LocalSoundVolume : 1f);
 
         // Pings still fire at any distance.
         if (!isLocal && ChatBoxManager.SettingEnableOnMessageMentionSounds && mentioned)
@@ -226,7 +184,8 @@ public static partial class PlateManager
     private static IEnumerator PlayDelayedMention(Vector3 position)
     {
         yield return new WaitForSeconds(0.5f);
-        PlaySound(ChatBoxManager.NotificationType.Global, AudioClipField.ChatBoxPing, position, MentionVolume);
+        ChatBoxManager.Instance.PlayNotificationSound(ChatBoxManager.NotificationType.Global,
+            AudioClipField.ChatBoxPing, position, MentionVolume);
     }
 
     private static string SourceLabelFor(ChatBoxAPI.ChatBoxMessage message) => message.Source switch

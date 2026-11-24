@@ -38,6 +38,7 @@ namespace NAK.CleanPlates.UI
         [SerializeField] private float typingTimeout = 5f;
         [SerializeField] private float typingDotInterval = 0.5f;
         [SerializeField] private Color typingMutedColor = new(0.55f, 0.55f, 0.6f, 0.5f);
+        [SerializeField] private Color voiceMutedColor = new(0.9f, 0.3f, 0.3f, 0.9f);
         [SerializeField] private float indicatorGap = 8f;
         [SerializeField, Range(0f, 1f)] private float voiceThreshold = 0.05f;
         [SerializeField] private float voicePulse = 0.25f;
@@ -68,16 +69,21 @@ namespace NAK.CleanPlates.UI
         private float voiceLevel;
         private float appliedVoiceScale = 1f;
         private bool isSpeaking;
+        private bool muted;
+        private Graphic speakerGraphic;
+        private Color speakerBaseColor;
+        private Graphic ttsGraphic;
+        private Color ttsBaseColor;
 
         public static bool ShowSpeakerIndicator = true;
         public static bool ShowHistory = true;
 
         public bool IsTyping { get; private set; }
         public bool IsPlayingTts { get; private set; }
-        public bool IsVoiceActive => IsPlayingTts || (ShowSpeakerIndicator && isSpeaking);
+        public bool IsVoiceActive => IsPlayingTts || ((ShowSpeakerIndicator || muted) && isSpeaking);
         public bool HasMessages => messages.Count > 0;
         // SetDetail already zeroes anything at or under the cutoff.
-        public bool IsActive => (IsTyping || IsVoiceActive || messages.Count > 0) && detail > 0f;
+        public bool IsActive => (IsTyping || IsPlayingTts || (ShowSpeakerIndicator && !muted && isSpeaking) || messages.Count > 0) && detail > 0f;
         public bool IsVisible => detail > 0f;
         public ChatMessageKind NewestKind => messages.Count > 0 ? messages[0].Kind : ChatMessageKind.Message;
 
@@ -153,6 +159,27 @@ namespace NAK.CleanPlates.UI
             if (playing == IsPlayingTts) return;
 
             IsPlayingTts = playing;
+            RefreshIndicator();
+        }
+
+        // Muted player shows red mic when talking
+        public void SetMuted(bool value)
+        {
+            if (speakerGraphic == null)
+            {
+                speakerGraphic = speakerIcon.GetComponent<Graphic>();
+                speakerBaseColor = speakerGraphic.color;
+            }
+
+            if (ttsGraphic == null)
+            {
+                ttsGraphic = ttsIcon.GetComponentInChildren<Graphic>(true);
+                if (ttsGraphic) ttsBaseColor = ttsGraphic.color;
+            }
+
+            muted = value;
+            speakerGraphic.color = value ? voiceMutedColor : speakerBaseColor;
+            if (ttsGraphic) ttsGraphic.color = value ? voiceMutedColor : ttsBaseColor;
             RefreshIndicator();
         }
 

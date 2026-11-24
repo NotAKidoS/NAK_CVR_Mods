@@ -7,9 +7,12 @@ using ABI_RC.Core.Player;
 using ABI_RC.Core.Savior;
 using ABI_RC.Core;
 using ABI_RC.Systems.ChatBox;
+using ABI_RC.Systems.Communications;
 using ABI_RC.Systems.GameEventSystem;
 using ABI_RC.Systems.InputManagement;
+using ABI_RC.Systems.NetworkIK;
 using ABI_RC.Systems.PlayerColors;
+using GameCommon.Models.Player;
 using NAK.CleanPlates.Helpers;
 using UnityEngine;
 
@@ -41,42 +44,37 @@ public static partial class PlateManager
     {
         // The chonk.
         CVRGameEventSystem.Initialization.OnPlayerSetupStart.AddListener(Setup);
-        CVRGameEventSystem.Avatar.OnLocalAvatarLoad.AddListener(OnLocalAvatarLoaded);
-        CVRGameEventSystem.Avatar.OnLocalAvatarClear.AddListener(OnLocalAvatarClear);
-        CVRGameEventSystem.Avatar.OnLocalAvatarHeightScale.AddListener(OnLocalAvatarHeightScale);
-        CVRGameEventSystem.Avatar.OnRemoteAvatarLoad.AddListener(OnRemoteAvatarLoaded);
-        CVRGameEventSystem.Avatar.OnRemoteAvatarClear.AddListener(OnRemoteAvatarClear);
         CVRGameEventSystem.Player.OnLeaveEntity.AddListener(OnPlayerLeaveEntity);
         CVRGameEventSystem.Instance.OnDisconnected.AddListener(OnInstanceDisconnected);
-        LateEventsManager.OnPostLateUpdate += Tick;
+        CVRFrameDriver.OnPostLateUpdate += Tick;
         PlayerColorsManager.OnRemotePlayerColorChanged += OnRemotePlayerColorChanged;
         PlayerColorsManager.OnLocalPlayerColorChanged += OnLocalPlayerColorChanged;
         Friends.OnFriendListUpdated += OnFriendsListUpdated;
         ShowRank.NameplateShowRankChanged += UpdateLocalRank;
-        
+
+        // Game job offsets every overhead by this
+        PlayerNameplate.PositionOffset = HeightClearance;
+
         // ChatBox
-        ChatBoxAPI.AddReceivingInterceptor(MutateChatBoxMessageForTheGreaterGood);
         ChatBoxAPI.OnMessageReceived += OnMessageReceived;
         ChatBoxAPI.OnIsTypingReceived += OnIsTypingReceived;
-        ChatBoxAPI.OnMessageSent += OnMessageSent;
         ChatBoxAPI.OnIsTypingSent += OnIsTypingSent;
-        CVRGameEventSystem.Communications.TextToSpeech.OnAudioStarted.AddListener(OnTTSAudioStarted);
     }
 
     private static void Setup()
     {
         if (_hasRunSetup) return;
 
-        // Run nameplate height processing on the blocked prefab in cache!
-        RootLogic.Instance.StartExternCoroutine(NameplateAnchorUtility.BakeRoutine(MetaPort.Instance.blockedAvatarPrefab));
-
         CVRSettings settings = MetaPort.Instance.settings;
         _localVisibility = (CVRSettings.CVRSettingsOptionMenu)settings.GetSettingsInt(PlayerNameplate.NameplateLocalVisibilitySettingName);
         _remoteVisibility = (CVRSettings.CVRSettingsOptionMenu)settings.GetSettingsInt(PlayerNameplate.NameplateRemoteVisibilitySettingName);
         _imageVisibility = (CVRSettings.CVRSettingsOptionFriends)settings.GetSettingsInt(PlayerNameplate.NameplateShowProfileImgSettingName);
-        _cameraVisibility = (CVRSettings.CVRSettingsOptionMenu)settings.GetSettingsInt(CameraVisibilitySettingName);
-        HeightMode = (NameplateHeightMode)settings.GetSettingsInt(HeightAdjustmentSettingName);
+        _cameraVisibility = (CVRSettings.CVRSettingsOptionMenu)settings.GetSettingsInt(IndicatorPlate.VisibilitySettingName);
         settings.settingIntChanged.AddListener(OnSettingIntChanged);
+
+        CVRSelfModerationManager moderation = MetaPort.Instance.SelfModerationManager;
+        moderation.OnPlayerMuteSet.AddListener(static (userId, _) => RefreshMuted(userId));
+        moderation.OnPlayerVolumeSet.AddListener(static (userId, _) => RefreshMuted(userId));
 
         _hasRunSetup = true;
     }
@@ -95,10 +93,7 @@ public static partial class PlateManager
                 _imageVisibility = (CVRSettings.CVRSettingsOptionFriends)settingValue;
                 RefreshAllIcons();
                 break;
-            case HeightAdjustmentSettingName:
-                HeightMode = (NameplateHeightMode)settingValue;
-                break;
-            case CameraVisibilitySettingName:
+            case IndicatorPlate.VisibilitySettingName:
                 _cameraVisibility = (CVRSettings.CVRSettingsOptionMenu)settingValue;
                 break;
             case ChatBoxBubbleBehavior.SettingBubbleOpacityName:
@@ -108,11 +103,8 @@ public static partial class PlateManager
         }
     }
 
-    private static void OnRemotePlayerColorChanged(string userId, PlayerColors color)
-    {
-        if (CVRPlayerManager.Instance.TryGetPlayerBase(userId, out PlayerBase player))
-            ApplyPlayerColors(player, color);
-    }
+    private static void OnRemotePlayerColorChanged(PlayerBase player, PlayerColors color)
+        => ApplyPlayerColors(player, color);
 
     private static void OnLocalPlayerColorChanged(PlayerColors color)
         => ApplyPlayerColors(PlayerSetup.Instance, color);
@@ -146,9 +138,155 @@ public static partial class PlateManager
         _frame.ShowCamera = ShouldDisplay(_cameraVisibility);
         _frame.ObserverPosition = PlayerSetup.Instance.activeCam.transform.position;
 
-        TickNameplates();
-        TickCameraIndicators();
+        TickPlates(entries, ref scanIndex, PlateProfiler);
+        TickPlates(indicators, ref indicatorScanIndex, CameraProfiler);
     }
+
+    // Indicators skip overhead, chat and voice
+    private static void TickPlates(List<Entry> plates, ref int scan, LoopProfiler profiler)
+    {
+        int count = plates.Count;
+        if (count == 0) return;
+
+        float dt = _frame.DeltaTime;
+        bool menuOpen = _frame.MenuOpen;
+        bool inspecting = _frame.Inspecting;
+
+        int checks = Mathf.Min(count,
+            Mathf.Max(DistanceChecksPerFrame, count / DistanceCheckDivisor));
+        for (int i = 0; i < checks; i++)
+        {
+            scan = (scan + 1) % count;
+            Entry e = plates[scan];
+            if (e.Anchor == null) continue;
+            e.Distance = Vector3.Distance(_frame.ObserverPosition, e.Anchor.position);
+            if (!e.IsIndicator && !e.IsLocal) e.InNearBand = IsInNearBand(e);
+        }
+
+        profiler.Begin();
+        int processed = 0;
+
+        float now = Time.time;
+        float scaleLerp = 1f - Mathf.Exp(-ScaleSmoothing * dt);
+        float fovScale = FovScale.Current;
+
+        foreach (Entry e in plates)
+        {
+            if (e.Anchor == null) continue;
+
+            bool indicator = e.IsIndicator;
+            bool show = indicator ? _frame.ShowCamera : e.IsLocal ? _frame.ShowLocal : _frame.ShowRemote;
+
+            // Own indicators sit in front of us, own nameplate does not
+            e.NearHidden = NearHide && (indicator || !e.IsLocal) && e.Distance <= NearHideDistance
+                                         + (e.NearHidden ? NearHideHysteresis : 0f);
+
+            bool visible = show && (menuOpen || inspecting || !e.NearHidden)
+                                && ((e.InNearBand && e.Distance <= HideDistance)
+                                    || (inspecting && e.Distance <= MaxRevealDistance));
+            bool full = e.Distance < FullDetailDistance;
+
+            float targetAlpha = visible ? Opacity : 0f;
+            float targetBlend = full ? 1f : 0f;
+            float targetDetail = inspecting && !indicator ? 1f : 0f;
+
+            if (inspecting && now < e.RevealTime)
+            {
+                targetAlpha = e.Alpha;
+                targetBlend = e.LodBlend;
+                targetDetail = e.DetailBlend;
+            }
+
+            float alpha = Mathf.MoveTowards(e.Alpha, targetAlpha, FadeSpeed * dt);
+            float blend = Mathf.MoveTowards(e.LodBlend, targetBlend, LodBlendSpeed * dt);
+            float detail = Mathf.MoveTowards(e.DetailBlend, targetDetail, LodBlendSpeed * dt);
+
+            // Resize rebuilds mesh (expensive) so alpha and scale are separate dirty flags
+
+            if (alpha != e.Alpha) e.AlphaDirty = true;
+            if (blend != e.LodBlend || detail != e.DetailBlend) e.Dirty = true;
+            e.Alpha = alpha;
+            e.LodBlend = blend;
+            e.DetailBlend = detail;
+
+            if (!indicator && !TickOverhead(e, now, dt))
+            {
+                e.Scale = -1f; // snap on the way back in instead of sliding
+                continue;
+            }
+
+            if (e.Dirty)
+            {
+                e.View.SetState(e.Alpha, e.LodBlend, e.DetailBlend);
+                e.Dirty = false;
+                e.AlphaDirty = false;
+            }
+            else if (e.AlphaDirty)
+            {
+                e.View.SetAlpha(e.Alpha);
+                e.AlphaDirty = false;
+            }
+
+            processed++;
+
+            float targetScale = indicator
+                ? Mathf.Clamp(e.Distance * fovScale / FullDetailDistance,
+                      1f, inspecting ? CameraMaxScale : CameraCollapsedMaxScale)
+                  * Mathf.Lerp(CameraFarScale, CameraNearScale, blend)
+                : Mathf.Clamp(e.Distance * fovScale / (inspecting ? InspectReadableDistance : ReadableDistance),
+                      1f, inspecting ? MaxScale : CollapsedMaxScale)
+                  / e.Plate.NameSizeAtLod(blend) * UserScale;
+
+            float scale = e.Scale < 0f
+                ? targetScale
+                : Mathf.Lerp(e.Scale, targetScale, scaleLerp);
+            if (Mathf.Abs(scale - e.Scale) > 0.001f)
+            {
+                e.Scale = scale;
+                e.Anchor.localScale = e.BaseScale * scale;
+            }
+        }
+
+        profiler.End(processed, count);
+    }
+
+    // Collapse, voice, chat, then overhead active
+    private static bool TickOverhead(Entry e, float now, float dt)
+    {
+        bool collapsed = e.LodBlend < CollapseThreshold;
+        if (collapsed != e.Collapsed)
+        {
+            e.Collapsed = collapsed;
+            ThirdpartySupport.RaisePlateCollapsedChanged(e.Player, collapsed);
+        }
+
+        float talkTarget = Mathf.Clamp01(e.GetCommsSmoothAmplitude());
+        float talkSpeed = talkTarget > e.TalkLevel ? TalkAttack : TalkRelease;
+        e.TalkLevel = Mathf.MoveTowards(e.TalkLevel, talkTarget, talkSpeed * dt);
+
+        string userId = e.Player.PlayerId;
+        bool packetSpeaking = e.TalkLevel < TalkStep && VoiceActivity.IsSpeaking(userId);
+        e.Chat.SetVoiceLevel(packetSpeaking ? PacketSpeakingLevel : e.TalkLevel);
+        if (e.IsLocal ? Comms_Manager.IsTTSPlaying : VoiceActivity.IsPlayingTts(userId))
+            e.Chat.SetPlayingTts(TtsHoldSeconds);
+        e.Chat.SetDetail(e.LodBlend);
+        e.Chat.Tick(now);
+
+        OverheadController controller = e.OverheadController;
+        controller.UpdateActiveState();
+        if (!controller.IsActive) return false;
+
+        if (Mathf.Abs(e.TalkLevel - e.AppliedTalk) > TalkStep
+            || (e.TalkLevel == talkTarget && e.TalkLevel != e.AppliedTalk))
+        {
+            e.AppliedTalk = e.TalkLevel;
+            e.Plate.SetTalk(e.TalkLevel); // tints the body graphic, so this is a rebuild
+        }
+
+        return true;
+    }
+
+    private static bool IsInNearBand(Entry e) => e.Puppet == null || e.Puppet.IsNameplateVisible;
 
     private static bool ShouldDisplay(CVRSettings.CVRSettingsOptionMenu visibility)
         => AuthManager.IsAuthenticated

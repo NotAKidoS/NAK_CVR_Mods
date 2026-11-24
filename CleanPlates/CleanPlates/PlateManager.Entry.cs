@@ -1,8 +1,6 @@
 using ABI_RC.Core.Player;
 using ABI_RC.Systems.Communications.Audio.Components;
-using NAK.CleanPlates.Helpers;
 using NAK.CleanPlates.UI;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace NAK.CleanPlates;
@@ -27,6 +25,7 @@ public static partial class PlateManager
     {
         public Transform Parent;
         public NameplateView Plate;
+        public MiniNameplate Mini;
         public NameplateChat Chat;
         public NameplateData Data;
         public OverheadHandle Handle;
@@ -46,28 +45,18 @@ public static partial class PlateManager
         // Starts collapsed so the first tick past the threshold reports it.
         public bool Collapsed = true;
         public bool IsLocal;
-        
+        public bool IsIndicator;
+        // Only remote nameplates leave it
+        public bool InNearBand = true;
+
         public PlayerBase Player;
         public OverheadController OverheadController;
-        public Transform ControllerTransform;
-        public Transform PlateTransform;
+        // Overhead for nameplates, plate itself for indicators
+        public Transform Anchor;
+        public Vector3 BaseScale = Vector3.one;
         public PuppetMaster Puppet;
 
-        public bool HasNameplateAnchor;
-        public NameplateAnchor NameplateAnchor;
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3 GetNameplatePosition(NameplateHeightMode heightMode, float offset, float fallbackHeight)
-        {
-            if (!HasNameplateAnchor)
-            {
-                Transform playerTransform = Player.transform;
-                return playerTransform.position + playerTransform.up * fallbackHeight;
-            }
-            return heightMode == NameplateHeightMode.FollowHead
-                ? NameplateAnchor.GetHeadAnchorPosition(offset)
-                : NameplateAnchor.GetRootAnchorPosition(offset);
-        }
+        public IPlateView View => IsIndicator ? Mini : Plate;
 
         public float GetCommsSmoothAmplitude()
         {
