@@ -27,6 +27,7 @@
   <Project Path="FuckToes/FuckToes.csproj" />
   <Project Path="FixVideoPlayerRenderTextureResolution/FixVideoPlayerRenderTextureResolution.csproj" />
   <Project Path="NoisyProps/NoisyProps.csproj" />
+  <Project Path="Mowods/Mowods.csproj" />
   <Project Path="PathCamDisabler/PathCamDisabler.csproj" />
   <Project Path="PlapPlapForAll/PlapPlapForAll.csproj" />
   <Project Path="PortableCameraAdditions/PortableCameraAdditions.csproj" />

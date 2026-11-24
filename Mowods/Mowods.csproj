@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <EmbeddedResource Include="Cohtml/Menu.js" LogicalName="Menu.js" />
+    <EmbeddedResource Include="Cohtml/Menu.css" LogicalName="Menu.css" />
+    <EmbeddedResource Include="Cohtml/melon.svg" LogicalName="melon.svg" />
+  </ItemGroup>
+</Project>

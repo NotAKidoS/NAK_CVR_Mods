@@ -1,0 +1,25 @@
+{
+  "_id": -1,
+  "name": "Mowods",
+  "modversion": "1.0.0",
+  "gameversion": "2026.3.0",
+  "loaderversion": "0.7.2",
+  "modtype": "Mod",
+  "author": "NotAKidoS",
+  "description": "Adds a Mòwóds page to the Main Menu home page to view all mod settings in-game. Spiritual replacement for UI Expansion Kit.\n\n**Features:**\n- Mod setting search\n- Displays author, version, assembly name, source URL\n- Categories color-coded by defined mod/author colors\n- Tooltips & settings reset buttons\n\nEverything is parsed from the MelonLoader [attributes](<https://melonwiki.xyz/#/modders/attributes?id=attributes-in-melonloader>) and [preferences](<https://melonwiki.xyz/#/modders/preferences>).",
+  "searchtags": [
+    "settings",
+    "preferences",
+    "melonprefs",
+    "menu",
+    "ui",
+    "uiexpansionkit"
+  ],
+  "requirements": [
+    "None"
+  ],
+  "downloadlink": "https://github.com/NotAKidoS/NAK_CVR_Mods/releases/download/r51/Mowods.dll",
+  "sourcelink": "https://github.com/NotAKidoS/NAK_CVR_Mods/tree/main/Mowods/",
+  "changelog": "- Initial release",
+  "embedcolor": "#f61963"
+}
