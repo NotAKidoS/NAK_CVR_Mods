@@ -30,11 +30,23 @@ public class FixVideoPlayerRenderTextureResolutionMod : MelonMod
             display_name: "Max Texture Size",
             description: "Upper bound on either projection texture axis. Lower if VRAM is a concern.");
 
+    private static readonly MelonPreferences_Entry<bool> EntryFitFullSideBySide =
+        Category.CreateEntry(
+            identifier: "fit_full_side_by_side",
+            false,
+            display_name: "Fit Full Side-By-Side 3D",
+            description: "Videos wider than 3:1 (like 3840x1080) are treated as two eyes side by side and fit per eye, so 3D screens are not squished. Disable for ultrawide 2D videos.");
+
     #endregion Melon Preferences
 
     // counters oblique-angle mip selection (HMD lens distortion, high fov desktop) blurring the texture at edges?
     private const float MipMapBias = -0.5f;
     private const int MinTextureSize = 16;
+    private const float FullSideBySideMinAspect = 3f;
+
+    private static readonly int ScaleProperty = Shader.PropertyToID("_Scale");
+    private static readonly AccessTools.FieldRef<CVRVideoPlayer, Material> BlitMaterial =
+        AccessTools.FieldRefAccess<CVRVideoPlayer, Material>("_blitMaterial");
 
     private static readonly Dictionary<CVRVideoPlayer, Vector2Int> DefaultProjectionSizes = new();
 
@@ -46,6 +58,8 @@ public class FixVideoPlayerRenderTextureResolutionMod : MelonMod
             typeof(CVRVideoPlayer).GetMethod(nameof(CVRVideoPlayer.UpdateAspectRatio),
                 BindingFlags.NonPublic | BindingFlags.Instance),
             prefix: new HarmonyMethod(typeof(FixVideoPlayerRenderTextureResolutionMod).GetMethod(nameof(OnCVRVideoPlayerUpdateAspectRatio),
+                BindingFlags.NonPublic | BindingFlags.Static)),
+            postfix: new HarmonyMethod(typeof(FixVideoPlayerRenderTextureResolutionMod).GetMethod(nameof(OnCVRVideoPlayerUpdateAspectRatioPost),
                 BindingFlags.NonPublic | BindingFlags.Static))
         );
 
@@ -58,10 +72,40 @@ public class FixVideoPlayerRenderTextureResolutionMod : MelonMod
 
         EntryMatchVideoResolution.OnEntryValueChanged.Subscribe((_, _) => ApplyProjectionTextureResolutionToAll());
         EntryMaxTextureSize.OnEntryValueChanged.Subscribe((_, _) => ApplyProjectionTextureResolutionToAll());
+        EntryFitFullSideBySide.OnEntryValueChanged.Subscribe((_, _) => ApplyProjectionTextureResolutionToAll());
     }
 
     private static void OnCVRVideoPlayerUpdateAspectRatio(CVRVideoPlayer __instance)
         => ApplyProjectionTextureResolution(__instance);
+
+    private static void OnCVRVideoPlayerUpdateAspectRatioPost(CVRVideoPlayer __instance)
+    {
+        if (!EntryFitFullSideBySide.Value) return;
+
+        RenderTexture projectionTexture = __instance.ProjectionTexture;
+        Material blitMaterial = BlitMaterial(__instance);
+        var videoInfo = __instance.VideoPlayer?.Info?.VideoMetaData;
+        if (projectionTexture == null || blitMaterial == null || videoInfo == null) return;
+
+        int videoWidth = videoInfo.GetVideoWidth();
+        int videoHeight = videoInfo.GetVideoHeight();
+        if (videoWidth <= 0 || videoHeight <= 0) return;
+
+        float videoAspect = (float)videoWidth / videoHeight;
+        if (videoAspect < FullSideBySideMinAspect) return;
+
+        // each half is one eye and the world 3D shader stretches it back across the screen, so fit one eye
+        float eyeAspect = videoAspect / 2f;
+        float textureAspect = (float)projectionTexture.width / projectionTexture.height;
+        Vector4 scale = eyeAspect > textureAspect
+            ? new Vector4(1f, textureAspect / eyeAspect)
+            : new Vector4(eyeAspect / textureAspect, 1f);
+
+        Vector4 nativeScale = blitMaterial.GetVector(ScaleProperty);
+        scale.x *= Mathf.Sign(nativeScale.x);
+        scale.y *= Mathf.Sign(nativeScale.y);
+        blitMaterial.SetVector(ScaleProperty, scale);
+    }
 
     private static void OnCVRVideoPlayerDestroy(CVRVideoPlayer __instance)
         => DefaultProjectionSizes.Remove(__instance);
@@ -134,8 +178,9 @@ public class FixVideoPlayerRenderTextureResolutionMod : MelonMod
 
     private static void ApplyProjectionTextureResolutionToAll()
     {
-        foreach (CVRVideoPlayer videoPlayer in Resources.FindObjectsOfTypeAll<CVRVideoPlayer>())
+        foreach (CVRVideoPlayer videoPlayer in new List<CVRVideoPlayer>(DefaultProjectionSizes.Keys))
         {
+            if (videoPlayer.VideoPlayer?.Info?.VideoMetaData == null) continue;
             videoPlayer.UpdateAspectRatio();
         }
     }
